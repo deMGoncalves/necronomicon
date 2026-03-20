@@ -6,41 +6,41 @@
 
 ---
 
-## What it is
+## O que é
 
-Classes in a package should be reused together. If you use one, you should use all.
+Classes em um pacote devem ser reutilizadas em conjunto. Se você usa uma, deve usar todas.
 
-## Why it matters
+## Por que importa
 
-CRP helps refine package granularity, ensuring clients are not forced to depend on classes they don't use, which avoids unnecessary recompilations/redeploy and reduces unwanted coupling.
+O CRP ajuda a refinar a granularidade dos pacotes, garantindo que os clientes não sejam forçados a depender de classes que não utilizam, o que evita recompilações/redeploys desnecessários e reduz o acoplamento indesejado.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package should be split if there are classes not used by at least **50%** of the clients that import the package.
-- [ ] If a class is used in isolation, it should be moved to a utility package or out of the cohesive package.
-- [ ] There should not be more than **3** public classes within a package that are not externally referenced.
+- [ ] O pacote deve ser dividido se houver classes não utilizadas por pelo menos **50%** dos clientes que o importam.
+- [ ] Se uma classe é utilizada de forma isolada, deve ser movida para um pacote utilitário ou removida do pacote coeso.
+- [ ] Não deve haver mais de **3** classes públicas dentro de um pacote que não sejam referenciadas externamente.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Private Support Methods**: Internal helper classes that are strictly used to support the public classes of the package.
+- **Métodos de Suporte Privados**: Classes helper internas que são estritamente utilizadas para suportar as classes públicas do pacote.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check the `imports` directory of a client and see how many classes from the imported package it actively uses.
+Verificar o diretório de `imports` de um cliente e observar quantas classes do pacote importado ele utiliza ativamente.
 
-### Automatic
+### Automático
 
-Dependency analysis: Tools that map the percentage of classes consumed within a package.
+Análise de dependências: Ferramentas que mapeiam o percentual de classes consumidas dentro de um pacote.
 
-## Related to
+## Relacionado a
 
-- [015 - Release Reuse Equivalency Principle](../package-principles/001_release-reuse-equivalency-principle.md): complements
-- [013 - Interface Segregation Principle](004_interface-segregation-principle.md): reinforces
-- [016 - Common Closure Principle](../package-principles/002_common-closure-principle.md): complements
+- [015 - Release Reuse Equivalency Principle](../package-principles/001_release-reuse-equivalency-principle.md): complementa
+- [013 - Interface Segregation Principle](004_interface-segregation-principle.md): reforça
+- [016 - Common Closure Principle](../package-principles/002_common-closure-principle.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

@@ -184,7 +184,7 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 ### Relação com Rules
 
-- [028 - Tratamento de Exceção Assíncrona](../../clean-code/008_tratamento-excecao-assincrona.md): crucial para streams
+- [028 - Tratamento de Exceção Assíncrona](../../clean-code/tratamento-excecao-assincrona.md): crucial para streams
 - [045 - Processos Stateless](../../twelve-factor/006_processos-stateless.md): servidores streaming stateless
 - [047 - Concorrência via Processos](../../twelve-factor/008_concorrencia-via-processos.md): múltiplas requests simultâneas
 - [048 - Descartabilidade de Processos](../../twelve-factor/009_descartabilidade-processos.md): processos podem ser interrompidos

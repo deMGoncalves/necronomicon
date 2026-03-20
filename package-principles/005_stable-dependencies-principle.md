@@ -6,41 +6,41 @@
 
 ---
 
-## What it is
+## O que é
 
-A module's dependencies should point in the direction of stability. Unstable modules (that change frequently) should depend on stable modules.
+As dependências de um módulo devem apontar na direção da estabilidade. Módulos instáveis (que mudam com frequência) devem depender de módulos estáveis.
 
-## Why it matters
+## Por que importa
 
-SDP violations cause high-level modules (most important to business) to depend on low-level and volatile modules, spreading changes and reducing testability.
+Violações do SDP fazem com que módulos de alto nível (mais importantes para o negócio) dependam de módulos de baixo nível e voláteis, propagando mudanças e reduzindo a testabilidade.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package's **instability** (I), calculated as (Outgoing Dependencies / Total Dependencies), should be **less than** 0.5.
-- [ ] Business policy modules (high level) should have the lowest Instability (close to 0).
-- [ ] Most used packages (high degree of stability) must not depend on packages with low degree of stability (high I).
+- [ ] A **instabilidade** (I) do pacote, calculada como (Dependências de Saída / Total de Dependências), deve ser **menor que** 0.5.
+- [ ] Módulos de política de negócio (alto nível) devem ter a menor Instabilidade (próxima de 0).
+- [ ] Os pacotes mais utilizados (alto grau de estabilidade) não devem depender de pacotes com baixo grau de estabilidade (alto I).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Boundary Elements**: Elements at the system boundary (e.g., *Adapters*, *Controllers*) that are volatile by nature.
+- **Elementos de Fronteira**: Elementos na fronteira do sistema (ex.: *Adapters*, *Controllers*) que são voláteis por natureza.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Identify the high-level layer (e.g., *Domain*) importing concrete classes from external layers (e.g., *Infrastructure*).
+Identificar a camada de alto nível (ex.: *Domain*) importando classes concretas de camadas externas (ex.: *Infrastructure*).
 
-### Automatic
+### Automático
 
-Dependency analysis: Calculation of package stability metrics (I).
+Análise de dependências: Cálculo das métricas de estabilidade de pacotes (I).
 
-## Related to
+## Relacionado a
 
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reinforces
-- [018 - Acyclic Dependencies Principle](../package-principles/004_acyclic-dependencies-principle.md): complements
-- [020 - Stable Abstractions Principle](../package-principles/006_stable-abstractions-principle.md): complements
+- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reforça
+- [018 - Acyclic Dependencies Principle](../package-principles/004_acyclic-dependencies-principle.md): complementa
+- [020 - Stable Abstractions Principle](../package-principles/006_stable-abstractions-principle.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

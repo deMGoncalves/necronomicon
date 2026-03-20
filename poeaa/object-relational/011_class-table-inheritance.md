@@ -1,14 +1,14 @@
 # Class Table Inheritance
 
-**Type**: Object-Relational Mapping Pattern (Structural)
+**Tipo**: Padrão Object-Relational (Estrutural)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Represent a class inheritance hierarchy with a database table for each class in the hierarchy, where each table contains only the fields defined in that specific class.
+Representar uma hierarquia de herança de classes com uma tabela do banco de dados para cada classe da hierarquia, onde cada tabela contém apenas os campos definidos naquela classe específica.
 
-## Also Known As
+## Também Conhecido Como
 
 - Table-per-Class
 - Joined Strategy
@@ -16,34 +16,34 @@ Represent a class inheritance hierarchy with a database table for each class in 
 
 ---
 
-## Motivation
+## Motivação
 
-Single Table Inheritance is simple but suffers from space waste and impossibility of NOT NULL constraints on subclass-specific fields. Class Table Inheritance solves these problems through normalization: each class in the hierarchy has its own table containing only its specific fields.
+O Single Table Inheritance é simples, mas sofre com desperdício de espaço e impossibilidade de restrições NOT NULL em campos específicos de subclasse. O Class Table Inheritance resolve esses problemas por meio da normalização: cada classe da hierarquia possui sua própria tabela contendo apenas seus campos específicos.
 
-Consider the hierarchy `Animal` → `Dog`, `Cat`. With Class Table Inheritance, we create three tables: `animals` (id, name), `dogs` (id FK→animals, breed), `cats` (id FK→animals, furColor). A Dog record has one row in `animals` and another in `dogs`, linked by foreign key. This eliminates NULL columns and allows appropriate constraints (e.g., `breed NOT NULL` in `dogs`).
+Considere a hierarquia `Animal` → `Dog`, `Cat`. Com Class Table Inheritance, criamos três tabelas: `animals` (id, name), `dogs` (id FK→animals, breed), `cats` (id FK→animals, furColor). Um registro Dog possui uma linha em `animals` e outra em `dogs`, ligadas por chave estrangeira. Isso elimina colunas NULL e permite restrições apropriadas (ex.: `breed NOT NULL` em `dogs`).
 
-The advantage is perfect normalization — no space waste, each table has clear semantics, and the schema directly reflects the inheritance structure. The cost is complexity: queries require joins to reconstruct the complete object, and read performance can degrade in deep hierarchies. The choice between Single Table and Class Table is a classic trade-off between simplicity/performance and normalization/integrity.
-
----
-
-## Applicability
-
-Use Class Table Inheritance when:
-
-- The hierarchy has many subclass-specific fields that are rarely shared
-- Referential integrity and NOT NULL constraints are important to the domain
-- Queries frequently operate on a single subclass (e.g., "all dogs")
-- Schema normalization is an architectural priority
-- The hierarchy is deep (more than 3 levels) and NULL column waste would be significant
-- The data model needs to be understandable without consulting code (self-documenting schema)
+A vantagem é a normalização perfeita — sem desperdício de espaço, cada tabela possui semântica clara e o schema reflete diretamente a estrutura de herança. O custo é a complexidade: queries requerem joins para reconstruir o objeto completo, e a performance de leitura pode degradar em hierarquias profundas. A escolha entre Single Table e Class Table é um clássico trade-off entre simplicidade/performance e normalização/integridade.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Class Table Inheritance quando:
+
+- A hierarquia possui muitos campos específicos de subclasse que raramente são compartilhados
+- Integridade referencial e restrições NOT NULL são importantes para o domínio
+- Queries frequentemente operam em uma única subclasse (ex.: "todos os dogs")
+- A normalização do schema é uma prioridade arquitetural
+- A hierarquia é profunda (mais de 3 níveis) e o desperdício de colunas NULL seria significativo
+- O modelo de dados precisa ser compreensível sem consultar o código (schema auto-documentado)
+
+---
+
+## Estrutura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Client Code                          │
+│                        Código Cliente                        │
 └────────────────────────────────┬────────────────────────────┘
                                  │
                     ┌────────────▼────────────┐
@@ -64,9 +64,9 @@ Use Class Table Inheritance when:
     │ + bark(): void       │      │ + meow(): void      │
     └──────────────────────┘      └─────────────────────┘
 
-Database Schema:
+Schema do Banco de Dados:
 ┌──────────────────────────┐
-│   Table: animals         │
+│   Tabela: animals        │
 ├──────────┬───────────────┤
 │ id (PK)  │ name          │
 │ BIGINT   │ VARCHAR       │
@@ -80,7 +80,7 @@ Database Schema:
          │
 ┌────────┴─────────────────┐
 │                          │
-│  Table: dogs             │    Table: cats
+│  Tabela: dogs            │    Tabela: cats
 ├──────────┬───────────────┤    ├──────────┬──────────────┤
 │ id (PK)  │ breed         │    │ id (PK)  │ furColor     │
 │ FK       │ VARCHAR       │    │ FK       │ VARCHAR      │
@@ -92,122 +92,122 @@ Database Schema:
 
 ---
 
-## Participants
+## Participantes
 
-- **Animal** (Base Table): Stores the primary ID and all fields common to the entire hierarchy. Serves as anchor for foreign keys from subclass tables.
+- **Animal** (Tabela Base): Armazena o ID primário e todos os campos comuns a toda a hierarquia. Serve como âncora para as chaves estrangeiras das tabelas de subclasse.
 
-- **Dog / Cat** (Subclass Tables): Store only the specific fields of each subclass. Their primary keys are simultaneously foreign keys to the base table.
+- **Dog / Cat** (Tabelas de Subclasse): Armazenam apenas os campos específicos de cada subclasse. Suas chaves primárias são simultaneamente chaves estrangeiras para a tabela base.
 
-- **Foreign Key Relationship**: Links each subclass record to the corresponding record in the base table, ensuring referential integrity.
+- **Relacionamento de Chave Estrangeira**: Liga cada registro de subclasse ao registro correspondente na tabela base, garantindo a integridade referencial.
 
-- **Mapper/ORM**: Responsible for coordinating JOINs between tables to reconstruct the complete object when loading, and for INSERT/UPDATE in multiple tables when saving.
+- **Mapper/ORM**: Responsável por coordenar JOINs entre tabelas para reconstruir o objeto completo ao carregar, e por INSERT/UPDATE em múltiplas tabelas ao salvar.
 
-- [**Identity Field**](004_identity-field.md): The ID is shared across all tables — the same ID value identifies the same object in all hierarchy tables.
-
----
-
-## Collaborations
-
-When saving a Dog object, the Mapper first inserts a record in the `animals` table with common fields (name) and obtains the generated ID. Then, it inserts into the `dogs` table using that same ID as both primary key and foreign key, including specific fields (breed). The operation requires two coordinated writes.
-
-When loading a Dog by ID, the Mapper executes a JOIN between `animals` and `dogs` (`SELECT * FROM animals INNER JOIN dogs ON animals.id = dogs.id WHERE animals.id = ?`), retrieves data from both tables, and constructs the complete Dog object with all fields.
+- [**Identity Field**](004_identity-field.md): O ID é compartilhado por todas as tabelas — o mesmo valor de ID identifica o mesmo objeto em todas as tabelas da hierarquia.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Ao salvar um objeto Dog, o Mapper primeiro insere um registro na tabela `animals` com os campos comuns (name) e obtém o ID gerado. Em seguida, insere na tabela `dogs` usando esse mesmo ID como chave primária e chave estrangeira, incluindo os campos específicos (breed). A operação requer duas escritas coordenadas.
 
-1. **Perfect Normalization**: No unnecessary NULL columns — each table contains only relevant data.
-2. **Integrity Constraints**: Subclass fields can have appropriate NOT NULL, UNIQUE, CHECK constraints.
-3. **Self-Documenting Schema**: The table structure directly reflects the class hierarchy, facilitating understanding.
-4. **Space Economy**: No storage waste with empty columns.
-5. **Independent Evolution**: Adding fields to a subclass doesn't affect other hierarchy tables.
-6. **Extension Support**: Easy to add new subclasses without polluting existing tables.
-
-### Disadvantages
-
-1. **Read Performance**: Each object load requires JOIN of multiple tables, degrading performance.
-2. **Query Complexity**: Polymorphic queries ("all animals") require UNION or multiple LEFT JOINs.
-3. **Write Overhead**: Saving an object requires multiple coordinated INSERTs/UPDATEs, increasing error chance.
-4. **Refactoring Problems**: Moving a field between superclass and subclass requires data migration between tables.
-5. **Deep Hierarchies**: In hierarchies with 5+ levels, the number of JOINs can make queries impractical.
+Ao carregar um Dog por ID, o Mapper executa um JOIN entre `animals` e `dogs` (`SELECT * FROM animals INNER JOIN dogs ON animals.id = dogs.id WHERE animals.id = ?`), recupera os dados de ambas as tabelas e constrói o objeto Dog completo com todos os campos.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Primary Key Strategy**: The subclass table's PK must simultaneously be FK to the base table. Use `ON DELETE CASCADE` to maintain integrity.
+1. **Normalização Perfeita**: Sem colunas NULL desnecessárias — cada tabela contém apenas dados relevantes.
+2. **Restrições de Integridade**: Campos de subclasse podem ter restrições NOT NULL, UNIQUE, CHECK apropriadas.
+3. **Schema Auto-Documentado**: A estrutura de tabelas reflete diretamente a hierarquia de classes, facilitando a compreensão.
+4. **Economia de Espaço**: Sem desperdício de armazenamento com colunas vazias.
+5. **Evolução Independente**: Adicionar campos a uma subclasse não afeta outras tabelas da hierarquia.
+6. **Suporte a Extensão**: Fácil adicionar novas subclasses sem poluir tabelas existentes.
 
-2. **Type Identification**: Without explicit discriminator column, the ORM identifies type by presence of record in subclass table after JOINs.
+### Desvantagens
 
-3. **Operation Ordering**: When saving, always insert in superclass first (to obtain ID), then in subclasses. When deleting, delete from subclasses first.
-
-4. **Transactions**: Multi-table operations must be wrapped in transactions to guarantee atomicity (either everything is saved, or nothing is).
-
-5. **Indexes**: Create indexes on foreign keys of subclass tables to optimize JOINs.
-
-6. **Views**: For frequent polymorphic queries, consider creating views that UNION all subclasses.
-
-### Implementation Techniques
-
-1. **ORM Mapping**: Hibernate uses `@Inheritance(strategy = InheritanceType.JOINED)`. Entity Framework uses `Table-per-Type` (TPT).
-
-2. **SQL Inheritance**: Use Common Table Expressions (CTEs) for complex hierarchical queries.
-
-3. **Lazy Loading of Subclasses**: Configure ORM to lazily load subclass properties if not immediately needed.
-
-4. **Batch Fetching**: Use batch fetching (N+1 SELECT problem solution) to load multiple subclass objects efficiently.
-
-5. **Polymorphism via UNION**: For "SELECT all", use `SELECT id, name, 'Dog' as type FROM animals JOIN dogs UNION SELECT id, name, 'Cat' as type FROM animals JOIN cats`.
-
-6. **Abstract Table**: If the superclass is abstract, the base table can be kept only for referential integrity, without "orphan" records.
+1. **Performance de Leitura**: Cada carregamento de objeto requer JOIN de múltiplas tabelas, degradando a performance.
+2. **Complexidade de Query**: Queries polimórficas ("todos os animais") requerem UNION ou múltiplos LEFT JOINs.
+3. **Overhead de Escrita**: Salvar um objeto requer múltiplos INSERTs/UPDATEs coordenados, aumentando a chance de erro.
+4. **Problemas de Refatoração**: Mover um campo entre superclasse e subclasse requer migração de dados entre tabelas.
+5. **Hierarquias Profundas**: Em hierarquias com 5+ níveis, o número de JOINs pode tornar as queries impraticáveis.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Hibernate ORM**: The `JOINED` strategy is widely used in enterprise systems that prioritize normalization.
+### Considerações de Implementação
 
-2. **Entity Framework**: TPT (Table-per-Type) is one of the three standard inheritance mapping strategies.
+1. **Estratégia de Chave Primária**: A PK da tabela de subclasse deve ser simultaneamente FK para a tabela base. Use `ON DELETE CASCADE` para manter a integridade.
 
-3. **Financial Systems**: Use Class Table for Financial Instrument hierarchies (Stock, Bond, Derivative) where each type has specific fields.
+2. **Identificação de Tipo**: Sem coluna discriminadora explícita, o ORM identifica o tipo pela presença de registro na tabela de subclasse após os JOINs.
 
-4. **HR Systems**: Map Employee hierarchy → Manager, Developer, Salesperson with table per type.
+3. **Ordenação de Operações**: Ao salvar, sempre inserir primeiro na superclasse (para obter o ID), depois nas subclasses. Ao excluir, excluir das subclasses primeiro.
 
-5. **E-commerce Platforms**: Use for Products → PhysicalProduct, DigitalProduct, Subscription, where each type has different logistics.
+4. **Transações**: Operações em múltiplas tabelas devem ser encapsuladas em transações para garantir atomicidade (ou tudo é salvo, ou nada é).
 
-6. **PostgreSQL Inheritance**: PostgreSQL has native support for table inheritance (`CREATE TABLE dogs (...) INHERITS (animals)`), which implements this pattern at database level.
+5. **Índices**: Criar índices nas chaves estrangeiras das tabelas de subclasse para otimizar os JOINs.
 
----
+6. **Views**: Para queries polimórficas frequentes, considerar criar views que façam UNION de todas as subclasses.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Single Table Inheritance**](010_single-table-inheritance.md): Simpler alternative that uses a single table with discriminator.
-- [**Concrete Table Inheritance**](012_concrete-table-inheritance.md): Alternative that duplicates common fields in each concrete table.
-- [**Inheritance Mappers**](013_inheritance-mappers.md): Structures Mappers in hierarchy to reflect object hierarchy.
-- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Used to link subclass tables to base table.
-- [**Identity Field**](004_identity-field.md): The ID is shared between base and subclass tables.
-- [**Lazy Load**](003_lazy-load.md): Essential to avoid unnecessary JOINs when loading deep hierarchies.
-- [**Unit of Work**](001_unit-of-work.md): Coordinates INSERTs/UPDATEs in multiple tables atomically.
+1. **Mapeamento ORM**: Hibernate usa `@Inheritance(strategy = InheritanceType.JOINED)`. Entity Framework usa `Table-per-Type` (TPT).
 
-### Relationship with Rules
+2. **SQL com Herança**: Usar Common Table Expressions (CTEs) para queries hierárquicas complexas.
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): table per responsibility
-- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): substitutable subclasses
+3. **Lazy Loading de Subclasses**: Configurar o ORM para carregar lazily as propriedades de subclasse se não forem necessárias imediatamente.
 
----
+4. **Batch Fetching**: Usar batch fetching (solução para o problema N+1 SELECT) para carregar múltiplos objetos de subclasse eficientemente.
 
-## Relationship with Business Rules
+5. **Polimorfismo via UNION**: Para "SELECT all", usar `SELECT id, name, 'Dog' as type FROM animals JOIN dogs UNION SELECT id, name, 'Cat' as type FROM animals JOIN cats`.
 
-- **[012] Liskov Substitution Principle**: The separate table structure reflects substitutability between classes.
-- **[010] Single Responsibility Principle**: Each table has the sole responsibility of storing fields of a specific class.
-- **[014] Dependency Inversion Principle**: The Mapper abstracts JOIN complexity, keeping domain independent of schema.
-- **[021] Prohibition of Logic Duplication**: Eliminates duplication of common columns that would occur in Concrete Table Inheritance.
+6. **Tabela Abstrata**: Se a superclasse for abstrata, a tabela base pode ser mantida apenas para integridade referencial, sem registros "órfãos".
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Hibernate ORM**: A estratégia `JOINED` é amplamente utilizada em sistemas corporativos que priorizam a normalização.
+
+2. **Entity Framework**: TPT (Table-per-Type) é uma das três estratégias padrão de mapeamento de herança.
+
+3. **Sistemas Financeiros**: Usam Class Table para hierarquias de Instrumento Financeiro (Ação, Título, Derivativo) onde cada tipo possui campos específicos.
+
+4. **Sistemas de RH**: Mapeiam hierarquia de Funcionário → Gerente, Desenvolvedor, Vendedor com tabela por tipo.
+
+5. **Plataformas de E-commerce**: Usam para Produtos → ProdutoFísico, ProdutoDigital, Assinatura, onde cada tipo possui logística diferente.
+
+6. **PostgreSQL Inheritance**: O PostgreSQL possui suporte nativo para herança de tabelas (`CREATE TABLE dogs (...) INHERITS (animals)`), implementando este padrão no nível do banco de dados.
+
+---
+
+## Padrões Relacionados
+
+- [**Single Table Inheritance**](010_single-table-inheritance.md): Alternativa mais simples que usa uma única tabela com discriminador.
+- [**Concrete Table Inheritance**](012_concrete-table-inheritance.md): Alternativa que duplica campos comuns em cada tabela concreta.
+- [**Inheritance Mappers**](013_inheritance-mappers.md): Estrutura Mappers em hierarquia para refletir a hierarquia de objetos.
+- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Usado para ligar as tabelas de subclasse à tabela base.
+- [**Identity Field**](004_identity-field.md): O ID é compartilhado entre as tabelas base e de subclasse.
+- [**Lazy Load**](003_lazy-load.md): Essencial para evitar JOINs desnecessários ao carregar hierarquias profundas.
+- [**Unit of Work**](001_unit-of-work.md): Coordena INSERTs/UPDATEs em múltiplas tabelas atomicamente.
+
+### Relação com Rules
+
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): tabela por responsabilidade
+- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): subclasses substituíveis
+
+---
+
+## Relação com Regras de Negócio
+
+- **[012] Liskov Substitution Principle**: A estrutura de tabelas separadas reflete a substituibilidade entre classes.
+- **[010] Single Responsibility Principle**: Cada tabela tem a única responsabilidade de armazenar campos de uma classe específica.
+- **[014] Dependency Inversion Principle**: O Mapper abstrai a complexidade dos JOINs, mantendo o domínio independente do schema.
+- **[021] Proibição de Duplicação de Lógica**: Elimina a duplicação de colunas comuns que ocorreria no Concrete Table Inheritance.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

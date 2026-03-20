@@ -181,7 +181,7 @@ await db.users.insert({ email, password: hashedPassword });
 
 ## Rules Relacionadas
 
-- [clean-code/010 - Insecure Functions](../../clean-code/010_proibicao-funcoes-inseguras.md)
+- [clean-code/010 - Insecure Functions](../../clean-code/proibicao-funcoes-inseguras.md)
 - [twelve-factor/003 - Config via Environment](../../twelve-factor/003_configuracoes-via-ambiente.md)
 
 ## Patterns Relacionados

@@ -1,4 +1,4 @@
-# Application of Single Responsibility Principle (SRP)
+# Aplicação do Single Responsibility Principle (SRP)
 
 **ID**: BEHAVIORAL-010
 **Severity**: 🔴 Critical
@@ -6,53 +6,53 @@
 
 ---
 
-## What it is
+## O que é
 
-Requires that a class or module have only one reason to change, which implies it must have a single responsibility.
+Exige que uma classe ou módulo tenha apenas uma razão para mudar, o que implica que deve ter uma única responsabilidade.
 
-## Why it matters
+## Por que importa
 
-Violation of SRP causes **low cohesion** and **high coupling**, making classes fragile and difficult to test. It increases maintenance cost, as a change in one business area can break another.
+A violação do SRP causa **baixa coesão** e **alto acoplamento**, tornando classes frágeis e difíceis de testar. Aumenta o custo de manutenção, pois uma mudança em uma área de negócio pode quebrar outra.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] A class must not contain business logic and persistence logic (e.g., *Service* and *Repository* together).
-- [ ] The number of public methods in a class must not exceed **7**.
-- [ ] The **Lack of Cohesion in Methods (LCOM)** must be less than 0.75.
+- [ ] Uma classe não deve conter lógica de negócio e lógica de persistência ao mesmo tempo (ex.: *Service* e *Repository* juntos).
+- [ ] O número de métodos públicos em uma classe não deve exceder **7**.
+- [ ] O **Lack of Cohesion in Methods (LCOM)** deve ser menor que 0.75.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Utility/Helper Classes**: Static classes that group pure stateless functions for generic data manipulation (e.g., date formatters).
+- **Classes Utilitárias/Helper**: Classes estáticas que agrupam funções puras sem estado para manipulação genérica de dados (ex.: formatadores de data).
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Ask: "If there is a change in requirement X and requirement Y, does this class need to be changed in both situations?" (SRP violated if the answer is yes).
+Pergunte: "Se houver uma mudança no requisito X e no requisito Y, essa classe precisa ser alterada nas duas situações?" (SRP violado se a resposta for sim).
 
-### Automatic
+### Automático
 
-SonarQube: High `Cognitive Complexity` and high `LCOM (Lack of Cohesion in Methods)`.
+SonarQube: Alta `Cognitive Complexity` e alto `LCOM (Lack of Cohesion in Methods)`.
 
-## Related to
+## Relacionado a
 
-- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reinforces
-- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reinforces
-- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): complements
-- [025 - Prohibition of The Blob Anti-Pattern](../clean-code/005_prohibition-blob-anti-pattern.md): complements
-- [021 - Prohibition of Logic Duplication](../clean-code/001_prohibition-logic-duplication.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](../clean-code/002_prioritization-simplicity-clarity.md): reinforces
-- [015 - Release Reuse Equivalency Principle](001_release-reuse-equivalency-principle.md): reinforces
-- [016 - Common Closure Principle](002_common-closure-principle.md): reinforces
-- [032 - Minimum Test Coverage](../clean-code/012_minimum-test-coverage.md): reinforces
-- [033 - Parameter Limit per Function](../clean-code/013_parameter-limit-per-function.md): reinforces
-- [034 - Consistent Class and Method Names](../clean-code/014_consistent-class-method-names.md): reinforces
-- [037 - Prohibition of Flag Arguments](../clean-code/017_prohibition-flag-arguments.md): reinforces
-- [038 - Query Inversion Principle](../clean-code/018_query-inversion-principle.md): reinforces
-- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): complements
-- [047 - Concurrency via Processes](../twelve-factor/008_concurrency-via-processes.md): complements
+- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reforça
+- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reforça
+- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): complementa
+- [025 - Prohibition of The Blob Anti-Pattern](../clean-code/proibicao-anti-padrao-blob.md): complementa
+- [021 - Prohibition of Logic Duplication](../clean-code/proibicao-duplicacao-logica.md): reforça
+- [022 - Prioritization of Simplicity and Clarity](../clean-code/priorizacao-simplicidade-clareza.md): reforça
+- [015 - Release Reuse Equivalency Principle](001_release-reuse-equivalency-principle.md): reforça
+- [016 - Common Closure Principle](002_common-closure-principle.md): reforça
+- [032 - Minimum Test Coverage](../clean-code/cobertura-teste-minima-qualidade.md): reforça
+- [033 - Parameter Limit per Function](../clean-code/limite-parametros-funcao.md): reforça
+- [034 - Consistent Class and Method Names](../clean-code/nomes-classes-metodos-consistentes.md): reforça
+- [037 - Prohibition of Flag Arguments](../clean-code/proibicao-argumentos-sinalizadores.md): reforça
+- [038 - Query Inversion Principle](../clean-code/conformidade-principio-inversao-consulta.md): reforça
+- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): complementa
+- [047 - Concurrency via Processes](../twelve-factor/008_concurrency-via-processes.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

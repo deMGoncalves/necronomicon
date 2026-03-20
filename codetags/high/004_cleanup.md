@@ -226,8 +226,8 @@ const stillHere = true;
 
 ## Rules Relacionadas
 
-- [clean-code/003 - YAGNI](../../clean-code/003_prohibition-speculative-functionality.md): remover código não necessário
-- [clean-code/019 - Boy Scout Rule](../../clean-code/019_regra-escoteiro-refatoracao-continua.md): limpar ao passar
+- [clean-code/003 - YAGNI](../../clean-code/proibicao-funcionalidade-especulativa.md): remover código não necessário
+- [clean-code/019 - Boy Scout Rule](../../clean-code/regra-escoteiro-refatoracao-continua.md): limpar ao passar
 
 ---
 

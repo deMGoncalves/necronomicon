@@ -1,38 +1,38 @@
 # Dependent Mapping
 
-**Classification**: Object-Relational Structural Pattern
+**Classificação**: Padrão Object-Relational Estrutural
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Map dependent objects that have no identity of their own and exist only in the context of their parent object.
+Mapear objetos dependentes que não possuem identidade própria e existem apenas no contexto de seu objeto pai.
 
-## Also Known As
+## Também Conhecido Como
 
 - Cascading Mapper
 - Child Mapping
 
-## Motivation
+## Motivação
 
-Dependent objects are those that have no meaning outside of their owner. For example, Order Items don't make sense without an Order. They have no independent identity and their lifecycle is coupled to the parent object.
+Objetos dependentes são aqueles que não fazem sentido fora de seu proprietário. Por exemplo, Order Items não fazem sentido sem um Order. Eles não possuem identidade independente e seu ciclo de vida está acoplado ao objeto pai.
 
-Dependent Mapping handles this by making the parent object's mapper responsible for also mapping its dependents. When you load an Order, you automatically load its Order Items. When you save an Order, you also save all items.
+O Dependent Mapping lida com isso tornando o mapper do objeto pai responsável por também mapear seus dependentes. Quando você carrega um Order, automaticamente carrega seus Order Items. Quando você salva um Order, também salva todos os itens.
 
-This pattern simplifies mapping by eliminating the need for separate mappers for dependent objects, centralizing all persistence logic in the aggregate root's mapper. It's especially useful in Domain-Driven Design (DDD) to enforce aggregate boundaries.
+Este padrão simplifica o mapeamento eliminando a necessidade de mappers separados para objetos dependentes, centralizando toda a lógica de persistência no mapper da raiz do agregado. É especialmente útil em Domain-Driven Design (DDD) para reforçar as fronteiras do agregado.
 
-## Applicability
+## Aplicabilidade
 
-Use Dependent Mapping when:
+Use Dependent Mapping quando:
 
-- Dependent objects have no identity outside the parent
-- The dependent's lifecycle is tied to the parent
-- Dependents are always loaded/saved with the parent
-- There's no direct access to dependents without the parent
-- Aggregate boundaries in Domain-Driven Design
-- Performance: you always need the dependents together with the parent
+- Objetos dependentes não possuem identidade fora do pai
+- O ciclo de vida do dependente está vinculado ao do pai
+- Dependentes são sempre carregados/salvos com o pai
+- Não há acesso direto aos dependentes sem o pai
+- Fronteiras de agregados em Domain-Driven Design
+- Performance: você sempre precisa dos dependentes junto com o pai
 
-## Structure
+## Estrutura
 
 ```
 Order (Aggregate Root)
@@ -41,93 +41,93 @@ Order (Aggregate Root)
 └── OrderItem (Dependent)
 
 OrderMapper
-├── load(id) → loads Order + all OrderItems
-├── save(Order) → saves Order + all OrderItems
-└── delete(id) → deletes Order + all OrderItems
+├── load(id) → carrega Order + todos os OrderItems
+├── save(Order) → salva Order + todos os OrderItems
+└── delete(id) → exclui Order + todos os OrderItems
 
-OrderItemMapper does not exist
-(OrderItems are mapped via OrderMapper)
+OrderItemMapper não existe
+(OrderItems são mapeados via OrderMapper)
 ```
 
-## Participants
+## Participantes
 
-- **Aggregate Root**: Parent object with independent identity
-- **Dependent Object**: Object that exists only in the context of the parent
-- **Owner Mapper**: Mapper of the aggregate root that also maps the dependents
-- **Database**: Tables related by foreign key
+- **Aggregate Root**: Objeto pai com identidade independente
+- **Dependent Object**: Objeto que existe apenas no contexto do pai
+- **Owner Mapper**: Mapper da raiz do agregado que também mapeia os dependentes
+- **Database**: Tabelas relacionadas por chave estrangeira
 
-## Collaborations
+## Colaborações
 
-- Client requests Owner Mapper to load aggregate root
-- Owner Mapper loads parent data from main table
-- Owner Mapper automatically loads dependent data from related tables
-- Owner Mapper constructs complete object graph (parent + dependents)
-- On save, Owner Mapper persists both parent and dependents in cascade
+- Client solicita ao Owner Mapper que carregue a raiz do agregado
+- Owner Mapper carrega os dados do pai da tabela principal
+- Owner Mapper carrega automaticamente os dados dependentes das tabelas relacionadas
+- Owner Mapper constrói o grafo de objetos completo (pai + dependentes)
+- Ao salvar, Owner Mapper persiste pai e dependentes em cascata
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Simplicity**: Single mapper for complete aggregate
-- **Consistency**: Parent and dependents always synchronized
-- **Performance**: Efficient batch loading
-- **Aggregate boundary**: Enforces DDD aggregate boundaries
-- **Maintainability**: Centralized persistence logic
-- **Atomicity**: Parent and dependent operations are atomic
+- **Simplicidade**: Mapper único para o agregado completo
+- **Consistência**: Pai e dependentes sempre sincronizados
+- **Performance**: Carregamento em lote eficiente
+- **Fronteira do agregado**: Reforça as fronteiras de agregados DDD
+- **Manutenibilidade**: Lógica de persistência centralizada
+- **Atomicidade**: Operações do pai e dependentes são atômicas
 
-### Disadvantages
+### Desvantagens
 
-- **Unnecessary loading**: Always loads dependents even if not needed
-- **Mapper complexity**: Parent mapper becomes more complex
-- **Limited flexibility**: Cannot access dependents independently
-- **Coupling**: Dependents strongly coupled to parent lifecycle
-- **Hard to refactor**: If dependent needs to become independent in the future
+- **Carregamento desnecessário**: Sempre carrega dependentes mesmo que não sejam necessários
+- **Complexidade do mapper**: O mapper do pai torna-se mais complexo
+- **Flexibilidade limitada**: Não é possível acessar dependentes de forma independente
+- **Acoplamento**: Dependentes fortemente acoplados ao ciclo de vida do pai
+- **Difícil de refatorar**: Se o dependente precisar se tornar independente no futuro
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Identify dependents**: Objects without identity or independent lifecycle
-2. **Cascade operations**: Implement save/delete cascade in parent mapper
-3. **Loading strategy**: Use joins or separate queries to load dependents
-4. **Collection handling**: Map collections of dependents correctly
-5. **Delete orphans**: Remove dependents that no longer exist in the collection
-6. **Versioning**: Include dependents in aggregate version calculation
+1. **Identificar dependentes**: Objetos sem identidade ou ciclo de vida independente
+2. **Operações em cascata**: Implementar cascata de save/delete no mapper do pai
+3. **Estratégia de carregamento**: Usar joins ou queries separadas para carregar dependentes
+4. **Tratamento de coleções**: Mapear coleções de dependentes corretamente
+5. **Excluir órfãos**: Remover dependentes que não existem mais na coleção
+6. **Versionamento**: Incluir dependentes no cálculo da versão do agregado
 
-### Techniques
+### Técnicas
 
-- **Join fetching**: Load parent and dependents in single query with JOIN
-- **Batch loading**: Load dependents in separate query after loading parents
-- **Diff algorithm**: Compare old and new collections to determine what to insert/update/delete
-- **Mark for deletion**: Mark orphaned dependents for deletion
-- **Unit of Work integration**: Integrate with Unit of Work to manage cascade operations
-- **Cascade rules**: Define clear cascade rules (save, delete, update)
+- **Join fetching**: Carregar pai e dependentes em uma única query com JOIN
+- **Batch loading**: Carregar dependentes em query separada após carregar os pais
+- **Algoritmo diff**: Comparar coleções antigas e novas para determinar o que inserir/atualizar/excluir
+- **Marcar para exclusão**: Marcar dependentes órfãos para exclusão
+- **Integração com Unit of Work**: Integrar com Unit of Work para gerenciar operações em cascata
+- **Regras de cascata**: Definir regras claras de cascata (save, delete, update)
 
-## Known Uses
+## Usos Conhecidos
 
-- **Order/OrderItem**: Orders and order items in e-commerce
-- **Invoice/InvoiceItem**: Invoices and invoice lines
-- **Document/Paragraph**: Documents and paragraphs
-- **Album/Photo**: Photo albums and individual photos when photo only exists in album
-- **Playlist/Song**: Playlists and songs when song only exists in playlist
-- **Form/Field**: Forms and dynamic form fields
+- **Order/OrderItem**: Pedidos e itens de pedido em e-commerce
+- **Invoice/InvoiceItem**: Faturas e linhas de fatura
+- **Document/Paragraph**: Documentos e parágrafos
+- **Album/Photo**: Álbuns de fotos e fotos individuais quando a foto só existe no álbum
+- **Playlist/Song**: Playlists e músicas quando a música só existe na playlist
+- **Form/Field**: Formulários e campos de formulário dinâmicos
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Embedded Value**](008_embedded-value.md): Alternative when dependent fits in parent table
-- [**Identity Map**](002_identity-map.md): Not applicable to dependents (no identity)
-- [**Unit of Work**](001_unit-of-work.md): Coordinates cascade operations
-- [**Data Mapper**](../data-source/004_data-mapper.md): Base pattern for mapping
-- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Implements relationship in database
-- [**Lazy Load**](003_lazy-load.md): Alternative to avoid always loading dependents
-- [**GoF Composite**](../../gof/structural/003_composite.md): Aggregate structure with dependents
+- [**Embedded Value**](008_embedded-value.md): Alternativa quando o dependente cabe na tabela do pai
+- [**Identity Map**](002_identity-map.md): Não aplicável a dependentes (sem identidade)
+- [**Unit of Work**](001_unit-of-work.md): Coordena operações em cascata
+- [**Data Mapper**](../data-source/004_data-mapper.md): Padrão base para mapeamento
+- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Implementa o relacionamento no banco de dados
+- [**Lazy Load**](003_lazy-load.md): Alternativa para evitar carregar dependentes sempre
+- [**GoF Composite**](../../gof/structural/003_composite.md): Estrutura de agregado com dependentes
 
-### Relationship with Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): mapper responsible for aggregate
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): consider immutability of dependents
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): mapper responsável pelo agregado
+- [029 - Imutabilidade de Objetos](../../clean-code/imutabilidade-objetos-freeze.md): considerar imutabilidade dos dependentes
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

@@ -1,39 +1,39 @@
 # Builder
 
-**Classification**: Creational Pattern
+**Classificação**: Padrão Criacional
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Separate the construction of a complex object from its representation, so that the same construction process can create different representations. Allows building objects step-by-step, making the creation process more controlled and readable.
+Separar a construção de um objeto complexo de sua representação, de modo que o mesmo processo de construção possa criar diferentes representações. Permite construir objetos passo a passo, tornando o processo de criação mais controlado e legível.
 
-## Also Known As
+## Também Conhecido Como
 
 - Constructor
 - Assembler
 
-## Motivation
+## Motivação
 
-An RTF document reader must convert RTF to multiple formats (ASCII, TeX, Widget). The problem is that the number of possible conversions is unlimited, and it would be impractical to add them all as methods in the reader class.
+Um leitor de documentos RTF deve converter RTF para múltiplos formatos (ASCII, TeX, Widget). O problema é que o número de conversões possíveis é ilimitado, e seria impraticável adicioná-las todas como métodos na classe do leitor.
 
-The solution is to configure the reader with a Builder object that knows how to convert RTF to a specific format. As the reader parses the document, it notifies the builder, which gradually constructs the final product. Different builders produce different representations.
+A solução é configurar o leitor com um objeto Builder que sabe como converter RTF para um formato específico. Enquanto o leitor analisa o documento, ele notifica o builder, que gradualmente constrói o produto final. Builders diferentes produzem representações diferentes.
 
-## Applicability
+## Aplicabilidade
 
-Use the Builder pattern when:
+Use o padrão Builder quando:
 
-- The algorithm for creating a complex object should be independent of the parts that compose the object and how they are assembled
-- The construction process must allow different representations of the constructed object
-- You need to construct objects with many optional parameters (avoid telescoping constructors)
-- You want to ensure the object is only usable after its complete construction (immutability)
-- Creating an object requires multiple steps or intermediate validations
+- O algoritmo para criar um objeto complexo deve ser independente das partes que compõem o objeto e de como são montadas
+- O processo de construção deve permitir diferentes representações do objeto construído
+- Você precisa construir objetos com muitos parâmetros opcionais (evitar construtores telescópicos)
+- Você deseja garantir que o objeto seja utilizável apenas após sua construção completa (imutabilidade)
+- Criar um objeto requer múltiplas etapas ou validações intermediárias
 
-## Structure
+## Estrutura
 
 ```
 Director
-├── Composes: Builder (interface)
+├── Compõe: Builder (interface)
 └── construct()
     ├── builder.buildPartA()
     ├── builder.buildPartB()
@@ -45,85 +45,85 @@ Builder (Interface)
 └── getResult(): Product
 
 ConcreteBuilder implements Builder
-├── Maintains reference to Product being built
-├── buildPartA() → configures part A of Product
-├── buildPartB() → configures part B of Product
-└── getResult() → returns final Product
+├── Mantém referência ao Product sendo construído
+├── buildPartA() → configura a parte A do Product
+├── buildPartB() → configura a parte B do Product
+└── getResult() → retorna o Product final
 
 Product
-└── Complex object being constructed
+└── Objeto complexo sendo construído
 ```
 
-## Participants
+## Participantes
 
-- [**Builder**](002_builder.md): Specifies abstract interface for creating parts of a Product object
-- **ConcreteBuilder**: Constructs and assembles parts of the product; defines and maintains the representation it creates; provides interface for retrieving the product
-- **Director**: Constructs an object using the Builder interface
-- **Product**: Represents the complex object being constructed; ConcreteBuilder constructs internal representation and defines assembly process
+- [**Builder**](002_builder.md): Especifica a interface abstrata para criar partes de um objeto Product
+- **ConcreteBuilder**: Constrói e monta partes do produto; define e mantém a representação que cria; fornece interface para recuperar o produto
+- **Director**: Constrói um objeto usando a interface Builder
+- **Product**: Representa o objeto complexo sendo construído; ConcreteBuilder constrói a representação interna e define o processo de montagem
 
-## Collaborations
+## Colaborações
 
-- Client creates Director object and configures it with desired Builder
-- Director notifies builder whenever a part of the product should be built
-- Builder handles requests from director and adds parts to the product
-- Client retrieves product from builder
+- Client cria o objeto Director e o configura com o Builder desejado
+- Director notifica o builder sempre que uma parte do produto deve ser construída
+- Builder trata as solicitações do director e adiciona partes ao produto
+- Client recupera o produto do builder
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Allows varying internal representation**: Using different builders provides different representations
-- **Isolates construction and representation code**: Encapsulates how a complex object is constructed and represented
-- **Refined control over construction process**: Builds the product step-by-step, under director's control
-- **Immutability**: Allows creating immutable objects elegantly
-- **Centralized validation**: Can validate state before returning final product
+- **Permite variar a representação interna**: Usar builders diferentes fornece representações diferentes
+- **Isola o código de construção e representação**: Encapsula como um objeto complexo é construído e representado
+- **Controle refinado sobre o processo de construção**: Constrói o produto passo a passo, sob controle do director
+- **Imutabilidade**: Permite criar objetos imutáveis de forma elegante
+- **Validação centralizada**: Pode validar o estado antes de retornar o produto final
 
-### Disadvantages
+### Desvantagens
 
-- **Requires creating specific builder**: A ConcreteBuilder is needed for each different representation
-- **Increases number of classes**: Adds complexity to design
+- **Requer criar builder específico**: Um ConcreteBuilder é necessário para cada representação diferente
+- **Aumenta o número de classes**: Adiciona complexidade ao design
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Assembly and construction interface**: Builders should be generic enough to allow different Directors
-2. **Why no abstract product**: Products produced by builders can differ drastically, not having a common interface
-3. **Empty methods as default**: Builder methods can have empty implementation by default (only necessary ones are overridden)
-4. **Fluent Interface**: Builder can return `this` to allow method chaining
-5. **Validation**: Perform validation in `getResult()` or `build()` method
+1. **Interface de montagem e construção**: Builders devem ser genéricos o suficiente para permitir diferentes Directors
+2. **Por que não há produto abstrato**: Produtos produzidos por builders podem diferir drasticamente, sem uma interface comum
+3. **Métodos vazios como padrão**: Métodos do Builder podem ter implementação vazia por padrão (apenas os necessários são sobrescritos)
+4. **Fluent Interface**: Builder pode retornar `this` para permitir encadeamento de métodos
+5. **Validação**: Realizar validação no método `getResult()` ou `build()`
 
-### Techniques
+### Técnicas
 
-- **Step Builder**: Ensure call order through intermediate interfaces
-- **Named Parameters**: Simulate named parameters in languages that don't support them
-- **Validation on Build**: Validate completeness and consistency before returning product
+- **Step Builder**: Garantir a ordem de chamada por meio de interfaces intermediárias
+- **Parâmetros Nomeados**: Simular parâmetros nomeados em linguagens que não os suportam
+- **Validação no Build**: Validar completude e consistência antes de retornar o produto
 
-## Known Uses
+## Usos Conhecidos
 
-- **StringBuilder/StringBuffer**: Construction of complex strings
-- **Document Builders**: XML, JSON, HTML builders (DocumentBuilder, JsonBuilder)
-- **HTTP Request Builders**: HTTP libraries (OkHttp, Retrofit)
-- **Test Data Builders**: Creation of complex objects in tests
-- **Query Builders**: Construction of SQL or NoSQL queries
-- **Configuration Builders**: Creation of complex configuration objects
+- **StringBuilder/StringBuffer**: Construção de strings complexas
+- **Document Builders**: Builders de XML, JSON, HTML (DocumentBuilder, JsonBuilder)
+- **HTTP Request Builders**: Bibliotecas HTTP (OkHttp, Retrofit)
+- **Test Data Builders**: Criação de objetos complexos em testes
+- **Query Builders**: Construção de consultas SQL ou NoSQL
+- **Configuration Builders**: Criação de objetos de configuração complexos
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Abstract Factory**](001_abstract-factory.md): Similar, but Abstract Factory returns product immediately, while Builder constructs step-by-step
-- [**Composite**](../structural/003_composite.md): What the Builder frequently constructs
-- [**Factory Method**](003_factory-method.md): Alternative when only one construction step
-- [**Prototype**](004_prototype.md): Builder and Prototype can work together (clone and then build upon copy)
-- [**Singleton**](005_singleton.md): Builder can be singleton if stateless
+- [**Abstract Factory**](001_abstract-factory.md): Similar, mas Abstract Factory retorna o produto imediatamente, enquanto Builder constrói passo a passo
+- [**Composite**](../structural/003_composite.md): O que Builder frequentemente constrói
+- [**Factory Method**](003_factory-method.md): Alternativa quando há apenas uma etapa de construção
+- [**Prototype**](004_prototype.md): Builder e Prototype podem trabalhar juntos (clonar e depois construir sobre a cópia)
+- [**Singleton**](005_singleton.md): Builder pode ser singleton se não tiver estado
 
-### Relation to Rules
+### Relação com Rules
 
-- [033 - Limit of Parameters per Function](../../clean-code/013_limite-parametros-funcao.md): solves (avoids telescoping constructors)
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): facilitates
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reinforces
-- [003 - Primitive Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md): complements
+- [033 - Limit of Parameters per Function](../../clean-code/limite-parametros-funcao.md): resolve (evita construtores telescópicos)
+- [029 - Object Immutability](../../clean-code/imutabilidade-objetos-freeze.md): facilita
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reforça
+- [003 - Primitive Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md): complementa
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

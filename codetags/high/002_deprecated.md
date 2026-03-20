@@ -208,7 +208,7 @@ function secretlyDeprecated() { }
 
 ## Rules Relacionadas
 
-- [clean-code/003 - YAGNI](../../clean-code/003_prohibition-speculative-functionality.md): remover código não usado
+- [clean-code/003 - YAGNI](../../clean-code/proibicao-funcionalidade-especulativa.md): remover código não usado
 - [package-principles/001 - REP](../../package-principles/001_release-reuse-equivalency-principle.md): versionamento adequado
 
 ---

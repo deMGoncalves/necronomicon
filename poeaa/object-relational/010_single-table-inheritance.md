@@ -1,14 +1,14 @@
 # Single Table Inheritance
 
-**Type**: Object-Relational Mapping Pattern (Structural)
+**Tipo**: Padrão Object-Relational (Estrutural)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Represent a class inheritance hierarchy in a single database table that contains columns for all fields of all classes in the hierarchy, using a discriminator column to identify the type of each record.
+Representar uma hierarquia de herança de classes em uma única tabela do banco de dados que contém colunas para todos os campos de todas as classes da hierarquia, usando uma coluna discriminadora para identificar o tipo de cada registro.
 
-## Also Known As
+## Também Conhecido Como
 
 - Single Table Strategy
 - Table-per-Hierarchy
@@ -16,34 +16,34 @@ Represent a class inheritance hierarchy in a single database table that contains
 
 ---
 
-## Motivation
+## Motivação
 
-When mapping object-oriented inheritance hierarchies to relational databases, we face the challenge that relational databases don't have a native concept of inheritance. Single Table Inheritance solves this problem in the simplest way possible: creating a single table that contains all columns necessary to represent all attributes of all classes in the hierarchy.
+Ao mapear hierarquias de herança orientada a objetos para bancos de dados relacionais, enfrentamos o desafio de que bancos relacionais não possuem um conceito nativo de herança. O Single Table Inheritance resolve esse problema da forma mais simples possível: criando uma única tabela que contém todas as colunas necessárias para representar todos os atributos de todas as classes da hierarquia.
 
-For example, consider an `Animal` hierarchy with subclasses `Dog` and `Cat`. Dog has a `breed` attribute, while Cat has a `furColor` attribute. With Single Table Inheritance, we create an `animals` table with columns: `id`, `type` (discriminator), `name`, `breed`, `furColor`. A Dog record would have `type='Dog'` and `furColor=NULL`, while a Cat would have `type='Cat'` and `breed=NULL`.
+Por exemplo, considere uma hierarquia `Animal` com subclasses `Dog` e `Cat`. Dog possui um atributo `breed`, enquanto Cat possui `furColor`. Com Single Table Inheritance, criamos uma tabela `animals` com colunas: `id`, `type` (discriminador), `name`, `breed`, `furColor`. Um registro Dog teria `type='Dog'` e `furColor=NULL`, enquanto um Cat teria `type='Cat'` e `breed=NULL`.
 
-The pattern's simplicity comes with trade-offs. Since all subclasses share the same table, columns that belong only to one subclass remain NULL for records of other subclasses. This violates normalization and wastes space if there are many subclass-specific fields. However, the simplicity of queries (single table, no joins) and the ease of adding new subclasses (just add columns) make this pattern attractive for simple hierarchies.
-
----
-
-## Applicability
-
-Use Single Table Inheritance when:
-
-- The inheritance hierarchy is relatively shallow (2-3 levels) with few subclasses
-- Subclasses have similar fields or share most attributes
-- You need to make frequent queries involving the entire hierarchy (e.g., "all animals")
-- Read performance is critical and you want to avoid joins
-- Subclasses change rarely, but new types may be added occasionally
-- The number of subclass-specific columns is small (acceptable space waste)
+A simplicidade do padrão vem com compensações. Como todas as subclasses compartilham a mesma tabela, colunas que pertencem apenas a uma subclasse ficam NULL para registros de outras subclasses. Isso viola a normalização e desperdiça espaço se houver muitos campos específicos de subclasse. Porém, a simplicidade das queries (tabela única, sem joins) e a facilidade de adicionar novas subclasses (apenas adicionar colunas) tornam esse padrão atraente para hierarquias simples.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Single Table Inheritance quando:
+
+- A hierarquia de herança é relativamente rasa (2 a 3 níveis) com poucas subclasses
+- As subclasses possuem campos similares ou compartilham a maioria dos atributos
+- Você precisa fazer queries frequentes envolvendo toda a hierarquia (ex.: "todos os animais")
+- A performance de leitura é crítica e você quer evitar joins
+- As subclasses mudam raramente, mas novos tipos podem ser adicionados ocasionalmente
+- O número de colunas específicas de subclasse é pequeno (desperdício de espaço aceitável)
+
+---
+
+## Estrutura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Client Code                          │
+│                        Código Cliente                        │
 └────────────────────────────────┬────────────────────────────┘
                                  │
                     ┌────────────▼────────────┐
@@ -64,9 +64,9 @@ Use Single Table Inheritance when:
     │ + bark(): void       │      │ + meow(): void      │
     └──────────────────────┘      └─────────────────────┘
 
-Database Schema:
+Schema do Banco de Dados:
 ┌─────────────────────────────────────────────────────────────┐
-│                     Table: animals                          │
+│                     Tabela: animals                          │
 ├──────────┬───────────┬───────────┬──────────┬──────────────┤
 │ id (PK)  │ type      │ name      │ breed    │ furColor     │
 │ BIGINT   │ VARCHAR   │ VARCHAR   │ VARCHAR  │ VARCHAR      │
@@ -79,122 +79,122 @@ Database Schema:
 
 ---
 
-## Participants
+## Participantes
 
-- **Animal** (Abstract Base Class): Defines the common interface and shared attributes for all subclasses in the hierarchy.
+- **Animal** (Classe Base Abstrata): Define a interface comum e atributos compartilhados para todas as subclasses da hierarquia.
 
-- **Dog / Cat** (Concrete Subclasses): Implement specific behaviors and have additional attributes stored in dedicated columns in the shared table.
+- **Dog / Cat** (Subclasses Concretas): Implementam comportamentos específicos e possuem atributos adicionais armazenados em colunas dedicadas na tabela compartilhada.
 
-- **Discriminator Column** (`type`): Special column in the table that stores the concrete class type of each record, allowing the ORM to instantiate the correct class when loading from the database.
+- **Coluna Discriminadora** (`type`): Coluna especial na tabela que armazena o tipo de classe concreta de cada registro, permitindo que o ORM instancie a classe correta ao carregar do banco de dados.
 
-- **Mapper/ORM**: Component responsible for reading the discriminator column, instantiating the correct class, and populating only the relevant fields for that type.
+- **Mapper/ORM**: Componente responsável por ler a coluna discriminadora, instanciar a classe correta e popular apenas os campos relevantes para aquele tipo.
 
-- **Single Table** (`animals`): Database structure containing the union of all columns from all classes, with many NULL values.
-
----
-
-## Collaborations
-
-When the client requests saving a Dog object, the Mapper checks the object type, sets the `type='Dog'` column, fills the shared columns (`id`, `name`) and the specific column (`breed`), leaving `furColor` as NULL. The operation is a simple INSERT into a single table.
-
-When loading, the Mapper executes a SELECT, reads the `type` column, and based on the value, instantiates the appropriate class (Dog or Cat), populating only the relevant fields for that class. Polymorphic queries ("SELECT * FROM animals") return all records of all types with a single statement.
+- **Tabela Única** (`animals`): Estrutura do banco de dados contendo a união de todas as colunas de todas as classes, com muitos valores NULL.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Quando o cliente solicita o salvamento de um objeto Dog, o Mapper verifica o tipo do objeto, define a coluna `type='Dog'`, preenche as colunas compartilhadas (`id`, `name`) e a coluna específica (`breed`), deixando `furColor` como NULL. A operação é um simples INSERT em uma única tabela.
 
-1. **Schema Simplicity**: Just one table for the entire hierarchy — easy to understand and maintain.
-2. **Read Performance**: Queries don't require joins — all data is in a single table.
-3. **Simple Polymorphic Queries**: Fetching all objects in the hierarchy is trivial (SELECT without joins).
-4. **Ease of Refactoring**: Moving fields between classes doesn't require schema changes, only code alterations.
-5. **Adding New Subclasses**: Adding a new type requires only new columns (ALTER TABLE) and a new discriminator value.
-6. **Simple Transactions**: Saving or updating an object is a single write operation.
-
-### Disadvantages
-
-1. **Normalization Violation**: Many columns remain NULL for records that don't use them, wasting space.
-2. **Schema Pollution**: The table grows horizontally with each new subclass, becoming hard to manage.
-3. **Impossibility of NOT NULL**: Subclass-specific columns can't have NOT NULL constraints, as other subclasses will leave them NULL.
-4. **Space Waste**: In databases that allocate space for NULL columns, storage overhead can be significant.
-5. **Difficulty Understanding the Model**: For someone reading the schema, it's not obvious which columns belong to which classes without consulting the code.
+Ao carregar, o Mapper executa um SELECT, lê a coluna `type` e, com base no valor, instancia a classe apropriada (Dog ou Cat), populando apenas os campos relevantes para aquela classe. Queries polimórficas ("SELECT * FROM animals") retornam todos os registros de todos os tipos com uma única instrução.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Discriminator Choice**: The discriminator can be the class name (String), a numeric code, or an enum. Strings are more readable; numbers save space.
+1. **Simplicidade do Schema**: Apenas uma tabela para toda a hierarquia — fácil de entender e manter.
+2. **Performance de Leitura**: Queries não requerem joins — todos os dados estão em uma única tabela.
+3. **Queries Polimórficas Simples**: Buscar todos os objetos da hierarquia é trivial (SELECT sem joins).
+4. **Facilidade de Refatoração**: Mover campos entre classes não requer mudanças no schema, apenas alterações no código.
+5. **Adição de Novas Subclasses**: Adicionar um novo tipo requer apenas novas colunas (ALTER TABLE) e um novo valor discriminador.
+6. **Transações Simples**: Salvar ou atualizar um objeto é uma única operação de escrita.
 
-2. **Discriminator Indexing**: Always create an index on the discriminator column, as queries frequently filter by specific type.
+### Desvantagens
 
-3. **NULL vs Default Values Strategy**: Decide whether unused columns remain NULL or receive default values. NULL is more explicit, but default values can avoid checks.
-
-4. **Integrity Validation**: Implement code validations to ensure only the correct columns are filled for each type.
-
-5. **Column Limit**: Databases have column-per-table limits (MySQL: 4096, PostgreSQL: 1600). Plan not to exceed these limits.
-
-6. **Data Migration**: When adding new subclasses, plan migrations that add columns with default NULL values for existing records.
-
-### Implementation Techniques
-
-1. **Discriminator Mapping**: Configure the ORM to map discriminator values to classes. In Hibernate: `@DiscriminatorColumn(name="type")` and `@DiscriminatorValue("Dog")`.
-
-2. **Mapper Inheritance**: Use Inheritance Mappers pattern where each subclass Mapper inherits from the base Mapper, reusing common field mapping code.
-
-3. **Selective Lazy Loading**: Configure lazy loading for collections or large objects within the hierarchy to avoid loading unnecessary data.
-
-4. **Read Strategy**: Use type-specific SELECT when possible (`WHERE type='Dog'`) to avoid overhead of processing unnecessary types.
-
-5. **Discriminated Cache**: Configure separate second-level cache per type to avoid unnecessary cache invalidation.
-
-6. **Audit Columns**: Add audit columns (`created_at`, `updated_at`, `version`) once in the base table, applying to all types.
+1. **Violação de Normalização**: Muitas colunas ficam NULL para registros que não as utilizam, desperdiçando espaço.
+2. **Poluição do Schema**: A tabela cresce horizontalmente com cada nova subclasse, tornando-se difícil de gerenciar.
+3. **Impossibilidade de NOT NULL**: Colunas específicas de subclasse não podem ter restrições NOT NULL, pois outras subclasses as deixarão NULL.
+4. **Desperdício de Espaço**: Em bancos que alocam espaço para colunas NULL, o overhead de armazenamento pode ser significativo.
+5. **Dificuldade de Entender o Modelo**: Para quem lê o schema, não é óbvio quais colunas pertencem a quais classes sem consultar o código.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Hibernate ORM**: Supports Single Table Inheritance via `InheritanceType.SINGLE_TABLE` strategy with `@DiscriminatorColumn`.
+### Considerações de Implementação
 
-2. **Entity Framework (C#)**: The TPH (Table-per-Hierarchy) strategy is the default for inheritance mapping.
+1. **Escolha do Discriminador**: O discriminador pode ser o nome da classe (String), um código numérico ou um enum. Strings são mais legíveis; números economizam espaço.
 
-3. **Rails Active Record**: Uses Single Table Inheritance (STI) as the default for hierarchies, with `type` column as automatic discriminator.
+2. **Indexação do Discriminador**: Sempre criar um índice na coluna discriminadora, pois queries frequentemente filtram por tipo específico.
 
-4. **Django ORM**: Doesn't support natively, but can be implemented with abstract base classes and manual type selection.
+3. **Estratégia NULL vs. Valores Padrão**: Decidir se colunas não utilizadas ficam NULL ou recebem valores padrão. NULL é mais explícito, mas valores padrão podem evitar verificações.
 
-5. **Doctrine (PHP)**: Supports Single Table Inheritance with `@InheritanceType("SINGLE_TABLE")` annotation.
+4. **Validação de Integridade**: Implementar validações no código para garantir que apenas as colunas corretas sejam preenchidas para cada tipo.
 
-6. **E-commerce Systems**: Use STI to represent different Product types (Physical, Digital, Service) in a table with discriminator.
+5. **Limite de Colunas**: Bancos possuem limites de colunas por tabela (MySQL: 4096, PostgreSQL: 1600). Planeje para não exceder esses limites.
 
----
+6. **Migração de Dados**: Ao adicionar novas subclasses, planeje migrações que adicionam colunas com valores NULL padrão para registros existentes.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Class Table Inheritance**](011_class-table-inheritance.md): Alternative that creates a table per class, avoiding NULLs but requiring joins.
-- [**Concrete Table Inheritance**](012_concrete-table-inheritance.md): Alternative that creates table only for concrete classes, duplicating inherited fields.
-- [**Inheritance Mappers**](013_inheritance-mappers.md): Structures Mappers to reflect object inheritance hierarchy.
-- [**Identity Field**](004_identity-field.md): Used to uniquely identify each record in the shared table.
-- [**Lazy Load**](003_lazy-load.md): Can be used to avoid loading subclass-specific fields unnecessarily.
-- [**Query Object**](015_query-object.md): Facilitates creating queries that filter by specific type using discriminator.
-- [**Repository**](016_repository.md): Encapsulates logic for creating polymorphic queries over the hierarchy.
+1. **Discriminator Mapping**: Configurar o ORM para mapear valores discriminadores para classes. No Hibernate: `@DiscriminatorColumn(name="type")` e `@DiscriminatorValue("Dog")`.
 
-### Relationship with Rules
+2. **Herança de Mappers**: Usar o padrão Inheritance Mappers onde cada Mapper de subclasse herda do Mapper base, reutilizando o código de mapeamento de campos comuns.
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): organize hierarchy
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extension via subclasses
+3. **Lazy Loading Seletivo**: Configurar lazy loading para coleções ou objetos grandes dentro da hierarquia para evitar carregar dados desnecessários.
 
----
+4. **Estratégia de Leitura**: Usar SELECT específico por tipo quando possível (`WHERE type='Dog'`) para evitar overhead de processar tipos desnecessários.
 
-## Relationship with Business Rules
+5. **Cache Discriminado**: Configurar cache de segundo nível separado por tipo para evitar invalidações desnecessárias de cache.
 
-- **[012] Liskov Substitution Principle**: Single Table Inheritance facilitates polymorphism by allowing queries that return a mix of subclasses.
-- **[022] Prioritization of Simplicity and Clarity**: It's the simplest inheritance mapping pattern — ideal when simplicity is a priority.
-- **[010] Single Responsibility Principle**: Each subclass Mapper is responsible only for its specific fields.
-- **[019] Stable Dependencies Principle**: The single table is stable — adding subclasses doesn't break existing queries.
+6. **Colunas de Auditoria**: Adicionar colunas de auditoria (`created_at`, `updated_at`, `version`) uma vez na tabela base, aplicando a todos os tipos.
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Hibernate ORM**: Suporta Single Table Inheritance via estratégia `InheritanceType.SINGLE_TABLE` com `@DiscriminatorColumn`.
+
+2. **Entity Framework (C#)**: A estratégia TPH (Table-per-Hierarchy) é o padrão para mapeamento de herança.
+
+3. **Rails Active Record**: Usa Single Table Inheritance (STI) como padrão para hierarquias, com coluna `type` como discriminador automático.
+
+4. **Django ORM**: Não suporta nativamente, mas pode ser implementado com classes base abstratas e seleção manual de tipo.
+
+5. **Doctrine (PHP)**: Suporta Single Table Inheritance com a anotação `@InheritanceType("SINGLE_TABLE")`.
+
+6. **Sistemas de E-commerce**: Usam STI para representar diferentes tipos de Product (Físico, Digital, Serviço) em uma tabela com discriminador.
+
+---
+
+## Padrões Relacionados
+
+- [**Class Table Inheritance**](011_class-table-inheritance.md): Alternativa que cria uma tabela por classe, evitando NULLs mas exigindo joins.
+- [**Concrete Table Inheritance**](012_concrete-table-inheritance.md): Alternativa que cria tabela apenas para classes concretas, duplicando campos herdados.
+- [**Inheritance Mappers**](013_inheritance-mappers.md): Estrutura Mappers para refletir a hierarquia de herança dos objetos.
+- [**Identity Field**](004_identity-field.md): Usado para identificar unicamente cada registro na tabela compartilhada.
+- [**Lazy Load**](003_lazy-load.md): Pode ser usado para evitar carregar campos específicos de subclasse desnecessariamente.
+- [**Query Object**](015_query-object.md): Facilita a criação de queries que filtram por tipo específico usando o discriminador.
+- [**Repository**](016_repository.md): Encapsula a lógica para criar queries polimórficas sobre a hierarquia.
+
+### Relação com Rules
+
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): organizar hierarquia
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extensão via subclasses
+
+---
+
+## Relação com Regras de Negócio
+
+- **[012] Liskov Substitution Principle**: Single Table Inheritance facilita o polimorfismo ao permitir queries que retornam uma mistura de subclasses.
+- **[022] Priorização de Simplicidade e Clareza**: É o padrão de mapeamento de herança mais simples — ideal quando a simplicidade é prioridade.
+- **[010] Single Responsibility Principle**: Cada Mapper de subclasse é responsável apenas pelos seus campos específicos.
+- **[019] Stable Dependencies Principle**: A tabela única é estável — adicionar subclasses não quebra as queries existentes.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

@@ -1,126 +1,126 @@
 # Factory Method
 
-**Classification**: Creational Pattern
+**Classificação**: Padrão Criacional
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses, promoting loose coupling between the creator and concrete products.
+Definir uma interface para criar um objeto, mas deixar as subclasses decidirem qual classe instanciar. Factory Method permite que uma classe adie a instanciação para as subclasses, promovendo o acoplamento fraco entre o criador e os produtos concretos.
 
-## Also Known As
+## Também Conhecido Como
 
 - Virtual Constructor
 
-## Motivation
+## Motivação
 
-Frameworks use abstract classes to define and maintain relationships between objects. A framework for applications that can present multiple documents to the user defines abstractions like Application and Document, but leaves the creation of concrete documents to specific subclasses.
+Frameworks usam classes abstratas para definir e manter relacionamentos entre objetos. Um framework para aplicações que podem apresentar múltiplos documentos ao usuário define abstrações como Application e Document, mas deixa a criação de documentos concretos para subclasses específicas.
 
-The Application class is responsible for managing Documents but doesn't know which specific type to create - this depends on the concrete application. Factory Method allows Application to define the creation interface but delegate the decision about which Document class to instantiate to subclasses.
+A classe Application é responsável por gerenciar Documents mas não sabe qual tipo específico criar — isso depende da aplicação concreta. Factory Method permite que Application defina a interface de criação mas delegue a decisão sobre qual classe Document instanciar para as subclasses.
 
-## Applicability
+## Aplicabilidade
 
-Use the Factory Method pattern when:
+Use o padrão Factory Method quando:
 
-- A class cannot anticipate the class of objects it must create
-- A class wants its subclasses to specify the objects it creates
-- Classes delegate responsibility to one of several helper subclasses, and you want to localize the knowledge of which helper subclass is the delegate
-- You want to provide users of your library with a way to extend internal components
-- Replace constructors with named methods that describe the creation
+- Uma classe não pode antecipar a classe de objetos que deve criar
+- Uma classe quer que suas subclasses especifiquem os objetos que ela cria
+- Classes delegam responsabilidade a uma de várias subclasses auxiliares, e você deseja localizar o conhecimento sobre qual subclasse auxiliar é o delegado
+- Você deseja fornecer aos usuários de sua biblioteca uma forma de estender componentes internos
+- Substituir construtores por métodos nomeados que descrevem a criação
 
-## Structure
+## Estrutura
 
 ```
-Creator (Abstract Class/Interface)
-├── factoryMethod(): Product (abstract)
+Creator (Classe Abstrata/Interface)
+├── factoryMethod(): Product (abstrato)
 └── operation()
     ├── product = factoryMethod()
-    └── uses product
+    └── usa o product
 
 ConcreteCreatorA extends Creator
-└── factoryMethod() → returns new ConcreteProductA()
+└── factoryMethod() → retorna new ConcreteProductA()
 
 ConcreteCreatorB extends Creator
-└── factoryMethod() → returns new ConcreteProductB()
+└── factoryMethod() → retorna new ConcreteProductB()
 
 Product (Interface)
 ├── ConcreteProductA implements Product
 └── ConcreteProductB implements Product
 ```
 
-## Participants
+## Participantes
 
-- **Product**: Defines interface of objects the factory method creates
-- **ConcreteProduct**: Implements the Product interface
-- **Creator**: Declares the factory method that returns Product type object; may define default implementation that returns default ConcreteProduct; may call factory method to create Product
-- **ConcreteCreator**: Overrides factory method to return instance of ConcreteProduct
+- **Product**: Define a interface dos objetos que o factory method cria
+- **ConcreteProduct**: Implementa a interface Product
+- **Creator**: Declara o factory method que retorna objeto do tipo Product; pode definir implementação padrão que retorna ConcreteProduct padrão; pode chamar o factory method para criar um Product
+- **ConcreteCreator**: Sobrescreve o factory method para retornar instância de ConcreteProduct
 
-## Collaborations
+## Colaborações
 
-- Creator relies on its subclasses to define the factory method so it returns appropriate instance of ConcreteProduct
+- Creator depende de suas subclasses para definir o factory method de modo que retorne a instância adequada de ConcreteProduct
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Eliminates coupling**: Code doesn't depend on concrete classes, only on interfaces
-- **Open/Closed Principle**: Code open for extension, closed for modification
-- **Single Responsibility**: Creation code moved to a single place
-- **Naming**: Factory methods with descriptive names are clearer than constructors
-- **Polymorphism**: Replaces conditionals with polymorphism
+- **Elimina acoplamento**: O código não depende de classes concretas, apenas de interfaces
+- **Open/Closed Principle**: Código aberto para extensão, fechado para modificação
+- **Single Responsibility**: Código de criação movido para um único lugar
+- **Nomenclatura**: Factory methods com nomes descritivos são mais claros que construtores
+- **Polimorfismo**: Substitui condicionais por polimorfismo
 
-### Disadvantages
+### Desvantagens
 
-- **Class hierarchy**: May lead to many small subclasses
-- **Complexity**: Code can become more complicated with many additional classes
+- **Hierarquia de classes**: Pode levar a muitas subclasses pequenas
+- **Complexidade**: O código pode se tornar mais complicado com muitas classes adicionais
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Two main varieties**:
-   - Creator is abstract class without default implementation of factory method
-   - Creator is concrete class with default implementation
+1. **Duas variedades principais**:
+   - Creator é classe abstrata sem implementação padrão do factory method
+   - Creator é classe concreta com implementação padrão
 
-2. **Parameterized factory methods**: Accepts parameter identifying type of object to create
+2. **Factory methods parametrizados**: Aceita parâmetro identificando o tipo de objeto a criar
 
-3. **Naming conventions**: `createProduct()`, `newProduct()`, `makeProduct()`
+3. **Convenções de nomenclatura**: `createProduct()`, `newProduct()`, `makeProduct()`
 
-4. **Using templates**: In typed languages, use generics/templates to avoid subclassing
+4. **Usando templates**: Em linguagens tipadas, usar generics/templates para evitar herança
 
-5. **Lazy initialization**: Factory method can implement lazy creation
+5. **Inicialização preguiçosa**: Factory method pode implementar criação preguiçosa
 
-### Techniques
+### Técnicas
 
-- **Static Factory Method**: Static method that returns instances (not the pure pattern, but useful)
-- **Named Constructor**: Factory methods with descriptive names that replace constructors
-- **Registry of Factories**: Maintain registry of available creators
+- **Static Factory Method**: Método estático que retorna instâncias (não o padrão puro, mas útil)
+- **Named Constructor**: Factory methods com nomes descritivos que substituem construtores
+- **Registro de Fábricas**: Manter registro de criadores disponíveis
 
-## Known Uses
+## Usos Conhecidos
 
 - **Collection Factories**: `Array.from()`, `List.of()`, `Map.of()`
-- **GUI Frameworks**: Creation of platform-specific components
+- **Frameworks GUI**: Criação de componentes específicos de plataforma
 - **Loggers**: `LoggerFactory.getLogger()`
-- **Database Connections**: `ConnectionFactory.createConnection()`
-- **Parser Factories**: Creation of specific parsers (XML, JSON)
-- **Iterator Creation**: `collection.iterator()`
+- **Conexões de Banco de Dados**: `ConnectionFactory.createConnection()`
+- **Parser Factories**: Criação de parsers específicos (XML, JSON)
+- **Criação de Iterator**: `collection.iterator()`
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Abstract Factory**](001_abstract-factory.md): Frequently implemented using Factory Methods
-- [**Template Method**](../behavioral/010_template-method.md): Factory Methods are frequently called within Template Methods
-- [**Prototype**](004_prototype.md): Doesn't require inheritance but requires initialize operation; Factory Method requires inheritance but not initialize
-- [**Singleton**](005_singleton.md): Can use Factory Method to control single instantiation
-- [**Builder**](002_builder.md): Focuses on building complex objects step-by-step; Factory Method creates objects in a single call
+- [**Abstract Factory**](001_abstract-factory.md): Frequentemente implementado usando Factory Methods
+- [**Template Method**](../behavioral/010_template-method.md): Factory Methods são frequentemente chamados dentro de Template Methods
+- [**Prototype**](004_prototype.md): Não requer herança mas requer operação de inicialização; Factory Method requer herança mas não inicialização
+- [**Singleton**](005_singleton.md): Pode usar Factory Method para controlar instanciação única
+- [**Builder**](002_builder.md): Focado em construir objetos complexos passo a passo; Factory Method cria objetos em uma única chamada
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): implements
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): reinforces
-- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): eliminates (replaces with polymorphism)
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reinforces
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): implementa
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): reforça
+- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): elimina (substitui por polimorfismo)
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reforça
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

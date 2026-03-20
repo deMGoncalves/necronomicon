@@ -1,14 +1,14 @@
 # Metadata Mapping
 
-**Type**: Object-Relational Mapping Pattern (Metadata)
+**Tipo**: Padrão Object-Relational (Metadados)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Maintain the details of how domain objects map to database structures in metadata files (XML, annotations, JSON) separated from the main code, allowing the persistence framework to configure mapping dynamically.
+Manter os detalhes de como os objetos de domínio se mapeiam para estruturas de banco de dados em arquivos de metadados (XML, anotações, JSON) separados do código principal, permitindo que o framework de persistência configure o mapeamento dinamicamente.
 
-## Also Known As
+## Também Conhecido Como
 
 - External Mapping
 - Configuration-Based Mapping
@@ -16,36 +16,36 @@ Maintain the details of how domain objects map to database structures in metadat
 
 ---
 
-## Motivation
+## Motivação
 
-Encoding object-relational mapping directly in code (hardcoding SQL queries, manually constructing objects from ResultSets) is laborious, repetitive, and error-prone. Each domain class requires substantial mapping code that handles type transformations, column naming, relationships, inheritance, etc. This infrastructure code pollutes domain classes and makes changes difficult.
+Codificar o mapeamento objeto-relacional diretamente no código (hardcoding de queries SQL, construção manual de objetos a partir de ResultSets) é trabalhoso, repetitivo e propenso a erros. Cada classe de domínio requer código de mapeamento substancial que lida com transformações de tipo, nomenclatura de colunas, relacionamentos, herança, etc. Esse código de infraestrutura polui as classes de domínio e torna as mudanças difíceis.
 
-Metadata Mapping solves this problem by externalizing mapping rules to declarative metadata files. Instead of writing code that says "the `fullName` property maps to the `full_name` column of VARCHAR type", you write a declaration: `<property name="fullName" column="full_name" type="string"/>`. A persistence framework (ORM) reads these metadata at runtime and automatically generates the necessary mapping code.
+O Metadata Mapping resolve esse problema externalizando as regras de mapeamento para arquivos de metadados declarativos. Em vez de escrever código que diz "a propriedade `fullName` mapeia para a coluna `full_name` do tipo VARCHAR", você escreve uma declaração: `<property name="fullName" column="full_name" type="string"/>`. Um framework de persistência (ORM) lê esses metadados em tempo de execução e gera automaticamente o código de mapeamento necessário.
 
-The advantage is separation of concerns: domain code remains clean and focused on business logic, while technical persistence details live in configuration. Mapping changes (e.g., renaming a column) don't require code recompilation. Different mapping strategies can be applied without touching the domain. The cost is the complexity of learning and maintaining metadata files, and potential loss of type-safety (errors only detected at runtime).
-
----
-
-## Applicability
-
-Use Metadata Mapping when:
-
-- You have multiple domain classes that need to be persisted and want to avoid repetitive mapping code
-- Object-relational mapping is complex (inheritance, relationships, custom types) and would benefit from abstraction
-- You want to keep domain code clean and independent of persistence details
-- Different developers can work on database schema and domain code independently
-- You need to support multiple databases or change mapping strategies without changing code
-- A mature ORM framework (Hibernate, Entity Framework, Doctrine) is available to interpret the metadata
+A vantagem é a separação de responsabilidades: o código de domínio permanece limpo e focado na lógica de negócio, enquanto os detalhes técnicos de persistência ficam na configuração. Mudanças de mapeamento (ex.: renomear uma coluna) não requerem recompilação do código. Diferentes estratégias de mapeamento podem ser aplicadas sem tocar no domínio. O custo é a complexidade de aprender e manter os arquivos de metadados, e a possível perda de type-safety (erros detectados apenas em tempo de execução).
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Metadata Mapping quando:
+
+- Você possui múltiplas classes de domínio que precisam ser persistidas e quer evitar código de mapeamento repetitivo
+- O mapeamento objeto-relacional é complexo (herança, relacionamentos, tipos customizados) e se beneficiaria de abstração
+- Você quer manter o código de domínio limpo e independente de detalhes de persistência
+- Desenvolvedores diferentes podem trabalhar no schema do banco de dados e no código de domínio de forma independente
+- Você precisa suportar múltiplos bancos de dados ou mudar estratégias de mapeamento sem alterar o código
+- Um framework ORM maduro (Hibernate, Entity Framework, Doctrine) está disponível para interpretar os metadados
+
+---
+
+## Estrutura
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    Application Code                          │
+│                    Código da Aplicação                        │
 └────────────────────────────┬─────────────────────────────────┘
-                             │ uses
+                             │ usa
                 ┌────────────▼────────────┐
                 │  Domain Object          │
                 │  (User)                 │
@@ -55,9 +55,9 @@ Use Metadata Mapping when:
                 │ - email: String         │
                 └─────────────────────────┘
                       △
-                      │ maps
+                      │ mapeia
     ┌─────────────────┴──────────────────────────────┐
-    │         Metadata Configuration                 │
+    │         Configuração de Metadados              │
     │  ────────────────────────────────────────────  │
     │  <class name="User" table="users">             │
     │    <id name="id" column="user_id"/>            │
@@ -69,143 +69,143 @@ Use Metadata Mapping when:
     │              type="string"/>                   │
     │  </class>                                      │
     └────────────────────┬───────────────────────────┘
-                         │ read by
+                         │ lido por
             ┌────────────▼────────────┐
-            │  ORM Framework          │
+            │  Framework ORM          │
             │ ─────────────────────   │
             │ + configure(metadata)   │
             │ + save(object)          │
             │ + find(id)              │
             └────────────┬────────────┘
-                         │ generates
+                         │ gera
             ┌────────────▼────────────┐
-            │  SQL Statements         │
+            │  Instruções SQL         │
             │ ─────────────────────   │
             │  INSERT INTO users...   │
             │  SELECT * FROM users... │
             └─────────────────────────┘
 
-Alternatives: XML, Annotations, JSON, YAML, Fluent API
+Alternativas: XML, Anotações, JSON, YAML, Fluent API
 ```
 
 ---
 
-## Participants
+## Participantes
 
-- **Domain Object** (`User`): POJO (Plain Old Java Object) domain class that contains no persistence logic. It is agnostic about how it's mapped.
+- **Domain Object** (`User`): Classe de domínio POJO (Plain Old Java Object) que não contém lógica de persistência. É agnóstica sobre como é mapeada.
 
-- **Metadata Configuration** (XML/Annotations): File or annotations that declare how object properties map to database columns, data types, relationships, loading strategies, etc.
+- **Configuração de Metadados** (XML/Anotações): Arquivo ou anotações que declaram como as propriedades do objeto mapeiam para as colunas do banco de dados, tipos de dados, relacionamentos, estratégias de carregamento, etc.
 
-- **ORM Framework** (Hibernate, Entity Framework): Engine that reads metadata at initialization or runtime, builds an internal mapping model, and uses this model to generate SQL and transform data.
+- **Framework ORM** (Hibernate, Entity Framework): Motor que lê os metadados na inicialização ou em tempo de execução, constrói um modelo de mapeamento interno e usa esse modelo para gerar SQL e transformar dados.
 
-- **Mapping Metadata Reader**: ORM component responsible for parsing XML files, reflecting annotations, or processing programmatic configurations.
+- **Leitor de Metadados de Mapeamento**: Componente do ORM responsável por analisar arquivos XML, refletir anotações ou processar configurações programáticas.
 
-- **SQL Generator**: Component that uses mapping metadata to dynamically generate SQL statements (SELECT, INSERT, UPDATE, DELETE) appropriate to the schema.
-
----
-
-## Collaborations
-
-During application initialization, the ORM Framework scans packages or configuration files, finds mapping metadata (XML files or annotations), and parses them to build an internal metamodel that describes how each class maps to tables and columns.
-
-When the application requests `repository.save(user)`, the ORM queries the metamodel to discover that User maps to the `users` table, that `fullName` goes to the `full_name` column, etc. It then dynamically constructs the appropriate INSERT SQL, executes it, and returns the persisted object with generated ID.
+- **Gerador SQL**: Componente que usa os metadados de mapeamento para gerar dinamicamente instruções SQL (SELECT, INSERT, UPDATE, DELETE) adequadas ao schema.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Durante a inicialização da aplicação, o Framework ORM escaneia pacotes ou arquivos de configuração, encontra os metadados de mapeamento (arquivos XML ou anotações) e os analisa para construir um metamodelo interno que descreve como cada classe mapeia para tabelas e colunas.
 
-1. **Separation of Concerns**: Domain code is clean and free of SQL/ORM persistence details.
-2. **DRY**: Eliminates repetitive manual mapping code (building objects from ResultSet, filling PreparedStatements).
-3. **Flexibility**: Schema changes (renaming columns, changing types) can be made by changing only metadata, not code.
-4. **Database Portability**: ORM can adapt SQL for different database dialects based on metadata.
-5. **Productivity**: Faster development — focus on business logic, not persistence plumbing.
-6. **Declarative Strategies**: Caching, lazy loading, cascading, inheritance — all configurable via metadata.
-
-### Disadvantages
-
-1. **Loss of Type-Safety**: Mapping errors (wrong column name, incompatible type) are only detected at runtime, not compile-time.
-2. **Learning Complexity**: Developers need to learn the ORM's DSL (XML schema, annotations) in addition to the language.
-3. **Difficult Debugging**: Mapping problems generate deep, cryptic stack traces from the ORM, not from business code.
-4. **Performance Overhead**: Reflection and dynamic SQL generation have computational cost compared to handcrafted SQL.
-5. **Vendor Lock-in**: Metadata is often ORM-specific (Hibernate vs EF), making migration difficult.
+Quando a aplicação solicita `repository.save(user)`, o ORM consulta o metamodelo para descobrir que User mapeia para a tabela `users`, que `fullName` vai para a coluna `full_name`, etc. Ele então constrói dinamicamente o SQL INSERT apropriado, o executa e retorna o objeto persistido com o ID gerado.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Format Choice**: XML is verbose but validatable with XSD; annotations are concise but pollute code; Fluent API is type-safe but requires more code. Choose based on team preferences.
+1. **Separação de Responsabilidades**: O código de domínio está limpo e livre de detalhes de persistência SQL/ORM.
+2. **DRY**: Elimina código de mapeamento manual repetitivo (construção de objetos a partir de ResultSet, preenchimento de PreparedStatements).
+3. **Flexibilidade**: Mudanças de schema (renomear colunas, mudar tipos) podem ser feitas alterando apenas os metadados, não o código.
+4. **Portabilidade de Banco de Dados**: O ORM pode adaptar o SQL para diferentes dialetos de banco de dados com base nos metadados.
+5. **Produtividade**: Desenvolvimento mais rápido — foco na lógica de negócio, não no plumbing de persistência.
+6. **Estratégias Declarativas**: Cache, lazy loading, cascatas, herança — tudo configurável via metadados.
 
-2. **Metamodel Caching**: Metadata parsing is expensive. ORMs should cache the metamodel and revalidate only when configuration files change.
+### Desvantagens
 
-3. **Metadata Validation**: Implement strict metadata validation at initialization to detect errors (non-existent columns, incompatible types) before runtime.
-
-4. **Convention over Configuration**: Minimize metadata using conventions (e.g., `name` property → `name` column). Configure only exceptions.
-
-5. **Multi-tenant Environment**: Metadata may need to vary per tenant. Consider separate metamodels or dynamic resolution.
-
-6. **Schema Versioning**: Include version in metadata to support migrations and controlled schema evolution.
-
-### Implementation Techniques
-
-1. **Annotation-Based Mapping**: Use annotations (@Entity, @Column, @OneToMany) directly on domain classes for inline configuration.
-
-2. **External XML Mapping**: Maintain .hbm.xml (Hibernate) or .edmx (Entity Framework) files separately for complete code and config separation.
-
-3. **Fluent Configuration**: Use fluent APIs (e.g., Entity Framework Fluent API) to configure mapping in code with type-safety.
-
-4. **Convention-Based Mapping**: Implement standard conventions (table = plural of class, PK = Id) and override only when necessary.
-
-5. **Composite Configurations**: Combine approaches — use annotations for simple cases, XML for complex cases (inheritance, custom queries).
-
-6. **Code Generation**: Generate domain classes from metadata (database-first approach) or generate metadata from classes (code-first approach).
+1. **Perda de Type-Safety**: Erros de mapeamento (nome de coluna errado, tipo incompatível) são detectados apenas em tempo de execução, não em tempo de compilação.
+2. **Complexidade de Aprendizado**: Desenvolvedores precisam aprender a DSL do ORM (schema XML, anotações) além da linguagem.
+3. **Depuração Difícil**: Problemas de mapeamento geram stack traces profundos e crípticos do ORM, não do código de negócio.
+4. **Overhead de Performance**: Reflection e geração dinâmica de SQL têm custo computacional comparado ao SQL artesanal.
+5. **Vendor Lock-in**: Os metadados geralmente são específicos do ORM (Hibernate vs EF), tornando a migração difícil.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Hibernate (Java)**: The original ORM that popularized metadata mapping via .hbm.xml files (older versions) and JPA annotations (modern versions).
+### Considerações de Implementação
 
-2. **Entity Framework (.NET)**: Supports three approaches: Database First (generates classes from schema), Code First (generates schema from classes), and Model First (visual designer generates both).
+1. **Escolha do Formato**: XML é verboso mas validável com XSD; anotações são concisas mas poluem o código; Fluent API é type-safe mas requer mais código. Escolha com base nas preferências da equipe.
 
-3. **Doctrine (PHP)**: Uses annotations (@ORM\Entity, @ORM\Column) or YAML/XML for entity metadata mapping.
+2. **Cache do Metamodelo**: A análise de metadados é custosa. Os ORMs devem fazer cache do metamodelo e revalidar apenas quando os arquivos de configuração mudam.
 
-4. **SQLAlchemy (Python)**: Supports declarative mapping via Python classes with embedded metadata or classical mapping via total separation.
+3. **Validação de Metadados**: Implementar validação rigorosa de metadados na inicialização para detectar erros (colunas inexistentes, tipos incompatíveis) antes do tempo de execução.
 
-5. **ActiveRecord (Ruby on Rails)**: Uses convention over configuration — mapping is implicit based on class and table names, with declarative overrides.
+4. **Convention over Configuration**: Minimizar metadados usando convenções (ex.: propriedade `name` → coluna `name`). Configurar apenas as exceções.
 
-6. **MyBatis (Java)**: Uses XML files to map SQL statements to interface methods, giving full SQL control while keeping metadata separate.
+5. **Ambiente Multi-tenant**: Os metadados podem precisar variar por tenant. Considerar metamodelos separados ou resolução dinâmica.
 
----
+6. **Versionamento de Schema**: Incluir versão nos metadados para suportar migrações e evolução controlada do schema.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Data Mapper**](../data-source/004_data-mapper.md): Metadata Mapping configures how Data Mappers perform object-relational transformations.
-- [**Repository**](016_repository.md): Repositories depend on metadata mapping to abstract domain object persistence.
-- [**Unit of Work**](001_unit-of-work.md): Coordinates with metadata mapping to track object changes and generate persistence SQL.
-- [**Identity Map**](002_identity-map.md): Uses Identity Field metadata to cache objects by primary key.
-- [**Lazy Load**](003_lazy-load.md): Configured via metadata (e.g., `fetch="lazy"` in XML or `lazy: true` in annotations).
-- [**Query Object**](015_query-object.md): Uses metamodel to build type-safe queries based on object structure.
-- [**Inheritance Mappers**](013_inheritance-mappers.md): Metadata declares inheritance mapping strategy (Single/Class/Concrete Table).
+1. **Mapeamento Baseado em Anotações**: Usar anotações (@Entity, @Column, @OneToMany) diretamente nas classes de domínio para configuração inline.
 
-### Relation with Rules
+2. **Mapeamento XML Externo**: Manter arquivos .hbm.xml (Hibernate) ou .edmx (Entity Framework) separados para completa separação de código e configuração.
 
-- [021 - Prohibition of Logic Duplication](../../clean-code/001_prohibition-logic-duplication.md): metadata eliminates duplication
-- [022 - Prioritization of Simplicity and Clarity](../../clean-code/002_prioritization-simplicity-clarity.md): declarative configuration
+3. **Configuração Fluent**: Usar APIs fluentes (ex.: Entity Framework Fluent API) para configurar o mapeamento no código com type-safety.
 
----
+4. **Mapeamento Baseado em Convenções**: Implementar convenções padrão (tabela = plural da classe, PK = Id) e sobrescrever apenas quando necessário.
 
-## Business Rules Relationship
+5. **Configurações Compostas**: Combinar abordagens — usar anotações para casos simples, XML para casos complexos (herança, queries customizadas).
 
-- **[010] Single Responsibility Principle**: Metadata separates persistence responsibility from domain logic.
-- **[014] Dependency Inversion Principle**: Domain classes don't depend on persistence details — metadata inverts the dependency.
-- **[022] Prioritization of Simplicity and Clarity**: Declarative metadata can be clearer than imperative mapping code.
-- **[021] Prohibition of Logic Duplication**: Eliminates duplication of manual mapping code through automatic generation based on metadata.
+6. **Geração de Código**: Gerar classes de domínio a partir de metadados (abordagem database-first) ou gerar metadados a partir das classes (abordagem code-first).
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Hibernate (Java)**: O ORM original que popularizou o metadata mapping via arquivos .hbm.xml (versões antigas) e anotações JPA (versões modernas).
+
+2. **Entity Framework (.NET)**: Suporta três abordagens: Database First (gera classes a partir do schema), Code First (gera schema a partir das classes) e Model First (designer visual gera ambos).
+
+3. **Doctrine (PHP)**: Usa anotações (@ORM\Entity, @ORM\Column) ou YAML/XML para mapeamento de metadados de entidades.
+
+4. **SQLAlchemy (Python)**: Suporta mapeamento declarativo via classes Python com metadados embutidos ou mapeamento clássico via separação total.
+
+5. **ActiveRecord (Ruby on Rails)**: Usa convention over configuration — o mapeamento é implícito com base nos nomes de classe e tabela, com sobrescritas declarativas.
+
+6. **MyBatis (Java)**: Usa arquivos XML para mapear instruções SQL a métodos de interface, dando controle total sobre SQL enquanto mantém os metadados separados.
+
+---
+
+## Padrões Relacionados
+
+- [**Data Mapper**](../data-source/004_data-mapper.md): Metadata Mapping configura como os Data Mappers realizam as transformações objeto-relacionais.
+- [**Repository**](016_repository.md): Repositories dependem do metadata mapping para abstrair a persistência dos objetos de domínio.
+- [**Unit of Work**](001_unit-of-work.md): Coordena com o metadata mapping para rastrear mudanças de objetos e gerar SQL de persistência.
+- [**Identity Map**](002_identity-map.md): Usa os metadados do Identity Field para fazer cache de objetos pela chave primária.
+- [**Lazy Load**](003_lazy-load.md): Configurado via metadados (ex.: `fetch="lazy"` em XML ou `lazy: true` em anotações).
+- [**Query Object**](015_query-object.md): Usa o metamodelo para construir queries type-safe com base na estrutura do objeto.
+- [**Inheritance Mappers**](013_inheritance-mappers.md): Os metadados declaram a estratégia de mapeamento de herança (Single/Class/Concrete Table).
+
+### Relação com Rules
+
+- [021 - Proibição de Duplicação de Lógica](../../clean-code/proibicao-duplicacao-logica.md): metadados eliminam duplicação
+- [022 - Priorização de Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): configuração declarativa
+
+---
+
+## Relação com Regras de Negócio
+
+- **[010] Single Responsibility Principle**: Os metadados separam a responsabilidade de persistência da lógica de domínio.
+- **[014] Dependency Inversion Principle**: Classes de domínio não dependem de detalhes de persistência — os metadados invertem a dependência.
+- **[022] Priorização de Simplicidade e Clareza**: Metadados declarativos podem ser mais claros do que código de mapeamento imperativo.
+- **[021] Proibição de Duplicação de Lógica**: Elimina a duplicação de código de mapeamento manual por meio de geração automática baseada em metadados.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

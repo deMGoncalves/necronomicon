@@ -1,38 +1,38 @@
-# ICP Calculation (Intrinsic Complexity Points)
+# Cálculo de ICP (Intrinsic Complexity Points)
 
-## General Formula
+## Fórmula Geral
 
 ```
 ICP = CC_base + Nesting + Responsibilities + Coupling
 ```
 
-## Component 1: Base Cyclomatic Complexity
+## Componente 1: Complexidade Ciclomática Base
 
-CC measures the number of independent paths through the code.
+A CC mede o número de caminhos independentes pelo código.
 
-### CC Calculation
+### Cálculo de CC
 
-CC = number of decision points + 1
+CC = número de pontos de decisão + 1
 
-**Decision points:**
+**Pontos de decisão:**
 - `if`, `else if`
 - `for`, `while`, `do-while`
-- `case` in `switch`
-- `&&`, `||` in conditions
-- `catch` in try-catch
-- `?` in ternary operator
+- `case` em `switch`
+- `&&`, `||` em condições
+- `catch` em try-catch
+- `?` no operador ternário
 
-### Conversion to Base ICP
+### Conversão para ICP Base
 
-| CC | ICP Base | Category |
+| CC | ICP Base | Categoria |
 |----|----------|-----------|
-| ≤ 5 | 1 | Simple |
-| 6-10 | 2 | Moderate |
-| 11-15 | 3 | Complex |
-| 16-20 | 4 | Very Complex |
-| > 20 | 5 | Critical |
+| ≤ 5 | 1 | Simples |
+| 6-10 | 2 | Moderado |
+| 11-15 | 3 | Complexo |
+| 16-20 | 4 | Muito Complexo |
+| > 20 | 5 | Crítico |
 
-**Example:**
+**Exemplo:**
 
 ```javascript
 // CC = 4 (3 ifs + 1) → ICP Base = 1
@@ -44,27 +44,27 @@ function validateEmail(email) {
 }
 ```
 
-## Component 2: Nesting Depth
+## Componente 2: Profundidade de Aninhamento
 
-Measures how many indentation levels the code has.
+Mede quantos níveis de indentação o código possui.
 
-### Scoring
+### Pontuação
 
-| Levels | Points | Example |
+| Níveis | Pontos | Exemplo |
 |--------|--------|---------|
-| 1 | 0 | Linear code with guard clauses |
-| 2 | 1 | One level of `if` or `for` |
-| 3 | 2 | `if` inside `for` |
-| 4+ | 3 | Deep nesting |
+| 1 | 0 | Código linear com guard clauses |
+| 2 | 1 | Um nível de `if` ou `for` |
+| 3 | 2 | `if` dentro de `for` |
+| 4+ | 3 | Aninhamento profundo |
 
-**Example:**
+**Exemplo:**
 
 ```javascript
-// Nesting = 3 levels → +2 points
+// Aninhamento = 3 níveis → +2 pontos
 function processOrders(orders) {
-  for (let order of orders) {           // Level 1
-    if (order.isPaid) {                  // Level 2
-      for (let item of order.items) {    // Level 3
+  for (let order of orders) {           // Nível 1
+    if (order.isPaid) {                  // Nível 2
+      for (let item of order.items) {    // Nível 3
         item.ship();
       }
     }
@@ -72,69 +72,69 @@ function processOrders(orders) {
 }
 ```
 
-## Component 3: Number of Responsibilities
+## Componente 3: Número de Responsabilidades
 
-Measures SRP (Single Responsibility Principle) violations.
+Mede violações do SRP (Single Responsibility Principle).
 
-### Responsibility Identification
+### Identificação de Responsabilidades
 
-A function has multiple responsibilities if it does 2+ of the following:
+Uma função tem múltiplas responsabilidades se fizer 2 ou mais das seguintes:
 
-1. Data validation
-2. Data transformation
-3. Persistence (save, update, delete)
-4. Query (fetch, read)
-5. Business logic
-6. Formatting/presentation
-7. Logging/auditing
-8. Error handling
+1. Validação de dados
+2. Transformação de dados
+3. Persistência (salvar, atualizar, excluir)
+4. Consulta (buscar, ler)
+5. Lógica de negócio
+6. Formatação/apresentação
+7. Logging/auditoria
+8. Tratamento de erros
 
-### Scoring
+### Pontuação
 
-| Responsibilities | Points |
+| Responsabilidades | Pontos |
 |-------------------|--------|
 | 1 | 0 |
 | 2-3 | 1 |
 | 4-5 | 2 |
 | 6+ | 3 |
 
-**Example:**
+**Exemplo:**
 
 ```javascript
-// 3 responsibilities → +1 point
-// 1. Validation, 2. Transformation, 3. Persistence
+// 3 responsabilidades → +1 ponto
+// 1. Validação, 2. Transformação, 3. Persistência
 function createUser(data) {
-  // 1. Validation
+  // 1. Validação
   if (!data.email) throw new Error('Invalid email');
 
-  // 2. Transformation
+  // 2. Transformação
   const user = {
     email: data.email.toLowerCase(),
     name: data.name.trim()
   };
 
-  // 3. Persistence
+  // 3. Persistência
   database.users.insert(user);
   return user;
 }
 ```
 
-## Component 4: Coupling (Optional)
+## Componente 4: Acoplamento (Opcional)
 
-Measures direct external dependencies.
+Mede dependências externas diretas.
 
-### Scoring
+### Pontuação
 
-| Dependencies | Points |
+| Dependências | Pontos |
 |--------------|--------|
 | 0-2 | 0 |
 | 3-5 | 1 |
 | 6+ | 2 |
 
-**Example:**
+**Exemplo:**
 
 ```javascript
-// 4 dependencies → +1 point
+// 4 dependências → +1 ponto
 import { validateEmail } from './validators';
 import { hashPassword } from './crypto';
 import { sendEmail } from './mailer';
@@ -148,9 +148,9 @@ function registerUser(email, password) {
 }
 ```
 
-## Complete Calculation: Examples
+## Cálculo Completo: Exemplos
 
-### Example 1: Simple Function
+### Exemplo 1: Função Simples
 
 ```javascript
 function sum(a, b) {
@@ -159,15 +159,15 @@ function sum(a, b) {
 ```
 
 - CC: 1 → ICP Base = 1
-- Nesting: 0 levels → +0
-- Responsibilities: 1 (transformation) → +0
-- Coupling: 0 → +0
+- Aninhamento: 0 níveis → +0
+- Responsabilidades: 1 (transformação) → +0
+- Acoplamento: 0 → +0
 
-**Total ICP: 1** 🟢 (Excellent)
+**ICP Total: 1** 🟢 (Excelente)
 
 ---
 
-### Example 2: Moderate Function
+### Exemplo 2: Função Moderada
 
 ```javascript
 function processPayment(order) {
@@ -184,15 +184,15 @@ function processPayment(order) {
 ```
 
 - CC: 3 (2 ifs + 1) → ICP Base = 1
-- Nesting: 2 levels → +1
-- Responsibilities: 3 (validation, payment, notification) → +1
-- Coupling: 3 (paymentGateway, order, emailService) → +1
+- Aninhamento: 2 níveis → +1
+- Responsabilidades: 3 (validação, pagamento, notificação) → +1
+- Acoplamento: 3 (paymentGateway, order, emailService) → +1
 
-**Total ICP: 4** 🟡 (Acceptable, consider refactoring)
+**ICP Total: 4** 🟡 (Aceitável, considere refatoração)
 
 ---
 
-### Example 3: Complex Function
+### Exemplo 3: Função Complexa
 
 ```javascript
 function syncUserData(userId) {
@@ -218,29 +218,29 @@ function syncUserData(userId) {
 ```
 
 - CC: 6 (5 ifs/for + 1) → ICP Base = 2
-- Nesting: 4 levels → +3
-- Responsibilities: 5 (query, validation, fetch, transformation, persistence) → +2
-- Coupling: 4 (database, apiClient, auditLog, Date) → +1
+- Aninhamento: 4 níveis → +3
+- Responsabilidades: 5 (consulta, validação, busca, transformação, persistência) → +2
+- Acoplamento: 4 (database, apiClient, auditLog, Date) → +1
 
-**Total ICP: 8** 🟠 (Concerning, refactoring recommended)
+**ICP Total: 8** 🟠 (Preocupante, refatoração recomendada)
 
 ---
 
-## ICP Limits and Actions
+## Limites e Ações de ICP
 
-| ICP | Status | Action |
+| ICP | Status | Ação |
 |-----|--------|------|
-| ≤ 3 | 🟢 Excellent | Maintain |
-| 4-6 | 🟡 Acceptable | Consider refactoring |
-| 7-10 | 🟠 Concerning | Refactoring recommended |
-| > 10 | 🔴 Critical | Mandatory refactoring |
+| ≤ 3 | 🟢 Excelente | Manter |
+| 4-6 | 🟡 Aceitável | Considerar refatoração |
+| 7-10 | 🟠 Preocupante | Refatoração recomendada |
+| > 10 | 🔴 Crítico | Refatoração obrigatória |
 
-## ICP Reduction Strategies
+## Estratégias de Redução de ICP
 
-### 1. Reduce CC → Extract Method
+### 1. Reduzir CC → Extrair Método
 
 ```javascript
-// Before: CC = 5, ICP = 6
+// Antes: CC = 5, ICP = 6
 function processOrder(order) {
   if (!order.items.length) return false;
   if (!order.customer) return false;
@@ -250,7 +250,7 @@ function processOrder(order) {
   return true;
 }
 
-// After: CC = 2, ICP = 2
+// Depois: CC = 2, ICP = 2
 function processOrder(order) {
   if (!isValidOrder(order)) return false;
   order.ship();
@@ -265,10 +265,10 @@ function isValidOrder(order) {
 }
 ```
 
-### 2. Reduce Nesting → Early Return
+### 2. Reduzir Aninhamento → Retorno Antecipado
 
 ```javascript
-// Before: Nesting = 3
+// Antes: Aninhamento = 3
 function getDiscount(user) {
   if (user) {
     if (user.isPremium) {
@@ -280,7 +280,7 @@ function getDiscount(user) {
   return 0;
 }
 
-// After: Nesting = 1
+// Depois: Aninhamento = 1
 function getDiscount(user) {
   if (!user) return 0;
   if (!user.isPremium) return 0;
@@ -289,10 +289,10 @@ function getDiscount(user) {
 }
 ```
 
-### 3. Reduce Responsibilities → SRP
+### 3. Reduzir Responsabilidades → SRP
 
 ```javascript
-// Before: 4 responsibilities
+// Antes: 4 responsabilidades
 function registerUser(email, password) {
   validateEmail(email);
   const hash = hashPassword(password);
@@ -301,7 +301,7 @@ function registerUser(email, password) {
   return user;
 }
 
-// After: 1 responsibility (orchestration)
+// Depois: 1 responsabilidade (orquestração)
 function registerUser(email, password) {
   const user = userService.create(email, password);
   notificationService.sendWelcome(user);
@@ -309,12 +309,12 @@ function registerUser(email, password) {
 }
 ```
 
-## Tools
+## Ferramentas
 
-- **Manual**: Visual counting of components
-- **Automatic**: ESLint with plugins `complexity`, `max-depth`, `max-lines-per-function`
-- **IDE**: Plugins that calculate CC and show metrics
+- **Manual**: Contagem visual dos componentes
+- **Automático**: ESLint com plugins `complexity`, `max-depth`, `max-lines-per-function`
+- **IDE**: Plugins que calculam CC e exibem métricas
 
-## Version
+## Versão
 
-ICP Calculation v1.0 - March 2026
+Cálculo de ICP v1.0 - Março 2026

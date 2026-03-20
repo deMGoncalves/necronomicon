@@ -1,165 +1,165 @@
 # Unit of Work
 
-**Classification**: Object-Relational Behavioral Pattern
+**Classificação**: Padrão Object-Relational Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Maintains a list of objects affected by a business transaction and coordinates writing of changes and resolution of concurrency problems. Tracks all changes during a session and writes everything at once.
+Mantém uma lista de objetos afetados por uma transação de negócio e coordena a escrita das mudanças e a resolução de problemas de concorrência. Rastreia todas as alterações durante uma sessão e as persiste de uma vez só.
 
-## Also Known As
+## Também Conhecido Como
 
 - Transaction Manager
 - Change Tracker
 - Session
 
-## Motivation
+## Motivação
 
-When working with objects in memory that need to be persisted, tracking which objects changed, were created, or deleted is complex. Without centralized control, you may forget to save changes, save the same object multiple times, or execute operations in wrong order causing integrity violations.
+Ao trabalhar com objetos em memória que precisam ser persistidos, rastrear quais objetos foram alterados, criados ou excluídos é complexo. Sem controle centralizado, você pode esquecer de salvar mudanças, salvar o mesmo objeto múltiplas vezes, ou executar operações na ordem errada, causando violações de integridade.
 
-Unit of Work solves this by maintaining a list of all loaded objects and tracking changes to them. When you modify an object, Unit of Work registers the change. When you create a new object, Unit of Work registers it as "new". When you delete, Unit of Work registers as "removed". On commit, Unit of Work calculates correct order of operations and executes all changes in one database transaction.
+O Unit of Work resolve isso mantendo uma lista de todos os objetos carregados e rastreando suas alterações. Quando você modifica um objeto, o Unit of Work registra a mudança. Quando você cria um novo objeto, o Unit of Work o registra como "novo". Quando você exclui, o Unit of Work registra como "removido". No commit, o Unit of Work calcula a ordem correta das operações e executa todas as mudanças em uma única transação de banco de dados.
 
-For example, in an order transaction you may create Order, add OrderItems, update Product stock, and update Customer credit. Unit of Work tracks everything. On commit, it executes INSERTs for Order and Items, UPDATEs for Products and Customer, all in correct order and in one transaction. If something fails, everything is rolled back automatically.
+Por exemplo, em uma transação de pedido você pode criar um Order, adicionar OrderItems, atualizar o estoque de Product e atualizar o crédito do Customer. O Unit of Work rastreia tudo. No commit, ele executa INSERTs para Order e Items, UPDATEs para Products e Customer, tudo na ordem correta e em uma única transação. Se algo falhar, tudo é revertido automaticamente.
 
-## Applicability
+## Aplicabilidade
 
-Use Unit of Work when:
+Use Unit of Work quando:
 
-- Multiple objects are modified in a business transaction
-- Changes need to be committed atomically
-- Optimization of update queries is important (batch updates)
-- Order of database operations needs to be managed
-- Domain Model is used (frequently with Data Mapper)
-- Concurrency problems need to be detected and resolved
+- Múltiplos objetos são modificados em uma transação de negócio
+- As mudanças precisam ser confirmadas atomicamente
+- A otimização de queries de atualização é importante (batch updates)
+- A ordem das operações de banco de dados precisa ser gerenciada
+- O Domain Model é utilizado (frequentemente com Data Mapper)
+- Problemas de concorrência precisam ser detectados e resolvidos
 
-## Structure
+## Estrutura
 
 ```
 Client (Service Layer)
-└── Uses: Unit of Work
+└── Usa: Unit of Work
 
 Unit of Work
-├── Object Registries:
+├── Registros de Objetos:
 │   ├── newObjects: List<Object>
 │   ├── dirtyObjects: List<Object>
 │   ├── removedObjects: List<Object>
 │   └── clean: List<Object>
-├── Public Methods:
+├── Métodos Públicos:
 │   ├── registerNew(object)
 │   ├── registerDirty(object)
 │   ├── registerRemoved(object)
 │   ├── registerClean(object)
 │   └── commit()
-└── Collaborates with:
-    ├── Data Mappers (to persist)
-    └── Identity Map (to load)
+└── Colabora com:
+    ├── Data Mappers (para persistir)
+    └── Identity Map (para carregar)
 
-Flow:
-1. Client loads objects
-2. Client modifies objects → UoW registers as dirty
-3. Client creates objects → UoW registers as new
-4. Client deletes objects → UoW registers as removed
-5. Client calls commit()
-6. UoW orders operations
-7. UoW starts database transaction
-8. UoW executes INSERTs (new objects)
-9. UoW executes UPDATEs (dirty objects)
-10. UoW executes DELETEs (removed objects)
-11. UoW commits transaction
+Fluxo:
+1. Client carrega objetos
+2. Client modifica objetos → UoW registra como dirty
+3. Client cria objetos → UoW registra como new
+4. Client exclui objetos → UoW registra como removed
+5. Client chama commit()
+6. UoW ordena as operações
+7. UoW inicia transação de banco de dados
+8. UoW executa INSERTs (objetos novos)
+9. UoW executa UPDATEs (objetos dirty)
+10. UoW executa DELETEs (objetos removidos)
+11. UoW confirma a transação
 ```
 
-## Participants
+## Participantes
 
-- **Unit of Work**: Tracks changes and coordinates persistence
-- **Domain Objects**: Objects being modified during transaction
-- **Data Mappers**: Execute SQL to persist changes
-- [**Identity Map**](002_identity-map.md): Maintains loaded objects unique
-- **Object Lists**: Lists of new, dirty, removed, clean objects
-- **Transaction**: Database transaction managed
+- **Unit of Work**: Rastreia mudanças e coordena a persistência
+- **Domain Objects**: Objetos sendo modificados durante a transação
+- **Data Mappers**: Executam SQL para persistir as mudanças
+- [**Identity Map**](002_identity-map.md): Mantém os objetos carregados únicos
+- **Listas de Objetos**: Listas de objetos novos, sujos, removidos e limpos
+- **Transaction**: Transação de banco de dados gerenciada
 
-## Collaborations
+## Colaborações
 
-- Client loads objects via Repository or Data Mapper
-- Loaded objects are registered as "clean" in Unit of Work
-- Client modifies objects; objects self-register as "dirty" or Client registers explicitly
-- Client creates new objects and registers them as "new"
-- Client marks objects for deletion by registering as "removed"
-- Client calls commit() on Unit of Work
-- Unit of Work calculates operation order based on dependencies
-- Unit of Work starts database transaction
-- Unit of Work iterates over "new" objects and calls Mapper.insert()
-- Unit of Work iterates over "dirty" objects and calls Mapper.update()
-- Unit of Work iterates over "removed" objects and calls Mapper.delete()
-- If all succeeds, Unit of Work commits transaction
-- If error occurs, Unit of Work rolls back transaction
+- Client carrega objetos via Repository ou Data Mapper
+- Objetos carregados são registrados como "clean" no Unit of Work
+- Client modifica objetos; objetos se auto-registram como "dirty" ou o Client registra explicitamente
+- Client cria novos objetos e os registra como "new"
+- Client marca objetos para exclusão registrando-os como "removed"
+- Client chama commit() no Unit of Work
+- Unit of Work calcula a ordem das operações com base nas dependências
+- Unit of Work inicia a transação de banco de dados
+- Unit of Work itera sobre objetos "new" e chama Mapper.insert()
+- Unit of Work itera sobre objetos "dirty" e chama Mapper.update()
+- Unit of Work itera sobre objetos "removed" e chama Mapper.delete()
+- Se tudo ocorrer bem, Unit of Work confirma a transação
+- Se ocorrer erro, Unit of Work realiza rollback da transação
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Atomicity**: All changes committed or none
-- **Performance**: Batch updates reduce round-trips to database
-- **Consistency**: Correct order of operations guaranteed
-- **Simplicity for client**: Client doesn't manage transactions manually
-- **Concurrency detection**: Can detect conflicts before committing
-- **Optimization**: Can eliminate redundant updates
+- **Atomicidade**: Todas as mudanças são confirmadas ou nenhuma é
+- **Performance**: Batch updates reduzem idas e vindas ao banco de dados
+- **Consistência**: Ordem correta das operações garantida
+- **Simplicidade para o client**: Client não gerencia transações manualmente
+- **Detecção de concorrência**: Pode detectar conflitos antes de confirmar
+- **Otimização**: Pode eliminar atualizações redundantes
 
-### Disadvantages
+### Desvantagens
 
-- **Complexity**: Complex implementation; difficult to do correctly
-- **Memory overhead**: Maintains references to all modified objects
-- **Hidden state**: Transaction state may not be obvious
-- **Commit timing**: Difficult to know when to commit for best performance
-- **Cascades**: Difficult to manage cascading operations
-- **Debugging**: Problems appear only on commit, far from where error was introduced
+- **Complexidade**: Implementação complexa; difícil de fazer corretamente
+- **Overhead de memória**: Mantém referências a todos os objetos modificados
+- **Estado oculto**: O estado da transação pode não ser óbvio
+- **Momento do commit**: Difícil saber quando confirmar para melhor performance
+- **Cascatas**: Difícil gerenciar operações em cascata
+- **Depuração**: Problemas aparecem apenas no commit, longe de onde o erro foi introduzido
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Object registration**: Decide if objects self-register or client registers explicitly
-2. **Change detection**: Original snapshot vs dirty tracking vs proxy
-3. **Ordering**: Calculate correct order based on dependencies
-4. **Identity**: Integrate with Identity Map to avoid duplicates
-5. **Concurrency**: Implement optimistic or pessimistic locking
-6. **Scope**: Define lifetime of Unit of Work (per request, etc)
+1. **Registro de objetos**: Decidir se os objetos se auto-registram ou se o client registra explicitamente
+2. **Detecção de mudanças**: Snapshot original vs dirty tracking vs proxy
+3. **Ordenação**: Calcular a ordem correta com base nas dependências
+4. **Identidade**: Integrar com o Identity Map para evitar duplicatas
+5. **Concorrência**: Implementar bloqueio otimista ou pessimista
+6. **Escopo**: Definir o tempo de vida do Unit of Work (por requisição, etc.)
 
-### Techniques
+### Técnicas
 
-- **Object Registration**: register* methods to track objects
-- **Caller Registration**: Client registers objects explicitly
-- **Object Self-Registration**: Objects register themselves when modified
-- **Change Tracking**: Compare snapshots to detect changes
-- **Topological Sort**: Order operations based on dependencies
-- **Transaction Management**: Start/commit/rollback transactions
-- **Batch Operations**: Group similar operations
+- **Registro de Objetos**: Métodos register* para rastrear objetos
+- **Registro pelo Chamador**: Client registra objetos explicitamente
+- **Auto-Registro pelo Objeto**: Objetos se registram ao serem modificados
+- **Change Tracking**: Comparar snapshots para detectar mudanças
+- **Ordenação Topológica**: Ordenar operações com base nas dependências
+- **Gerenciamento de Transação**: Iniciar/confirmar/reverter transações
+- **Operações em Lote**: Agrupar operações similares
 
-## Known Uses
+## Usos Conhecidos
 
-- **Hibernate Session**: Hibernate Unit of Work pattern
-- **Entity Framework DbContext**: EF uses Unit of Work
-- **JPA EntityManager**: JPA EntityManager is Unit of Work
-- **NHibernate Session**: NHibernate implementation
-- **SQLAlchemy Session**: Python ORM Session
-- **TypeORM EntityManager**: TypeScript ORM
+- **Hibernate Session**: Padrão Unit of Work do Hibernate
+- **Entity Framework DbContext**: EF usa Unit of Work
+- **JPA EntityManager**: JPA EntityManager é Unit of Work
+- **NHibernate Session**: Implementação do NHibernate
+- **SQLAlchemy Session**: Session do ORM Python
+- **TypeORM EntityManager**: ORM TypeScript
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Data Mapper**](../data-source/004_data-mapper.md): Unit of Work coordinates Mappers
-- [**Identity Map**](002_identity-map.md): Works together to ensure identity
-- [**Repository**](016_repository.md): Repository uses Unit of Work internally
-- [**Lazy Load**](003_lazy-load.md): Unit of Work can trigger lazy loads
-- [**Optimistic Offline Lock**](057_optimistic-offline-lock.md): Detects conflicts
-- [**Service Layer**](../domain-logic/004_service-layer.md): Service Layer manages Unit of Work
+- [**Data Mapper**](../data-source/004_data-mapper.md): Unit of Work coordena os Mappers
+- [**Identity Map**](002_identity-map.md): Trabalha em conjunto para garantir a identidade
+- [**Repository**](016_repository.md): Repository usa Unit of Work internamente
+- [**Lazy Load**](003_lazy-load.md): Unit of Work pode disparar lazy loads
+- [**Optimistic Offline Lock**](057_optimistic-offline-lock.md): Detecta conflitos
+- [**Service Layer**](../domain-logic/004_service-layer.md): Service Layer gerencia o Unit of Work
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): UoW responsible for transactions
-- [027 - Quality in Error Handling](../../clean-code/007_qualidade-tratamento-erros-dominio.md): automatic rollback
-- [028 - Asynchronous Exception Handling](../../clean-code/008_tratamento-excecao-assincrona.md): manages async transactions
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): UoW responsável pelas transações
+- [027 - Qualidade no Tratamento de Erros](../../clean-code/qualidade-tratamento-erros-dominio.md): rollback automático
+- [028 - Tratamento de Exceção Assíncrona](../../clean-code/tratamento-excecao-assincrona.md): gerencia transações assíncronas
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

@@ -222,7 +222,7 @@ function maybeSlowMaybeNot() { }
 
 ## Rules Relacionadas
 
-- [clean-code/002 - KISS](../../clean-code/002_prioritization-simplicity-clarity.md): não complicar por micro-otimização
+- [clean-code/002 - KISS](../../clean-code/priorizacao-simplicidade-clareza.md): não complicar por micro-otimização
 - [object-calisthenics/001 - Single Indentation](../../object-calisthenics/001_single-indentation-level.md): loops aninhados são candidatos
 
 ---

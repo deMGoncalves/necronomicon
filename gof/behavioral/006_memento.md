@@ -1,130 +1,130 @@
 # Memento
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Without violating encapsulation, capture and externalize an object's internal state so that the object can be restored to this state later. Allows implementing undo/redo, snapshots, and checkpoints while maintaining encapsulation.
+Sem violar o encapsulamento, capturar e externalizar o estado interno de um objeto para que o objeto possa ser restaurado a esse estado mais tarde. Permite implementar undo/redo, snapshots e checkpoints mantendo o encapsulamento.
 
-## Also Known As
+## Também Conhecido Como
 
 - Token
 - Snapshot
 
-## Motivation
+## Motivação
 
-Sometimes it's necessary to record the internal state of an object to implement checkpoints and undo mechanisms. Objects normally encapsulate some or all of their state, making it inaccessible to other objects and impossible to save externally. Exposing this state would violate encapsulation, which can compromise the application's robustness and extensibility.
+Às vezes é necessário registrar o estado interno de um objeto para implementar checkpoints e mecanismos de desfazer. Os objetos normalmente encapsulam parte ou todo o seu estado, tornando-o inacessível a outros objetos e impossível de salvar externamente. Expor esse estado violaria o encapsulamento, o que pode comprometer a robustez e a extensibilidade da aplicação.
 
-Consider a graphical editor that supports connectivity between objects. A user can align objects by connecting them. Alignment may modify data structures that specify connectivity. Implementing undo requires storing the data structures that specify exactly how objects are connected. But Constraint objects encapsulate these structures internally.
+Considere um editor gráfico que suporta conectividade entre objetos. Um usuário pode alinhar objetos conectando-os. O alinhamento pode modificar estruturas de dados que especificam a conectividade. Implementar undo requer armazenar as estruturas de dados que especificam exatamente como os objetos estão conectados. Mas os objetos Constraint encapsulam essas estruturas internamente.
 
-The Memento pattern solves this problem without compromising encapsulation. The Originator (Constraint) delegates saving state to another object (memento). Only the originator can store and retrieve information from the memento.
+O padrão Memento resolve esse problema sem comprometer o encapsulamento. O Originator (Constraint) delega o salvamento do estado para outro objeto (memento). Apenas o originator pode armazenar e recuperar informações do memento.
 
-## Applicability
+## Aplicabilidade
 
-Use the Memento pattern when:
+Use o padrão Memento quando:
 
-- A snapshot of (some portion of) an object's state must be saved so that it can be restored later
-- A direct interface for obtaining the state would expose implementation details and break the object's encapsulation
-- You need to implement undo/redo
-- You want to implement transactions that can be rolled back
-- You need to implement checkpoints in long-running processes
+- Um snapshot de (alguma parte do) estado de um objeto deve ser salvo para que possa ser restaurado posteriormente
+- Uma interface direta para obter o estado exporia detalhes de implementação e quebraria o encapsulamento do objeto
+- Você precisa implementar undo/redo
+- Você deseja implementar transações que possam ser revertidas
+- Você precisa implementar checkpoints em processos de longa duração
 
-## Structure
+## Estrutura
 
 ```
 Originator
-├── Maintains: internal state
+├── Mantém: estado interno
 ├── createMemento(): Memento
 │   └── return new Memento(state)
 └── restore(memento: Memento)
     └── state = memento.getState()
 
 Memento
-├── Maintains: saved state of Originator
-├── getState() → returns state (only for Originator)
-└── (Optionally) limited interface for Caretaker
+├── Mantém: estado salvo do Originator
+├── getState() → retorna estado (apenas para Originator)
+└── (Opcionalmente) interface limitada para Caretaker
 
 Caretaker
-├── Maintains: List<Memento> (history)
-├── Responsible for: saving and restoring Originator
+├── Mantém: List<Memento> (histórico)
+├── Responsável por: salvar e restaurar o Originator
 ├── saveState()
 │   └── history.add(originator.createMemento())
 └── undo()
     └── originator.restore(history.pop())
 ```
 
-## Participants
+## Participantes
 
-- [**Memento**](006_memento.md): Stores internal state snapshot of the Originator; protects against access by objects other than the originator
-- **Originator**: Creates memento containing snapshot of its current internal state; uses the memento to restore its internal state
-- **Caretaker**: Responsible for the memento's safekeeping; never operates on or examines the contents of a memento
+- [**Memento**](006_memento.md): Armazena o snapshot do estado interno do Originator; protege contra acesso de objetos que não sejam o originator
+- **Originator**: Cria o memento contendo o snapshot de seu estado interno atual; usa o memento para restaurar seu estado interno
+- **Caretaker**: Responsável pela guarda do memento; nunca opera nem examina o conteúdo de um memento
 
-## Collaborations
+## Colaborações
 
-- Caretaker requests a memento from the originator, holds it for a time, and passes it back to the originator
-- Mementos are passive; only the originator that created a memento will assign or retrieve its state
+- Caretaker solicita um memento ao originator, mantém-o por um tempo e o passa de volta ao originator
+- Mementos são passivos; apenas o originator que criou um memento irá atribuir ou recuperar seu estado
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Preserves encapsulation**: Avoids exposing information that only an originator should manage but must be stored outside of it
-- **Simplifies Originator**: Originator doesn't need to manage versions of internal state
-- **Allows undo/redo**: History of mementos allows navigating through states
-- **Separation of concerns**: Caretaker manages when and why to capture state
+- **Preserva o encapsulamento**: Evita expor informações que apenas um originator deve gerenciar mas que precisam ser armazenadas fora dele
+- **Simplifica o Originator**: O originator não precisa gerenciar versões do estado interno
+- **Permite undo/redo**: O histórico de mementos permite navegar entre estados
+- **Separação de responsabilidades**: Caretaker gerencia quando e por que capturar o estado
 
-### Disadvantages
+### Desvantagens
 
-- **Cost of copying state**: Can be expensive if Originator must copy large amounts of information
-- **Caretaker costs**: Caretaker can incur significant storage costs
-- **Memory overhead**: Maintaining many mementos can consume lots of memory
+- **Custo de cópia do estado**: Pode ser caro se o Originator precisar copiar grandes quantidades de informação
+- **Custos do Caretaker**: O Caretaker pode incorrer em custos significativos de armazenamento
+- **Sobrecarga de memória**: Manter muitos mementos pode consumir muita memória
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Language support for preserving encapsulation**: Ideally, only Originator can access memento state
+1. **Suporte da linguagem para preservar o encapsulamento**: Idealmente, apenas o Originator pode acessar o estado do memento
 
-2. **Storing incremental changes**: If creating and restoring state is expensive, mementos can store only incremental changes
+2. **Armazenando mudanças incrementais**: Se criar e restaurar estado for caro, os mementos podem armazenar apenas as mudanças incrementais
 
-3. **Lazy restoration**: Defer restoration until actually needed
+3. **Restauração preguiçosa**: Adiar a restauração até que seja realmente necessária
 
-4. **Limiting history**: Limit number of mementos to control memory usage (LRU cache)
+4. **Limitando o histórico**: Limitar o número de mementos para controlar o uso de memória (cache LRU)
 
-### Techniques
+### Técnicas
 
-- **Incremental Memento**: Store only differences since last snapshot
-- **Compress Mementos**: Compress state to save memory
-- **Copy-on-write**: Share state until modification
-- **Prototype for cloning**: Use Prototype to copy state
-- **Serialization**: Serialize object state
+- **Memento Incremental**: Armazenar apenas as diferenças desde o último snapshot
+- **Compressão de Mementos**: Comprimir o estado para economizar memória
+- **Copy-on-write**: Compartilhar estado até a modificação
+- **Prototype para clonagem**: Usar Prototype para copiar o estado
+- **Serialização**: Serializar o estado do objeto
 
-## Known Uses
+## Usos Conhecidos
 
-- **Text Editors**: Undo/redo of edits (Ctrl+Z, Ctrl+Y)
-- **Database Transactions**: Savepoints and rollback
-- **Game State**: Save games, checkpoints
-- **Graphics Editors**: Undo operations (Photoshop, GIMP)
-- **Version Control**: Snapshots of project state
-- **Browser History**: Back/forward navigation
+- **Editores de Texto**: Undo/redo de edições (Ctrl+Z, Ctrl+Y)
+- **Transações de Banco de Dados**: Savepoints e rollback
+- **Estado de Jogo**: Jogos salvos, checkpoints
+- **Editores Gráficos**: Operações de undo (Photoshop, GIMP)
+- **Controle de Versão**: Snapshots do estado do projeto
+- **Histórico do Navegador**: Navegação para trás/frente
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Command**](002_command.md): Commands can use Mementos to maintain state for undo
-- [**Iterator**](004_iterator.md): Memento can be used to capture iteration state
-- [**Prototype**](../creational/004_prototype.md): Mementos can use Prototype to copy state
-- [**State**](008_state.md): Memento can save states from State pattern
-- **Serialization**: Common technique for implementing Memento
+- [**Command**](002_command.md): Commands podem usar Mementos para manter estado para undo
+- [**Iterator**](004_iterator.md): Memento pode ser usado para capturar o estado da iteração
+- [**Prototype**](../creational/004_prototype.md): Mementos podem usar Prototype para copiar estado
+- [**State**](008_state.md): Memento pode salvar estados do padrão State
+- **Serialização**: Técnica comum para implementar Memento
 
-### Relation to Rules
+### Relação com Rules
 
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): mementos should be immutable
-- [036 - Function Side Effects Restriction](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): restoration should not have side effects
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate state management
+- [029 - Object Immutability](../../clean-code/imutabilidade-objetos-freeze.md): mementos devem ser imutáveis
+- [036 - Function Side Effects Restriction](../../clean-code/restricao-funcoes-efeitos-colaterais.md): restauração não deve ter efeitos colaterais
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar gerenciamento de estado
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

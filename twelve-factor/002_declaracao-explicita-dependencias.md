@@ -1,47 +1,47 @@
-# Explicit Declaration of Dependencies
+# Declaração Explícita de Dependências
 
 **ID**: INFRASTRUCTURE-041
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-An application must declare **all** its dependencies explicitly and completely through a dependency manifest (e.g., `package.json`, `requirements.txt`). The application must never depend on the implicit existence of packages in the system.
+Uma aplicação deve declarar **todas** as suas dependências de forma explícita e completa por meio de um manifesto de dependências (ex.: `package.json`, `requirements.txt`). A aplicação nunca deve depender da existência implícita de pacotes no sistema.
 
-## Why it matters
+## Por que importa
 
-Implicit dependencies break portability and environment reproducibility. A new developer or a new server will not be able to run the application without prior knowledge of hidden dependencies, violating the principle of minimal *setup*.
+Dependências implícitas quebram a portabilidade e a reprodutibilidade do ambiente. Um novo desenvolvedor ou um novo servidor não conseguirá executar a aplicação sem conhecimento prévio das dependências ocultas, violando o princípio de *setup* mínimo.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] **100%** of runtime and build dependencies must be declared in the manifest (`package.json`, `bun.lockb`).
-- [ ] Using global system dependencies (e.g., libraries installed via `npm install -g` or `apt-get`) is prohibited.
-- [ ] The dependency *lockfile* must be versioned and kept up to date to ensure deterministic builds.
+- [ ] **100%** das dependências de runtime e build devem ser declaradas no manifesto (`package.json`, `bun.lockb`).
+- [ ] É proibido o uso de dependências globais do sistema (ex.: bibliotecas instaladas via `npm install -g` ou `apt-get`).
+- [ ] O *lockfile* de dependências deve ser versionado e mantido atualizado para garantir builds determinísticos.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Base Runtime**: Fundamental runtime dependencies (e.g., Node.js, Bun, Python) that are declared as environment requirements.
+- **Runtime Base**: Dependências fundamentais de runtime (ex.: Node.js, Bun, Python) que são declaradas como requisitos do ambiente.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Clone the repository on a clean machine and run `npm install && npm start` — if it fails due to a missing dependency, there is a violation.
+Clonar o repositório em uma máquina limpa e executar `npm install && npm start` — se falhar por dependência ausente, há uma violação.
 
-### Automatic
+### Automático
 
-CI/CD: Builds in ephemeral containers (Docker) that fail if there are undeclared dependencies.
+CI/CD: Builds em containers efêmeros (Docker) que falham se houver dependências não declaradas.
 
-## Related to
+## Relacionado a
 
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): complements
-- [018 - Acyclic Dependencies Principle](004_acyclic-dependencies-principle.md): reinforces
-- [042 - Configurations via Environment](../twelve-factor/003_configuracoes-via-ambiente.md): complements
-- [044 - Strict Separation of Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): reinforces
+- [014 - Princípio da Inversão de Dependência](005_dependency-inversion-principle.md): complementa
+- [018 - Princípio das Dependências Acíclicas](004_acyclic-dependencies-principle.md): reforça
+- [042 - Configurações via Ambiente](../twelve-factor/003_configuracoes-via-ambiente.md): complementa
+- [044 - Separação Estrita de Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): reforça
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

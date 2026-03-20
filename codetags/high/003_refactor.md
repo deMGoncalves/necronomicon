@@ -218,8 +218,8 @@ function neverFixed() { }
 
 - [solid/001 - SRP](../../solid/001_single-responsibility-principle.md)
 - [solid/002 - OCP](../../solid/002_open-closed-principle.md)
-- [clean-code/001 - DRY](../../clean-code/001_prohibition-logic-duplication.md)
-- [clean-code/005 - No Blob](../../clean-code/005_prohibition-blob-anti-pattern.md)
+- [clean-code/001 - DRY](../../clean-code/proibicao-duplicacao-logica.md)
+- [clean-code/005 - No Blob](../../clean-code/proibicao-anti-padrao-blob.md)
 
 ---
 

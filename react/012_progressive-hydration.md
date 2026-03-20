@@ -185,8 +185,8 @@ function HydrateOnHover({ children }) {
 
 ### Relação com Rules
 
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): pode adicionar complexidade
-- [032 - Cobertura Mínima de Teste](../../clean-code/012_cobertura-teste-minima-qualidade.md): testar diferentes estados de hydration
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): pode adicionar complexidade
+- [032 - Cobertura Mínima de Teste](../../clean-code/cobertura-teste-minima-qualidade.md): testar diferentes estados de hydration
 
 ## Bibliotecas e Ferramentas
 

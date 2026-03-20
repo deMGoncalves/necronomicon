@@ -187,7 +187,7 @@ const result = items.reduce((acc, item) => {
 
 ## Rules Relacionadas
 
-- [clean-code/002 - Simplicity (KISS)](../../clean-code/002_prioritization-simplicity-clarity.md)
+- [clean-code/002 - Simplicity (KISS)](../../clean-code/priorizacao-simplicidade-clareza.md)
 - [object-calisthenics/001 - Single Indentation](../../object-calisthenics/001_single-indentation-level.md)
 
 ## Patterns Relacionados

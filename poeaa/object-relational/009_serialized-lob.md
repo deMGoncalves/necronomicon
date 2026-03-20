@@ -1,14 +1,14 @@
 # Serialized LOB (Serialized Large Object)
 
-**Type**: Object-Relational Mapping Pattern (Structural)
+**Tipo**: Padrão Object-Relational (Estrutural)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Save an object graph by serializing it into a single Large Object (LOB) database field, allowing complex structures to be persisted without decomposition into multiple tables.
+Salvar um grafo de objetos serializando-o em um único campo Large Object (LOB) do banco de dados, permitindo que estruturas complexas sejam persistidas sem decomposição em múltiplas tabelas.
 
-## Also Known As
+## Também Conhecido Como
 
 - Serialized Graph
 - Blob Storage Pattern
@@ -16,34 +16,34 @@ Save an object graph by serializing it into a single Large Object (LOB) database
 
 ---
 
-## Motivation
+## Motivação
 
-In object-oriented systems, we frequently encounter complex object graphs where decomposition into multiple relational tables would be overly complex or unnecessary. For example, a `PurchaseOrder` object may contain a hierarchy of items, discounts, tax calculators, and business rules that change frequently. Mapping this structure to a normalized relational model would create dozens of tables and complex joins.
+Em sistemas orientados a objetos, frequentemente encontramos grafos de objetos complexos onde a decomposição em múltiplas tabelas relacionais seria excessivamente complexa ou desnecessária. Por exemplo, um objeto `PurchaseOrder` pode conter uma hierarquia de itens, descontos, calculadores de imposto e regras de negócio que mudam frequentemente. Mapear essa estrutura para um modelo relacional normalizado criaria dezenas de tabelas e joins complexos.
 
-The Serialized LOB pattern solves this problem by serializing the entire object graph into a binary or textual format (JSON, XML, Protocol Buffers) and storing it in a single BLOB (Binary Large Object) or CLOB (Character Large Object) field. When the object is needed, the system deserializes the field content and reconstructs the complete object graph in memory.
+O padrão Serialized LOB resolve esse problema serializando todo o grafo de objetos em um formato binário ou textual (JSON, XML, Protocol Buffers) e armazenando-o em um único campo BLOB (Binary Large Object) ou CLOB (Character Large Object). Quando o objeto é necessário, o sistema desserializa o conteúdo do campo e reconstrói o grafo de objetos completo em memória.
 
-The main advantage is mapping simplicity: a complex object is persisted with a single write operation and retrieved with a single read. This eliminates the object-relational impedance mismatch for structures that don't need to be queried by their individual parts. However, the cost is the loss of granular query capability — it's not possible to write SQL queries that filter by internal attributes of the serialized object without loading and deserializing all records.
-
----
-
-## Applicability
-
-Use Serialized LOB when:
-
-- You have complex object graphs that change frequently and don't justify complete relational mapping
-- The object's internal structure doesn't need to be queried or indexed by the database
-- The object is always loaded and saved as an atomic unit (never partially)
-- Serialization/deserialization performance is acceptable for the data volume
-- You need to version or audit the complete state of an object at a point in time
-- The object structure is highly hierarchical or graph-based, making relational mapping too complex
+A principal vantagem é a simplicidade do mapeamento: um objeto complexo é persistido com uma única operação de escrita e recuperado com uma única leitura. Isso elimina o impedance mismatch objeto-relacional para estruturas que não precisam ser consultadas por suas partes individuais. Porém, o custo é a perda da capacidade de query granular — não é possível escrever queries SQL que filtrem por atributos internos do objeto serializado sem carregar e desserializar todos os registros.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Serialized LOB quando:
+
+- Você possui grafos de objetos complexos que mudam frequentemente e não justificam mapeamento relacional completo
+- A estrutura interna do objeto não precisa ser consultada ou indexada pelo banco de dados
+- O objeto é sempre carregado e salvo como uma unidade atômica (nunca parcialmente)
+- A performance de serialização/desserialização é aceitável para o volume de dados
+- Você precisa versionar ou auditar o estado completo de um objeto em um ponto no tempo
+- A estrutura do objeto é altamente hierárquica ou baseada em grafo, tornando o mapeamento relacional complexo demais
+
+---
+
+## Estrutura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Client Code                          │
+│                        Código Cliente                        │
 └────────────────────────────────┬────────────────────────────┘
                                  │
                     ┌────────────▼────────────┐
@@ -63,13 +63,13 @@ Use Serialized LOB when:
                     └────────────┬────────────┘
                                  │
                     ┌────────────▼────────────┐
-                    │   LOB Field             │
-                    │  (Database Column)      │
+                    │   Campo LOB             │
+                    │  (Coluna do Banco)      │
                     │ ─────────────────────   │
-                    │  BLOB or CLOB type      │
+                    │  Tipo BLOB ou CLOB      │
                     └─────────────────────────┘
 
-Table: orders
+Tabela: orders
 ┌──────────┬─────────────┬──────────────────┐
 │ order_id │ created_at  │ serialized_data  │
 │ (PK)     │ TIMESTAMP   │ BLOB             │
@@ -81,123 +81,123 @@ Table: orders
 
 ---
 
-## Participants
+## Participantes
 
-- **Domain Object** (`ComplexOrder`): The complex domain object containing nested graphs of other objects. It's agnostic about its persistence form.
+- **Domain Object** (`ComplexOrder`): O objeto de domínio complexo que contém grafos aninhados de outros objetos. É agnóstico quanto à sua forma de persistência.
 
-- **Serializer** (`ObjectSerializer`): Responsible for converting the object graph to a serializable format (binary or text) and vice versa. Can use libraries like JSON, MessagePack, Protocol Buffers, or native language serialization.
+- **Serializer** (`ObjectSerializer`): Responsável por converter o grafo de objetos para um formato serializável (binário ou texto) e vice-versa. Pode usar bibliotecas como JSON, MessagePack, Protocol Buffers ou serialização nativa da linguagem.
 
-- **LOB Field** (Column `serialized_data`): Database field of BLOB or CLOB type that stores the serialized representation of the object. Has no queryable internal structure.
+- **Campo LOB** (Coluna `serialized_data`): Campo do banco de dados do tipo BLOB ou CLOB que armazena a representação serializada do objeto. Não possui estrutura interna consultável.
 
-- **Data Mapper/Repository** (`OrderRepository`): Component that coordinates persistence, invoking the Serializer to transform objects before saving and after loading from the database.
+- **Data Mapper/Repository** (`OrderRepository`): Componente que coordena a persistência, invocando o Serializer para transformar objetos antes de salvar e após carregar do banco de dados.
 
-- **Schema** (Table `orders`): Minimalist relational structure containing only the identifier, basic metadata (timestamps, version), and the LOB field.
-
----
-
-## Collaborations
-
-When the client requests saving a complex Domain Object, the Data Mapper invokes the Serializer to transform the object graph into a byte sequence (or JSON string). This serialized representation is then stored in the corresponding table's LOB field along with metadata like ID and timestamp.
-
-During reading, the process is reversed: the Data Mapper retrieves the LOB field content, passes it to the Serializer which reconstructs the original object graph, and returns the Domain Object to the client. All persistence complexity is encapsulated, and the client works only with rich domain objects.
+- **Schema** (Tabela `orders`): Estrutura relacional minimalista contendo apenas o identificador, metadados básicos (timestamps, versão) e o campo LOB.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Quando o cliente solicita o salvamento de um Domain Object complexo, o Data Mapper invoca o Serializer para transformar o grafo de objetos em uma sequência de bytes (ou string JSON). Essa representação serializada é então armazenada no campo LOB da tabela correspondente junto com metadados como ID e timestamp.
 
-1. **Mapping Simplicity**: Eliminates the need to create dozens of tables and relationships for complex graphs.
-2. **Structure Flexibility**: Changes to object structure don't require complex schema migrations — only format versioning.
-3. **Load Performance**: A single read operation loads the entire object, without need for multiple queries or joins.
-4. **Natural Atomicity**: The object is always saved and loaded as a consistent unit, avoiding partial states.
-5. **Facilitated Versioning**: Easy to maintain complete object snapshots for auditing or history.
-6. **Reduced ORM Complexity**: Doesn't require complex object-relational mapping configuration for hierarchical structures.
-
-### Disadvantages
-
-1. **Loss of Query Capability**: Not possible to write SQL queries that filter or sort by internal object attributes without deserializing everything.
-2. **Impossibility of Indexing**: Internal object fields cannot have database indexes, hurting search performance.
-3. **Serialization Overhead**: Serialization/deserialization operations can be CPU-intensive for very large objects.
-4. **Storage Size**: Serialization formats can be less efficient than normalized relational decomposition.
-5. **Data Migration Difficulty**: Changing object structure requires migration logic in code, not in SQL, and can break deserialization of old data.
+Durante a leitura, o processo é revertido: o Data Mapper recupera o conteúdo do campo LOB, passa ao Serializer que reconstrói o grafo de objetos original e retorna o Domain Object ao cliente. Toda a complexidade de persistência é encapsulada, e o cliente trabalha apenas com objetos de domínio ricos.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Serialization Format Choice**: JSON offers readability and portability; Protocol Buffers or MessagePack offer compaction and performance; native binary serialization offers speed but loses cross-language portability.
+1. **Simplicidade de Mapeamento**: Elimina a necessidade de criar dezenas de tabelas e relacionamentos para grafos complexos.
+2. **Flexibilidade de Estrutura**: Mudanças na estrutura do objeto não requerem migrações complexas de esquema — apenas versionamento do formato.
+3. **Performance de Carregamento**: Uma única operação de leitura carrega o objeto inteiro, sem necessidade de múltiplas queries ou joins.
+4. **Atomicidade Natural**: O objeto é sempre salvo e carregado como uma unidade consistente, evitando estados parciais.
+5. **Versionamento Facilitado**: Fácil manter snapshots completos do objeto para auditoria ou histórico.
+6. **Complexidade ORM Reduzida**: Não requer configuração complexa de mapeamento objeto-relacional para estruturas hierárquicas.
 
-2. **Schema Versioning**: Include a version field in the serialized format to allow controlled migrations when object structure changes.
+### Desvantagens
 
-3. **Maximum LOB Size**: Databases have limits for LOB fields (e.g., 16MB in standard MySQL). Validate that your objects don't exceed these limits or configure the database appropriately.
-
-4. **Circular Reference Handling**: Many serializers don't handle cyclic graphs well. Use libraries that support object identity preservation or refactor the model to avoid cycles.
-
-5. **Deserialization Security**: Deserialization of untrusted data can be an attack vector (insecure deserialization). Validate and sanitize data before deserializing, especially if the format is native binary.
-
-6. **Compression**: For large objects, consider compressing (gzip, zstd) serialized data before storing in LOB to save space and I/O.
-
-### Implementation Techniques
-
-1. **Abstract Serializer**: Create a `Serializer<T>` interface with methods `serialize(T obj): bytes` and `deserialize(bytes): T` to allow swapping implementations.
-
-2. **Versioning Metadata**: Include a `version` field at the beginning of serialized data (e.g., `{ version: 2, data: {...} }`) to support multiple schema versions.
-
-3. **Lazy Loading of LOBs**: In some databases, LOB fields are loaded lazily. Ensure the connection is still open when accessing the LOB.
-
-4. **Deserialized Caching**: Keep the deserialized object in cache (Identity Map) to avoid repeated deserialization of the same record.
-
-5. **Auditing via Snapshots**: Use Serialized LOB to create audit tables where each change writes a complete serialized object snapshot with timestamp.
-
-6. **Hybrid Queries**: Keep important queryable fields outside the LOB (e.g., `order_id`, `customer_id`, `total_amount`) to allow filtering, and use LOB only for data that isn't queried.
+1. **Perda da Capacidade de Query**: Não é possível escrever queries SQL que filtrem ou ordenem por atributos internos do objeto sem desserializar tudo.
+2. **Impossibilidade de Indexação**: Campos internos do objeto não podem ter índices de banco de dados, prejudicando a performance de busca.
+3. **Overhead de Serialização**: Operações de serialização/desserialização podem ser intensas em CPU para objetos muito grandes.
+4. **Tamanho de Armazenamento**: Formatos de serialização podem ser menos eficientes que a decomposição relacional normalizada.
+5. **Dificuldade de Migração de Dados**: Mudar a estrutura do objeto requer lógica de migração no código, não em SQL, e pode quebrar a desserialização de dados antigos.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Hibernate ORM**: Supports mapping properties as `@Lob` to serialize complex objects into BLOB/CLOB fields.
+### Considerações de Implementação
 
-2. **Event Sourcing Systems**: Frameworks like Axon Framework store serialized domain events (JSON or Avro) in LOB fields of event stores.
+1. **Escolha do Formato de Serialização**: JSON oferece legibilidade e portabilidade; Protocol Buffers ou MessagePack oferecem compacidade e performance; serialização binária nativa oferece velocidade mas perde portabilidade entre linguagens.
 
-3. **Salesforce**: The platform stores object customization metadata as serialized JSON in internal LOB fields.
+2. **Versionamento do Schema**: Incluir um campo de versão no formato serializado para permitir migrações controladas quando a estrutura do objeto mudar.
 
-4. **Rails Active Record**: The `serialize` method allows storing complex Ruby hashes or arrays in TEXT fields using YAML or JSON.
+3. **Tamanho Máximo do LOB**: Bancos de dados possuem limites para campos LOB (ex.: 16MB no MySQL padrão). Valide que seus objetos não excedem esses limites ou configure o banco adequadamente.
 
-5. **MongoDB (hybrid)**: Although a NoSQL database, the pattern is analogous — BSON documents are "Serialized LOBs" that allow nested structures without fixed schema.
+4. **Tratamento de Referências Circulares**: Muitos serializadores não lidam bem com grafos cíclicos. Use bibliotecas que suportam preservação de identidade de objetos ou refatore o modelo para evitar ciclos.
 
-6. **Audit Trails in Financial Systems**: Banks store complete transaction snapshots as XML or JSON in CLOB fields for regulatory compliance.
+5. **Segurança na Desserialização**: A desserialização de dados não confiáveis pode ser um vetor de ataque (insecure deserialization). Valide e sanitize os dados antes de desserializar, especialmente se o formato for binário nativo.
 
----
+6. **Compressão**: Para objetos grandes, considere compactar (gzip, zstd) os dados serializados antes de armazenar no LOB para economizar espaço e I/O.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Single Table Inheritance**](010_single-table-inheritance.md): Can combine with Serialized LOB to store subclass-specific attributes in a LOB field.
-- [**Embedded Value**](008_embedded-value.md): Alternative that decomposes the object into parent table columns, opposite of complete serialization.
-- [**Data Transfer Object**](056_data-transfer-object.md): DTOs can be serialized in LOBs for communication between layers or systems.
-- [**GoF Memento**](../../gof/behavioral/006_memento.md): Serialized LOB is a way to implement Memento to capture and restore object state.
-- [**Repository**](016_repository.md): Repositories coordinate serialization/deserialization of Domain Objects when persisting to LOBs.
-- [**Unit of Work**](001_unit-of-work.md): Manages when to serialize and persist modified objects in LOBs.
-- [**Metadata Mapping**](014_metadata-mapping.md): Can use metadata to control which properties are serialized in the LOB.
-- **Event Sourcing**: Domain events are frequently stored as Serialized LOBs in event stores.
+1. **Serializer Abstrato**: Criar uma interface `Serializer<T>` com métodos `serialize(T obj): bytes` e `deserialize(bytes): T` para permitir trocar implementações.
 
-### Relationship with Rules
+2. **Metadados de Versionamento**: Incluir um campo `version` no início dos dados serializados (ex.: `{ version: 2, data: {...} }`) para suportar múltiplas versões do schema.
 
-- [003 - Primitive Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md): Serialized Value Objects
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): serialized objects should be immutable
+3. **Lazy Loading de LOBs**: Em alguns bancos, campos LOB são carregados lazily. Garanta que a conexão ainda está aberta ao acessar o LOB.
+
+4. **Cache do Desserializado**: Manter o objeto desserializado em cache (Identity Map) para evitar desserialização repetida do mesmo registro.
+
+5. **Auditoria via Snapshots**: Usar Serialized LOB para criar tabelas de auditoria onde cada mudança grava um snapshot completo do objeto serializado com timestamp.
+
+6. **Queries Híbridas**: Manter campos importantes consultáveis fora do LOB (ex.: `order_id`, `customer_id`, `total_amount`) para permitir filtragem, e usar o LOB apenas para dados que não são consultados.
 
 ---
 
-## Relationship with Business Rules
+## Usos Conhecidos
 
-- **[003] Primitive Encapsulation**: Serialized complex objects encapsulate all their logic and data, avoiding primitive exposure.
-- **[029] Object Immutability**: Serialized objects can be treated as immutable — each change creates a new serialized version.
-- **[010] Single Responsibility Principle**: The Serializer has the sole responsibility of format transformation, separated from domain logic.
-- **[045] Stateless Processes**: Serialized LOBs allow stateless processes to persist and recover complete object state between requests.
+1. **Hibernate ORM**: Suporta mapeamento de propriedades como `@Lob` para serializar objetos complexos em campos BLOB/CLOB.
+
+2. **Sistemas de Event Sourcing**: Frameworks como Axon Framework armazenam eventos de domínio serializados (JSON ou Avro) em campos LOB de event stores.
+
+3. **Salesforce**: A plataforma armazena metadados de customização de objetos como JSON serializado em campos LOB internos.
+
+4. **Rails Active Record**: O método `serialize` permite armazenar hashes ou arrays Ruby complexos em campos TEXT usando YAML ou JSON.
+
+5. **MongoDB (híbrido)**: Embora seja um banco NoSQL, o padrão é análogo — documentos BSON são "Serialized LOBs" que permitem estruturas aninhadas sem esquema fixo.
+
+6. **Audit Trails em Sistemas Financeiros**: Bancos armazenam snapshots completos de transações como XML ou JSON em campos CLOB para conformidade regulatória.
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Padrões Relacionados
+
+- [**Single Table Inheritance**](010_single-table-inheritance.md): Pode combinar com Serialized LOB para armazenar atributos específicos de subclasse em um campo LOB.
+- [**Embedded Value**](008_embedded-value.md): Alternativa que decompõe o objeto em colunas da tabela pai, oposto da serialização completa.
+- [**Data Transfer Object**](056_data-transfer-object.md): DTOs podem ser serializados em LOBs para comunicação entre camadas ou sistemas.
+- [**GoF Memento**](../../gof/behavioral/006_memento.md): Serialized LOB é uma forma de implementar Memento para capturar e restaurar o estado do objeto.
+- [**Repository**](016_repository.md): Repositories coordenam a serialização/desserialização de Domain Objects ao persistir em LOBs.
+- [**Unit of Work**](001_unit-of-work.md): Gerencia quando serializar e persistir objetos modificados em LOBs.
+- [**Metadata Mapping**](014_metadata-mapping.md): Pode usar metadados para controlar quais propriedades são serializadas no LOB.
+- **Event Sourcing**: Eventos de domínio são frequentemente armazenados como Serialized LOBs em event stores.
+
+### Relação com Rules
+
+- [003 - Encapsulamento de Primitivos](../../object-calisthenics/003_encapsulamento-primitivos.md): Value Objects serializados
+- [029 - Imutabilidade de Objetos](../../clean-code/imutabilidade-objetos-freeze.md): objetos serializados devem ser imutáveis
+
+---
+
+## Relação com Regras de Negócio
+
+- **[003] Encapsulamento de Primitivos**: Objetos complexos serializados encapsulam toda sua lógica e dados, evitando a exposição de primitivos.
+- **[029] Imutabilidade de Objetos**: Objetos serializados podem ser tratados como imutáveis — cada mudança cria uma nova versão serializada.
+- **[010] Single Responsibility Principle**: O Serializer tem a única responsabilidade de transformação de formato, separada da lógica de domínio.
+- **[045] Processos Stateless**: Serialized LOBs permitem que processos stateless persistam e recuperem o estado completo do objeto entre requisições.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

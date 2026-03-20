@@ -1,4 +1,4 @@
-# Application of "Tell, Don't Ask" Principle (Law of Demeter)
+# Aplicação do Princípio "Tell, Don't Ask" (Lei de Demeter)
 
 **ID**: BEHAVIORAL-009
 **Severity**: 🔴 Critical
@@ -6,47 +6,47 @@
 
 ---
 
-## What it is
+## O que é
 
-Requires that a method call methods or access properties only of its "immediate neighbors": the object itself, objects passed as arguments, objects it creates, or objects that are direct internal properties.
+Exige que um método chame métodos ou acesse propriedades apenas de seus "vizinhos imediatos": o próprio objeto, objetos passados como argumentos, objetos que ele cria ou objetos que são propriedades internas diretas.
 
-## Why it matters
+## Por que importa
 
-Violations of the Law of Demeter result in high and transitive coupling (*train wrecks*), making code fragile to internal changes in objects distant in the dependency chain, and obscuring the responsibility of each object.
+Violações da Lei de Demeter resultam em acoplamento alto e transitivo (*train wrecks*), tornando o código frágil a mudanças internas em objetos distantes na cadeia de dependências e obscurecendo a responsabilidade de cada objeto.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] A method should avoid calling methods of an object returned by another method (e.g., `a.getB().getC().f()`).
-- [ ] Method calls must be restricted to objects that the method has direct knowledge of.
-- [ ] The client object should *tell* the dependent object what to do, instead of *asking* for internal state to make a decision.
+- [ ] Um método deve evitar chamar métodos de um objeto retornado por outro método (por exemplo, `a.getB().getC().f()`).
+- [ ] Chamadas de métodos devem ser restritas a objetos que o método conhece diretamente.
+- [ ] O objeto cliente deve *dizer* ao objeto dependente o que fazer, em vez de *perguntar* pelo estado interno para tomar uma decisão.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Fluent Interface Patterns (Chaining)**: As long as the method returns `this` (or the same interface), as in Builders.
-- **Access to DTOs/Value Objects**: Data access to objects that are purely data containers.
+- **Padrões de Interface Fluente (Chaining)**: Desde que o método retorne `this` (ou a mesma interface), como em Builders.
+- **Acesso a DTOs/Value Objects**: Acesso a dados de objetos que são puramente contêineres de dados.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for call chaining (*dot-chaining*) with three or more consecutive calls, indicating knowledge of nested objects.
+Buscar por encadeamento de chamadas (*dot-chaining*) com três ou mais chamadas consecutivas, indicando conhecimento de objetos aninhados.
 
-### Automatic
+### Automático
 
-ESLint: `no-chaining` with high depth and `no-access-target` (with custom plugins).
+ESLint: `no-chaining` com alta profundidade e `no-access-target` (com plugins customizados).
 
-## Related to
+## Relacionado a
 
-- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reinforces
-- [005 - Method Chaining Restriction](../object-calisthenics/005_method-chaining-restriction.md): reinforces
-- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): reinforces
-- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): reinforces
-- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): complements
-- [018 - Acyclic Dependencies Principle](004_acyclic-dependencies-principle.md): reinforces
-- [036 - Side Effect Function Restriction](../clean-code/016_side-effect-function-restriction.md): reinforces
-- [038 - Query Inversion Principle](../clean-code/018_query-inversion-principle.md): reinforces
+- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reforça
+- [005 - Method Chaining Restriction](../object-calisthenics/005_method-chaining-restriction.md): reforça
+- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): reforça
+- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): reforça
+- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): complementa
+- [018 - Acyclic Dependencies Principle](004_acyclic-dependencies-principle.md): reforça
+- [036 - Side Effect Function Restriction](../clean-code/restricao-funcoes-efeitos-colaterais.md): reforça
+- [038 - Query Inversion Principle](../clean-code/conformidade-principio-inversao-consulta.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

@@ -156,7 +156,7 @@ showError('No pudimos procesar tu solicitud. Intenta de nuevo.');
 ## Rules Relacionadas
 
 - [object-calisthenics/006 - No Abbreviations](../../object-calisthenics/006_proibicao-nomes-abreviados.md)
-- [clean-code/014 - Naming](../../clean-code/014_nomes-classes-metodos-consistentes.md)
+- [clean-code/014 - Naming](../../clean-code/nomes-classes-metodos-consistentes.md)
 
 ## Patterns Relacionados
 

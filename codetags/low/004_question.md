@@ -234,7 +234,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+/; // Sem exigir TLD
 
 ## Rules Relacionadas
 
-- [clean-code/006 - Comments](../../clean-code/006_qualidade-comentarios-porque.md): QUESTION é comunicação temporária
+- [clean-code/006 - Comments](../../clean-code/qualidade-comentarios-porque.md): QUESTION é comunicação temporária
 
 ---
 

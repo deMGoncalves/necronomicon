@@ -220,8 +220,8 @@ await sendReport(mock);
 ## Rules Relacionadas
 
 - [solid/005 - Dependency Inversion](../../solid/005_principio-inversao-dependencia.md)
-- [clean-code/012 - Test Coverage](../../clean-code/012_cobertura-teste-minima-qualidade.md)
-- [clean-code/016 - Side Effects](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md)
+- [clean-code/012 - Test Coverage](../../clean-code/cobertura-teste-minima-qualidade.md)
+- [clean-code/016 - Side Effects](../../clean-code/restricao-funcoes-efeitos-colaterais.md)
 
 ## Patterns Relacionados
 

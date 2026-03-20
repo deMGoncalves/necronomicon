@@ -1,36 +1,36 @@
 # Adapter
 
-**Classification**: Structural Pattern
+**Classificação**: Padrão Estrutural
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Convert the interface of a class into another interface expected by clients. Adapter allows classes with incompatible interfaces to work together, wrapping itself with a compatible interface.
+Converter a interface de uma classe em outra interface esperada pelos clientes. O Adapter permite que classes com interfaces incompatíveis trabalhem juntas, envolvendo-se com uma interface compatível.
 
-## Also Known As
+## Também Conhecido Como
 
 - Wrapper
 
-## Motivation
+## Motivação
 
-Sometimes a toolkit class designed for reuse cannot be reused simply because its interface doesn't match the domain-specific interface required by an application. Consider a graphical editor that allows drawing and organizing graphical elements. The editor's interface defines abstractions like Shape for graphical objects. But there's an inherited TextView class that implements text windows, and you want to reuse it.
+Às vezes uma classe de toolkit projetada para reutilização não pode ser reutilizada simplesmente porque sua interface não corresponde à interface específica do domínio exigida por uma aplicação. Considere um editor gráfico que permite desenhar e organizar elementos gráficos. A interface do editor define abstrações como Shape para objetos gráficos. Mas existe uma classe TextView herdada que implementa janelas de texto, e você quer reutilizá-la.
 
-The solution is to define a TextShape class that adapts the TextView interface to the Shape interface. TextShape is an adapter that allows the editor to treat TextView as if it were a Shape.
+A solução é definir uma classe TextShape que adapta a interface do TextView à interface Shape. TextShape é um adaptador que permite ao editor tratar TextView como se fosse um Shape.
 
-## Applicability
+## Aplicabilidade
 
-Use the Adapter pattern when:
+Use o padrão Adapter quando:
 
-- You want to use an existing class but its interface doesn't match the one you need
-- You want to create a reusable class that cooperates with unrelated or unforeseen classes with incompatible interfaces
-- (Object adapter only) You need to use several existing subclasses, but it's impractical to adapt their interface by subclassing. An object adapter can adapt the interface of its parent class
-- You want to isolate your code from external dependencies (Anti-Corruption Layer)
-- You need to integrate legacy code with new code
+- Você quer usar uma classe existente, mas sua interface não corresponde à que você precisa
+- Você quer criar uma classe reutilizável que coopere com classes não relacionadas ou imprevistas com interfaces incompatíveis
+- (Apenas adaptador de objeto) Você precisa usar várias subclasses existentes, mas é impraticável adaptar sua interface por subclassing. Um adaptador de objeto pode adaptar a interface de sua classe pai
+- Você quer isolar seu código de dependências externas (Camada Anticorrupção)
+- Você precisa integrar código legado com código novo
 
-## Structure
+## Estrutura
 
-### Object Adapter (Composition)
+### Adaptador de Objeto (Composição)
 ```
 Client
 └── Uses: Target (Interface)
@@ -45,7 +45,7 @@ Adaptee
 └── specificRequest()
 ```
 
-### Class Adapter (Inheritance)
+### Adaptador de Classe (Herança)
 ```
 Client
 └── Uses: Target (Interface)
@@ -55,82 +55,82 @@ Adapter extends Adaptee implements Target
     └── Calls: this.specificRequest()
 ```
 
-## Participants
+## Participantes
 
-- **Target**: Defines the domain-specific interface that Client uses
-- **Client**: Collaborates with objects conforming to the Target interface
-- **Adaptee**: Defines an existing interface that needs adapting
-- [**Adapter**](001_adapter.md): Adapts the interface of Adaptee to the Target interface
+- **Target**: Define a interface específica do domínio que o Client utiliza
+- **Client**: Colabora com objetos que seguem a interface Target
+- **Adaptee**: Define uma interface existente que precisa ser adaptada
+- [**Adapter**](001_adapter.md): Adapta a interface do Adaptee para a interface Target
 
-## Collaborations
+## Colaborações
 
-- Clients call operations on Adapter instance
-- Adapter calls Adaptee operations that carry out the request
+- Clientes chamam operações na instância do Adapter
+- O Adapter chama operações do Adaptee que executam a requisição
 
-## Consequences
+## Consequências
 
-### Class Adapter (Inheritance)
-**Advantages**:
-- Adapts Adaptee to Target by committing to a concrete Adaptee class
-- Allows Adapter to override some of Adaptee's behavior
-- Introduces only one object; no additional pointer indirection to get to adaptee
+### Adaptador de Classe (Herança)
+**Vantagens**:
+- Adapta o Adaptee ao Target ao se comprometer com uma classe Adaptee concreta
+- Permite que o Adapter substitua parte do comportamento do Adaptee
+- Introduz apenas um objeto; sem indireção adicional de ponteiro para chegar ao adaptee
 
-**Disadvantages**:
-- Won't work when we want to adapt a class and all its subclasses
-- Requires multiple inheritance (not available in many languages)
+**Desvantagens**:
+- Não funciona quando queremos adaptar uma classe e todas as suas subclasses
+- Requer herança múltipla (não disponível em muitas linguagens)
 
-### Object Adapter (Composition)
-**Advantages**:
-- Allows a single Adapter to work with multiple Adaptees
-- Makes it easier to add functionality to all Adaptees at once
-- More flexible (composition favored over inheritance)
+### Adaptador de Objeto (Composição)
+**Vantagens**:
+- Permite que um único Adapter trabalhe com múltiplos Adaptees
+- Facilita adicionar funcionalidade a todos os Adaptees de uma vez
+- Mais flexível (composição preferida sobre herança)
 
-**Disadvantages**:
-- Makes it harder to override Adaptee behavior
-- Requires reference to Adaptee
+**Desvantagens**:
+- Dificulta a substituição do comportamento do Adaptee
+- Requer referência ao Adaptee
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **How much adaptation to do**: Work varies from simple operation name conversion to supporting a completely different set of operations
+1. **Quanto de adaptação fazer**: O trabalho varia desde simples conversão de nomes de operações até suportar um conjunto completamente diferente de operações
 
-2. **Pluggable adapters**: Maximize reusability by using adapters that adapt to different clients. Build minimal interface, use abstract operations, use delegates
+2. **Adaptadores plugáveis**: Maximize a reutilização usando adaptadores que se adaptam a diferentes clientes. Construa interface mínima, use operações abstratas, use delegates
 
-3. **Two-way adapters**: Support multiple views of an object (multiple inheritance)
+3. **Adaptadores bidirecionais**: Suporte múltiplas visões de um objeto (herança múltipla)
 
-4. **Minimal interface**: Adapter should expose only what's necessary
+4. **Interface mínima**: O Adapter deve expor apenas o necessário
 
-### Techniques
+### Técnicas
 
-- **Delegate Pattern**: Delegate calls to the Adaptee
-- **Interface Adapter**: Create adapter that implements full interface with empty methods, subclasses override what's needed
-- **Function Adapter**: For adapting standalone functions
+- **Padrão Delegate**: Delega chamadas ao Adaptee
+- **Interface Adapter**: Cria adaptador que implementa a interface completa com métodos vazios; subclasses substituem o que for necessário
+- **Function Adapter**: Para adaptar funções isoladas
 
-## Known Uses
+## Usos Conhecidos
 
-- **Collections Framework**: `Arrays.asList()` adapts array to List
-- **I/O Streams**: `InputStreamReader` adapts InputStream to Reader
-- **Event Handling**: Adapter classes in listeners (MouseAdapter, KeyAdapter)
-- **Legacy Code Integration**: Wrapping legacy systems for use in modern architectures
-- **Third-party Libraries**: Adapting external libraries to internal interfaces
-- **Anti-Corruption Layer**: DDD - protect domain from external systems
+- **Collections Framework**: `Arrays.asList()` adapta array para List
+- **I/O Streams**: `InputStreamReader` adapta InputStream para Reader
+- **Tratamento de Eventos**: Classes adaptadoras em listeners (MouseAdapter, KeyAdapter)
+- **Integração de Código Legado**: Encapsulamento de sistemas legados para uso em arquiteturas modernas
+- **Bibliotecas de Terceiros**: Adaptação de bibliotecas externas para interfaces internas
+- **Camada Anticorrupção**: DDD - protege o domínio de sistemas externos
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Bridge**](002_bridge.md): Similar but different intent; Bridge separates interface from implementation so they can vary independently; Adapter changes interface of existing object
-- [**Decorator**](004_decorator.md): Enhances another object without changing interface; more transparent than Adapter; supports recursive composition
-- [**Proxy**](007_proxy.md): Defines representative for another object without changing interface
-- [**Facade**](005_facade.md): Defines new interface; Adapter reuses old interface
+- [**Bridge**](002_bridge.md): Similar, mas com intenção diferente; Bridge separa interface de implementação para que possam variar independentemente; Adapter muda a interface de um objeto existente
+- [**Decorator**](004_decorator.md): Aprimora outro objeto sem mudar a interface; mais transparente que o Adapter; suporta composição recursiva
+- [**Proxy**](007_proxy.md): Define um representante para outro objeto sem mudar a interface
+- [**Facade**](005_facade.md): Define nova interface; Adapter reutiliza a interface antiga
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): reinforces
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): implements
-- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): reinforces
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): adapting is single responsibility
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): reforça
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): implementa
+- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): reforça
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): adaptar é responsabilidade única
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

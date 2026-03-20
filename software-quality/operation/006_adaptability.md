@@ -173,7 +173,7 @@ Así se puede ajustar por ambiente sin redeploy.
 ## Rules Relacionadas
 
 - [twelve-factor/003 - Config via Environment](../../twelve-factor/003_configuracoes-via-ambiente.md)
-- [clean-code/004 - Magic Constants](../../clean-code/004_proibicao-constantes-magicas.md)
+- [clean-code/004 - Magic Constants](../../clean-code/proibicao-constantes-magicas.md)
 - [solid/002 - Open/Closed Principle](../../solid/002_principio-aberto-fechado.md)
 
 ## Patterns Relacionados

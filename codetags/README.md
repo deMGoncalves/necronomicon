@@ -150,9 +150,9 @@ grep -rn "FIXME:\|BUG:\|SECURITY:\|XXX:" src/
 
 ## Rules Relacionadas
 
-- [clean-code/006 - Comment Quality](../clean-code/006_qualidade-comentarios-porque.md): codetags são temporárias
-- [clean-code/019 - Boy Scout Rule](../clean-code/019_regra-escoteiro-refatoracao-continua.md): resolver tags ao modificar código
-- [clean-code/002 - KISS](../clean-code/002_prioritization-simplicity-clarity.md): muitas tags indica complexidade excessiva
+- [clean-code/006 - Comment Quality](../clean-code/qualidade-comentarios-porque.md): codetags são temporárias
+- [clean-code/019 - Boy Scout Rule](../clean-code/regra-escoteiro-refatoracao-continua.md): resolver tags ao modificar código
+- [clean-code/002 - KISS](../clean-code/priorizacao-simplicidade-clareza.md): muitas tags indica complexidade excessiva
 
 ---
 

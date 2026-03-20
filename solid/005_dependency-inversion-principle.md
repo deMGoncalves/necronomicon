@@ -1,4 +1,4 @@
-# Application of Dependency Inversion Principle (DIP)
+# Aplicação do Dependency Inversion Principle (DIP)
 
 **ID**: BEHAVIORAL-014
 **Severity**: 🔴 Critical
@@ -6,49 +6,49 @@
 
 ---
 
-## What it is
+## O que é
 
-High-level modules must not depend on low-level modules. Both should depend on abstractions (interfaces).
+Módulos de alto nível não devem depender de módulos de baixo nível. Ambos devem depender de abstrações (interfaces).
 
-## Why it matters
+## Por que importa
 
-DIP is crucial for decoupling business policy from implementation. Violation creates tight coupling, making testing (unit and integration) difficult and preventing the high-level module from being reused in a new context.
+O DIP é crucial para desacoplar a política de negócio da implementação. A violação cria acoplamento forte, dificultando os testes (unitários e de integração) e impedindo que o módulo de alto nível seja reutilizado em um novo contexto.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The creation of new instances of concrete classes (*new Class()*) is prohibited within high-level classes (e.g., *Services* and *Controllers*).
-- [ ] High-level modules must reference only interfaces or abstract classes (what will be injected).
-- [ ] The number of *imports* for concrete classes in constructors must be zero (only abstraction injection).
+- [ ] A criação de novas instâncias de classes concretas (*new Class()*) é proibida dentro de classes de alto nível (ex.: *Services* e *Controllers*).
+- [ ] Módulos de alto nível devem referenciar apenas interfaces ou classes abstratas (o que será injetado).
+- [ ] O número de *imports* de classes concretas em construtores deve ser zero (apenas injeção de abstração).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Entities and Value Objects**: Pure data classes that can be freely instantiated.
-- **Root Composer**: The system initialization module where dependency injection is configured.
+- **Entidades e Value Objects**: Classes puramente de dados que podem ser instanciadas livremente.
+- **Root Composer**: O módulo de inicialização do sistema onde a injeção de dependência é configurada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for `new ConcreteName()` within *Services* or *Business Logic* code.
+Buscar por `new ConcreteName()` dentro de código de *Services* ou *Business Logic*.
 
-### Automatic
+### Automático
 
-ESLint: `no-new-without-abstraction` (with custom rules).
+ESLint: `no-new-without-abstraction` (com regras customizadas).
 
-## Related to
+## Relacionado a
 
-- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): reinforces
-- [015 - Release Reuse Equivalency Principle](001_release-reuse-equivalency-principle.md): reinforces
-- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complements
-- [018 - Acyclic Dependencies Principle](004_acyclic-dependencies-principle.md): reinforces
-- [019 - Stable Dependencies Principle](005_stable-dependencies-principle.md): reinforces
-- [020 - Stable Abstractions Principle](006_stable-abstractions-principle.md): reinforces
-- [032 - Minimum Test Coverage](../clean-code/012_minimum-test-coverage.md): complements
-- [041 - Explicit Dependency Declaration](../twelve-factor/002_explicit-dependency-declaration.md): complements
-- [043 - Backing Services as Resources](../twelve-factor/004_backing-services-resources.md): complements
+- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): reforça
+- [015 - Release Reuse Equivalency Principle](001_release-reuse-equivalency-principle.md): reforça
+- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complementa
+- [018 - Acyclic Dependencies Principle](004_acyclic-dependencies-principle.md): reforça
+- [019 - Stable Dependencies Principle](005_stable-dependencies-principle.md): reforça
+- [020 - Stable Abstractions Principle](006_stable-abstractions-principle.md): reforça
+- [032 - Minimum Test Coverage](../clean-code/cobertura-teste-minima-qualidade.md): complementa
+- [041 - Explicit Dependency Declaration](../twelve-factor/002_explicit-dependency-declaration.md): complementa
+- [043 - Backing Services as Resources](../twelve-factor/004_backing-services-resources.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Updated on**: 2025-10-04
-**Version**: 1.1
+**Criado em**: 2025-10-04
+**Atualizado em**: 2025-10-04
+**Versão**: 1.1

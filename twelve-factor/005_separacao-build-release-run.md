@@ -1,47 +1,47 @@
-# Strict Separation of Build, Release, and Run
+# Separação Estrita de Build, Release e Run
 
 **ID**: INFRASTRUCTURE-044
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-The deploy process must be separated into three distinct and immutable stages: **Build** (compiles the code), **Release** (combines build with configuration), and **Run** (executes the application). Each release must have a unique identifier and be immutable.
+O processo de deploy deve ser separado em três estágios distintos e imutáveis: **Build** (compila o código), **Release** (combina build com configuração) e **Run** (executa a aplicação). Cada release deve ter um identificador único e ser imutável.
 
-## Why it matters
+## Por que importa
 
-Separation enables fast rollbacks, release auditing, and ensures that the code in execution is exactly the same that was tested. Mixing stages creates ambiguity about what is running and prevents reproducibility.
+A separação permite rollbacks rápidos, auditoria de releases e garante que o código em execução é exatamente o mesmo que foi testado. Misturar estágios cria ambiguidade sobre o que está em execução e impede a reprodutibilidade.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The **Build** stage must produce an executable artifact (bundle, container image) without environment configuration dependencies.
-- [ ] The **Release** stage must be immutable — once created, the release cannot be altered; fixes require a new release.
-- [ ] Every release must have a **unique identifier** (timestamp, hash, sequential number) for traceability.
+- [ ] O estágio de **Build** deve produzir um artefato executável (bundle, imagem de container) sem dependências de configuração de ambiente.
+- [ ] O estágio de **Release** deve ser imutável — uma vez criado, o release não pode ser alterado; correções exigem um novo release.
+- [ ] Todo release deve ter um **identificador único** (timestamp, hash, número sequencial) para rastreabilidade.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Local Development Environment**: Build and run may be combined to expedite the development cycle (e.g., `bun run dev`).
+- **Ambiente de Desenvolvimento Local**: Build e run podem ser combinados para agilizar o ciclo de desenvolvimento (ex.: `bun run dev`).
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if it is possible to alter code or configuration of a release already in production without creating a new release.
+Verificar se é possível alterar código ou configuração de um release já em produção sem criar um novo release.
 
-### Automatic
+### Automático
 
-CI/CD: Pipeline that rejects manual deploys and requires passage through the three stages with versioning.
+CI/CD: Pipeline que rejeita deploys manuais e exige a passagem pelos três estágios com versionamento.
 
-## Related to
+## Relacionado a
 
-- [040 - Single Codebase](../twelve-factor/001_base-codigo-unica.md): complements
-- [041 - Explicit Declaration of Dependencies](../twelve-factor/002_declaracao-explicita-dependencias.md): reinforces
-- [042 - Configurations via Environment](../twelve-factor/003_configuracoes-via-ambiente.md): complements
-- [049 - Dev/Prod Parity](../twelve-factor/010_paridade-dev-prod.md): reinforces
+- [040 - Base de Código Única](../twelve-factor/001_base-codigo-unica.md): complementa
+- [041 - Declaração Explícita de Dependências](../twelve-factor/002_declaracao-explicita-dependencias.md): reforça
+- [042 - Configurações via Ambiente](../twelve-factor/003_configuracoes-via-ambiente.md): complementa
+- [049 - Paridade Dev/Prod](../twelve-factor/010_paridade-dev-prod.md): reforça
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

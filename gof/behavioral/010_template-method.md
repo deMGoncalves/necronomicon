@@ -1,121 +1,121 @@
 # Template Method
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Define the skeleton of an algorithm in an operation, deferring some steps to subclasses. Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm's structure.
+Definir o esqueleto de um algoritmo em uma operação, adiando algumas etapas para as subclasses. Template Method permite que subclasses redefinam certas etapas de um algoritmo sem alterar sua estrutura.
 
-## Also Known As
+## Também Conhecido Como
 
 - Template Method
 - Hollywood Principle ("Don't call us, we'll call you")
 
-## Motivation
+## Motivação
 
-Consider an application framework that provides Application and Document classes. The Application class is responsible for opening existing documents stored in an external format, such as a file. A Document object represents the information in a document once it's opened.
+Considere um framework de aplicação que fornece classes Application e Document. A classe Application é responsável por abrir documentos existentes armazenados em um formato externo, como um arquivo. Um objeto Document representa as informações em um documento depois que ele é aberto.
 
-Applications built with the framework can subclass Application and Document to suit specific needs. For example, a drawing application defines DrawApplication and DrawDocument subclasses. Application class defines the algorithm for opening and reading a document in a template method called OpenDocument. OpenDocument defines each step for opening a document: it can check if the document can be opened, create a Document object, read the file, add the document to its set of documents. We call OpenDocument a template method because it defines an algorithm with some abstract steps (CreateDocument, DoRead) that subclasses must implement.
+Aplicações construídas com o framework podem criar subclasses de Application e Document para atender às necessidades específicas. Por exemplo, uma aplicação de desenho define subclasses DrawApplication e DrawDocument. A classe Application define o algoritmo para abrir e ler um documento em um template method chamado OpenDocument. OpenDocument define cada etapa para abrir um documento: pode verificar se o documento pode ser aberto, criar um objeto Document, ler o arquivo, adicionar o documento ao seu conjunto de documentos. Chamamos OpenDocument de template method porque define um algoritmo com algumas etapas abstratas (CreateDocument, DoRead) que as subclasses devem implementar.
 
-## Applicability
+## Aplicabilidade
 
-Use the Template Method pattern when:
+Use o padrão Template Method quando:
 
-- To implement the invariant parts of an algorithm once and leave it up to subclasses to implement the behavior that can vary
-- Common behavior among subclasses should be factored and localized in a common class to avoid code duplication
-- To control subclass extensions; you can define a template method that calls "hook" operations at specific points, thereby permitting extensions only at those points
-- You want to invert control (Hollywood Principle)
-- You have an algorithm with fixed steps but variable implementations
+- Para implementar as partes invariantes de um algoritmo uma única vez e deixar para as subclasses implementarem o comportamento que pode variar
+- Comportamento comum entre subclasses deve ser fatorado e localizado em uma classe comum para evitar duplicação de código
+- Para controlar extensões de subclasses; você pode definir um template method que chama operações de "hook" em pontos específicos, permitindo assim extensões apenas nesses pontos
+- Você deseja inverter o controle (Princípio Hollywood)
+- Você tem um algoritmo com etapas fixas mas implementações variáveis
 
-## Structure
+## Estrutura
 
 ```
 AbstractClass
 ├── templateMethod() [final]
 │   ├── primitiveOperation1()
 │   ├── primitiveOperation2()
-│   └── hook() [optional]
+│   └── hook() [opcional]
 ├── primitiveOperation1() [abstract]
 └── primitiveOperation2() [abstract]
-└── hook() [empty implementation - optional]
+└── hook() [implementação vazia - opcional]
 
 ConcreteClass extends AbstractClass
 ├── primitiveOperation1()
-│   └── Specific implementation
+│   └── Implementação específica
 └── primitiveOperation2()
-    └── Specific implementation
-└── hook() [optional override]
+    └── Implementação específica
+└── hook() [override opcional]
 ```
 
-## Participants
+## Participantes
 
-- **AbstractClass**: Defines abstract primitive operations that concrete subclasses define to implement steps of an algorithm; implements a template method defining the skeleton of an algorithm; the template method calls primitive operations as well as operations defined in AbstractClass or those of other objects
-- **ConcreteClass**: Implements the primitive operations to carry out subclass-specific steps of the algorithm
+- **AbstractClass**: Define operações primitivas abstratas que as subclasses concretas definem para implementar as etapas de um algoritmo; implementa um template method definindo o esqueleto de um algoritmo; o template method chama operações primitivas assim como operações definidas na AbstractClass ou as de outros objetos
+- **ConcreteClass**: Implementa as operações primitivas para realizar as etapas específicas da subclasse do algoritmo
 
-## Collaborations
+## Colaborações
 
-- ConcreteClass relies on AbstractClass to implement the invariant steps of the algorithm
+- ConcreteClass depende de AbstractClass para implementar as etapas invariantes do algoritmo
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Code reuse**: Common code factored into base class
-- **Inversion of control**: Base class calls operations of a subclass and not the other way around
-- **Well-defined extension points**: Hook operations provide default behavior that subclasses can override if necessary
-- **Open/Closed Principle**: Open for extension (subclasses) but closed for modification (template method)
+- **Reutilização de código**: Código comum fatorado na classe base
+- **Inversão de controle**: Classe base chama operações de uma subclasse e não o contrário
+- **Pontos de extensão bem definidos**: Operações de hook fornecem comportamento padrão que as subclasses podem sobrescrever se necessário
+- **Open/Closed Principle**: Aberto para extensão (subclasses) mas fechado para modificação (template method)
 
-### Disadvantages
+### Desvantagens
 
-- **Can lead to complex hierarchies**: Many primitive operations can make templates hard to understand
-- **Difficult debugging**: Inverted control flow can make debugging difficult
-- **Liskov violation**: If template method assumes too much about subclasses
+- **Pode levar a hierarquias complexas**: Muitas operações primitivas podem tornar templates difíceis de entender
+- **Depuração difícil**: Fluxo de controle invertido pode dificultar a depuração
+- **Violação de Liskov**: Se o template method assume muito sobre as subclasses
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Using access control**: Template methods should be protected to be overridden; primitive operations can be protected for access only by template method
+1. **Usando controle de acesso**: Template methods devem ser protegidos para serem sobrescritos; operações primitivas podem ser protegidas para acesso apenas pelo template method
 
-2. **Minimizing primitive operations**: The fewer primitive operations that need overriding, the easier for clients
+2. **Minimizando operações primitivas**: Quanto menos operações primitivas precisarem ser sobrescritas, mais fácil para os clientes
 
-3. **Naming conventions**: Can use conventions to identify operations that should be overridden
+3. **Convenções de nomenclatura**: Podem ser usadas convenções para identificar operações que devem ser sobrescritas
 
-4. **Using final/sealed**: Template method can be marked final to prevent override
+4. **Usando final/sealed**: O template method pode ser marcado como final para evitar sobrescrita
 
-### Techniques
+### Técnicas
 
-- **Hook Operations**: Operations with default empty implementation that can be overridden
-- **Required vs Optional**: Distinguish mandatory operations (abstract) from optional (hook)
-- [**Factory Method**](../creational/003_factory-method.md): Template Method often uses Factory Methods
-- **Frozen Spots vs Hot Spots**: Template method is frozen spot; primitive operations are hot spots
+- **Operações Hook**: Operações com implementação vazia padrão que podem ser sobrescritas
+- **Obrigatórias vs Opcionais**: Distinguir operações obrigatórias (abstratas) das opcionais (hook)
+- [**Factory Method**](../creational/003_factory-method.md): Template Method frequentemente usa Factory Methods
+- **Pontos Congelados vs Pontos Quentes**: Template method é ponto congelado; operações primitivas são pontos quentes
 
-## Known Uses
+## Usos Conhecidos
 
-- **Framework Lifecycle Methods**: React (componentDidMount, render), Angular (ngOnInit)
-- **HTTP Servlets**: service() method calls doGet(), doPost()
-- **Unit Testing Frameworks**: setUp(), test(), tearDown()
-- **Data Processing Pipelines**: extract(), transform(), load()
-- **Game Loops**: initialize(), update(), render(), cleanup()
-- **Sorting Algorithms**: Template for sort with variable compare method
+- **Métodos de Ciclo de Vida de Framework**: React (componentDidMount, render), Angular (ngOnInit)
+- **HTTP Servlets**: Método service() chama doGet(), doPost()
+- **Frameworks de Teste Unitário**: setUp(), test(), tearDown()
+- **Pipelines de Processamento de Dados**: extract(), transform(), load()
+- **Loops de Jogo**: initialize(), update(), render(), cleanup()
+- **Algoritmos de Ordenação**: Template para sort com método de comparação variável
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Factory Method**](../creational/003_factory-method.md): Often called by template methods
-- [**Strategy**](009_strategy.md): Template Method uses inheritance to vary part of an algorithm; Strategy uses composition
-- [**Command**](002_command.md): Commands can use template method to define execution structure
-- [**Visitor**](011_visitor.md): Template Method can be used to define traversal skeleton
+- [**Factory Method**](../creational/003_factory-method.md): Frequentemente chamado por template methods
+- [**Strategy**](009_strategy.md): Template Method usa herança para variar parte de um algoritmo; Strategy usa composição
+- [**Command**](002_command.md): Commands podem usar template method para definir a estrutura de execução
+- [**Visitor**](011_visitor.md): Template Method pode ser usado para definir o esqueleto de percurso
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extension via subclassing
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate invariant from variant
-- [021 - Prohibition of Logic Duplication](../../clean-code/001_prohibition-logic-duplication.md): eliminates duplication in subclasses
-- [001 - Single Level of Indentation](../../object-calisthenics/001_nivel-unico-indentacao.md): break into small methods
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extensão via herança
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar invariante do variante
+- [021 - Prohibition of Logic Duplication](../../clean-code/proibicao-duplicacao-logica.md): elimina duplicação nas subclasses
+- [001 - Single Level of Indentation](../../object-calisthenics/001_nivel-unico-indentacao.md): dividir em métodos pequenos
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

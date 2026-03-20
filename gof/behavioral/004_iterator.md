@@ -1,131 +1,131 @@
 # Iterator
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Provide a way to access the elements of an aggregate object sequentially without exposing its underlying representation. Decouples algorithms from containers, allowing you to traverse collections without knowing their internal structure.
+Fornecer uma maneira de acessar sequencialmente os elementos de um objeto agregado sem expor sua representação subjacente. Desacopla algoritmos de contêineres, permitindo percorrer coleções sem conhecer sua estrutura interna.
 
-## Also Known As
+## Também Conhecido Como
 
 - Cursor
 
-## Motivation
+## Motivação
 
-An aggregate object like a list should provide a way to access its elements without exposing its internal structure. Moreover, you may want to traverse the list in different ways. But you don't want to bloat the List interface with different traversal operations. You may also need more than one traversal pending on the same list.
+Um objeto agregado como uma lista deve fornecer uma forma de acessar seus elementos sem expor sua estrutura interna. Além disso, você pode querer percorrer a lista de diferentes maneiras. Mas você não quer sobrecarregar a interface de List com diferentes operações de percurso. Você também pode precisar de mais de um percurso pendente sobre a mesma lista.
 
-The Iterator pattern lets you do all this. The key idea is to take the responsibility for access and traversal out of the list object and put it into an iterator object. The Iterator class defines an interface for accessing elements. An Iterator instance keeps track of the current element and which ones have been traversed.
+O padrão Iterator permite fazer tudo isso. A ideia central é retirar a responsabilidade de acesso e percurso do objeto lista e colocá-la em um objeto iterador. A classe Iterator define uma interface para acessar elementos. Uma instância de Iterator mantém o controle do elemento atual e quais foram percorridos.
 
-## Applicability
+## Aplicabilidade
 
-Use the Iterator pattern when:
+Use o padrão Iterator quando:
 
-- Access contents of an aggregate object without exposing its internal representation
-- Support multiple traversals of aggregate objects
-- Provide a uniform interface for traversing different aggregate structures (polymorphic iteration)
-- Decouple algorithms from data structures
-- Implement lazy evaluation of collections
+- Acessar o conteúdo de um objeto agregado sem expor sua representação interna
+- Suportar múltiplos percursos de objetos agregados
+- Fornecer uma interface uniforme para percorrer diferentes estruturas agregadas (iteração polimórfica)
+- Desacoplar algoritmos de estruturas de dados
+- Implementar avaliação preguiçosa de coleções
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Uses: Iterator, Aggregate
+└── Usa: Iterator, Aggregate
 
 Aggregate (Interface)
 └── createIterator(): Iterator
 
 ConcreteAggregate implements Aggregate
-├── Maintains: internal elements
+├── Mantém: elementos internos
 └── createIterator() → return new ConcreteIterator(this)
 
 Iterator (Interface)
 ├── hasNext(): boolean
 ├── next(): Element
-└── remove() (optional)
+└── remove() (opcional)
 
 ConcreteIterator implements Iterator
-├── Composes: ConcreteAggregate
-├── Maintains: current position
-├── hasNext() → checks if there's next
-└── next() → returns next and advances
+├── Compõe: ConcreteAggregate
+├── Mantém: posição atual
+├── hasNext() → verifica se há próximo
+└── next() → retorna o próximo e avança
 ```
 
-## Participants
+## Participantes
 
-- [**Iterator**](004_iterator.md): Defines interface for accessing and traversing elements
-- **ConcreteIterator**: Implements the Iterator interface; keeps track of the current position in the traversal of the aggregate
-- **Aggregate**: Defines interface for creating an Iterator object
-- **ConcreteAggregate**: Implements the Iterator creation interface to return an instance of the proper ConcreteIterator
+- [**Iterator**](004_iterator.md): Define a interface para acessar e percorrer elementos
+- **ConcreteIterator**: Implementa a interface Iterator; mantém o controle da posição atual no percurso do agregado
+- **Aggregate**: Define a interface para criar um objeto Iterator
+- **ConcreteAggregate**: Implementa a interface de criação de Iterator para retornar uma instância do ConcreteIterator adequado
 
-## Collaborations
+## Colaborações
 
-- ConcreteIterator keeps track of the current object in the aggregate and can compute the succeeding item in the traversal
+- ConcreteIterator mantém o controle do objeto atual no agregado e pode calcular o próximo item no percurso
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Supports variations in traversal**: Complex aggregates can be traversed in many ways; can define new iterators without changing aggregate
-- **Simplifies the Aggregate interface**: Don't need traversal operations on Aggregate
-- **More than one traversal can be pending**: Each iterator maintains its own traversal state
+- **Suporta variações no percurso**: Agregados complexos podem ser percorridos de muitas formas; pode-se definir novos iteradores sem alterar o agregado
+- **Simplifica a interface do Aggregate**: Não é necessário ter operações de percurso no Aggregate
+- **Mais de um percurso pode estar pendente**: Cada iterador mantém seu próprio estado de percurso
 
-### Disadvantages
+### Desvantagens
 
-- **Overhead**: For simple collections may be unnecessary overhead
-- **Direct access**: May be slower than direct index access
+- **Sobrecarga**: Para coleções simples pode ser uma sobrecarga desnecessária
+- **Acesso direto**: Pode ser mais lento do que acesso direto por índice
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Who controls the iteration**: External iterator (client controls) vs internal iterator (iterator controls)
+1. **Quem controla a iteração**: Iterador externo (o cliente controla) vs iterador interno (o iterador controla)
 
-2. **Who defines the traversal algorithm**: Iterator or Aggregate; having it in the iterator allows different algorithms; having it in the aggregate avoids duplication
+2. **Quem define o algoritmo de percurso**: Iterator ou Aggregate; tê-lo no iterador permite diferentes algoritmos; tê-lo no agregado evita duplicação
 
-3. **Robustness of iterator**: Modifications to the aggregate during iteration can be dangerous; solution: copy aggregate or register iterator in aggregate
+3. **Robustez do iterador**: Modificações no agregado durante a iteração podem ser perigosas; solução: copiar o agregado ou registrar o iterador no agregado
 
-4. **Additional Iterator operations**: Can have previous(), currentItem(), skipTo(), etc.
+4. **Operações adicionais no Iterator**: Pode ter previous(), currentItem(), skipTo(), etc.
 
-5. **Using iterators in typed languages**: Use generics/templates
+5. **Usando iteradores em linguagens tipadas**: Usar generics/templates
 
-6. **Null iterators**: Have null object iterator for empty collections
+6. **Iteradores nulos**: Ter um iterador de objeto nulo para coleções vazias
 
-7. **Privileged access**: Iterator may need privileged access to the aggregate's internal structure
+7. **Acesso privilegiado**: O iterador pode precisar de acesso privilegiado à estrutura interna do agregado
 
-### Techniques
+### Técnicas
 
-- **Internal Iterator**: Iterator controls iteration (forEach)
-- **External Iterator**: Client controls iteration (hasNext/next)
-- **Fail-fast Iterator**: Throw exception if aggregate is modified during iteration
-- **Generator/Yield**: Lazy iterators using coroutines
+- **Iterador Interno**: O iterador controla a iteração (forEach)
+- **Iterador Externo**: O cliente controla a iteração (hasNext/next)
+- **Iterador Fail-fast**: Lança exceção se o agregado for modificado durante a iteração
+- **Generator/Yield**: Iteradores preguiçosos usando corotinas
 
-## Known Uses
+## Usos Conhecidos
 
-- **Java Collections**: `Iterator` interface, enhanced for-loop
-- **JavaScript**: Iteration protocol (`Symbol.iterator`), for-of loops
-- **Python**: `__iter__` and `__next__` protocol, generators
-- **C++ STL**: Iterators for all containers
-- **Database Cursors**: Iterate over result sets
-- **File Readers**: Read files line by line
+- **Java Collections**: Interface `Iterator`, enhanced for-loop
+- **JavaScript**: Protocolo de iteração (`Symbol.iterator`), loops for-of
+- **Python**: Protocolo `__iter__` e `__next__`, generators
+- **C++ STL**: Iteradores para todos os contêineres
+- **Cursores de Banco de Dados**: Iterar sobre conjuntos de resultados
+- **Leitores de Arquivo**: Ler arquivos linha por linha
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Composite**](008_composite.md): Iterators often applied to recursive structures
-- [**Factory Method**](../creational/003_factory-method.md): Aggregate uses Factory Method to instantiate appropriate iterators
-- [**Memento**](006_memento.md): Can use with Iterator to capture iteration state
-- [**Visitor**](011_visitor.md): Visitor can use Iterator to traverse structure
-- [**Strategy**](009_strategy.md): Iterator can be seen as Strategy for accessing collections
+- [**Composite**](008_composite.md): Iteradores frequentemente aplicados a estruturas recursivas
+- [**Factory Method**](../creational/003_factory-method.md): Aggregate usa Factory Method para instanciar iteradores adequados
+- [**Memento**](006_memento.md): Pode ser usado com Iterator para capturar o estado da iteração
+- [**Visitor**](011_visitor.md): Visitor pode usar Iterator para percorrer a estrutura
+- [**Strategy**](009_strategy.md): Iterator pode ser visto como Strategy para acessar coleções
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate iteration from collection
-- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): iterator encapsulates access
-- [036 - Function Side Effects Restriction](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): iteration without side effects
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar iteração da coleção
+- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): iterador encapsula o acesso
+- [036 - Function Side Effects Restriction](../../clean-code/restricao-funcoes-efeitos-colaterais.md): iteração sem efeitos colaterais
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

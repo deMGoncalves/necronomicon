@@ -1,147 +1,147 @@
 # Foreign Key Mapping
 
-**Classification**: Object-Relational Structural Pattern
+**Classificação**: Padrão Object-Relational Estrutural
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Map association between objects to foreign key reference between tables. Uses foreign key in database to represent object references in memory.
+Mapear associação entre objetos para referência de chave estrangeira entre tabelas. Usa chave estrangeira no banco de dados para representar referências de objetos em memória.
 
-## Also Known As
+## Também Conhecido Como
 
 - FK Mapping
 - Reference Mapping
 - Association Mapping
 
-## Motivation
+## Motivação
 
-Objects reference other objects directly through pointers or references. Relational databases represent relationships through foreign keys - columns that store ID of related row. Foreign Key Mapping translates between these two worlds.
+Objetos referenciam outros objetos diretamente por meio de ponteiros ou referências. Bancos de dados relacionais representam relacionamentos por meio de chaves estrangeiras — colunas que armazenam o ID da linha relacionada. O Foreign Key Mapping traduz entre esses dois mundos.
 
-When Order references Customer, in memory Order has direct reference to Customer object. In database, orders table has customer_id column containing Customer ID. When saving Order, Mapper extracts Customer ID and stores in customer_id. When loading Order, Mapper uses customer_id to load Customer object and establish reference.
+Quando Order referencia Customer, em memória o Order possui referência direta ao objeto Customer. No banco de dados, a tabela orders tem a coluna customer_id contendo o ID do Customer. Ao salvar o Order, o Mapper extrai o ID do Customer e o armazena em customer_id. Ao carregar o Order, o Mapper usa customer_id para carregar o objeto Customer e estabelecer a referência.
 
-Complexities arise with bidirectional relationships, lazy loading, and cascades. Mapper needs to decide when to load related objects, how to maintain bidirectional consistency, and which operations to propagate (cascade save, delete, etc).
+Complexidades surgem com relacionamentos bidirecionais, lazy loading e cascatas. O Mapper precisa decidir quando carregar os objetos relacionados, como manter a consistência bidirecional e quais operações propagar (cascade save, delete, etc.).
 
-## Applicability
+## Aplicabilidade
 
-Use Foreign Key Mapping when:
+Use Foreign Key Mapping quando:
 
-- Objects have one-to-one or many-to-one relationships
-- Relational database is used for persistence
-- Relationships need to be navigable in memory
-- Data Mapper or Active Record is persistence pattern
-- Referential integrity needs to be maintained
-- Lazy loading of relationships is desirable
+- Objetos possuem relacionamentos um-para-um ou muitos-para-um
+- Banco de dados relacional é usado para persistência
+- Relacionamentos precisam ser navegáveis em memória
+- Data Mapper ou Active Record é o padrão de persistência
+- A integridade referencial precisa ser mantida
+- O lazy loading de relacionamentos é desejável
 
-## Structure
+## Estrutura
 
 ```
-Domain Objects (in memory)
+Domain Objects (em memória)
 Order
 ├── id: 1
-└── customer: → Customer{id:5, name:"John"}
+└── customer: → Customer{id:5, name:"João"}
 
-Database (persisted)
-orders table
+Banco de Dados (persistido)
+tabela orders
 ├── id: 1
-├── customer_id: 5 (foreign key)
+├── customer_id: 5 (chave estrangeira)
 └── total: 100.00
 
-customers table
-└── id: 5, name: "John"
+tabela customers
+└── id: 5, name: "João"
 
-Mapping:
+Mapeamento:
 Order.customer → orders.customer_id → Customer.id
 ```
 
-## Participants
+## Participantes
 
-- **Source Object**: Object containing reference (Order)
-- **Target Object**: Object being referenced (Customer)
-- **Foreign Key Column**: Column in database storing target ID
-- [**Data Mapper**](../data-source/004_data-mapper.md): Translates between reference and foreign key
-- [**Identity Field**](004_identity-field.md): ID used to correlate objects
+- **Source Object**: Objeto que contém a referência (Order)
+- **Target Object**: Objeto sendo referenciado (Customer)
+- **Foreign Key Column**: Coluna no banco de dados que armazena o ID do alvo
+- [**Data Mapper**](../data-source/004_data-mapper.md): Traduz entre referência e chave estrangeira
+- [**Identity Field**](004_identity-field.md): ID usado para correlacionar objetos
 
-## Collaborations
+## Colaborações
 
-**When Saving:**
-- Mapper checks Order object to persist
-- Mapper finds Order.customer reference
-- Mapper extracts customer.id (Identity Field)
-- Mapper stores customer.id in orders.customer_id
-- Foreign key in database points to customer row
+**Ao Salvar:**
+- Mapper verifica o objeto Order a persistir
+- Mapper encontra a referência Order.customer
+- Mapper extrai customer.id (Identity Field)
+- Mapper armazena customer.id em orders.customer_id
+- Chave estrangeira no banco de dados aponta para a linha do customer
 
-**When Loading:**
-- Mapper loads row from orders table
-- Mapper finds value in customer_id
-- Mapper uses customer_id to load Customer (via Identity Map or query)
-- Mapper establishes reference Order.customer = customerObject
-- Returns Order with populated reference
+**Ao Carregar:**
+- Mapper carrega linha da tabela orders
+- Mapper encontra valor em customer_id
+- Mapper usa customer_id para carregar Customer (via Identity Map ou query)
+- Mapper estabelece referência Order.customer = customerObject
+- Retorna Order com a referência preenchida
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Simplicity**: Direct and intuitive mapping
-- **Integrity**: Foreign key constraints maintain integrity
-- **Performance**: Indexes on foreign keys optimize joins
-- **Navigation**: Relationships navigable in objects
-- **Standard SQL**: Uses standard SQL features
-- **Unidirectional**: Doesn't require inverse relationship
+- **Simplicidade**: Mapeamento direto e intuitivo
+- **Integridade**: Restrições de chave estrangeira mantêm a integridade
+- **Performance**: Índices em chaves estrangeiras otimizam joins
+- **Navegação**: Relacionamentos navegáveis nos objetos
+- **SQL padrão**: Usa recursos SQL padrão
+- **Unidirecional**: Não requer relacionamento inverso
 
-### Disadvantages
+### Desvantagens
 
-- **N+1 queries**: Loading relationships can generate many queries
-- **Null handling**: Nullable foreign keys complicate logic
-- **Bidirectional sync**: Difficult to maintain bidirectional consistency
-- **Cascade complexity**: Operation propagation is complex
-- **Lazy load issues**: Requires open session for lazy loading
-- **Coupling**: Source table coupled to target
+- **Queries N+1**: Carregar relacionamentos pode gerar muitas queries
+- **Tratamento de nulo**: Chaves estrangeiras anuláveis complicam a lógica
+- **Sincronização bidirecional**: Difícil manter consistência bidirecional
+- **Complexidade de cascata**: Propagação de operações é complexa
+- **Problemas com lazy load**: Requer sessão aberta para lazy loading
+- **Acoplamento**: Tabela fonte acoplada ao alvo
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Loading strategy**: Eager vs lazy loading of relationship
-2. **Directionality**: Unidirectional vs bidirectional
-3. **Nullability**: Can foreign key be null?
-4. **Cascade operations**: Which operations to propagate (save, delete)
-5. **Inverse mapping**: How to maintain inverse relationship consistent
-6. **Performance**: Avoid N+1 query problem
+1. **Estratégia de carregamento**: Eager vs. lazy loading do relacionamento
+2. **Direcionalidade**: Unidirecional vs. bidirecional
+3. **Nulabilidade**: A chave estrangeira pode ser nula?
+4. **Operações em cascata**: Quais operações propagar (save, delete)
+5. **Mapeamento inverso**: Como manter o relacionamento inverso consistente
+6. **Performance**: Evitar o problema de query N+1
 
-### Techniques
+### Técnicas
 
-- **Eager Loading**: Load relationship with join immediately
-- **Lazy Loading**: Use proxy to load relationship on demand
-- **Batch Fetching**: Load multiple relationships at once
-- **Cascade Save**: Save related objects automatically
-- **Cascade Delete**: Delete related when parent is deleted
-- **Orphan Removal**: Delete objects no longer referenced
+- **Eager Loading**: Carregar relacionamento com join imediatamente
+- **Lazy Loading**: Usar proxy para carregar relacionamento sob demanda
+- **Batch Fetching**: Carregar múltiplos relacionamentos de uma vez
+- **Cascade Save**: Salvar objetos relacionados automaticamente
+- **Cascade Delete**: Excluir relacionados quando o pai é deletado
+- **Orphan Removal**: Excluir objetos que não são mais referenciados
 
-## Known Uses
+## Usos Conhecidos
 
-- **Hibernate @ManyToOne**: Many-to-one mapping with foreign key
-- **Entity Framework Navigation Properties**: Relationships via FK
-- **ActiveRecord belongs_to**: Foreign key relationship
-- **Sequelize belongsTo**: Foreign key association
-- **TypeORM @ManyToOne**: Foreign key column
-- **SQLAlchemy ForeignKey**: Foreign key mapping
+- **Hibernate @ManyToOne**: Mapeamento muitos-para-um com chave estrangeira
+- **Entity Framework Navigation Properties**: Relacionamentos via FK
+- **ActiveRecord belongs_to**: Relacionamento de chave estrangeira
+- **Sequelize belongsTo**: Associação com chave estrangeira
+- **TypeORM @ManyToOne**: Coluna de chave estrangeira
+- **SQLAlchemy ForeignKey**: Mapeamento de chave estrangeira
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Identity Field**](004_identity-field.md): Provides ID for foreign key
-- [**Association Table Mapping**](006_association-table-mapping.md): For many-to-many
-- [**Dependent Mapping**](007_dependent-mapping.md): Dependent objects without FK
-- [**Lazy Load**](003_lazy-load.md): Loads relationships on demand
-- [**Data Mapper**](../data-source/004_data-mapper.md): Implements the mapping
-- [**Identity Map**](002_identity-map.md): Cache of related objects
+- [**Identity Field**](004_identity-field.md): Fornece o ID para a chave estrangeira
+- [**Association Table Mapping**](006_association-table-mapping.md): Para muitos-para-muitos
+- [**Dependent Mapping**](007_dependent-mapping.md): Objetos dependentes sem FK
+- [**Lazy Load**](003_lazy-load.md): Carrega relacionamentos sob demanda
+- [**Data Mapper**](../data-source/004_data-mapper.md): Implementa o mapeamento
+- [**Identity Map**](002_identity-map.md): Cache de objetos relacionados
 
-### Relation to Rules
+### Relação com Rules
 
-- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): navigable relationships
-- [034 - Lazy Load**](003_lazy-load.md): avoids loading everything eagerly
+- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): relacionamentos navegáveis
+- [034 - Lazy Load**](003_lazy-load.md): evita carregar tudo antecipadamente
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

@@ -176,8 +176,8 @@ function myBadCode() { } // Use REFACTOR
 
 ## Rules Relacionadas
 
-- [clean-code/002 - KISS](../../clean-code/002_prioritization-simplicity-clarity.md): HACKs violam simplicidade
-- [clean-code/019 - Boy Scout Rule](../../clean-code/019_regra-escoteiro-refatoracao-continua.md): resolver HACKs ao passar pela área
+- [clean-code/002 - KISS](../../clean-code/priorizacao-simplicidade-clareza.md): HACKs violam simplicidade
+- [clean-code/019 - Boy Scout Rule](../../clean-code/regra-escoteiro-refatoracao-continua.md): resolver HACKs ao passar pela área
 
 ---
 

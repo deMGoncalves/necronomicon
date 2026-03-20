@@ -127,7 +127,7 @@ function Parent({ children }) {
 
 - [004 - Coleções de Primeira Classe](../../object-calisthenics/004_colecoes-primeira-classe.md): relaciona-se
 - [010 - Princípio da Responsabilidade Única](../../solid/001_single-responsibility-principle.md): reforça
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): reforça
 
 ## Exemplo de Uso
 

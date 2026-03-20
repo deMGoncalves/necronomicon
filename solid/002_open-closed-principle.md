@@ -1,4 +1,4 @@
-# Compliance with Open/Closed Principle (OCP)
+# Conformidade com o Open/Closed Principle (OCP)
 
 **ID**: BEHAVIORAL-011
 **Severity**: 🟠 High
@@ -6,45 +6,45 @@
 
 ---
 
-## What it is
+## O que é
 
-Modules, classes, or functions must be open for extension and closed for modification, allowing the addition of new behaviors without changing the existing code of the unit.
+Módulos, classes ou funções devem ser abertos para extensão e fechados para modificação, permitindo a adição de novos comportamentos sem alterar o código existente da unidade.
 
-## Why it matters
+## Por que importa
 
-Violation of OCP leads to fragile code. Compliance reduces regression risk and increases maintainability, as new features are added without needing to rewrite already tested logic.
+A violação do OCP gera código frágil. A conformidade reduz o risco de regressão e aumenta a manutenibilidade, pois novas funcionalidades são adicionadas sem a necessidade de reescrever lógica já testada.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Adding a new "type" of behavior must be implemented through inheritance or composition, and **not** through new `if/switch` in existing code.
-- [ ] Methods with more than **3** `if/else if/switch case` clauses that handle *types* (e.g., `if (type === 'A')`) violate OCP.
-- [ ] High-level modules must not have direct dependency on more than **2** concrete classes that implement the same abstraction.
+- [ ] A adição de um novo "tipo" de comportamento deve ser implementada por meio de herança ou composição, e **não** por meio de novos `if/switch` no código existente.
+- [ ] Métodos com mais de **3** cláusulas `if/else if/switch case` que tratam *tipos* (ex.: `if (type === 'A')`) violam o OCP.
+- [ ] Módulos de alto nível não devem ter dependência direta de mais de **2** classes concretas que implementam a mesma abstração.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Orchestration Classes**: Modules that act as *Factory* to instantiate types, where `switch` logic is centralized.
+- **Classes de Orquestração**: Módulos que atuam como *Factory* para instanciar tipos, onde a lógica de `switch` é centralizada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Whenever it's necessary to add new functionality, check if it was necessary to modify the base class (if yes, OCP violated).
+Sempre que for necessário adicionar uma nova funcionalidade, verificar se foi necessário modificar a classe base (se sim, OCP violado).
 
-### Automatic
+### Automático
 
-ESLint: Rules that detect high number of *switch/if-else* in a method.
+ESLint: Regras que detectam alto número de *switch/if-else* em um método.
 
-## Related to
+## Relacionado a
 
-- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reinforces
-- [012 - Liskov Substitution Principle](../solid/003_liskov-substitution-principle.md): depends
-- [013 - Interface Segregation Principle](../solid/004_interface-segregation-principle.md): complements
-- [010 - Single Responsibility Principle](../solid/001_single-responsibility-principle.md): complements
-- [014 - Dependency Inversion Principle](../solid/005_dependency-inversion-principle.md): reinforces
-- [020 - Command-Query Separation](../clean-code/018_conformidade-principio-inversao-consulta.md): reinforces
-- [043 - Backing Services as Resources](../twelve-factor/004_backing-services-resources.md): complements
+- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reforça
+- [012 - Liskov Substitution Principle](../solid/003_liskov-substitution-principle.md): depende
+- [013 - Interface Segregation Principle](../solid/004_interface-segregation-principle.md): complementa
+- [010 - Single Responsibility Principle](../solid/001_single-responsibility-principle.md): complementa
+- [014 - Dependency Inversion Principle](../solid/005_dependency-inversion-principle.md): reforça
+- [020 - Command-Query Separation](../clean-code/conformidade-principio-inversao-consulta.md): reforça
+- [043 - Backing Services as Resources](../twelve-factor/004_backing-services-resources.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

@@ -1,48 +1,48 @@
 # Lazy Load
 
-**Classification**: Object-Relational Behavioral Pattern
+**Classificação**: Padrão Object-Relational Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-An object that doesn't contain all necessary data but knows how to obtain it when needed. Defers loading of data until the moment they are actually accessed.
+Um objeto que não contém todos os dados necessários, mas sabe como obtê-los quando precisar. Adia o carregamento dos dados até o momento em que eles são efetivamente acessados.
 
-## Also Known As
+## Também Conhecido Como
 
 - Lazy Initialization
 - Deferred Loading
 - On-Demand Loading
 - Just-in-Time Loading
 
-## Motivation
+## Motivação
 
-Loading a complete object with all relationships can be extremely costly. Customer may have hundreds of Orders, each Order with dozens of Items. Loading everything eagerly when you only need Customer name wastes memory and time.
+Carregar um objeto completo com todos os seus relacionamentos pode ser extremamente custoso. Um Customer pode ter centenas de Orders, cada Order com dezenas de Items. Carregar tudo de forma antecipada quando você só precisa do nome do Customer desperdiça memória e tempo.
 
-Lazy Load solves this by loading only essential data initially, leaving relationships as empty "placeholders". When code accesses relationship for the first time, lazy load detects access and loads data from database at that moment. If relationship is never accessed, it's never loaded.
+O Lazy Load resolve isso carregando apenas os dados essenciais inicialmente, deixando os relacionamentos como "marcadores de posição" vazios. Quando o código acessa um relacionamento pela primeira vez, o lazy load detecta o acesso e carrega os dados do banco de dados naquele momento. Se o relacionamento nunca for acessado, ele nunca é carregado.
 
-There are four main implementations: Lazy Initialization (check null and load), Virtual Proxy (proxy object that loads on first call), Value Holder (wrapper that encapsulates loading), and Ghost (partially loaded object that fills itself when accessed). Each has tradeoffs between transparency and complexity.
+Existem quatro implementações principais: Lazy Initialization (verifica nulo e carrega), Virtual Proxy (objeto proxy que carrega na primeira chamada), Value Holder (wrapper que encapsula o carregamento) e Ghost (objeto parcialmente carregado que se preenche quando acessado). Cada uma tem compensações entre transparência e complexidade.
 
-## Applicability
+## Aplicabilidade
 
-Use Lazy Load when:
+Use Lazy Load quando:
 
-- Objects have many relationships that are rarely used
-- Loading relationships eagerly causes performance problems
-- Related data is large or numerous
-- N+1 query problem is acceptable or can be mitigated
-- Access to relationships is predictable and controlled
-- Loading transparency is not critical
+- Objetos possuem muitos relacionamentos raramente utilizados
+- Carregar relacionamentos antecipadamente causa problemas de performance
+- Os dados relacionados são grandes ou numerosos
+- O problema de query N+1 é aceitável ou pode ser mitigado
+- O acesso aos relacionamentos é previsível e controlado
+- A transparência no carregamento não é crítica
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Accesses: Domain Object
+└── Acessa: Domain Object
 
 Domain Object
-├── basicData: loaded eagerly
-└── relationship: lazy (4 implementations)
+├── basicData: carregado antecipadamente
+└── relationship: lazy (4 implementações)
 
 1. Lazy Initialization
    └── getOrders() {
@@ -52,119 +52,119 @@ Domain Object
 
 2. Virtual Proxy
    └── orders: OrdersProxy
-       └── First call → loads real orders
+       └── Primeira chamada → carrega orders reais
 
 3. Value Holder
    └── orders: ValueHolder<Orders>
-       └── getValue() → loads if necessary
+       └── getValue() → carrega se necessário
 
 4. Ghost
-   └── Customer (partially loaded)
-       └── Any access → loads missing fields
+   └── Customer (parcialmente carregado)
+       └── Qualquer acesso → carrega campos faltantes
 ```
 
-## Participants
+## Participantes
 
-- **Domain Object**: Object that has lazy data
-- **Lazy Field**: Field that will be loaded on demand
-- **Loader**: Responsible for loading data when necessary
-- **Virtual Proxy**: Proxy object that intercepts access
-- **Value Holder**: Container that encapsulates lazy loading
-- **Ghost Object**: Partially initialized object
-- [**Data Mapper**](../data-source/004_data-mapper.md): Loads data from database when requested
+- **Domain Object**: Objeto que possui dados lazy
+- **Lazy Field**: Campo que será carregado sob demanda
+- **Loader**: Responsável por carregar os dados quando necessário
+- **Virtual Proxy**: Objeto proxy que intercepta o acesso
+- **Value Holder**: Contêiner que encapsula o carregamento lazy
+- **Ghost Object**: Objeto parcialmente inicializado
+- [**Data Mapper**](../data-source/004_data-mapper.md): Carrega dados do banco de dados quando solicitado
 
-## Collaborations
+## Colaborações
 
 **Lazy Initialization:**
-- Client accesses getter method on Domain Object
-- Getter checks if field is null
-- If null, invokes Data Mapper to load data
-- Stores loaded data and returns
-- Subsequent accesses return cached data
+- Client acessa o método getter no Domain Object
+- Getter verifica se o campo é nulo
+- Se nulo, invoca o Data Mapper para carregar os dados
+- Armazena os dados carregados e retorna
+- Acessos subsequentes retornam os dados em cache
 
 **Virtual Proxy:**
-- Domain Object contains proxy instead of real object
-- Client accesses method on proxy
-- Proxy intercepts call and checks if loaded
-- If not loaded, proxy loads real object
-- Proxy delegates call to real object
+- Domain Object contém proxy em vez do objeto real
+- Client acessa método no proxy
+- Proxy intercepta a chamada e verifica se foi carregado
+- Se não carregado, proxy carrega o objeto real
+- Proxy delega a chamada ao objeto real
 
 **Value Holder:**
-- Domain Object contains ValueHolder
-- Client calls getValue() on holder
-- Holder checks if loaded and loads if necessary
-- Returns value
+- Domain Object contém ValueHolder
+- Client chama getValue() no holder
+- Holder verifica se foi carregado e carrega se necessário
+- Retorna o valor
 
 **Ghost:**
-- Object loaded with only essential fields (ID, etc)
-- First access to non-loaded field triggers load
-- Object loads missing fields and "materializes"
+- Objeto carregado apenas com campos essenciais (ID, etc.)
+- Primeiro acesso a campo não carregado dispara o carregamento
+- Objeto carrega os campos faltantes e se "materializa"
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Initial performance**: Objects loaded more quickly
-- **Memory economy**: Only necessary data in memory
-- **Reduced bandwidth**: Less data transferred from database
-- **Scalability**: Supports large object graphs
-- **Flexibility**: Client controls what is loaded
-- **Responsiveness**: More responsive UI with less waiting
+- **Performance inicial**: Objetos carregados mais rapidamente
+- **Economia de memória**: Apenas dados necessários em memória
+- **Redução de largura de banda**: Menos dados transferidos do banco de dados
+- **Escalabilidade**: Suporta grafos de objetos grandes
+- **Flexibilidade**: Client controla o que é carregado
+- **Responsividade**: UI mais responsiva com menos espera
 
-### Disadvantages
+### Desvantagens
 
-- **N+1 query problem**: Can generate many small queries
-- **Lost transparency**: Client may need to know about lazy load
-- **Complexity**: Adds complexity to model
-- **Session requirement**: Requires active session to load
-- **Unexpected exceptions**: Can throw exceptions in getters
-- **Difficult debugging**: Hard to track when loads happen
+- **Problema de query N+1**: Pode gerar muitas queries pequenas
+- **Transparência perdida**: Client pode precisar saber sobre o lazy load
+- **Complexidade**: Adiciona complexidade ao modelo
+- **Requisito de sessão**: Requer sessão ativa para carregar
+- **Exceções inesperadas**: Pode lançar exceções em getters
+- **Depuração difícil**: Difícil rastrear quando os carregamentos ocorrem
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Strategy choice**: Lazy Init, Proxy, Value Holder, or Ghost
-2. **Transparency**: How much client should know about lazy loading
-3. **Session management**: Keep session open for lazy loads
-4. **Exception handling**: What to do when load fails
-5. **Fetch strategies**: When to use eager vs lazy
-6. **Batch loading**: Load multiple objects at once
+1. **Escolha da estratégia**: Lazy Init, Proxy, Value Holder ou Ghost
+2. **Transparência**: Quanto o client deve saber sobre o lazy loading
+3. **Gerenciamento de sessão**: Manter a sessão aberta para lazy loads
+4. **Tratamento de exceção**: O que fazer quando o carregamento falha
+5. **Estratégias de fetch**: Quando usar eager vs. lazy
+6. **Carregamento em lote**: Carregar múltiplos objetos de uma vez
 
-### Techniques
+### Técnicas
 
-- **Lazy Initialization**: Check null in getter and load
-- **Virtual Proxy**: Create proxy that loads on first call
-- **Value Holder**: Encapsulate value in holder object
-- **Ghost**: Load object partially and fill later
-- **Batch Fetching**: Load multiple related objects together
-- **Subselect Fetching**: Use subselect to load related
-- **Extra Lazy**: Operations on collections without loading all
+- **Lazy Initialization**: Verificar nulo no getter e carregar
+- **Virtual Proxy**: Criar proxy que carrega na primeira chamada
+- **Value Holder**: Encapsular valor em objeto holder
+- **Ghost**: Carregar objeto parcialmente e preencher depois
+- **Batch Fetching**: Carregar múltiplos objetos relacionados juntos
+- **Subselect Fetching**: Usar subselect para carregar relacionados
+- **Extra Lazy**: Operações em coleções sem carregar tudo
 
-## Known Uses
+## Usos Conhecidos
 
-- **Hibernate**: Lazy loading of relationships and collections
-- **Entity Framework**: Lazy loading via dynamic proxies
-- **JPA**: Lazy fetch type default for collections
-- **NHibernate**: Lazy proxy generation
-- **ActiveRecord (Rails)**: Lazy queries and associations
-- **Doctrine (PHP)**: Lazy loading with proxies
+- **Hibernate**: Lazy loading de relacionamentos e coleções
+- **Entity Framework**: Lazy loading via proxies dinâmicos
+- **JPA**: Fetch type lazy padrão para coleções
+- **NHibernate**: Geração de proxies lazy
+- **ActiveRecord (Rails)**: Queries e associações lazy
+- **Doctrine (PHP)**: Lazy loading com proxies
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**GoF Proxy**](../../gof/structural/007_proxy.md): Virtual Proxy is Lazy Load implementation
-- [**Identity Map**](002_identity-map.md): Works together; Identity Map can contain proxies
-- [**Data Mapper**](../data-source/004_data-mapper.md): Mapper loads data lazily
-- [**Unit of Work**](001_unit-of-work.md): Session needs to be open for lazy load
-- [**Repository**](016_repository.md): Repository configures lazy loading
-- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Different loading strategies
+- [**GoF Proxy**](../../gof/structural/007_proxy.md): Virtual Proxy é implementação de Lazy Load
+- [**Identity Map**](002_identity-map.md): Trabalha em conjunto; Identity Map pode conter proxies
+- [**Data Mapper**](../data-source/004_data-mapper.md): Mapper carrega dados lazily
+- [**Unit of Work**](001_unit-of-work.md): Sessão precisa estar aberta para o lazy load
+- [**Repository**](016_repository.md): Repository configura o lazy loading
+- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Diferentes estratégias de carregamento
 
-### Relation to Rules
+### Relação com Rules
 
-- [036 - Restriction of Functions with Side Effects](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): getter with lazy load has side effect
-- [027 - Quality in Error Handling](../../clean-code/007_qualidade-tratamento-erros-dominio.md): lazy load can throw exceptions
+- [036 - Restrição de Funções com Efeitos Colaterais](../../clean-code/restricao-funcoes-efeitos-colaterais.md): getter com lazy load possui efeito colateral
+- [027 - Qualidade no Tratamento de Erros](../../clean-code/qualidade-tratamento-erros-dominio.md): lazy load pode lançar exceções
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

@@ -192,7 +192,7 @@ class OrderNotifier { notify() }
 
 - [solid/001 - Single Responsibility](../../solid/001_principio-responsabilidade-unica.md)
 - [object-calisthenics/007 - Max Lines](../../object-calisthenics/007_limite-maximo-linhas-classe.md)
-- [clean-code/005 - No Blob](../../clean-code/005_proibicao-anti-pattern-the-blob.md)
+- [clean-code/005 - No Blob](../../clean-code/proibicao-anti-padrao-blob.md)
 
 ## Patterns Relacionados
 

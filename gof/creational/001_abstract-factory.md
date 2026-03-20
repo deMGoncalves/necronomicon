@@ -1,34 +1,34 @@
 # Abstract Factory
 
-**Classification**: Creational Pattern
+**Classificação**: Padrão Criacional
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Provide an interface for creating families of related or dependent objects without specifying their concrete classes. Allows the system to be independent of how its products are created, composed, and represented.
+Fornecer uma interface para criar famílias de objetos relacionados ou dependentes sem especificar suas classes concretas. Permite que o sistema seja independente de como seus produtos são criados, compostos e representados.
 
-## Also Known As
+## Também Conhecido Como
 
 - Kit
 
-## Motivation
+## Motivação
 
-Consider a graphical interface system that supports multiple visual styles (look-and-feel). To ensure portability across different platforms, the application code should not directly instantiate platform-specific widgets (like `WindowsButton` or `MacButton`).
+Considere um sistema de interface gráfica que suporta múltiplos estilos visuais (look-and-feel). Para garantir portabilidade entre diferentes plataformas, o código da aplicação não deve instanciar diretamente widgets específicos de plataforma (como `WindowsButton` ou `MacButton`).
 
-Abstract Factory solves this problem by defining an abstract interface for creating each type of widget. Each platform implements its own concrete factory that creates widgets in the appropriate style. Client code uses only the abstract interfaces, becoming platform-independent.
+Abstract Factory resolve esse problema definindo uma interface abstrata para criar cada tipo de widget. Cada plataforma implementa sua própria fábrica concreta que cria widgets no estilo adequado. O código do cliente usa apenas as interfaces abstratas, tornando-se independente de plataforma.
 
-## Applicability
+## Aplicabilidade
 
-Use the Abstract Factory pattern when:
+Use o padrão Abstract Factory quando:
 
-- A system must be independent of how its products are created, composed, and represented
-- A system must be configured with one of multiple families of related products
-- A family of related objects was designed to be used together, and you need to enforce this constraint
-- You want to provide a class library of products and want to reveal only their interfaces, not their implementations
-- The lifetime of dependencies is shorter than that of the consumer
+- Um sistema deve ser independente de como seus produtos são criados, compostos e representados
+- Um sistema deve ser configurado com uma de múltiplas famílias de produtos relacionados
+- Uma família de objetos relacionados foi projetada para ser usada em conjunto, e você precisa garantir essa restrição
+- Você deseja fornecer uma biblioteca de classes de produtos e quer revelar apenas suas interfaces, não suas implementações
+- O tempo de vida das dependências é menor que o do consumidor
 
-## Structure
+## Estrutura
 
 ```
 AbstractFactory (Interface)
@@ -44,74 +44,74 @@ ConcreteFactory2 implements AbstractFactory
 └── createProductB() → ProductB2
 
 Client
-└── Uses only: AbstractFactory, AbstractProductA, AbstractProductB
+└── Usa apenas: AbstractFactory, AbstractProductA, AbstractProductB
 ```
 
-## Participants
+## Participantes
 
-- **AbstractFactory**: Declares interface for operations that create abstract product objects
-- **ConcreteFactory**: Implements operations to create concrete product objects
-- **AbstractProduct**: Declares interface for a type of product object
-- **ConcreteProduct**: Defines a product object to be created by the corresponding concrete factory; implements the AbstractProduct interface
-- **Client**: Uses only interfaces declared by AbstractFactory and AbstractProduct classes
+- **AbstractFactory**: Declara a interface para operações que criam objetos de produto abstratos
+- **ConcreteFactory**: Implementa as operações para criar objetos de produto concretos
+- **AbstractProduct**: Declara a interface para um tipo de objeto produto
+- **ConcreteProduct**: Define um objeto produto a ser criado pela fábrica concreta correspondente; implementa a interface AbstractProduct
+- **Client**: Usa apenas as interfaces declaradas pelas classes AbstractFactory e AbstractProduct
 
-## Collaborations
+## Colaborações
 
-- Normally a single instance of ConcreteFactory is created at runtime
-- AbstractFactory delegates product object creation to its ConcreteFactory subclass
-- Client remains independent of concrete classes, working only with abstractions
+- Normalmente uma única instância de ConcreteFactory é criada em tempo de execução
+- AbstractFactory delega a criação de objetos produto para sua subclasse ConcreteFactory
+- Client permanece independente das classes concretas, trabalhando apenas com abstrações
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Isolates concrete classes**: Helps control the classes of objects created by the application
-- **Facilitates exchanging product families**: The concrete factory class appears only once, making changes easy
-- **Promotes consistency among products**: When objects in a family are designed to work together, this is guaranteed
-- **Respects Open/Closed Principle**: New families can be added without modifying client code
+- **Isola classes concretas**: Ajuda a controlar as classes de objetos criados pela aplicação
+- **Facilita a troca de famílias de produtos**: A classe de fábrica concreta aparece apenas uma vez, facilitando alterações
+- **Promove consistência entre produtos**: Quando objetos de uma família são projetados para trabalhar juntos, isso é garantido
+- **Respeita o Open/Closed Principle**: Novas famílias podem ser adicionadas sem modificar o código do cliente
 
-### Disadvantages
+### Desvantagens
 
-- **Difficult to support new product types**: Extending AbstractFactory to produce new types requires changes throughout the hierarchy
-- **Increases complexity**: Introduces multiple additional interfaces and classes
+- **Difícil suportar novos tipos de produto**: Estender AbstractFactory para produzir novos tipos requer mudanças em toda a hierarquia
+- **Aumenta a complexidade**: Introduz múltiplas interfaces e classes adicionais
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Factories as Singleton**: Typically only one instance of ConcreteFactory is needed
-2. **Creating products**: AbstractFactory only declares interface; ConcreteFactory implements actual creation
-3. **Defining extensible factories**: Adding a parameter to the creation method allows creating different types without extending the interface
+1. **Fábricas como Singleton**: Tipicamente apenas uma instância de ConcreteFactory é necessária
+2. **Criando produtos**: AbstractFactory apenas declara a interface; ConcreteFactory implementa a criação real
+3. **Definindo fábricas extensíveis**: Adicionar um parâmetro ao método de criação permite criar tipos diferentes sem estender a interface
 
-### Techniques
+### Técnicas
 
-- Use Factory Method to implement creation methods
-- Use Prototype to implement factories, eliminating the need for subclasses
-- Factory can be initialized through configuration or registry
+- Usar Factory Method para implementar os métodos de criação
+- Usar Prototype para implementar fábricas, eliminando a necessidade de subclasses
+- A fábrica pode ser inicializada por configuração ou registro
 
-## Known Uses
+## Usos Conhecidos
 
-- **UI Frameworks**: Java Swing (UIManager), Qt (QStyle)
-- **Databases**: ADO.NET (DbProviderFactory), JDBC (DriverManager)
-- **Application Themes**: Systems that support multiple visual themes
-- **Cross-platform toolkits**: Libraries that abstract differences between platforms
-- **Game Engines**: Creation of entity families (enemies, obstacles) per level
+- **Frameworks UI**: Java Swing (UIManager), Qt (QStyle)
+- **Bancos de Dados**: ADO.NET (DbProviderFactory), JDBC (DriverManager)
+- **Temas de Aplicação**: Sistemas que suportam múltiplos temas visuais
+- **Toolkits multiplataforma**: Bibliotecas que abstraem diferenças entre plataformas
+- **Motores de Jogo**: Criação de famílias de entidades (inimigos, obstáculos) por fase
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Factory Method**](003_factory-method.md): Abstract Factory is often implemented using Factory Methods
-- [**Prototype**](004_prototype.md): Can use Prototype to implement factory creation methods
-- [**Singleton**](005_singleton.md): Concrete factories are often Singletons
-- [**Builder**](002_builder.md): Alternative pattern when creation is complex and step-by-step
-- [**Facade**](../structural/005_facade.md): Abstract Factory can be used with Facade to provide an interface for creating subsystem objects
+- [**Factory Method**](003_factory-method.md): Abstract Factory frequentemente é implementado usando Factory Methods
+- [**Prototype**](004_prototype.md): Pode usar Prototype para implementar os métodos de criação da fábrica
+- [**Singleton**](005_singleton.md): Fábricas concretas são frequentemente Singletons
+- [**Builder**](002_builder.md): Padrão alternativo quando a criação é complexa e passo a passo
+- [**Facade**](../structural/005_facade.md): Abstract Factory pode ser usado com Facade para fornecer uma interface para criar objetos de subsistema
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): reinforces
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): implements
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reinforces
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): reforça
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): implementa
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): reforça
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

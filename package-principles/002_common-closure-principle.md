@@ -6,42 +6,42 @@
 
 ---
 
-## What it is
+## O que é
 
-Classes that change together for the same reason should be packaged together.
+Classes que mudam juntas pelo mesmo motivo devem ser empacotadas juntas.
 
-## Why it matters
+## Por que importa
 
-CCP reinforces SRP at the package level, ensuring that software modifications are localized. It reduces the need to change many packages in a single requirement change, facilitating deployment and maintenance.
+O CCP reforça o SRP no nível de pacote, garantindo que as modificações de software sejam localizadas. Reduz a necessidade de alterar muitos pacotes em uma única mudança de requisito, facilitando o deploy e a manutenção.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package should be reviewed if a requirement change causes modifications in more than **3** unrelated class/module files.
-- [ ] Classes related to a single domain entity (e.g., `Order`, `OrderService`, `OrderFactory`) should be in the same package.
-- [ ] Classes that change together should be located in the same directory to facilitate cohesion.
+- [ ] O pacote deve ser revisado se uma mudança de requisito causar modificações em mais de **3** arquivos de classe/módulo não relacionados.
+- [ ] Classes relacionadas a uma única entidade de domínio (ex.: `Order`, `OrderService`, `OrderFactory`) devem estar no mesmo pacote.
+- [ ] Classes que mudam juntas devem estar no mesmo diretório para facilitar a coesão.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Shared Infrastructure Classes**: Classes that are used in many packages and live in a low-level utility package.
+- **Classes de Infraestrutura Compartilhada**: Classes utilizadas em muitos pacotes e que residem em um pacote utilitário de baixo nível.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Analyze commit history: check if a single *feature request* affected classes scattered across several packages.
+Analisar o histórico de commits: verificar se um único *feature request* afetou classes espalhadas por vários pacotes.
 
-### Automatic
+### Automático
 
-Code metrics analysis: tools that track files changed per functionality.
+Análise de métricas de código: ferramentas que rastreiam arquivos alterados por funcionalidade.
 
-## Related to
+## Relacionado a
 
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reinforces
-- [015 - Release Reuse Equivalency Principle](../package-principles/001_release-reuse-equivalency-principle.md): complements
-- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reinforces
-- [017 - Common Reuse Principle](../package-principles/003_common-reuse-principle.md): complements
+- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reforça
+- [015 - Release Reuse Equivalency Principle](../package-principles/001_release-reuse-equivalency-principle.md): complementa
+- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reforça
+- [017 - Common Reuse Principle](../package-principles/003_common-reuse-principle.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

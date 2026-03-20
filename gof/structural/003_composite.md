@@ -1,34 +1,34 @@
 # Composite
 
-**Classification**: Structural Pattern
+**Classificação**: Padrão Estrutural
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Compose objects into tree structures to represent part-whole hierarchies. Composite lets clients treat individual objects and compositions of objects uniformly.
+Compor objetos em estruturas de árvore para representar hierarquias parte-todo. O Composite permite que os clientes tratem objetos individuais e composições de objetos de forma uniforme.
 
-## Also Known As
+## Também Conhecido Como
 
 - Composite Object
 
-## Motivation
+## Motivação
 
-Graphical applications allow constructing complex diagrams from simple components. The user can group components to form larger components which can be grouped again. A simple implementation could define classes for graphical primitives and container classes that act as composites.
+Aplicações gráficas permitem construir diagramas complexos a partir de componentes simples. O usuário pode agrupar componentes para formar componentes maiores, que podem ser agrupados novamente. Uma implementação simples poderia definir classes para primitivos gráficos e classes contêiner que atuam como compostos.
 
-The problem is that code using these classes needs to treat primitive objects and containers differently, even though most of the time it treats both identically. Composite solves this by defining an abstract Component class that represents both primitives and containers. Primitives are leaves, containers are composites.
+O problema é que o código que usa essas classes precisa tratar objetos primitivos e contêineres de forma diferente, mesmo que na maioria das vezes trate ambos de forma idêntica. O Composite resolve isso definindo uma classe abstrata Component que representa tanto primitivos quanto contêineres. Primitivos são folhas, contêineres são compostos.
 
-## Applicability
+## Aplicabilidade
 
-Use the Composite pattern when:
+Use o padrão Composite quando:
 
-- You want to represent part-whole hierarchies of objects
-- You want clients to ignore the difference between compositions of objects and individual objects
-- The structure can have any level of complexity and is dynamic
-- You need to apply operations over the entire hierarchical structure
-- You have objects with recursive behaviors (trees, menus, file systems)
+- Você quer representar hierarquias parte-todo de objetos
+- Você quer que os clientes ignorem a diferença entre composições de objetos e objetos individuais
+- A estrutura pode ter qualquer nível de complexidade e é dinâmica
+- Você precisa aplicar operações sobre toda a estrutura hierárquica
+- Você tem objetos com comportamentos recursivos (árvores, menus, sistemas de arquivos)
 
-## Structure
+## Estrutura
 
 ```
 Client
@@ -52,83 +52,83 @@ Composite implements Component
 └── remove(Component) → removes from children
 ```
 
-## Participants
+## Participantes
 
-- **Component**: Declares interface for objects in composition; implements default behavior common to all classes; declares interface for accessing and managing child components; (optional) defines interface for accessing parent
-- **Leaf**: Represents leaf objects (no children); defines behavior for primitive objects
-- [**Composite**](003_composite.md): Defines behavior for components with children; stores children; implements child-related operations in Component interface
-- **Client**: Manipulates objects in composition through Component interface
+- **Component**: Declara a interface para objetos na composição; implementa comportamento padrão comum a todas as classes; declara interface para acesso e gerenciamento de componentes filhos; (opcional) define interface para acesso ao pai
+- **Leaf**: Representa objetos folha (sem filhos); define comportamento para objetos primitivos
+- [**Composite**](003_composite.md): Define comportamento para componentes com filhos; armazena filhos; implementa operações relacionadas a filhos na interface Component
+- **Client**: Manipula objetos na composição por meio da interface Component
 
-## Collaborations
+## Colaborações
 
-- Clients use Component interface to interact with objects in composite structure
-- If recipient is Leaf, request is handled directly
-- If recipient is Composite, it usually forwards requests to children, possibly performing additional operations before/after
+- Clientes usam a interface Component para interagir com objetos na estrutura composta
+- Se o destinatário for um Leaf, a requisição é tratada diretamente
+- Se o destinatário for um Composite, ele geralmente encaminha requisições aos filhos, possivelmente realizando operações adicionais antes/depois
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Defines class hierarchies**: Primitive objects can be composed into complex objects recursively
-- **Simplifies client**: Client treats all objects uniformly
-- **Makes it easy to add new components**: New Leafs or Composites work automatically with existing structures and code
-- **Promotes Single Responsibility**: Each component has single responsibility
+- **Define hierarquias de classes**: Objetos primitivos podem ser compostos em objetos complexos de forma recursiva
+- **Simplifica o cliente**: O cliente trata todos os objetos de forma uniforme
+- **Facilita a adição de novos componentes**: Novos Leafs ou Composites funcionam automaticamente com estruturas e código existentes
+- **Promove Responsabilidade Única**: Cada componente tem uma única responsabilidade
 
-### Disadvantages
+### Desvantagens
 
-- **Can make design too general**: Makes it hard to restrict components of composite
-- **Overhead**: Operations need to check child type
-- **Difficulty in restricting children**: Components can accept any child
+- **Pode tornar o design muito genérico**: Dificulta a restrição de componentes do Composite
+- **Overhead**: Operações precisam verificar o tipo do filho
+- **Dificuldade em restringir filhos**: Componentes podem aceitar qualquer filho
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Explicit parent references**: Maintaining child-to-parent reference simplifies traversal and Chain of Responsibility implementation
+1. **Referências explícitas ao pai**: Manter a referência filho-para-pai simplifica a travessia e a implementação de Chain of Responsibility
 
-2. **Sharing components**: Difficult when components have only one parent; Flyweight can help
+2. **Compartilhamento de componentes**: Difícil quando os componentes têm apenas um pai; Flyweight pode ajudar
 
-3. **Maximizing Component interface**: Place maximum of common operations in Component; may need to override operations that don't make sense in Leaf
+3. **Maximizar a interface Component**: Colocar o máximo de operações comuns no Component; pode ser necessário substituir operações que não fazem sentido em Leaf
 
-4. **Declaring child management operations**: Declare in Component (transparency) vs declare only in Composite (safety)
+4. **Declarar operações de gerenciamento de filhos**: Declarar no Component (transparência) vs declarar apenas no Composite (segurança)
 
-5. **Ordering children**: When order matters, careful design of access and management interface
+5. **Ordenação dos filhos**: Quando a ordem importa, design cuidadoso da interface de acesso e gerenciamento
 
-6. **Caching**: Composite can cache results of traversals or searches
+6. **Caching**: O Composite pode armazenar em cache resultados de travessias ou buscas
 
-7. **Visitor for operations**: When specific operations on composite structure, use Visitor
+7. **Visitor para operações**: Quando há operações específicas na estrutura composta, use o Visitor
 
-### Techniques
+### Técnicas
 
-- **Type Safety**: In typed languages, use generics/templates to restrict child types
-- **Null Object Pattern**: Use Null Object instead of null for nonexistent children
-- **Iterator Pattern**: Provide iterators for tree traversal
+- **Segurança de Tipos**: Em linguagens tipadas, use generics/templates para restringir tipos de filhos
+- **Null Object Pattern**: Use Null Object em vez de null para filhos inexistentes
+- **Iterator Pattern**: Forneça iteradores para travessia da árvore
 
-## Known Uses
+## Usos Conhecidos
 
-- **File Systems**: Directories (Composite) and files (Leaf)
-- **GUI Components**: Containers (panels, windows) and widgets (buttons, labels)
-- **Organization Charts**: Organizations composed of departments and employees
-- **Document Structure**: Documents with paragraphs, sections, chapters
-- **Menu Systems**: Menus containing items and submenus
-- **Expression Trees**: Syntax trees in compilers
+- **Sistemas de Arquivos**: Diretórios (Composite) e arquivos (Leaf)
+- **Componentes GUI**: Contêineres (painéis, janelas) e widgets (botões, rótulos)
+- **Organogramas**: Organizações compostas por departamentos e funcionários
+- **Estrutura de Documentos**: Documentos com parágrafos, seções, capítulos
+- **Sistemas de Menus**: Menus contendo itens e submenus
+- **Árvores de Expressão**: Árvores sintáticas em compiladores
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Chain of Responsibility**](013_chain-of-responsibility.md): Often used with Composite; component can pass request to its parent
-- [**Decorator**](004_decorator.md): Often used together; both share similar diagrams; Decorator adds responsibilities, Composite aggregates children
-- [**Flyweight**](006_flyweight.md): Allows sharing components but they can't reference parents
-- [**Iterator**](016_iterator.md): Used for traversing composites
-- [**Visitor**](../clean-code/003_visitor.md): Localizes operations that would otherwise be distributed across Composite and Leaf classes
+- [**Chain of Responsibility**](013_chain-of-responsibility.md): Frequentemente usado com Composite; o componente pode passar a requisição para seu pai
+- [**Decorator**](004_decorator.md): Frequentemente usado em conjunto; ambos compartilham diagramas similares; Decorator adiciona responsabilidades, Composite agrega filhos
+- [**Flyweight**](006_flyweight.md): Permite compartilhar componentes, mas eles não podem referenciar pais
+- [**Iterator**](016_iterator.md): Usado para percorrer compostos
+- [**Visitor**](../gof/behavioral/011_visitor.md): Localiza operações que de outra forma estariam distribuídas entre as classes Composite e Leaf
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): easy to add new components
-- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): Leaf and Composite interchangeable
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): each component has single responsibility
-- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): Composite encapsulates collection
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): fácil adicionar novos componentes
+- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): Leaf e Composite são intercambiáveis
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): cada componente tem responsabilidade única
+- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): Composite encapsula a coleção
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

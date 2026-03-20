@@ -130,8 +130,8 @@ function Input({ children }) {
 ### Relação com Rules
 
 - [010 - Princípio da Responsabilidade Única](../../solid/001_single-responsibility-principle.md): reforça
-- [021 - Proibição da Duplicação de Lógica](../../clean-code/001_prohibition-logic-duplication.md): implementa
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): pode violar se usado excessivamente
+- [021 - Proibição da Duplicação de Lógica](../../clean-code/proibicao-duplicacao-logica.md): implementa
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): pode violar se usado excessivamente
 
 ## Alternativa Moderna: Hooks
 

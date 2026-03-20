@@ -1,14 +1,14 @@
 # Page Controller
 
-**Type**: Web Presentation Pattern
+**Tipo**: Padrão de Apresentação Web
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Create an object that handles HTTP requests for a specific page or action of a website, where each logical page has its own dedicated handler that processes input and coordinates response generation.
+Criar um objeto que trata as requisições HTTP de uma página ou ação específica de um site, onde cada página lógica tem seu próprio handler dedicado que processa a entrada e coordena a geração da resposta.
 
-## Also Known As
+## Também Conhecido Como
 
 - Page Handler
 - Action Handler
@@ -16,43 +16,43 @@ Create an object that handles HTTP requests for a specific page or action of a w
 
 ---
 
-## Motivation
+## Motivação
 
-Websites consist of multiple pages, each with its own processing logic (e.g., login page, checkout page, profile page). A fundamental architectural question is: how to organize the code that handles HTTP requests for each page?
+Sites são compostos de múltiplas páginas, cada uma com sua própria lógica de processamento (ex.: página de login, página de checkout, página de perfil). Uma questão arquitetural fundamental é: como organizar o código que trata as requisições HTTP de cada página?
 
-Page Controller solves this with the simplest possible approach: create a dedicated controller for each logical page. For example, `LoginController` handles all requests related to login (display form, validate credentials), `CheckoutController` handles checkout, etc. Each controller is responsible for extracting data from the HTTP request, invoking appropriate business logic, and selecting the view to render the response.
+O Page Controller resolve isso com a abordagem mais simples possível: criar um controller dedicado para cada página lógica. Por exemplo, o `LoginController` trata todas as requisições relacionadas ao login (exibir formulário, validar credenciais), o `CheckoutController` trata o checkout, etc. Cada controller é responsável por extrair dados da requisição HTTP, invocar a lógica de negócio apropriada e selecionar a view para renderizar a resposta.
 
-The advantage is simplicity and intuitiveness — developers immediately understand that to add a new page, they create a new controller. The mapping between URL and controller is direct (e.g., `/login` → LoginController, `/checkout` → CheckoutController). There are no complex indirection layers. This makes Page Controller ideal for small to medium websites where each page has relatively independent logic. However, if there's much shared logic between pages (authentication, logging, transactions), this logic tends to be duplicated between controllers, leading to the need for Front Controller.
-
----
-
-## Applicability
-
-Use Page Controller when:
-
-- The web application has a moderate number of pages/actions (tens, not hundreds)
-- Each page's logic is relatively independent, with little shared behavior
-- The team values simplicity and wants to avoid complex abstractions
-- Navigation between pages is direct, without complex multi-step wizard flows
-- You're using a traditional MVC framework where controllers per resource are the norm
-- There's no need for sophisticated centralized routing logic or request interception
+A vantagem está na simplicidade e intuitividade — os desenvolvedores entendem imediatamente que para adicionar uma nova página, basta criar um novo controller. O mapeamento entre URL e controller é direto (ex.: `/login` → LoginController, `/checkout` → CheckoutController). Não há camadas de indireção complexas. Isso torna o Page Controller ideal para sites de pequeno a médio porte onde cada página tem lógica relativamente independente. Porém, se houver muita lógica compartilhada entre páginas (autenticação, logging, transações), essa lógica tende a ser duplicada entre os controllers, levando à necessidade do Front Controller.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Page Controller quando:
+
+- A aplicação web tiver um número moderado de páginas/ações (dezenas, não centenas)
+- A lógica de cada página for relativamente independente, com pouco comportamento compartilhado
+- A equipe valorizar a simplicidade e quiser evitar abstrações complexas
+- A navegação entre páginas for direta, sem fluxos complexos de múltiplas etapas em wizard
+- Você estiver usando um framework MVC tradicional onde controllers por recurso são a norma
+- Não houver necessidade de lógica de roteamento centralizada sofisticada ou interceptação de requisições
+
+---
+
+## Estrutura
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                     Web Browser (Client)                     │
+│                   Navegador (Cliente)                        │
 └────────────────────────────┬─────────────────────────────────┘
-                             │ HTTP Requests
+                             │ Requisições HTTP
           ┌──────────────────┼──────────────────┐
           │                  │                  │
 ┌─────────▼──────────┐ ┌─────▼────────────┐ ┌──▼──────────────┐
 │ GET /login         │ │ POST /login      │ │ GET /checkout   │
 └─────────┬──────────┘ └─────┬────────────┘ └──┬──────────────┘
           │                  │                  │
-          │ routed to        │                  │
+          │ roteado para     │                  │
           │                  │                  │
 ┌─────────▼──────────┐ ┌─────▼────────────┐ ┌──▼──────────────┐
 │ LoginController    │ │ LoginController  │ │CheckoutController│
@@ -63,7 +63,7 @@ Use Page Controller when:
 │                    │ │   - redirect     │ │  - render        │
 └─────────┬──────────┘ └─────┬────────────┘ └──┬──────────────┘
           │                  │                  │
-          │ uses             │                  │
+          │ usa              │                  │
           │                  │                  │
           ▼                  ▼                  ▼
    ┌─────────────┐    ┌─────────────┐   ┌─────────────┐
@@ -80,124 +80,124 @@ Use Page Controller when:
 
 ---
 
-## Participants
+## Participantes
 
-- [**Page Controller**](002_page-controller.md) (`LoginController`, `CheckoutController`): Object or class that handles requests for a specific page. Contains methods (action methods) for different operations on the page (GET, POST, etc).
+- [**Page Controller**](002_page-controller.md) (`LoginController`, `CheckoutController`): Objeto ou classe que trata as requisições de uma página específica. Contém métodos (action methods) para diferentes operações na página (GET, POST, etc).
 
-- **Router/Dispatcher**: Component that maps incoming URLs to the appropriate Page Controller. In frameworks, this is route configuration (e.g., Express routes, Rails routes).
+- **Router/Dispatcher**: Componente que mapeia as URLs recebidas para o Page Controller apropriado. Nos frameworks, isso é a configuração de rotas (ex.: rotas Express, rotas Rails).
 
-- **HTTP Request/Response**: Objects that encapsulate HTTP request data (params, headers, body) and response (status, headers, body).
+- **Requisição/Resposta HTTP**: Objetos que encapsulam os dados da requisição HTTP (params, headers, body) e da resposta (status, headers, body).
 
-- **Model/Service Layer**: Business logic invoked by controller to process operations. Controllers delegate actual work to this layer.
+- **Model/Service Layer**: Lógica de negócio invocada pelo controller para processar as operações. Os controllers delegam o trabalho efetivo para essa camada.
 
-- **View/Template**: Responsible for rendering visual response (HTML) using data prepared by controller.
-
----
-
-## Collaborations
-
-When an HTTP request arrives (e.g., `POST /login`), the Router identifies that it should be handled by LoginController and invokes the appropriate method (`authenticate()`). The controller extracts data from request (username, password from POST form), validates them, and invokes authentication service in Model.
-
-If authentication succeeds, controller creates session, prepares context data (user object), and redirects to dashboard (`redirect("/dashboard")`). If it fails, returns to login page with error message, rendering `login.html` view with error context.
-
-Each request to a different page is handled by a different controller — there's no sophisticated central coordination. Controllers are independent of each other.
+- **View/Template**: Responsável por renderizar a resposta visual (HTML) usando os dados preparados pelo controller.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Quando uma requisição HTTP chega (ex.: `POST /login`), o Router identifica que ela deve ser tratada pelo LoginController e invoca o método apropriado (`authenticate()`). O controller extrai os dados da requisição (username, password do formulário POST), os valida e invoca o serviço de autenticação no Model.
 
-1. **Simplicity**: Straightforward, easy-to-understand approach — each page has its handler.
-2. **Low Learning Curve**: New developers quickly understand where to add code for new page.
-3. **Isolation**: Controllers are independent — changes in one rarely affect others.
-4. **Easy Debugging**: Request flow is linear — easy to trace from URL → Controller → View.
-5. **Clear Structure**: Code organization by page reflects site structure, facilitating codebase navigation.
-6. **No Over-Engineering**: Doesn't introduce unnecessary abstractions for small/medium sites.
+Se a autenticação for bem-sucedida, o controller cria a sessão, prepara o contexto de dados (objeto user) e redireciona para o dashboard (`redirect("/dashboard")`). Se falhar, retorna à página de login com mensagem de erro, renderizando a view `login.html` com o contexto de erro.
 
-### Disadvantages
-
-1. **Code Duplication**: Shared logic (auth check, logging, error handling) tends to be duplicated between controllers.
-2. **Limited Scalability**: For sites with hundreds of pages, number of controllers becomes unmanageable.
-3. **Difficult Global Interception**: Adding behavior that should occur in all requests (e.g., CORS, security headers) requires changing all controllers.
-4. **No Sophisticated Routing**: Complex routing logic (e.g., content negotiation, versioning) is difficult to implement consistently.
-5. **Reduced Testability of Common Behavior**: Duplicated shared behavior needs to be tested across multiple controllers.
+Cada requisição para uma página diferente é tratada por um controller diferente — não há coordenação central sofisticada. Os controllers são independentes entre si.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **One Controller per Resource**: In REST, create controllers per resource (ProductController, OrderController), not per individual page (avoids class explosion).
+1. **Simplicidade**: Abordagem direta e fácil de entender — cada página tem seu handler.
+2. **Baixa Curva de Aprendizado**: Novos desenvolvedores entendem rapidamente onde adicionar código para uma nova página.
+3. **Isolamento**: Os controllers são independentes — mudanças em um raramente afetam os outros.
+4. **Depuração Fácil**: O fluxo da requisição é linear — fácil de rastrear de URL → Controller → View.
+5. **Estrutura Clara**: A organização do código por página reflete a estrutura do site, facilitando a navegação pelo código.
+6. **Sem Overengineering**: Não introduz abstrações desnecessárias para sites de pequeno/médio porte.
 
-2. **Action Methods**: Within each controller, create methods for each action (index, show, create, update, delete) — CRUD pattern.
+### Desvantagens
 
-3. **Base Controller**: Create AbstractController class with common functionalities (render, redirect, error handling) that Page Controllers inherit.
-
-4. **Dependency Injection**: Inject services and repositories into controllers via constructor to facilitate testing.
-
-5. **Convention over Configuration**: Use naming conventions to automatically map URLs (e.g., `/products/show` → ProductController.show()).
-
-6. **GET and POST Separation**: Use different methods for idempotent operations (GET showForm) and mutative (POST submitForm).
-
-### Implementation Techniques
-
-1. **Single Class per Page**: Create one controller class for each logical page with multiple methods for different actions.
-
-2. **Script per Action**: Alternatively, create separate script files for each action (login.php, logout.php) — classic PHP style.
-
-3. **Annotation-Based Routing**: Use annotations to map methods to routes (Spring: `@GetMapping("/login")`, Express decorators).
-
-4. **Middleware Chain**: Implement common behavior (auth, logging) as middleware that executes before controllers.
-
-5. **Helper Methods**: Extract common behavior into private helper methods within controller or in utility class.
-
-6. **RESTful Conventions**: Adopt REST conventions for method and URL naming (index, show, store, update, destroy).
+1. **Duplicação de Código**: A lógica compartilhada (verificação de autenticação, logging, tratamento de erros) tende a ser duplicada entre os controllers.
+2. **Escalabilidade Limitada**: Para sites com centenas de páginas, o número de controllers se torna ingerenciável.
+3. **Difícil Interceptação Global**: Adicionar comportamento que deve ocorrer em todas as requisições (ex.: CORS, cabeçalhos de segurança) exige alterar todos os controllers.
+4. **Sem Roteamento Sofisticado**: Lógica de roteamento complexa (ex.: negociação de conteúdo, versionamento) é difícil de implementar de forma consistente.
+5. **Testabilidade Reduzida do Comportamento Comum**: O comportamento compartilhado duplicado precisa ser testado em múltiplos controllers.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Ruby on Rails**: Classic MVC framework where each resource has a controller with standard action methods (index, show, new, create, edit, update, destroy).
+### Considerações de Implementação
 
-2. **ASP.NET MVC**: Controllers inherit from `ControllerBase` and contain action methods decorated with `[HttpGet]`, `[HttpPost]`, etc.
+1. **Um Controller por Recurso**: Em REST, crie controllers por recurso (ProductController, OrderController), não por página individual (evita explosão de classes).
 
-3. **Spring MVC**: Uses `@Controller` and `@RequestMapping` to define Page Controllers with methods for different HTTP methods.
+2. **Action Methods**: Dentro de cada controller, crie métodos para cada ação (index, show, create, update, delete) — padrão CRUD.
 
-4. **Laravel (PHP)**: Framework that uses controllers to group related request logic, supporting resource controllers.
+3. **Base Controller**: Crie uma classe AbstractController com funcionalidades comuns (render, redirect, tratamento de erros) que os Page Controllers herdam.
 
-5. **Express.js**: Although it allows Front Controller, many applications use routers with dedicated handlers per route (Page Controller style).
+4. **Injeção de Dependência**: Injete serviços e repositories nos controllers via construtor para facilitar os testes.
 
-6. **Django Views**: Function-based views in Django are essentially Page Controllers — one function per URL pattern.
+5. **Convenção sobre Configuração**: Use convenções de nomenclatura para mapear URLs automaticamente (ex.: `/products/show` → ProductController.show()).
 
----
+6. **Separação de GET e POST**: Use métodos diferentes para operações idempotentes (GET showForm) e mutativas (POST submitForm).
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Front Controller**](003_front-controller.md): Alternative that centralizes request handling at a single point before dispatch.
-- [**Application Controller**](054_application-controller.md): Manages navigation and flow between pages — complements Page Controller.
-- [**Template View**](../twelve-factor/012_template-view.md): Page Controllers typically use Template Views to render responses.
-- [**Transaction Script**](../domain-logic/001_transaction-script.md): Page Controllers frequently use Transaction Scripts for simple business logic.
-- [**Model-View-Controller**](001_model-view-controller.md): Page Controller is a specific implementation of the "C" in MVC.
-- [**GoF Command**](../../gof/behavioral/002_command.md): Each action method in Page Controller can be seen as a Command.
-- [**Service Layer**](../domain-logic/004_service-layer.md): Page Controllers delegate business logic to Service Layer.
+1. **Classe Única por Página**: Crie uma classe controller para cada página lógica com múltiplos métodos para diferentes ações.
 
-### Relation with Rules
+2. **Script por Ação**: Alternativamente, crie arquivos de script separados para cada ação (login.php, logout.php) — estilo PHP clássico.
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): controller per page
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): add pages without modifying existing ones
+3. **Roteamento por Anotação**: Use anotações para mapear métodos a rotas (Spring: `@GetMapping("/login")`, decorators do Express).
 
----
+4. **Cadeia de Middleware**: Implemente comportamento comum (auth, logging) como middleware que executa antes dos controllers.
 
-## Business Rules Relationship
+5. **Métodos Auxiliares**: Extraia comportamento comum em métodos auxiliares privados dentro do controller ou em uma classe utilitária.
 
-- **[010] Single Responsibility Principle**: Each Page Controller has single responsibility of handling requests for a specific page/resource.
-- **[022] Prioritization of Simplicity and Clarity**: Page Controller is the simplest and clearest approach to organize request handling.
-- **[021] Prohibition of Logic Duplication**: Requires discipline to extract common code into base classes or helpers.
-- **[007] Maximum Lines per Class**: Controllers should remain small, delegating to Services.
+6. **Convenções RESTful**: Adote convenções REST para nomenclatura de métodos e URLs (index, show, store, update, destroy).
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Ruby on Rails**: Framework MVC clássico onde cada recurso tem um controller com métodos de ação padrão (index, show, new, create, edit, update, destroy).
+
+2. **ASP.NET MVC**: Controllers herdam de `ControllerBase` e contêm action methods decorados com `[HttpGet]`, `[HttpPost]`, etc.
+
+3. **Spring MVC**: Usa `@Controller` e `@RequestMapping` para definir Page Controllers com métodos para diferentes métodos HTTP.
+
+4. **Laravel (PHP)**: Framework que usa controllers para agrupar a lógica de requisição relacionada, com suporte a resource controllers.
+
+5. **Express.js**: Embora permita Front Controller, muitas aplicações usam routers com handlers dedicados por rota (estilo Page Controller).
+
+6. **Django Views**: Views baseadas em funções no Django são essencialmente Page Controllers — uma função por padrão de URL.
+
+---
+
+## Padrões Relacionados
+
+- [**Front Controller**](003_front-controller.md): Alternativa que centraliza o tratamento de requisições em um único ponto antes do despacho.
+- [**Application Controller**](054_application-controller.md): Gerencia a navegação e o fluxo entre páginas — complementa o Page Controller.
+- [**Template View**](../twelve-factor/012_template-view.md): Page Controllers tipicamente usam Template Views para renderizar respostas.
+- [**Transaction Script**](../domain-logic/001_transaction-script.md): Page Controllers frequentemente usam Transaction Scripts para lógica de negócio simples.
+- [**Model-View-Controller**](001_model-view-controller.md): Page Controller é uma implementação específica do "C" no MVC.
+- [**GoF Command**](../../gof/behavioral/002_command.md): Cada action method no Page Controller pode ser visto como um Command.
+- [**Service Layer**](../domain-logic/004_service-layer.md): Page Controllers delegam a lógica de negócio à Service Layer.
+
+### Relação com Rules
+
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): controller por página
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): adicionar páginas sem modificar as existentes
+
+---
+
+## Relação com Regras de Negócio
+
+- **[010] Single Responsibility Principle**: Cada Page Controller tem a única responsabilidade de tratar requisições de uma página/recurso específico.
+- **[022] Prioritization of Simplicity and Clarity**: O Page Controller é a abordagem mais simples e clara para organizar o tratamento de requisições.
+- **[021] Prohibition of Logic Duplication**: Exige disciplina para extrair código comum em classes base ou helpers.
+- **[007] Maximum Lines per Class**: Controllers devem permanecer pequenos, delegando para Services.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

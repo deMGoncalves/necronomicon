@@ -1,46 +1,46 @@
-# Single Codebase
+# Base de Código Única
 
 **ID**: INFRASTRUCTURE-040
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-An application must have exactly one codebase tracked in version control, with multiple *deploys* originating from that same base. The relationship between codebase and application is always 1:1.
+Uma aplicação deve ter exatamente uma base de código rastreada no controle de versão, com múltiplos *deploys* originando dessa mesma base. A relação entre base de código e aplicação é sempre 1:1.
 
-## Why it matters
+## Por que importa
 
-Multiple codebases for the same application indicate a distributed system, not an application. Shared code should be extracted into libraries and managed via dependencies. Violation hinders traceability, versioning, and maintenance.
+Múltiplas bases de código para a mesma aplicação indicam um sistema distribuído, não uma aplicação. Código compartilhado deve ser extraído para bibliotecas e gerenciado via dependências. A violação dificulta a rastreabilidade, o versionamento e a manutenção.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The application must have **a single repository** of source code, with branches for different stages (dev, staging, prod).
-- [ ] Code shared between applications must be extracted to **independent libraries** with their own versioning.
-- [ ] Copying code between repositories of different applications (*copy-paste deployment*) is prohibited.
+- [ ] A aplicação deve ter **um único repositório** de código-fonte, com branches para diferentes estágios (dev, staging, prod).
+- [ ] Código compartilhado entre aplicações deve ser extraído para **bibliotecas independentes** com seu próprio versionamento.
+- [ ] É proibida a cópia de código entre repositórios de aplicações diferentes (*copy-paste deployment*).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Organizational Monorepos**: Multiple applications in a single repository, provided each application has its own root directory and independent deploy pipeline.
+- **Monorepos Organizacionais**: Múltiplas aplicações em um único repositório, desde que cada aplicação tenha seu próprio diretório raiz e pipeline de deploy independente.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if there are multiple repositories with duplicate code or if the same functionality is maintained in different locations.
+Verificar se há múltiplos repositórios com código duplicado ou se a mesma funcionalidade é mantida em locais diferentes.
 
-### Automatic
+### Automático
 
-Git: Commit history and branch analysis to identify unintentional divergences.
+Git: Análise do histórico de commits e branches para identificar divergências não intencionais.
 
-## Related to
+## Relacionado a
 
-- [021 - Prohibition of Logic Duplication](../clean-code/001_prohibition-logic-duplication.md): reinforces
-- [015 - Release Reuse Equivalence Principle](001_release-reuse-equivalency-principle.md): reinforces
-- [044 - Strict Separation of Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): complements
+- [021 - Proibição de Duplicação de Lógica](../clean-code/proibicao-duplicacao-logica.md): reforça
+- [015 - Princípio da Equivalência de Reutilização de Release](001_release-reuse-equivalency-principle.md): reforça
+- [044 - Separação Estrita de Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): complementa
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

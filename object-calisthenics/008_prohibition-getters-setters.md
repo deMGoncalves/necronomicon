@@ -1,4 +1,4 @@
-# Prohibition of Direct State Exposure (Getters/Setters)
+# Proibição de Exposição Direta de Estado (Getters/Setters)
 
 **ID**: BEHAVIORAL-008
 **Severity**: 🔴 Critical
@@ -6,46 +6,46 @@
 
 ---
 
-## What it is
+## O que é
 
-Prohibits the creation of methods purely for accessing or directly modifying the internal state of the object (such as `getProperty()` and `setProperty()`), reinforcing encapsulation and the "Tell, Don't Ask" principle.
+Proíbe a criação de métodos puramente para acessar ou modificar diretamente o estado interno do objeto (como `getProperty()` e `setProperty()`), reforçando o encapsulamento e o princípio "Tell, Don't Ask".
 
-## Why it matters
+## Por que importa
 
-Direct exposure of internal state violates encapsulation, forcing client code to decide business logic (*procedural programming*), resulting in anemic classes and coupling to implementation details.
+A exposição direta do estado interno viola o encapsulamento, forçando o código cliente a decidir a lógica de negócio (*programação procedural*), resultando em classes anêmicas e acoplamento a detalhes de implementação.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Methods that return the exact value of an internal property without transformations or logic are prohibited (pure *getters*).
-- [ ] Methods that only assign a value to an internal property are prohibited (pure *setters*).
-- [ ] Interaction with the object must occur through methods that express business *intention* (e.g., `scheduleMeeting()` instead of `setStatus(Scheduled)`).
+- [ ] Métodos que retornam o valor exato de uma propriedade interna sem transformações ou lógica são proibidos (*getters* puros).
+- [ ] Métodos que apenas atribuem um valor a uma propriedade interna são proibidos (*setters* puros).
+- [ ] A interação com o objeto deve ocorrer por meio de métodos que expressam a *intenção* de negócio (por exemplo, `scheduleMeeting()` em vez de `setStatus(Scheduled)`).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Data Transfer Objects (DTOs)**: Pure classes used only for data transfer between layers, without business logic.
-- **Serialization Frameworks**: Libraries that require *getters* and *setters* for mapping.
+- **Data Transfer Objects (DTOs)**: Classes puras usadas apenas para transferência de dados entre camadas, sem lógica de negócio.
+- **Frameworks de Serialização**: Bibliotecas que exigem *getters* e *setters* para mapeamento.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for methods containing `get` or `set` prefixes followed by a property name, or methods that have no business logic of their own.
+Buscar por métodos contendo prefixos `get` ou `set` seguidos de um nome de propriedade, ou métodos que não possuem lógica de negócio própria.
 
-### Automatic
+### Automático
 
-ESLint: Custom rules to identify empty or trivial `get/set` method patterns.
+ESLint: Regras customizadas para identificar padrões de métodos `get/set` vazios ou triviais.
 
-## Related to
+## Relacionado a
 
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reinforces
-- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complements
-- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reinforces
-- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reinforces
-- [005 - Method Chaining Restriction](../object-calisthenics/005_method-chaining-restriction.md): reinforces
-- [029 - Object Immutability](../clean-code/009_object-immutability.md): reinforces
-- [036 - Side Effect Function Restriction](../clean-code/016_side-effect-function-restriction.md): complements
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reforça
+- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complementa
+- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reforça
+- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reforça
+- [005 - Method Chaining Restriction](../object-calisthenics/005_method-chaining-restriction.md): reforça
+- [029 - Object Immutability](../clean-code/imutabilidade-objetos-freeze.md): reforça
+- [036 - Side Effect Function Restriction](../clean-code/restricao-funcoes-efeitos-colaterais.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

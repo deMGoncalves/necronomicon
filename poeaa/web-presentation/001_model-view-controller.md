@@ -1,50 +1,50 @@
 # Model-View-Controller (MVC)
 
-**Type**: Web Presentation Pattern
+**Tipo**: Padrão de Apresentação Web
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Separate interface presentation and user interaction from underlying business logic, dividing the application into three interconnected components: Model (data and logic), View (presentation), and Controller (input management and coordination).
+Separar a apresentação da interface e a interação do usuário da lógica de negócio subjacente, dividindo a aplicação em três componentes interconectados: Model (dados e lógica), View (apresentação) e Controller (gerenciamento de entrada e coordenação).
 
-## Also Known As
+## Também Conhecido Como
 
-- Model-View-Presenter (variation)
-- Model-View-ViewModel (MVVM - modern variation)
+- Model-View-Presenter (variação)
+- Model-View-ViewModel (MVVM - variação moderna)
 - Separated Presentation
 
 ---
 
-## Motivation
+## Motivação
 
-User interfaces are notoriously volatile — presentation requirements change frequently (new design, new platform, A/B testing). If presentation logic is mixed with business logic, each visual change requires touching critical business code, increasing bug risk and making independent evolution difficult.
+As interfaces de usuário são notoriamente voláteis — os requisitos de apresentação mudam com frequência (novo design, nova plataforma, testes A/B). Se a lógica de apresentação estiver misturada com a lógica de negócio, cada mudança visual exige tocar em código de negócio crítico, aumentando o risco de bugs e dificultando a evolução independente.
 
-MVC solves this problem by establishing clear separation of responsibilities. The Model encapsulates domain data and business logic, completely independent of how it will be presented. The View is responsible for rendering the visual interface, consuming data from the Model but containing no business logic. The Controller mediates between them: receives user input (clicks, form submissions), invokes operations on the Model, and selects the appropriate View to present results.
+O MVC resolve esse problema estabelecendo uma separação clara de responsabilidades. O Model encapsula os dados do domínio e a lógica de negócio, completamente independente de como será apresentado. A View é responsável por renderizar a interface visual, consumindo dados do Model mas não contendo lógica de negócio. O Controller media entre eles: recebe a entrada do usuário (cliques, envios de formulários), invoca operações no Model e seleciona a View apropriada para apresentar os resultados.
 
-For example, in an e-commerce, the ProductModel contains pricing calculation logic and stock validation. ProductView renders HTML displaying the product. ProductController receives HTTP request "GET /product/123", loads the product via Model, and passes it to the View which generates HTML. If tomorrow a JSON API is needed, create a new View (JSONView) without touching Model or Controller. The separation allows independent evolution and reuse.
-
----
-
-## Applicability
-
-Use MVC when:
-
-- The application has a user interface (web, desktop, mobile) that needs to be decoupled from business logic
-- Multiple different views/representations need to be provided for the same data (HTML, JSON, XML, PDF)
-- The interface may change frequently (redesigns, new visual features) without affecting business logic
-- Different developers work on presentation and business logic independently
-- You want testability — Models can be tested without UI, Views can be tested with mock data
-- The application is complex enough to justify separation of concerns (not a simple static page)
+Por exemplo, em um e-commerce, o ProductModel contém a lógica de cálculo de preços e validação de estoque. A ProductView renderiza o HTML exibindo o produto. O ProductController recebe a requisição HTTP "GET /product/123", carrega o produto via Model e passa-o à View que gera o HTML. Se amanhã for necessária uma API JSON, cria-se uma nova View (JSONView) sem tocar no Model ou no Controller. A separação permite evolução independente e reuso.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use MVC quando:
+
+- A aplicação tiver uma interface de usuário (web, desktop, mobile) que precisa ser desacoplada da lógica de negócio
+- Múltiplas views/representações diferentes precisarem ser fornecidas para os mesmos dados (HTML, JSON, XML, PDF)
+- A interface puder mudar com frequência (redesigns, novos recursos visuais) sem afetar a lógica de negócio
+- Desenvolvedores diferentes trabalharem na apresentação e na lógica de negócio de forma independente
+- Você quiser testabilidade — Models podem ser testados sem UI, Views podem ser testadas com dados simulados
+- A aplicação for complexa o suficiente para justificar a separação de responsabilidades (não apenas uma página estática simples)
+
+---
+
+## Estrutura
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                          Browser                             │
-│  User clicks button → HTTP Request: POST /checkout          │
+│  Usuário clica no botão → Requisição HTTP: POST /checkout    │
 └────────────────────────────┬─────────────────────────────────┘
                              │ HTTP
                 ┌────────────▼────────────┐
@@ -56,7 +56,7 @@ Use MVC when:
                 │ + selectView(): View    │
                 └───────┬────────┬────────┘
                         │        │
-                invokes │        │ uses
+                invoca  │        │ usa
                         │        │
          ┌──────────────▼──┐  ┌──▼──────────────┐
          │     Model       │  │      View       │
@@ -66,141 +66,141 @@ Use MVC when:
          │ + applyDiscount │  │ + toHTML()      │
          │ + validateStock │  │                 │
          └─────────────────┘  └──────────────────┘
-                │ notifies (Observer)
+                │ notifica (Observer)
                 ▼
          ┌─────────────────┐
-         │  View (updated) │
+         │  View (atualiz.) │
          │  Auto-refresh   │
          └─────────────────┘
 
-Flow:
-1. User → Controller (input)
-2. Controller → Model (business operation)
-3. Model → Controller (result)
-4. Controller → View (select & pass data)
-5. View → User (HTML response)
+Fluxo:
+1. Usuário → Controller (entrada)
+2. Controller → Model (operação de negócio)
+3. Model → Controller (resultado)
+4. Controller → View (seleciona e passa dados)
+5. View → Usuário (resposta HTML)
 ```
 
 ---
 
-## Participants
+## Participantes
 
-- **Model**: Encapsulates application data and business logic. Is independent of the user interface. Notifies Views (via Observer) when its state changes.
+- **Model**: Encapsula os dados da aplicação e a lógica de negócio. É independente da interface de usuário. Notifica as Views (via Observer) quando seu estado muda.
 
-- **View**: Renders visual presentation of the Model. Reads data from Model but doesn't modify it. There can be multiple Views for the same Model (HTMLView, JSONView).
+- **View**: Renderiza a apresentação visual do Model. Lê dados do Model, mas não o modifica. Pode haver múltiplas Views para o mesmo Model (HTMLView, JSONView).
 
-- **Controller**: Receives user input, interprets it, invokes operations on Model, and selects the appropriate View to present the response.
+- **Controller**: Recebe a entrada do usuário, interpreta-a, invoca operações no Model e seleciona a View apropriada para apresentar a resposta.
 
-- **Observer Mechanism** (optional): Allows Model to notify Views of state changes for automatic updating (more common in desktop/mobile UIs than web request-response).
+- **Mecanismo Observer** (opcional): Permite que o Model notifique as Views sobre mudanças de estado para atualização automática (mais comum em UIs desktop/mobile do que em requisição-resposta web).
 
-- **Router** (in web context): Maps URLs to specific Controllers (e.g., `/products/:id` → ProductController).
-
----
-
-## Collaborations
-
-When the user interacts (e.g., clicks "Add to Cart"), the corresponding Controller (CartController) receives the request. It extracts parameters (productId, quantity), invokes business method on Model (cart.addItem(productId, quantity)), which validates stock and calculates totals.
-
-After Model operation, Controller decides which View to use (in web, typically a template). Passes necessary data (cart object) to View, which renders HTML with cart items. The HTML is returned to user as HTTP response.
-
-In desktop applications with Observer, when Model changes, it notifies registered Views which automatically update to reflect new state. In web (request-response), View is rendered once per request.
+- **Router** (no contexto web): Mapeia URLs para Controllers específicos (ex.: `/products/:id` → ProductController).
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Quando o usuário interage (ex.: clica em "Adicionar ao Carrinho"), o Controller correspondente (CartController) recebe a requisição. Ele extrai os parâmetros (productId, quantity), invoca o método de negócio no Model (cart.addItem(productId, quantity)), que valida o estoque e calcula os totais.
 
-1. **Separation of Concerns**: Business logic (Model) is completely separated from presentation (View) and flow control (Controller).
-2. **Model Reusability**: The same Model can be used by multiple Views (web HTML, JSON API, PDF report).
-3. **Testability**: Models can be tested in isolation; Views can be tested with mock data; Controllers tested with mock Models.
-4. **Maintainability**: UI changes don't affect business logic, and vice versa.
-5. **Parallel Development**: Designers work on Views, backend developers on Models, without conflicts.
-6. **Presentation Flexibility**: Easy to add new output formats (mobile app, CLI) without changing Model.
+Após a operação no Model, o Controller decide qual View usar (em aplicações web, tipicamente um template). Passa os dados necessários (objeto cart) para a View, que renderiza o HTML com os itens do carrinho. O HTML é retornado ao usuário como resposta HTTP.
 
-### Disadvantages
-
-1. **Additional Complexity**: For simple applications, MVC can be unnecessary overhead.
-2. **Learning Curve**: New developers need to understand responsibilities of each layer.
-3. **Code Fragmentation**: Logic for a feature is spread across multiple files (Model, View, Controller).
-4. **Responsibility Debate**: Where to put formatting logic? Input validation? Can generate endless debates.
-5. **Performance Overhead**: Additional layers can add latency (mitigatable with optimizations).
+Em aplicações desktop com Observer, quando o Model muda, ele notifica as Views registradas, que se atualizam automaticamente para refletir o novo estado. Na web (requisição-resposta), a View é renderizada uma vez por requisição.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Fat Models, Skinny Controllers**: Keep business logic in Model; Controllers should be thin, only coordinating.
+1. **Separação de Responsabilidades**: A lógica de negócio (Model) é completamente separada da apresentação (View) e do controle de fluxo (Controller).
+2. **Reusabilidade do Model**: O mesmo Model pode ser usado por múltiplas Views (HTML web, API JSON, relatório PDF).
+3. **Testabilidade**: Models podem ser testados isoladamente; Views podem ser testadas com dados simulados; Controllers testados com Models simulados.
+4. **Manutenibilidade**: Mudanças na UI não afetam a lógica de negócio, e vice-versa.
+5. **Desenvolvimento Paralelo**: Designers trabalham nas Views, desenvolvedores backend nos Models, sem conflitos.
+6. **Flexibilidade de Apresentação**: Fácil adicionar novos formatos de saída (app mobile, CLI) sem alterar o Model.
 
-2. **Dumb Views**: Views should contain zero business logic — only presentation and simple rendering loops/conditionals.
+### Desvantagens
 
-3. **Observer vs Request-Response**: In desktop/mobile, implement Observer for notification. In web request-response, skip Observer.
-
-4. **Separation of View Logic**: Use templates (Mustache, Handlebars) or components (React) to keep View logic separated from Controllers.
-
-5. **Routing**: Implement Router that maps URLs/routes to appropriate Controllers (e.g., Rails routes, Express routes).
-
-6. **Dependency Injection**: Inject Models into Controllers to facilitate testing and decoupling.
-
-### Implementation Techniques
-
-1. **Template Engines**: Use engines (EJS, Pug, Razor) for Views — separate HTML from presentation logic.
-
-2. **Front Controller Pattern**: Combine MVC with Front Controller to centralize request handling before distributing to Controllers.
-
-3. **Action Methods**: In Controllers, create methods for each action (index, show, create, update, delete) — RESTful pattern.
-
-4. **View Models/DTOs**: Create intermediate objects (ViewModels) that transform domain Models into structures optimized for Views.
-
-5. **Lazy Loading of Views**: Load Views only when needed to save memory.
-
-6. [**Service Layer**](../domain-logic/004_service-layer.md): Add Service Layer between Controllers and Models for complex application logic (multi-model workflows).
+1. **Complexidade Adicional**: Para aplicações simples, o MVC pode ser uma sobrecarga desnecessária.
+2. **Curva de Aprendizado**: Novos desenvolvedores precisam entender as responsabilidades de cada camada.
+3. **Fragmentação de Código**: A lógica de uma funcionalidade é distribuída por múltiplos arquivos (Model, View, Controller).
+4. **Debate de Responsabilidades**: Onde colocar lógica de formatação? Validação de entrada? Pode gerar debates intermináveis.
+5. **Sobrecarga de Desempenho**: Camadas adicionais podem adicionar latência (mitigável com otimizações).
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Ruby on Rails**: Classic MVC framework — Models (ActiveRecord), Views (ERB templates), Controllers (ActionController).
+### Considerações de Implementação
 
-2. **ASP.NET MVC**: Microsoft framework implementing MVC for web with C# — Models (POCOs), Views (Razor), Controllers (ControllerBase).
+1. **Fat Models, Skinny Controllers**: Mantenha a lógica de negócio no Model; Controllers devem ser finos, apenas coordenando.
 
-3. **Django (Python)**: Uses MTV (Model-Template-View) which is essentially MVC with different nomenclature.
+2. **Views Passivas**: Views não devem conter nenhuma lógica de negócio — apenas apresentação e loops/condicionais simples de renderização.
 
-4. **Spring MVC (Java)**: Java framework for web with annotations (@Controller, @RequestMapping) mapping URLs to methods.
+3. **Observer vs Requisição-Resposta**: Em desktop/mobile, implemente Observer para notificação. Em web requisição-resposta, dispense o Observer.
 
-5. **Express.js**: Node.js framework allowing manual MVC structuring (non-opinionated) through routers and middleware.
+4. **Separação da Lógica de View**: Use templates (Mustache, Handlebars) ou componentes (React) para manter a lógica de View separada dos Controllers.
 
-6. **Smalltalk-80**: Origin of MVC pattern — used for interactive desktop interfaces.
+5. **Roteamento**: Implemente um Router que mapeie URLs/rotas para os Controllers apropriados (ex.: rotas Rails, rotas Express).
 
----
+6. **Injeção de Dependência**: Injete Models nos Controllers para facilitar testes e desacoplamento.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Page Controller**](002_page-controller.md): Specific type of Controller — one Controller per logical page.
-- [**Front Controller**](003_front-controller.md): Centralizes request handling before distributing to specific Controllers.
-- [**Template View**](../twelve-factor/012_template-view.md): View implementation strategy using templates.
-- [**Application Controller**](054_application-controller.md): Manages navigation flow between views/pages.
-- [**GoF Observer**](../../gof/behavioral/007_observer.md): Used for Model to notify Views of changes (desktop/mobile MVC).
-- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Views can be different strategies to present the same Model.
-- [**Service Layer**](../domain-logic/004_service-layer.md): Sits between Controllers and Domain Model for application logic.
+1. **Template Engines**: Use engines (EJS, Pug, Razor) para Views — separe HTML da lógica de apresentação.
 
-### Relation with Rules
+2. **Padrão Front Controller**: Combine MVC com Front Controller para centralizar o tratamento de requisições antes de distribuir aos Controllers.
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate MVC responsibilities
-- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): controller coordinates actions
+3. **Action Methods**: Nos Controllers, crie métodos para cada ação (index, show, create, update, delete) — padrão RESTful.
 
----
+4. **View Models/DTOs**: Crie objetos intermediários (ViewModels) que transformam Models de domínio em estruturas otimizadas para as Views.
 
-## Business Rules Relationship
+5. **Lazy Loading de Views**: Carregue Views apenas quando necessário para economizar memória.
 
-- **[010] Single Responsibility Principle**: Each component (M, V, C) has a single, well-defined responsibility.
-- **[022] Prioritization of Simplicity and Clarity**: Separation makes each component simpler and easier to understand in isolation.
-- **[014] Dependency Inversion Principle**: Controllers and Views depend on Model abstractions, not concrete implementations.
-- **[032] Minimum Test Coverage**: Separation facilitates testing — Models can have >85% coverage without UI.
+6. [**Service Layer**](../domain-logic/004_service-layer.md): Adicione uma Service Layer entre Controllers e Models para lógica de aplicação complexa (fluxos com múltiplos modelos).
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Ruby on Rails**: Framework MVC clássico — Models (ActiveRecord), Views (templates ERB), Controllers (ActionController).
+
+2. **ASP.NET MVC**: Framework Microsoft que implementa MVC para web com C# — Models (POCOs), Views (Razor), Controllers (ControllerBase).
+
+3. **Django (Python)**: Usa MTV (Model-Template-View), que é essencialmente MVC com nomenclatura diferente.
+
+4. **Spring MVC (Java)**: Framework Java para web com anotações (@Controller, @RequestMapping) mapeando URLs para métodos.
+
+5. **Express.js**: Framework Node.js que permite estruturar manualmente o MVC (sem opinião) por meio de routers e middleware.
+
+6. **Smalltalk-80**: Origem do padrão MVC — usado para interfaces desktop interativas.
+
+---
+
+## Padrões Relacionados
+
+- [**Page Controller**](002_page-controller.md): Tipo específico de Controller — um Controller por página lógica.
+- [**Front Controller**](003_front-controller.md): Centraliza o tratamento de requisições antes de distribuir para Controllers específicos.
+- [**Template View**](../twelve-factor/012_template-view.md): Estratégia de implementação de View usando templates.
+- [**Application Controller**](054_application-controller.md): Gerencia o fluxo de navegação entre views/páginas.
+- [**GoF Observer**](../../gof/behavioral/007_observer.md): Usado para o Model notificar Views sobre mudanças (MVC desktop/mobile).
+- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Views podem ser diferentes estratégias para apresentar o mesmo Model.
+- [**Service Layer**](../domain-logic/004_service-layer.md): Fica entre Controllers e Domain Model para lógica de aplicação.
+
+### Relação com Rules
+
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar responsabilidades do MVC
+- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): controller coordena ações
+
+---
+
+## Relação com Regras de Negócio
+
+- **[010] Single Responsibility Principle**: Cada componente (M, V, C) tem uma única responsabilidade bem definida.
+- **[022] Prioritization of Simplicity and Clarity**: A separação torna cada componente mais simples e fácil de entender isoladamente.
+- **[014] Dependency Inversion Principle**: Controllers e Views dependem de abstrações do Model, não de implementações concretas.
+- **[032] Minimum Test Coverage**: A separação facilita os testes — Models podem ter cobertura >85% sem UI.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

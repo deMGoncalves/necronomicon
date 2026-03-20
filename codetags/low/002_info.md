@@ -217,7 +217,7 @@ function processUser() { } // Use JSDoc
 
 ## Rules Relacionadas
 
-- [clean-code/006 - Comments](../../clean-code/006_qualidade-comentarios-porque.md): INFO complementa, não substitui bom código
+- [clean-code/006 - Comments](../../clean-code/qualidade-comentarios-porque.md): INFO complementa, não substitui bom código
 
 ---
 

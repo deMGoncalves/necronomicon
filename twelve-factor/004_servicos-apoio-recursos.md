@@ -1,47 +1,47 @@
-# Backing Services as Attached Resources
+# Serviços de Apoio como Recursos Anexados
 
 **ID**: INFRASTRUCTURE-043
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-Backing services (databases, queues, caches, email services, external APIs) must be treated as **attached resources**, accessed via URL or resource locator stored in configuration. The application must not distinguish between local and third-party services.
+Serviços de apoio (bancos de dados, filas, caches, serviços de e-mail, APIs externas) devem ser tratados como **recursos anexados**, acessados via URL ou localizador de recurso armazenado na configuração. A aplicação não deve distinguir entre serviços locais e de terceiros.
 
-## Why it matters
+## Por que importa
 
-Treating services as attached resources allows swapping a local database for a managed one (e.g., RDS), or one email service for another, without code changes. This increases resilience and deploy flexibility.
+Tratar serviços como recursos anexados permite trocar um banco de dados local por um gerenciado (ex.: RDS), ou um serviço de e-mail por outro, sem alterações no código. Isso aumenta a resiliência e a flexibilidade de deploy.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] All external services must be accessed via **URL or connection string** configurable by environment variable.
-- [ ] Code must not contain conditional logic that differentiates local from remote services (e.g., `if (isLocal) useLocalDB()`).
-- [ ] Swapping a backing service must require **only** configuration change, not code change.
+- [ ] Todos os serviços externos devem ser acessados via **URL ou string de conexão** configurável por variável de ambiente.
+- [ ] O código não deve conter lógica condicional que diferencie serviços locais de remotos (ex.: `if (isLocal) useLocalDB()`).
+- [ ] A troca de um serviço de apoio deve exigir **apenas** alteração de configuração, não alteração de código.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Test Mocks**: Substitution of services by mocks in unit test environment, controlled via dependency injection.
+- **Mocks de Teste**: Substituição de serviços por mocks em ambiente de teste unitário, controlada via injeção de dependência.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if swapping a service (e.g., MySQL to PostgreSQL, or local Redis to ElastiCache) requires code changes.
+Verificar se a troca de um serviço (ex.: MySQL por PostgreSQL, ou Redis local por ElastiCache) exige alterações no código.
 
-### Automatic
+### Automático
 
-Code analysis: Search for hardcoded URLs or hosts, or environment-based conditionals.
+Análise de código: Buscar URLs ou hosts hardcoded, ou condicionais baseados em ambiente.
 
-## Related to
+## Relacionado a
 
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reinforces
-- [042 - Configurations via Environment](../twelve-factor/003_configuracoes-via-ambiente.md): complements
-- [049 - Dev/Prod Parity](../twelve-factor/010_paridade-dev-prod.md): reinforces
-- [011 - Open/Closed Principle](002_open-closed-principle.md): reinforces
+- [014 - Princípio da Inversão de Dependência](005_dependency-inversion-principle.md): reforça
+- [042 - Configurações via Ambiente](../twelve-factor/003_configuracoes-via-ambiente.md): complementa
+- [049 - Paridade Dev/Prod](../twelve-factor/010_paridade-dev-prod.md): reforça
+- [011 - Princípio Aberto/Fechado](002_open-closed-principle.md): reforça
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

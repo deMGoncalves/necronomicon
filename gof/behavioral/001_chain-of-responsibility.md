@@ -1,124 +1,124 @@
 # Chain of Responsibility
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request. Chain the receiving objects and pass the request along the chain until an object handles it.
+Evitar o acoplamento do remetente de uma solicitação ao seu receptor, dando a mais de um objeto a chance de tratar a solicitação. Encadeia os objetos receptores e passa a solicitação ao longo da cadeia até que um objeto a trate.
 
-## Also Known As
+## Também Conhecido Como
 
 - Chain of Responsibility
 
-## Motivation
+## Motivação
 
-Consider a context-sensitive help system. If a user clicks on a part of the interface, appropriate help should be provided. But help depends on context - it may be specific to a button or more general. The help request is handled by the first object in the chain that can provide help.
+Considere um sistema de ajuda sensível ao contexto. Se um usuário clicar em uma parte da interface, a ajuda adequada deve ser fornecida. Mas a ajuda depende do contexto — pode ser específica a um botão ou mais geral. A solicitação de ajuda é tratada pelo primeiro objeto da cadeia capaz de fornecê-la.
 
-The problem is that the object that eventually provides help is not known by the object that initiates the request. A mechanism is needed to decouple the button that initiates the request from the objects that can provide information. Chain of Responsibility provides this by giving multiple objects a chance to handle the request.
+O problema é que o objeto que eventualmente fornece a ajuda não é conhecido pelo objeto que inicia a solicitação. É necessário um mecanismo para desacoplar o botão que inicia a solicitação dos objetos que podem fornecer a informação. O Chain of Responsibility resolve isso dando a múltiplos objetos a chance de tratar a solicitação.
 
-## Applicability
+## Aplicabilidade
 
-Use Chain of Responsibility when:
+Use Chain of Responsibility quando:
 
-- More than one object can handle a request and the handler is not known a priori; the handler must be determined automatically
-- You want to issue a request to one of several objects without specifying the receiver explicitly
-- The set of objects that can handle a request should be specified dynamically
-- You want to avoid coupling between sender and receivers
-- Request processing should follow a specific but flexible order
+- Mais de um objeto pode tratar uma solicitação e o tratador não é conhecido a priori; o tratador deve ser determinado automaticamente
+- Você deseja emitir uma solicitação para um de vários objetos sem especificar o receptor explicitamente
+- O conjunto de objetos que pode tratar uma solicitação deve ser especificado dinamicamente
+- Você deseja evitar o acoplamento entre remetente e receptores
+- O processamento da solicitação deve seguir uma ordem específica mas flexível
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Sends request to: Handler
+└── Envia solicitação para: Handler
 
-Handler (Interface/Abstract)
-├── Composes: Handler successor (next in chain)
+Handler (Interface/Abstrato)
+├── Compõe: Handler successor (próximo na cadeia)
 ├── handleRequest(request)
 └── setSuccessor(Handler)
 
 ConcreteHandler1 implements Handler
 └── handleRequest(request)
-    ├── If can handle
-    │   └── Process request
-    └── Else
+    ├── Se pode tratar
+    │   └── Processa a solicitação
+    └── Caso contrário
         └── successor.handleRequest(request)
 
 ConcreteHandler2 implements Handler
 └── handleRequest(request)
-    ├── If can handle
-    │   └── Process request
-    └── Else
+    ├── Se pode tratar
+    │   └── Processa a solicitação
+    └── Caso contrário
         └── successor.handleRequest(request)
 ```
 
-## Participants
+## Participantes
 
-- **Handler**: Defines interface for handling requests; (optionally) implements link to successor
-- **ConcreteHandler**: Handles requests it is responsible for; can access successor; if it can handle request, does so; otherwise forwards to successor
-- **Client**: Initiates request to a ConcreteHandler object in the chain
+- **Handler**: Define a interface para tratar solicitações; (opcionalmente) implementa o vínculo com o sucessor
+- **ConcreteHandler**: Trata as solicitações pelas quais é responsável; pode acessar o sucessor; se puder tratar a solicitação, faz isso; caso contrário, encaminha ao sucessor
+- **Client**: Inicia a solicitação para um objeto ConcreteHandler da cadeia
 
-## Collaborations
+## Colaborações
 
-- When client issues a request, the request propagates along the chain until a ConcreteHandler takes responsibility for handling it
+- Quando o cliente emite uma solicitação, ela se propaga pela cadeia até que um ConcreteHandler assuma a responsabilidade de tratá-la
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Reduced coupling**: Frees an object from knowing which other object handles the request; both receiver and sender have no explicit knowledge of each other
-- **Added flexibility in assigning responsibilities**: Adds flexibility in distributing responsibilities among objects; can add or change responsibilities by changing the chain at runtime
-- **Receipt isn't guaranteed**: Request may not have an explicit receiver
+- **Acoplamento reduzido**: Libera um objeto de precisar saber qual outro objeto trata a solicitação; tanto receptor quanto remetente não têm conhecimento explícito um do outro
+- **Flexibilidade adicionada na atribuição de responsabilidades**: Adiciona flexibilidade na distribuição de responsabilidades entre objetos; pode adicionar ou alterar responsabilidades modificando a cadeia em tempo de execução
+- **Recebimento não garantido**: A solicitação pode não ter um receptor explícito
 
-### Disadvantages
+### Desvantagens
 
-- **Receipt not guaranteed**: There's no guarantee the request will be handled; it may fall off the end of the chain without being handled
-- **Difficult to observe characteristics**: May be difficult to observe runtime characteristics due to indirect connections
-- **Debugging**: Can be difficult to debug flow through the chain
+- **Recebimento não garantido**: Não há garantia de que a solicitação será tratada; ela pode chegar ao fim da cadeia sem ser tratada
+- **Características difíceis de observar**: Pode ser difícil observar características em tempo de execução devido às conexões indiretas
+- **Depuração**: Pode ser difícil depurar o fluxo ao longo da cadeia
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Implementing the chain of successors**: Two possibilities
-   - Define new links (usually in Handler class; but may be in ConcreteHandlers)
-   - Use existing links (e.g., Composite parent reference)
+1. **Implementando a cadeia de sucessores**: Duas possibilidades
+   - Definir novos vínculos (geralmente na classe Handler; mas pode ser nos ConcreteHandlers)
+   - Utilizar vínculos existentes (ex: referência ao pai no Composite)
 
-2. **Connecting successors**: If there are no existing references, Handler must maintain reference to successor; useful to have default operation in Handler that forwards to successor
+2. **Conectando sucessores**: Se não existirem referências, Handler deve manter referência ao sucessor; é útil ter uma operação padrão no Handler que encaminha ao sucessor
 
-3. **Representing requests**: Options vary from hard-coded operations to separate Request object
+3. **Representando solicitações**: As opções variam desde operações codificadas diretamente até objetos Request separados
 
-### Techniques
+### Técnicas
 
-- **Default Handler**: Have default handler at end of chain for unhandled requests
-- **Priority Chain**: Handlers ordered by priority
-- **Broadcasting**: Allow multiple handlers to process request
-- **Early Exit**: Stop propagation after first handler processes
+- **Handler Padrão**: Ter um handler padrão no fim da cadeia para solicitações não tratadas
+- **Cadeia Prioritária**: Handlers ordenados por prioridade
+- **Broadcasting**: Permitir que múltiplos handlers processem a solicitação
+- **Saída Antecipada**: Interromper a propagação após o primeiro handler processar
 
-## Known Uses
+## Usos Conhecidos
 
-- **Event Handling**: Event bubbling in DOM (JavaScript)
-- **Logging Frameworks**: Loggers with levels (DEBUG, INFO, WARN, ERROR)
-- **Servlet Filters**: Chain of filters in Java Servlets
-- **Middleware**: Express.js middleware chain
-- **Exception Handling**: Try-catch blocks at multiple levels
-- **Authorization**: Permission checking in layers
+- **Tratamento de Eventos**: Borbulhamento de eventos no DOM (JavaScript)
+- **Frameworks de Log**: Loggers com níveis (DEBUG, INFO, WARN, ERROR)
+- **Servlet Filters**: Cadeia de filtros em Java Servlets
+- **Middleware**: Cadeia de middleware do Express.js
+- **Tratamento de Exceções**: Blocos try-catch em múltiplos níveis
+- **Autorização**: Verificação de permissões em camadas
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Composite**](008_composite.md): Often applied together; component can be parent's successor
-- [**Command**](002_command.md): Chain of Responsibility requests are often Commands
-- [**Decorator**](009_decorator.md): Structurally similar but different intents; Decorator adds behavior, Chain handles or passes forward
+- [**Composite**](008_composite.md): Frequentemente aplicados juntos; o componente pode ser o sucessor do pai
+- [**Command**](002_command.md): Solicitações no Chain of Responsibility são frequentemente Commands
+- [**Decorator**](009_decorator.md): Estruturalmente similar, mas com intenções diferentes; Decorator adiciona comportamento, Chain trata ou encaminha
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): each handler one responsibility
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): add handlers without modifying existing
-- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): eliminates complex conditionals
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): cada handler uma responsabilidade
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): adicionar handlers sem modificar os existentes
+- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): elimina condicionais complexos
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

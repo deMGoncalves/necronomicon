@@ -1,134 +1,134 @@
 # Strategy
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it. Promotes composition over inheritance for varying behavior.
+Definir uma família de algoritmos, encapsular cada um e torná-los intercambiáveis. Strategy permite que o algoritmo varie independentemente dos clientes que o utilizam. Promove composição em vez de herança para variar comportamento.
 
-## Also Known As
+## Também Conhecido Como
 
 - Policy
 
-## Motivation
+## Motivação
 
-Many algorithms exist for breaking a stream of text into lines. Hard-wiring all such algorithms into the classes that require them isn't desirable for several reasons: clients that need linebreaking become more complex if they include the linebreaking code, making clients bigger and harder to maintain; different algorithms will be appropriate at different times; it's difficult to add new algorithms and vary existing ones when linebreaking is an integral part of a client.
+Existem muitos algoritmos para quebrar um fluxo de texto em linhas. Codificar todos esses algoritmos diretamente nas classes que os requerem não é desejável por várias razões: os clientes que precisam de quebra de linha ficam mais complexos se incluírem o código de quebra de linha, tornando-os maiores e mais difíceis de manter; algoritmos diferentes serão adequados em momentos diferentes; é difícil adicionar novos algoritmos e variar os existentes quando a quebra de linha é parte integral de um cliente.
 
-We can avoid these problems by defining classes that encapsulate different linebreaking algorithms. An algorithm that's encapsulated in this way is called a strategy. Composition lets the Composition class maintain a reference to a Strategy object and delegate to it. Swapping in a different Strategy changes how the text is broken.
+Podemos evitar esses problemas definindo classes que encapsulam diferentes algoritmos de quebra de linha. Um algoritmo encapsulado desta forma é chamado de strategy. A composição permite que a classe Composition mantenha uma referência a um objeto Strategy e delegue a ele. Trocar por uma Strategy diferente muda como o texto é quebrado.
 
-## Applicability
+## Aplicabilidade
 
-Use the Strategy pattern when:
+Use o padrão Strategy quando:
 
-- Many related classes differ only in their behavior; Strategies provide a way to configure a class with one of many behaviors
-- You need different variants of an algorithm
-- An algorithm uses data that clients shouldn't know about; use Strategy to avoid exposing complex data structures
-- A class defines many behaviors, and these appear as multiple conditional statements; move each conditional branch into its own Strategy class
-- You want to avoid tight coupling between algorithm and code that uses it
-- You want to make algorithm interchangeable at runtime
+- Muitas classes relacionadas diferem apenas em seu comportamento; Strategies fornecem uma forma de configurar uma classe com um de muitos comportamentos
+- Você precisa de variantes diferentes de um algoritmo
+- Um algoritmo usa dados que os clientes não devem conhecer; use Strategy para evitar expor estruturas de dados complexas
+- Uma classe define muitos comportamentos, e estes aparecem como múltiplas instruções condicionais; mova cada ramo condicional para sua própria classe Strategy
+- Você deseja evitar acoplamento rígido entre o algoritmo e o código que o usa
+- Você deseja tornar o algoritmo intercambiável em tempo de execução
 
-## Structure
+## Estrutura
 
 ```
 Context
-├── Composes: Strategy
+├── Compõe: Strategy
 ├── contextInterface()
-│   └── Delegates to: strategy.algorithmInterface()
+│   └── Delega para: strategy.algorithmInterface()
 └── setStrategy(Strategy)
-    └── Allows strategy swapping
+    └── Permite trocar de strategy
 
 Strategy (Interface)
 └── algorithmInterface(data)
 
 ConcreteStrategyA implements Strategy
 └── algorithmInterface(data)
-    └── Algorithm A specific implementation
+    └── Implementação específica do Algoritmo A
 
 ConcreteStrategyB implements Strategy
 └── algorithmInterface(data)
-    └── Algorithm B specific implementation
+    └── Implementação específica do Algoritmo B
 
 ConcreteStrategyC implements Strategy
 └── algorithmInterface(data)
-    └── Algorithm C specific implementation
+    └── Implementação específica do Algoritmo C
 ```
 
-## Participants
+## Participantes
 
-- [**Strategy**](009_strategy.md): Declares an interface common to all supported algorithms; Context uses this interface to call the algorithm defined by a ConcreteStrategy
-- **ConcreteStrategy**: Implements the algorithm using the Strategy interface
-- **Context**: Configured with a ConcreteStrategy object; maintains a reference to a Strategy object; may define an interface that lets Strategy access its data
+- [**Strategy**](009_strategy.md): Declara uma interface comum para todos os algoritmos suportados; Context usa essa interface para chamar o algoritmo definido por um ConcreteStrategy
+- **ConcreteStrategy**: Implementa o algoritmo usando a interface Strategy
+- **Context**: Configurado com um objeto ConcreteStrategy; mantém uma referência a um objeto Strategy; pode definir uma interface que permite ao Strategy acessar seus dados
 
-## Collaborations
+## Colaborações
 
-- Strategy and Context interact to implement the chosen algorithm; a Context may pass all data required by the algorithm to the Strategy when the algorithm is called; alternatively, Context can pass itself as an argument, letting the Strategy call back on the Context as required
-- A Context forwards requests from its clients to its Strategy; Clients usually create and pass a ConcreteStrategy object to the Context; thereafter, clients interact with the Context exclusively
+- Strategy e Context interagem para implementar o algoritmo escolhido; um Context pode passar todos os dados necessários ao algoritmo para a Strategy quando o algoritmo é chamado; alternativamente, Context pode passar a si mesmo como argumento, permitindo que a Strategy faça callback no Context se necessário
+- Um Context encaminha solicitações de seus clientes para sua Strategy; Clientes geralmente criam e passam um objeto ConcreteStrategy para o Context; depois disso, os clientes interagem com o Context exclusivamente
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Families of related algorithms**: Hierarchies of Strategy classes define a family of algorithms or behaviors for contexts to reuse
-- **An alternative to subclassing**: Inheritance offers another way to support a variety of algorithms; but inheritance mixes the algorithm implementation into Context; mixes algorithm with Context, making Context harder to understand, maintain, and extend
-- **Eliminates conditional statements**: When different behaviors are lumped into conditional statements, Strategy eliminates conditionals by moving behavior into Strategy classes
-- **Choice of implementations**: Strategies can provide different implementations of the same behavior; client can choose among strategies with different time and space trade-offs
-- **Open/Closed Principle**: Add new strategies without modifying context
+- **Famílias de algoritmos relacionados**: Hierarquias de classes Strategy definem uma família de algoritmos ou comportamentos para contextos reutilizarem
+- **Uma alternativa à herança**: A herança oferece outra forma de suportar uma variedade de algoritmos; mas a herança mistura a implementação do algoritmo no Context; mistura o algoritmo com o Context, tornando-o mais difícil de entender, manter e estender
+- **Elimina instruções condicionais**: Quando comportamentos diferentes são agrupados em instruções condicionais, Strategy elimina os condicionais movendo o comportamento para classes Strategy
+- **Escolha de implementações**: Strategies podem fornecer diferentes implementações do mesmo comportamento; o cliente pode escolher entre strategies com diferentes compensações de tempo e espaço
+- **Open/Closed Principle**: Adicionar novas strategies sem modificar o context
 
-### Disadvantages
+### Desvantagens
 
-- **Clients must be aware of different Strategies**: Clients need to understand how Strategies differ before selecting the appropriate one
-- **Communication overhead**: The Strategy interface is shared by all ConcreteStrategies; some may not use all data passed through this interface
-- **Increased number of objects**: Strategies increase the number of objects in an application; can reduce this by using Strategies as stateless objects that contexts can share
+- **Clientes devem conhecer as diferentes Strategies**: Os clientes precisam entender como as Strategies diferem antes de selecionar a adequada
+- **Sobrecarga de comunicação**: A interface Strategy é compartilhada por todos os ConcreteStrategies; alguns podem não usar todos os dados passados por essa interface
+- **Número aumentado de objetos**: Strategies aumentam o número de objetos em uma aplicação; pode-se reduzir isso usando Strategies como objetos sem estado que os contextos podem compartilhar
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Defining Strategy and Context interfaces**: Strategy and Context interact to implement the chosen algorithm
-   - Context passes data to Strategy (can pass Context as parameter)
-   - Context can pass itself as argument allowing Strategy to callback
+1. **Definindo interfaces de Strategy e Context**: Strategy e Context interagem para implementar o algoritmo escolhido
+   - Context passa dados para Strategy (pode passar Context como parâmetro)
+   - Context pode passar a si mesmo como argumento permitindo que Strategy faça callback
 
-2. **Strategies as template parameters**: In C++, can use templates to configure a class with a Strategy; only works if Strategy can be selected at compile-time
+2. **Strategies como parâmetros de template**: Em C++, pode-se usar templates para configurar uma classe com uma Strategy; funciona apenas se a Strategy puder ser selecionada em tempo de compilação
 
-3. **Making Strategy objects optional**: Context checks if it has a Strategy; if not, carries out default behavior; benefit: clients don't have to deal with Strategy objects unless they don't like the default behavior
+3. **Tornando objetos Strategy opcionais**: Context verifica se tem uma Strategy; se não, executa comportamento padrão; benefício: clientes não precisam lidar com objetos Strategy a menos que não gostem do comportamento padrão
 
-4. **Strategy as function**: In languages with first-class functions, can pass function instead of Strategy object
+4. **Strategy como função**: Em linguagens com funções de primeira classe, pode-se passar função em vez de objeto Strategy
 
-### Techniques
+### Técnicas
 
-- **Stateless Strategies**: Strategies without state can be shared Flyweights
-- **Strategy Factory**: Factory to create appropriate strategies
-- **Default Strategy**: Default strategy if none provided
-- **Function as Strategy**: In functional languages, use higher-order functions
+- **Strategies Sem Estado**: Strategies sem estado podem ser Flyweights compartilhados
+- **Strategy Factory**: Factory para criar strategies adequadas
+- **Strategy Padrão**: Strategy padrão se nenhuma for fornecida
+- **Função como Strategy**: Em linguagens funcionais, usar funções de ordem superior
 
-## Known Uses
+## Usos Conhecidos
 
-- **Sorting Algorithms**: Different sorting algorithms (quicksort, mergesort, heapsort)
-- **Compression**: Different compression algorithms (ZIP, RAR, GZIP)
-- **Validation**: Different data validation strategies
-- **Payment Methods**: Different payment methods (credit card, PayPal, crypto)
-- **Route Planning**: Different routing algorithms (shortest, fastest, scenic)
-- **Layout Managers**: Different layout strategies in GUIs
+- **Algoritmos de Ordenação**: Diferentes algoritmos de ordenação (quicksort, mergesort, heapsort)
+- **Compressão**: Diferentes algoritmos de compressão (ZIP, RAR, GZIP)
+- **Validação**: Diferentes strategies de validação de dados
+- **Métodos de Pagamento**: Diferentes métodos de pagamento (cartão de crédito, PayPal, cripto)
+- **Planejamento de Rotas**: Diferentes algoritmos de roteamento (mais curto, mais rápido, panorâmico)
+- **Gerenciadores de Layout**: Diferentes strategies de layout em GUIs
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Flyweight**](011_flyweight.md): Strategy objects often make good flyweights
-- [**State**](008_state.md): State can be considered an extension of Strategy; both based on composition; but State lets State object change the Context's state; Strategy just varies the algorithm
-- [**Template Method**](010_template-method.md): Defines algorithm skeleton; Strategy defines complete family of algorithms
-- [**Command**](002_command.md): Strategy can use Command to parameterize objects with action
-- [**Decorator**](009_decorator.md): Changes object's skin; Strategy changes its guts
+- [**Flyweight**](011_flyweight.md): Objetos Strategy frequentemente fazem bons flyweights
+- [**State**](008_state.md): State pode ser considerado uma extensão de Strategy; ambos baseados em composição; mas State permite que o objeto de estado mude o estado do Context; Strategy apenas varia o algoritmo
+- [**Template Method**](010_template-method.md): Define o esqueleto do algoritmo; Strategy define família completa de algoritmos
+- [**Command**](002_command.md): Strategy pode usar Command para parametrizar objetos com ação
+- [**Decorator**](009_decorator.md): Muda a aparência do objeto; Strategy muda suas entranhas
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): add strategies without modifying context
-- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): eliminates algorithm conditionals
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): each strategy one responsibility
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): context depends on interface
-- [037 - Prohibition of Flag Arguments](../../clean-code/017_proibicao-argumentos-sinalizadores.md): replaces boolean flags
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): adicionar strategies sem modificar o context
+- [002 - Prohibition of ELSE Clause](../../object-calisthenics/002_proibicao-clausula-else.md): elimina condicionais de algoritmo
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): cada strategy uma responsabilidade
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): context depende da interface
+- [037 - Prohibition of Flag Arguments](../../clean-code/proibicao-argumentos-sinalizadores.md): substitui flags booleanas
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

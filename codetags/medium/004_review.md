@@ -209,8 +209,8 @@ function neverReviewed() { }
 
 ## Rules Relacionadas
 
-- [clean-code/006 - Comments](../../clean-code/006_qualidade-comentarios-porque.md): REVIEW comunica incerteza
-- [clean-code/012 - Test Coverage](../../clean-code/012_cobertura-teste-minima-qualidade.md): código revisado deve ter testes
+- [clean-code/006 - Comments](../../clean-code/qualidade-comentarios-porque.md): REVIEW comunica incerteza
+- [clean-code/012 - Test Coverage](../../clean-code/cobertura-teste-minima-qualidade.md): código revisado deve ter testes
 
 ---
 

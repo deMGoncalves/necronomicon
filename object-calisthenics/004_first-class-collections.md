@@ -1,4 +1,4 @@
-# Mandatory Use of First Class Collections
+# Uso Obrigatório de Coleções de Primeira Classe
 
 **ID**: STRUCTURAL-004
 **Severity**: 🟠 High
@@ -6,44 +6,44 @@
 
 ---
 
-## What it is
+## O que é
 
-Determines that any collection (list, array, map) with business logic or associated behavior must be encapsulated in a dedicated class (*First Class Collection*).
+Determina que qualquer coleção (lista, array, map) com lógica de negócio ou comportamento associado deve ser encapsulada em uma classe dedicada (*First Class Collection*).
 
-## Why it matters
+## Por que importa
 
-Native collections violate SRP if they have distributed manipulation logic. Encapsulating the collection centralizes responsibility, facilitates adding behaviors (e.g., filters, sums), and prevents internal state from being exposed and modified by clients.
+Coleções nativas violam o SRP se possuírem lógica de manipulação distribuída. Encapsular a coleção centraliza a responsabilidade, facilita a adição de comportamentos (por exemplo, filtros, somas) e impede que o estado interno seja exposto e modificado pelos clientes.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Native collection types (Array, List, Map) must not be passed as parameters or returned by public methods, except for pure DTOs.
-- [ ] Each collection with domain meaning must be wrapped by a dedicated class (e.g., `OrderList`, `Employees`).
-- [ ] The collection class must provide behavior methods (e.g., `add()`, `filterByStatus()`), and not just direct access to elements.
+- [ ] Tipos de coleção nativa (Array, List, Map) não devem ser passados como parâmetros ou retornados por métodos públicos, exceto em DTOs puros.
+- [ ] Cada coleção com significado de domínio deve ser envolvida por uma classe dedicada (por exemplo, `OrderList`, `Employees`).
+- [ ] A classe da coleção deve fornecer métodos de comportamento (por exemplo, `add()`, `filterByStatus()`), e não apenas acesso direto aos elementos.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Low-Level Interfaces**: Collections used purely as internal data structures without associated business logic (e.g., `tokens` in a *scanner*).
-- **Framework APIs**: Use of collections in Framework interfaces (e.g., React, ORMs) that require them.
+- **Interfaces de Baixo Nível**: Coleções usadas puramente como estruturas de dados internas sem lógica de negócio associada (por exemplo, `tokens` em um *scanner*).
+- **APIs de Framework**: Uso de coleções em interfaces de Framework (por exemplo, React, ORMs) que as exigem.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check the use of `Array.prototype` (map, filter, reduce) in methods of classes that are not *First Class Collections*.
+Verificar o uso de `Array.prototype` (map, filter, reduce) em métodos de classes que não são *First Class Collections*.
 
-### Automatic
+### Automático
 
-ESLint: Custom rules to prohibit returning `Array` in domain classes.
+ESLint: Regras customizadas para proibir o retorno de `Array` em classes de domínio.
 
-## Related to
+## Relacionado a
 
-- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reinforces
-- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reinforces
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reinforces
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): complements
-- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complements
+- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): reforça
+- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reforça
+- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reforça
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): complementa
+- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

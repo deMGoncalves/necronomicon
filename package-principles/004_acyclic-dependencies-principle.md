@@ -6,42 +6,42 @@
 
 ---
 
-## What it is
+## O que é
 
-The dependency graph between packages must be acyclic, meaning there must be no circular dependencies between modules.
+O grafo de dependências entre pacotes deve ser acíclico, ou seja, não deve haver dependências circulares entre módulos.
 
-## Why it matters
+## Por que importa
 
-Circular dependencies create a tight knot where classes in involved modules become inseparable. This prevents isolated testing, makes deployment more complex, and makes individual module reuse impossible.
+Dependências circulares criam um nó apertado onde as classes dos módulos envolvidos se tornam inseparáveis. Isso impede testes isolados, torna o deploy mais complexo e impossibilita a reutilização individual dos módulos.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] It is prohibited for Module A to depend on Module B, and Module B to depend on Module A.
-- [ ] Circular modules (with dependency loops) must be immediately broken via DIP (extracting common interface).
-- [ ] The dependency graph analysis must result in a Directed Acyclic Graph (DAG).
+- [ ] É proibido que o Módulo A dependa do Módulo B e que o Módulo B dependa do Módulo A.
+- [ ] Módulos circulares (com laços de dependência) devem ser imediatamente quebrados via DIP (extraindo interface comum).
+- [ ] A análise do grafo de dependências deve resultar em um Directed Acyclic Graph (DAG).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Infrastructure Classes**: Circular dependencies between classes *internal* to the same package, as long as they don't involve the public interface.
+- **Classes de Infraestrutura**: Dependências circulares entre classes *internas* ao mesmo pacote, desde que não envolvam a interface pública.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for `import { B } from 'module-b'` in `module-a` and `import { A } from 'module-a'` in `module-b`.
+Buscar por `import { B } from 'module-b'` em `module-a` e `import { A } from 'module-a'` em `module-b`.
 
-### Automatic
+### Automático
 
-Dependency analysis: `dependency-graph-analysis` (detects cycles).
+Análise de dependências: `dependency-graph-analysis` (detecta ciclos).
 
-## Related to
+## Relacionado a
 
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reinforces
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reinforces
-- [019 - Stable Dependencies Principle](../package-principles/005_stable-dependencies-principle.md): complements
-- [041 - Explicit Dependency Declaration](../twelve-factor/002_explicit-dependency-declaration.md): complements
+- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reforça
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reforça
+- [019 - Stable Dependencies Principle](../package-principles/005_stable-dependencies-principle.md): complementa
+- [041 - Explicit Dependency Declaration](../twelve-factor/002_explicit-dependency-declaration.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

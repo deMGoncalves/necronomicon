@@ -1,148 +1,148 @@
 # Identity Map
 
-**Classification**: Object-Relational Behavioral Pattern
+**Classificação**: Padrão Object-Relational Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Ensures that each object is loaded only once by keeping every loaded object in a map. Looks up objects using the map to avoid duplicates and ensure only one instance of an object with a given ID exists in memory.
+Garante que cada objeto seja carregado apenas uma vez, mantendo todo objeto carregado em um mapa. Consulta objetos usando o mapa para evitar duplicatas e assegurar que exista apenas uma instância de um objeto com determinado ID em memória.
 
-## Also Known As
+## Também Conhecido Como
 
 - Object Cache
 - Session Cache
 - First-Level Cache
 
-## Motivation
+## Motivação
 
-When you load an object from database multiple times in the same session, without Identity Map you'll have multiple copies in memory. This causes problems: changes in one copy don't appear in another, identity comparisons fail, and conflicting updates can corrupt data.
+Quando você carrega um objeto do banco de dados múltiplas vezes na mesma sessão, sem o Identity Map você terá várias cópias em memória. Isso causa problemas: mudanças em uma cópia não aparecem em outra, comparações de identidade falham e atualizações conflitantes podem corromper os dados.
 
-Identity Map solves this by maintaining a map of already-loaded objects, indexed by ID. When code requests an object by ID, Identity Map first checks map. If object is already there, returns existing reference. If not, loads from database, adds to map, and returns. This ensures only one instance of object with given ID exists in session.
+O Identity Map resolve isso mantendo um mapa de objetos já carregados, indexados por ID. Quando o código solicita um objeto por ID, o Identity Map verifica primeiro o mapa. Se o objeto já estiver lá, retorna a referência existente. Se não, carrega do banco de dados, adiciona ao mapa e retorna. Isso garante que apenas uma instância do objeto com determinado ID exista na sessão.
 
-For example, if you load Person(5) twice, without Identity Map you'd have two different instances. With Identity Map, both requests return the same instance. Changes made via one reference are visible through the other because it's the same object. This maintains consistency and avoids subtle state problems.
+Por exemplo, se você carregar Person(5) duas vezes, sem o Identity Map você teria duas instâncias diferentes. Com o Identity Map, ambas as requisições retornam a mesma instância. Mudanças feitas por uma referência são visíveis pela outra, pois é o mesmo objeto. Isso mantém a consistência e evita problemas sutis de estado.
 
-## Applicability
+## Aplicabilidade
 
-Use Identity Map when:
+Use Identity Map quando:
 
-- Same objects are accessed multiple times in a session
-- Object identity (reference) needs to be preserved
-- Session or Unit of Work is in use
-- Performance of repeated reads needs to be optimized
-- State consistency within session is critical
-- Multiple queries may return the same objects
+- Os mesmos objetos são acessados múltiplas vezes em uma sessão
+- A identidade (referência) dos objetos precisa ser preservada
+- Session ou Unit of Work estão sendo utilizados
+- A performance de leituras repetidas precisa ser otimizada
+- A consistência de estado dentro da sessão é crítica
+- Múltiplas queries podem retornar os mesmos objetos
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Uses: Repository or Data Mapper
+└── Usa: Repository ou Data Mapper
 
 Repository/Data Mapper
-└── Queries: Identity Map
+└── Consulta: Identity Map
 
 Identity Map
 ├── map: Map<ID, Object>
 ├── get(id): Object
-│   └── If exists: return cached
-│   └── If not: load from DB, cache, return
+│   └── Se existe: retorna do cache
+│   └── Se não: carrega do BD, armazena no cache, retorna
 ├── add(id, object)
 └── remove(id)
 
-Flow:
-1. Client requests Person(5)
-2. Mapper queries IdentityMap.get(5)
-3. If Person(5) already in map → returns cached
-4. If not → loads from DB
-5. Adds to map via IdentityMap.add(5, person)
-6. Returns person
-7. Next call for Person(5) → returns from map
+Fluxo:
+1. Client solicita Person(5)
+2. Mapper consulta IdentityMap.get(5)
+3. Se Person(5) já estiver no mapa → retorna do cache
+4. Se não → carrega do BD
+5. Adiciona ao mapa via IdentityMap.add(5, person)
+6. Retorna person
+7. Próxima chamada para Person(5) → retorna do mapa
 ```
 
-## Participants
+## Participantes
 
-- [**Identity Map**](002_identity-map.md): Map maintaining loaded objects indexed by ID
-- **Object Key**: ID or compound key used to identify object
-- **Cached Object**: Object stored in map
-- **Data Mapper/Repository**: Uses Identity Map to ensure identity
-- **Session**: Lifetime scope of Identity Map (usually per session/request)
+- [**Identity Map**](002_identity-map.md): Mapa que mantém os objetos carregados indexados por ID
+- **Object Key**: ID ou chave composta usada para identificar o objeto
+- **Cached Object**: Objeto armazenado no mapa
+- **Data Mapper/Repository**: Usa o Identity Map para garantir a identidade
+- **Session**: Escopo de vida do Identity Map (geralmente por sessão/requisição)
 
-## Collaborations
+## Colaborações
 
-- Client requests object via Repository or Data Mapper
-- Mapper checks Identity Map first using object ID
-- If object is in map, Mapper returns cached reference
-- If object not in map, Mapper loads from database
-- Mapper adds newly loaded object to Identity Map
-- Mapper returns object to Client
-- Any subsequent request for same ID returns same instance
-- When session ends, Identity Map is discarded
+- Client solicita objeto via Repository ou Data Mapper
+- Mapper verifica o Identity Map primeiro usando o ID do objeto
+- Se o objeto estiver no mapa, Mapper retorna a referência em cache
+- Se o objeto não estiver no mapa, Mapper carrega do banco de dados
+- Mapper adiciona o objeto recém-carregado ao Identity Map
+- Mapper retorna o objeto ao Client
+- Qualquer requisição subsequente pelo mesmo ID retorna a mesma instância
+- Quando a sessão termina, o Identity Map é descartado
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Identity guaranteed**: Only one instance per ID in session
-- **Performance**: Avoids repeated queries for same data
-- **Consistency**: Changes visible through all references
-- **Automatic cache**: First-level cache transparent
-- **Simplicity**: Client doesn't need to manage cache manually
-- **Prevents aliasing bugs**: Avoids problems of multiple copies
+- **Identidade garantida**: Apenas uma instância por ID na sessão
+- **Performance**: Evita queries repetidas para os mesmos dados
+- **Consistência**: Mudanças visíveis por todas as referências
+- **Cache automático**: Cache de primeiro nível transparente
+- **Simplicidade**: Client não precisa gerenciar cache manualmente
+- **Previne bugs de aliasing**: Evita problemas de múltiplas cópias
 
-### Disadvantages
+### Desvantagens
 
-- **Memory overhead**: Keeps all loaded objects in memory
-- **Lifecycle management**: Needs to clear map when session ends
-- **Concurrency**: Can hide changes made by other sessions
-- **Complexity**: Adds cache management layer
-- **Memory leaks**: If not cleaned properly can cause leaks
-- **Stale data**: Cached data can become outdated
+- **Overhead de memória**: Mantém todos os objetos carregados em memória
+- **Gerenciamento de ciclo de vida**: Precisa limpar o mapa quando a sessão termina
+- **Concorrência**: Pode ocultar mudanças feitas por outras sessões
+- **Complexidade**: Adiciona uma camada de gerenciamento de cache
+- **Memory leaks**: Se não limpo corretamente, pode causar vazamentos
+- **Dados desatualizados**: Dados em cache podem ficar desatualizados
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Map scope**: Usually per session/request; not global
-2. **Key type**: Simple ID or compound key (class + ID)
-3. **Cleanup**: When and how to clear the map
-4. **Thread safety**: If needed for concurrent access
-5. **Weak references**: Use to allow GC of unused objects
-6. **Multiple maps**: One map per entity type vs single map
+1. **Escopo do mapa**: Geralmente por sessão/requisição; não global
+2. **Tipo da chave**: ID simples ou chave composta (classe + ID)
+3. **Limpeza**: Quando e como limpar o mapa
+4. **Thread safety**: Se necessário para acesso concorrente
+5. **Weak references**: Usar para permitir GC de objetos não utilizados
+6. **Múltiplos mapas**: Um mapa por tipo de entidade vs. mapa único
 
-### Techniques
+### Técnicas
 
-- **Simple Map**: Use native Map/HashMap structure
-- **Per-Type Maps**: Separate map for each entity type
-- **Weak References**: Allow garbage collection if memory is problem
-- **Session Scope**: Associate map with session or Unit of Work
-- **Key Strategy**: Use class + ID as compound key
-- **Clear on Close**: Clear map when session closes
+- **Mapa Simples**: Usar estrutura nativa Map/HashMap
+- **Mapas por Tipo**: Mapa separado para cada tipo de entidade
+- **Weak References**: Permitir coleta de lixo se memória for problema
+- **Escopo de Sessão**: Associar o mapa à sessão ou Unit of Work
+- **Estratégia de Chave**: Usar classe + ID como chave composta
+- **Limpar ao Fechar**: Limpar o mapa quando a sessão for encerrada
 
-## Known Uses
+## Usos Conhecidos
 
-- **Hibernate Session**: First-level cache is Identity Map
-- **Entity Framework Context**: Change tracker is Identity Map
-- **JPA EntityManager**: Persistence context is Identity Map
-- **NHibernate Session**: Session cache
-- **SQLAlchemy Session**: Identity map built-in
-- **TypeORM EntityManager**: Maintains identity map
+- **Hibernate Session**: Cache de primeiro nível é o Identity Map
+- **Entity Framework Context**: Change tracker é o Identity Map
+- **JPA EntityManager**: Contexto de persistência é o Identity Map
+- **NHibernate Session**: Cache de sessão
+- **SQLAlchemy Session**: Identity map embutido
+- **TypeORM EntityManager**: Mantém identity map
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Unit of Work**](001_unit-of-work.md): Works together; UoW uses Identity Map
-- [**Data Mapper**](../data-source/004_data-mapper.md): Mapper queries Identity Map
-- [**Repository**](016_repository.md): Repository uses Identity Map internally
-- [**Lazy Load**](003_lazy-load.md): Identity Map can contain lazy proxies
-- [**GoF Flyweight**](../../gof/structural/006_flyweight.md): Similar; shares objects
-- **Second Level Cache**: Identity Map is first-level cache
+- [**Unit of Work**](001_unit-of-work.md): Trabalham juntos; UoW usa o Identity Map
+- [**Data Mapper**](../data-source/004_data-mapper.md): Mapper consulta o Identity Map
+- [**Repository**](016_repository.md): Repository usa o Identity Map internamente
+- [**Lazy Load**](003_lazy-load.md): Identity Map pode conter proxies lazy
+- [**GoF Flyweight**](../../gof/structural/006_flyweight.md): Similar; compartilha objetos
+- **Second Level Cache**: Identity Map é o cache de primeiro nível
 
-### Relation to Rules
+### Relação com Rules
 
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): Identity Map with immutables is thread-safe
-- [045 - Stateless Processes](../../twelve-factor/006_processos-stateless.md): Identity Map is state; scope per request
+- [029 - Imutabilidade de Objetos](../../clean-code/imutabilidade-objetos-freeze.md): Identity Map com imutáveis é thread-safe
+- [045 - Processos Stateless](../../twelve-factor/006_processos-stateless.md): Identity Map é estado; escopo por requisição
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

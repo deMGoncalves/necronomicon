@@ -1,47 +1,47 @@
 # Service Layer
 
-**Classification**: Domain Logic Pattern
+**Classificação**: Padrão de Lógica de Domínio
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Define application boundary with a service layer that establishes a set of available operations and coordinates application response in each operation. Encapsulates application logic and controls transactions.
+Definir o limite da aplicação com uma camada de serviço que estabelece um conjunto de operações disponíveis e coordena a resposta da aplicação em cada operação. Encapsula a lógica da aplicação e controla as transações.
 
-## Also Known As
+## Também Conhecido Como
 
 - Application Service Layer
 - Use Case Layer
 - Application Facade
 
-## Motivation
+## Motivação
 
-Enterprise applications typically expose functionality through multiple interfaces - web application, REST API, mobile interface, batch processes. Each interface needs the same business operations but in different contexts. Without Service Layer, business logic gets duplicated or scattered across presentation layers.
+Aplicações corporativas tipicamente expõem funcionalidades por meio de múltiplas interfaces — aplicação web, API REST, interface mobile, processos em lote. Cada interface precisa das mesmas operações de negócio, mas em contextos diferentes. Sem a Service Layer, a lógica de negócio é duplicada ou espalhada pelas camadas de apresentação.
 
-Service Layer defines the application boundary by establishing a set of available operations and coordinating response in each operation. When a client requests to create an order, Service Layer initiates transaction, validates data, coordinates necessary domain objects (Customer, Product, Order), persists changes, and commits transaction. Client doesn't need to know internal complexity.
+A Service Layer define o limite da aplicação estabelecendo um conjunto de operações disponíveis e coordenando a resposta em cada operação. Quando um cliente solicita a criação de um pedido, a Service Layer inicia a transação, valida os dados, coordena os objetos de domínio necessários (Customer, Product, Order), persiste as mudanças e confirma a transação. O cliente não precisa conhecer a complexidade interna.
 
-This approach creates a single entry point for application logic, facilitating transaction control, security, authorization, and auditing. Service Layer can be thin (merely delegating to Domain Model) or thicker (containing significant coordination logic), depending on complexity.
+Essa abordagem cria um único ponto de entrada para a lógica da aplicação, facilitando o controle de transações, segurança, autorização e auditoria. A Service Layer pode ser fina (delegando apenas ao Domain Model) ou mais espessa (contendo lógica de coordenação significativa), dependendo da complexidade.
 
-## Applicability
+## Aplicabilidade
 
-Use Service Layer when:
+Use Service Layer quando:
 
-- Application has multiple types of clients (web, mobile, API, batch)
-- Business logic needs to be reused across different interfaces
-- Transaction management needs to be centralized and consistent
-- Clear application boundary facilitates testing and maintenance
-- Security and authorization need to be applied uniformly
-- Integration with external systems requires well-defined interface
+- A aplicação tiver múltiplos tipos de clientes (web, mobile, API, lote)
+- A lógica de negócio precisar ser reutilizada entre diferentes interfaces
+- O gerenciamento de transações precisar ser centralizado e consistente
+- Um limite claro de aplicação facilitar os testes e a manutenção
+- Segurança e autorização precisarem ser aplicadas de forma uniforme
+- A integração com sistemas externos exigir uma interface bem definida
 
-## Structure
+## Estrutura
 
 ```
-Clients (multiple types)
+Clientes (múltiplos tipos)
 ├── Web UI
 ├── Mobile App
 ├── REST API
 └── Batch Jobs
-    └── All call: Service Layer
+    └── Todos chamam: Service Layer
 
 Service Layer
 ├── OrderService
@@ -55,109 +55,109 @@ Service Layer
     ├── addProduct(productData)
     └── updateInventory(productId, quantity)
 
-    └── Each service:
-        ├── Initiates transaction
-        ├── Coordinates Domain Objects
-        ├── Applies business rules
-        └── Commits/rollbacks transaction
+    └── Cada serviço:
+        ├── Inicia transação
+        ├── Coordena Objetos de Domínio
+        ├── Aplica regras de negócio
+        └── Confirma/reverte transação
 
-Domain Layer
+Camada de Domínio
 ├── Domain Model (Entities, Value Objects)
 └── Domain Services
 
-Data Source Layer
+Camada de Fonte de Dados
 └── Repositories, Data Mappers
 ```
 
-## Participants
+## Participantes
 
-- **Service Layer Interface**: Defines contracts of available application operations
-- **Application Service**: Implements application operations; coordinates work
-- **Domain Objects**: Entities and Value Objects that execute domain logic
-- **Domain Services**: Domain operations that don't belong to entities
-- **Repositories**: Provide access to persisted aggregates
-- **Transaction Manager**: Manages transactional boundaries
-- **Clients**: Presentation layer, APIs, other systems that invoke services
+- **Interface da Service Layer**: Define os contratos das operações disponíveis na aplicação
+- **Application Service**: Implementa as operações da aplicação; coordena o trabalho
+- **Domain Objects**: Entities e Value Objects que executam a lógica de domínio
+- **Domain Services**: Operações de domínio que não pertencem às entidades
+- **Repositories**: Fornecem acesso aos aggregates persistidos
+- **Transaction Manager**: Gerencia os limites transacionais
+- **Clientes**: Camada de apresentação, APIs, outros sistemas que invocam os serviços
 
-## Collaborations
+## Colaborações
 
-- Client invokes operation on Application Service through interface
-- Service initiates transaction and obtains necessary domain objects via Repository
-- Service coordinates interactions between Domain Objects to execute operation
-- Domain Objects execute business logic as coordinated by Service
-- Service persists changes through Repository or Unit of Work
-- Service commits transaction if operation successful or rollback on error
-- Service returns result (DTO or domain object) to Client
+- O cliente invoca uma operação no Application Service por meio da interface
+- O serviço inicia a transação e obtém os objetos de domínio necessários via Repository
+- O serviço coordena as interações entre os Objetos de Domínio para executar a operação
+- Os Objetos de Domínio executam a lógica de negócio conforme coordenado pelo Serviço
+- O serviço persiste as mudanças por meio do Repository ou Unit of Work
+- O serviço confirma a transação se a operação for bem-sucedida ou a reverte em caso de erro
+- O serviço retorna o resultado (DTO ou objeto de domínio) ao Cliente
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Clear application interface**: Well-defined and documented operations
-- **Reusability**: Shared logic between multiple clients
-- **Transaction management**: Transactions controlled consistently
-- **Separation of responsibilities**: Presentation separated from business logic
-- **Testability**: Services can be tested independently of UI
-- **Centralized security**: Authorization and authentication applied uniformly
+- **Interface clara da aplicação**: Operações bem definidas e documentadas
+- **Reusabilidade**: Lógica compartilhada entre múltiplos clientes
+- **Gerenciamento de transações**: Transações controladas de forma consistente
+- **Separação de responsabilidades**: Apresentação separada da lógica de negócio
+- **Testabilidade**: Serviços podem ser testados independentemente da UI
+- **Segurança centralizada**: Autorização e autenticação aplicadas de forma uniforme
 
-### Disadvantages
+### Desvantagens
 
-- **Additional layer**: Increases architectural complexity
-- **Anemia risk**: Can become simple passthrough without added value
-- **Granularity decisions**: Difficult to decide correct operation granularity
-- **Over-engineering**: Can be unnecessary overhead for simple applications
-- **Duplication**: Risk of duplicating logic that should be in domain
-- **Coupling**: Clients become coupled to service contracts
+- **Camada adicional**: Aumenta a complexidade arquitetural
+- **Risco de anemia**: Pode se tornar um simples repasse sem valor agregado
+- **Decisões de granularidade**: Difícil decidir a granularidade correta das operações
+- **Overengineering**: Pode ser uma sobrecarga desnecessária para aplicações simples
+- **Duplicação**: Risco de duplicar lógica que deveria estar no domínio
+- **Acoplamento**: Os clientes ficam acoplados aos contratos de serviço
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Operation granularity**: Define operations representing complete use cases, not generic CRUD
-2. **Transaction management**: Decide where transactions start and end (usually in Service Layer)
-3. **Service thickness**: Decide how much logic goes in Service vs Domain Model
-4. **DTOs vs Domain Objects**: Define what crosses Service Layer boundary
-5. **Error handling**: Translate domain exceptions to appropriate format
-6. **Stateless**: Keep Services stateless between calls
+1. **Granularidade das operações**: Defina operações que representem casos de uso completos, não CRUD genérico
+2. **Gerenciamento de transações**: Decida onde as transações começam e terminam (normalmente na Service Layer)
+3. **Espessura do serviço**: Decida quanta lógica vai no Serviço vs no Domain Model
+4. **DTOs vs Objetos de Domínio**: Defina o que atravessa o limite da Service Layer
+5. **Tratamento de erros**: Traduza exceções de domínio para o formato apropriado
+6. **Stateless**: Mantenha os Serviços sem estado entre chamadas
 
-### Techniques
+### Técnicas
 
-- **Facade Pattern**: Service Layer as Facade over complex Domain Model
-- **Transaction Script Organization**: Group Transaction Scripts into Services
-- **Domain Model Coordination**: Coordinate rich Domain Model objects
-- **DTO Assembly**: Assemble DTOs from Domain Objects for return
-- **Unit of Work Integration**: Use Unit of Work to manage persistence
-- **Dependency Injection**: Inject dependencies (Repositories, Domain Services)
+- **Padrão Facade**: Service Layer como Facade sobre um Domain Model complexo
+- **Organização de Transaction Scripts**: Agrupe Transaction Scripts em Serviços
+- **Coordenação do Domain Model**: Coordene objetos ricos do Domain Model
+- **Montagem de DTOs**: Monte DTOs a partir de Objetos de Domínio para retorno
+- **Integração com Unit of Work**: Use Unit of Work para gerenciar a persistência
+- **Injeção de Dependência**: Injete dependências (Repositories, Domain Services)
 
-## Known Uses
+## Usos Conhecidos
 
-- **Enterprise Java Applications**: EJB Session Beans, Spring Services
-- **ASP.NET Applications**: Service classes in layered architecture
-- **REST APIs**: Service layer exposing HTTP endpoints
-- **Microservices**: Each microservice with its Service Layer
-- **CQRS Implementations**: Command Handlers and Query Handlers
-- **Clean Architecture**: Use Case Interactors in application layer
+- **Aplicações Java Corporativas**: EJB Session Beans, Spring Services
+- **Aplicações ASP.NET**: Classes de serviço em arquitetura em camadas
+- **APIs REST**: Camada de serviço expondo endpoints HTTP
+- **Microsserviços**: Cada microsserviço com sua Service Layer
+- **Implementações CQRS**: Command Handlers e Query Handlers
+- **Clean Architecture**: Use Case Interactors na camada de aplicação
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Transaction Script**](001_transaction-script.md): Service Layer can contain and organize Scripts
-- [**Domain Model**](002_domain-model.md): Service Layer coordinates rich Domain Model
-- [**Table Module**](003_table-module.md): Service Layer can use Table Modules
-- [**Remote Facade**](055_remote-facade.md): Service Layer often exposed as Remote Facade
-- [**Data Transfer Object**](056_data-transfer-object.md): DTOs cross Service boundary
-- [**Unit of Work**](../object-relational/001_unit-of-work.md): Service Layer manages Unit of Work
-- [**Repository**](../object-relational/016_repository.md): Service Layer uses Repositories for data access
-- [**GoF Facade**](../../gof/structural/005_facade.md): Service Layer is application Facade
+- [**Transaction Script**](001_transaction-script.md): A Service Layer pode conter e organizar Scripts
+- [**Domain Model**](002_domain-model.md): A Service Layer coordena o Domain Model rico
+- [**Table Module**](003_table-module.md): A Service Layer pode usar Table Modules
+- [**Remote Facade**](055_remote-facade.md): A Service Layer frequentemente é exposta como Remote Facade
+- [**Data Transfer Object**](056_data-transfer-object.md): DTOs cruzam o limite da Service Layer
+- [**Unit of Work**](../object-relational/001_unit-of-work.md): A Service Layer gerencia o Unit of Work
+- [**Repository**](../object-relational/016_repository.md): A Service Layer usa Repositories para acesso a dados
+- [**GoF Facade**](../../gof/structural/005_facade.md): A Service Layer é a Facade da aplicação
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): coordination as responsibility
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): depend on abstractions
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extensible via new services
-- [038 - Conformance with CQS](../../clean-code/018_conformidade-principio-inversao-consulta.md): separate commands and queries
-- [032 - Test Coverage](../../clean-code/012_cobertura-teste-minima-qualidade.md): service testability
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): coordenação como responsabilidade
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): depender de abstrações
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): extensível via novos serviços
+- [038 - Conformance with CQS](../../clean-code/conformidade-principio-inversao-consulta.md): separar comandos e consultas
+- [032 - Test Coverage](../../clean-code/cobertura-teste-minima-qualidade.md): testabilidade dos serviços
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

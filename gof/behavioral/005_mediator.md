@@ -1,49 +1,49 @@
 # Mediator
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Define an object that encapsulates how a set of objects interact. Mediator promotes loose coupling by keeping objects from referring to each other explicitly, and it lets you vary their interaction independently.
+Definir um objeto que encapsula como um conjunto de objetos interage. Mediator promove o acoplamento fraco ao evitar que objetos se refiram uns aos outros explicitamente, e permite variar suas interações independentemente.
 
-## Also Known As
+## Também Conhecido Como
 
 - Mediator
 - Intermediary
 
-## Motivation
+## Motivação
 
-Object-oriented design encourages the distribution of behavior among objects. Such distribution can result in many connections between objects; in the worst case, every object knows about every other. Although partitioning a system into many objects generally enhances reusability, proliferating interconnections tend to reduce it again.
+O design orientado a objetos incentiva a distribuição de comportamento entre objetos. Tal distribuição pode resultar em muitas conexões entre objetos; no pior caso, cada objeto conhece todos os outros. Embora particionar um sistema em muitos objetos geralmente melhore a reusabilidade, a proliferação de interconexões tende a reduzi-la novamente.
 
-Lots of interconnections make it less likely that an object can work without the support of others. Mediator addresses this by encapsulating collective behavior in a separate object. A mediator is responsible for controlling and coordinating the interactions of a group of objects. The mediator serves as an intermediary that keeps objects in the group from referring to each other explicitly. The objects only know the mediator, reducing the number of interconnections.
+Muitas interconexões tornam menos provável que um objeto possa funcionar sem o suporte dos outros. Mediator resolve isso encapsulando o comportamento coletivo em um objeto separado. Um mediator é responsável por controlar e coordenar as interações de um grupo de objetos. Ele serve como um intermediário que evita que os objetos do grupo se refiram uns aos outros explicitamente. Os objetos conhecem apenas o mediator, reduzindo o número de interconexões.
 
-## Applicability
+## Aplicabilidade
 
-Use the Mediator pattern when:
+Use o padrão Mediator quando:
 
-- A set of objects communicate in well-defined but complex ways
-- Reusing an object is difficult because it refers to and communicates with many other objects
-- Behavior that's distributed between several classes should be customizable without a lot of subclassing
-- You want to decouple colleagues that communicate with each other
-- You have highly coupled classes that are difficult to modify
+- Um conjunto de objetos se comunica de formas bem definidas mas complexas
+- Reutilizar um objeto é difícil porque ele se refere e se comunica com muitos outros objetos
+- O comportamento distribuído entre várias classes deve ser customizável sem muita herança
+- Você deseja desacoplar colegas que se comunicam entre si
+- Você tem classes altamente acopladas que são difíceis de modificar
 
-## Structure
+## Estrutura
 
 ```
 Mediator (Interface)
 └── notify(sender, event)
 
 ConcreteMediator implements Mediator
-├── Knows: Colleague1, Colleague2, ColleagueN
+├── Conhece: Colleague1, Colleague2, ColleagueN
 └── notify(sender, event)
-    ├── Coordinates communication between colleagues
-    └── Implements interaction logic
+    ├── Coordena a comunicação entre colegas
+    └── Implementa a lógica de interação
 
-Colleague (Interface/Abstract)
-├── Composes: Mediator
-└── Communicates via: mediator.notify(this, event)
+Colleague (Interface/Abstrato)
+├── Compõe: Mediator
+└── Comunica via: mediator.notify(this, event)
 
 ConcreteColleague1 implements Colleague
 └── operation()
@@ -54,74 +54,74 @@ ConcreteColleague2 implements Colleague
     └── mediator.notify(this, "event2")
 ```
 
-## Participants
+## Participantes
 
-- [**Mediator**](005_mediator.md): Defines interface for communicating with Colleague objects
-- **ConcreteMediator**: Implements cooperative behavior by coordinating Colleague objects; knows and maintains its colleagues
-- **Colleague classes**: Each Colleague class knows its Mediator object; each colleague communicates with its mediator whenever it would have otherwise communicated with another colleague
+- [**Mediator**](005_mediator.md): Define a interface para comunicação com objetos Colleague
+- **ConcreteMediator**: Implementa o comportamento cooperativo coordenando objetos Colleague; conhece e mantém seus colegas
+- **Classes Colleague**: Cada classe Colleague conhece seu objeto Mediator; cada colega se comunica com seu mediator sempre que se comunicaria com outro colega
 
-## Collaborations
+## Colaborações
 
-- Colleagues send and receive requests from a Mediator object
-- The mediator implements the cooperative behavior by routing requests between the appropriate colleagues
+- Colegas enviam e recebem solicitações de um objeto Mediator
+- O mediator implementa o comportamento cooperativo roteando solicitações entre os colegas adequados
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Limits subclassing**: Localizes behavior that otherwise would be distributed among several objects; changing behavior requires only subclassing Mediator
-- **Decouples colleagues**: Mediator promotes loose coupling between colleagues; can vary and reuse Colleague and Mediator classes independently
-- **Simplifies object protocols**: Replaces many-to-many communications with one-to-many; one-to-many easier to understand, maintain, and extend
-- **Abstracts object cooperation**: Mediator separates how objects cooperate from their individual logic
-- **Centralizes control**: Trades complexity of interaction for complexity in mediator
+- **Limita a herança**: Localiza o comportamento que de outra forma estaria distribuído entre vários objetos; alterar o comportamento requer apenas herdar de Mediator
+- **Desacopla colegas**: Mediator promove acoplamento fraco entre colegas; pode variar e reutilizar classes Colleague e Mediator independentemente
+- **Simplifica protocolos de objetos**: Substitui comunicações muitos-para-muitos por um-para-muitos; um-para-muitos é mais fácil de entender, manter e estender
+- **Abstrai a cooperação entre objetos**: Mediator separa como os objetos cooperam de sua lógica individual
+- **Centraliza o controle**: Troca a complexidade da interação pela complexidade no mediator
 
-### Disadvantages
+### Desvantagens
 
-- **Centralization can create monolith**: Mediator can become a complex, hard-to-maintain monolith
-- **Mediator can become God Object**: If it concentrates too many responsibilities
+- **Centralização pode criar monólito**: Mediator pode se tornar um monólito complexo e difícil de manter
+- **Mediator pode se tornar um God Object**: Se concentrar responsabilidades demais
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Omitting abstract Mediator class**: When colleagues work with only one mediator, don't need abstraction
+1. **Omitindo a classe Mediator abstrata**: Quando colegas trabalham com apenas um mediator, a abstração não é necessária
 
-2. **Colleague-Mediator communication**: Use Observer pattern to communicate state changes
+2. **Comunicação Colleague-Mediator**: Usar o padrão Observer para comunicar mudanças de estado
 
-3. **Avoiding God Mediator**: If mediator becomes too complex, split responsibilities or use Chain of Responsibility
+3. **Evitando o God Mediator**: Se o mediator se tornar muito complexo, dividir responsabilidades ou usar Chain of Responsibility
 
-### Techniques
+### Técnicas
 
-- **Observer for notifications**: Colleagues observe changes via mediator
-- **Event-based communication**: Use events to decouple further
-- **Message-based**: Use typed messages for communication
-- **Mediator chain**: Mediators can form chain for delegation
+- **Observer para notificações**: Colegas observam mudanças via mediator
+- **Comunicação baseada em eventos**: Usar eventos para desacoplar ainda mais
+- **Baseado em mensagens**: Usar mensagens tipadas para comunicação
+- **Cadeia de mediators**: Mediators podem formar uma cadeia para delegação
 
-## Known Uses
+## Usos Conhecidos
 
-- **GUI Frameworks**: Dialog boxes coordinating widgets (MVC controller)
-- **Air Traffic Control**: Coordination between planes and tower
-- **Chat Rooms**: Server mediates messages between users
-- **Event Buses**: Event mediators in applications
-- **MVC Controller**: Coordinates Model and View
-- **Service Bus**: Enterprise Service Bus coordinates services
+- **Frameworks GUI**: Caixas de diálogo coordenando widgets (controller do MVC)
+- **Controle de Tráfego Aéreo**: Coordenação entre aviões e torre
+- **Salas de Chat**: Servidor que media mensagens entre usuários
+- **Event Buses**: Mediators de eventos em aplicações
+- **MVC Controller**: Coordena Model e View
+- **Service Bus**: Enterprise Service Bus coordena serviços
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Facade**](010_facade.md): Abstracts subsystem to simplify interface; Mediator abstracts communication between cooperating colleagues
-- [**Observer**](007_observer.md): Colleagues can communicate with mediator using Observer pattern
-- [**Singleton**](../creational/005_singleton.md): Mediator is often a singleton
-- [**Strategy**](009_strategy.md): Mediator can use Strategy to vary coordination behavior
-- [**Command**](002_command.md): Commands can be mediated through mediator
+- [**Facade**](010_facade.md): Abstrai subsistema para simplificar a interface; Mediator abstrai a comunicação entre colegas cooperantes
+- [**Observer**](007_observer.md): Colegas podem se comunicar com o mediator usando o padrão Observer
+- [**Singleton**](../creational/005_singleton.md): Mediator é frequentemente um singleton
+- [**Strategy**](009_strategy.md): Mediator pode usar Strategy para variar o comportamento de coordenação
+- [**Command**](002_command.md): Commands podem ser mediados pelo mediator
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): centralize coordination
-- [005 - Call Chaining Restriction](../../object-calisthenics/005_maximo-uma-chamada-por-linha.md): avoid direct communication
-- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): colleagues notify mediator
-- [025 - Prohibition of The Blob Anti-Pattern](../../clean-code/005_proibicao-anti-pattern-the-blob.md): avoid God Mediator
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): centralizar coordenação
+- [005 - Call Chaining Restriction](../../object-calisthenics/005_maximo-uma-chamada-por-linha.md): evitar comunicação direta
+- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): colegas notificam o mediator
+- [025 - Prohibition of The Blob Anti-Pattern](../../clean-code/proibicao-anti-padrao-blob.md): evitar God Mediator
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

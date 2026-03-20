@@ -1,45 +1,45 @@
 # Table Data Gateway
 
-**Classification**: Data Source Architectural Pattern
+**Classificação**: Padrão Arquitetural de Fonte de Dados
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-An object that acts as Gateway to a database table. One instance handles all rows in the table. Methods encapsulate queries and update operations, returning data in generic structures like RecordSet.
+Um objeto que atua como Gateway para uma tabela de banco de dados. Uma instância trata todas as linhas da tabela. Os métodos encapsulam consultas e operações de atualização, retornando dados em estruturas genéricas como RecordSet.
 
-## Also Known As
+## Também Conhecido Como
 
 - Table Gateway
-- Data Access Object (partially)
+- Data Access Object (parcialmente)
 - Table DAO
 
-## Motivation
+## Motivação
 
-When application code accesses the database directly, SQL gets scattered throughout the application, making it difficult to maintain and modify the database schema. Table Data Gateway solves this by encapsulating all data access for a table in a single class.
+Quando o código da aplicação acessa o banco de dados diretamente, o SQL fica espalhado por toda a aplicação, dificultando a manutenção e a modificação do esquema do banco. O Table Data Gateway resolve isso encapsulando todo o acesso a dados de uma tabela em uma única classe.
 
-Each table has its Gateway that provides methods for common operations: insert, update, delete, find. For example, PersonGateway would have methods like insert(name, age), update(id, name, age), delete(id), findById(id), findAll(). All SQL for the Person table is isolated in this class.
+Cada tabela tem seu Gateway que fornece métodos para operações comuns: inserir, atualizar, deletar, buscar. Por exemplo, PersonGateway teria métodos como insert(name, age), update(id, name, age), delete(id), findById(id), findAll(). Todo o SQL da tabela Person fica isolado nessa classe.
 
-Gateway returns data in generic structures like RecordSet, DataTable, or dictionaries, not in specific domain objects. This keeps Gateway focused only on data access, without knowledge of business logic. Client can be Transaction Script, Table Module, or Data Mapper.
+O Gateway retorna dados em estruturas genéricas como RecordSet, DataTable ou dicionários, não em objetos de domínio específicos. Isso mantém o Gateway focado apenas no acesso a dados, sem conhecimento de lógica de negócio. O client pode ser Transaction Script, Table Module ou Data Mapper.
 
-## Applicability
+## Aplicabilidade
 
-Use Table Data Gateway when:
+Use Table Data Gateway quando:
 
-- SQL needs to be separated from domain logic and presentation
-- Multiple operations on the same table need to be reused
-- Data access should be centralized to facilitate maintenance
-- Processing operates over multiple rows simultaneously
-- Platform has good support for generic data structures (RecordSet)
-- No need to map to rich domain objects
+- O SQL precisa ser separado da lógica de domínio e de apresentação
+- Múltiplas operações na mesma tabela precisam ser reutilizadas
+- O acesso a dados deve ser centralizado para facilitar a manutenção
+- O processamento opera sobre múltiplas linhas simultaneamente
+- A plataforma tem bom suporte para estruturas de dados genéricas (RecordSet)
+- Não há necessidade de mapear para objetos de domínio ricos
 
-## Structure
+## Estrutura
 
 ```
-Client (Transaction Script, Table Module, or UI)
-└── Uses: Table Data Gateway
+Client (Transaction Script, Table Module ou UI)
+└── Usa: Table Data Gateway
 
-Table Data Gateway (one per table)
+Table Data Gateway (um por tabela)
 ├── PersonGateway
 │   ├── insert(name, email, age): id
 │   ├── update(id, name, email, age)
@@ -61,96 +61,96 @@ Table Data Gateway (one per table)
     ├── findById(id): RecordSet
     └── findAvailable(): RecordSet
 
-Database
-└── Tables (Person, Order, Product)
+Banco de Dados
+└── Tabelas (Person, Order, Product)
 ```
 
-## Participants
+## Participantes
 
-- [**Table Data Gateway**](001_table-data-gateway.md): Class encapsulating access to a specific table
-- **RecordSet/DataTable**: Generic data structure containing returned rows
-- **Database Connection**: Database connection used by Gateway
-- **SQL Statements**: SQL commands encapsulated in Gateway methods
-- **Client**: Transaction Script, Table Module, or UI using Gateway
+- [**Table Data Gateway**](001_table-data-gateway.md): Classe que encapsula o acesso a uma tabela específica
+- **RecordSet/DataTable**: Estrutura de dados genérica contendo as linhas retornadas
+- **Conexão com o Banco de Dados**: Conexão utilizada pelo Gateway
+- **Instruções SQL**: Comandos SQL encapsulados nos métodos do Gateway
+- **Client**: Transaction Script, Table Module ou UI que utiliza o Gateway
 
-## Collaborations
+## Colaborações
 
-- Client invokes method on Table Data Gateway (e.g., personGateway.findById(5))
-- Gateway assembles appropriate SQL statement for operation
-- Gateway executes SQL using database connection
-- For queries, Gateway converts results to RecordSet or similar structure
-- Gateway returns RecordSet to Client
-- Client processes data using returned generic structure
-- For updates, Gateway executes INSERT/UPDATE/DELETE and returns status
+- O Client invoca um método no Table Data Gateway (ex.: personGateway.findById(5))
+- O Gateway monta a instrução SQL adequada para a operação
+- O Gateway executa o SQL usando a conexão com o banco de dados
+- Para consultas, o Gateway converte os resultados em RecordSet ou estrutura similar
+- O Gateway retorna o RecordSet ao Client
+- O Client processa os dados usando a estrutura genérica retornada
+- Para atualizações, o Gateway executa INSERT/UPDATE/DELETE e retorna o status
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Centralized SQL**: All SQL for table in one place
-- **Maintainability**: Schema changes affect only Gateway
-- **Reusability**: Common queries available to all clients
-- **Testability**: Easy to create Gateway mocks for tests
-- **Separation of responsibilities**: Data access separated from logic
-- **Simplicity**: Simpler than full Data Mapper
+- **SQL centralizado**: Todo o SQL da tabela em um só lugar
+- **Manutenibilidade**: Mudanças no esquema afetam apenas o Gateway
+- **Reusabilidade**: Consultas comuns disponíveis para todos os clients
+- **Testabilidade**: Fácil criar mocks do Gateway para testes
+- **Separação de responsabilidades**: Acesso a dados separado da lógica
+- **Simplicidade**: Mais simples do que um Data Mapper completo
 
-### Disadvantages
+### Desvantagens
 
-- **Data structure coupling**: Clients coupled to specific RecordSet
-- **Granularity**: One Gateway per table may be too much for large schemas
-- **No domain objects**: Doesn't map to rich objects; returns generic data
-- **Complex queries**: Difficult to handle complex joins between multiple tables
-- **Identity**: Doesn't manage object identity
-- **Relationships**: Difficult to navigate relationships between entities
+- **Acoplamento à estrutura de dados**: Clients acoplados ao RecordSet específico
+- **Granularidade**: Um Gateway por tabela pode ser excessivo para esquemas grandes
+- **Sem objetos de domínio**: Não mapeia para objetos ricos; retorna dados genéricos
+- **Consultas complexas**: Difícil tratar joins complexos entre múltiplas tabelas
+- **Identidade**: Não gerencia identidade de objetos
+- **Relacionamentos**: Difícil navegar relacionamentos entre entidades
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **One Gateway per table**: Create separate class for each database table
-2. **Finder methods**: Methods that return RecordSets (findById, findByXXX)
-3. **Command methods**: Methods for INSERT, UPDATE, DELETE
-4. **Connection management**: Decide if Gateway manages connection or receives it
-5. **Data return**: Use RecordSet, DataTable, array of dictionaries, or similar
-6. **Transactions**: Manage transactions outside Gateway (in Service Layer)
+1. **Um Gateway por tabela**: Crie uma classe separada para cada tabela do banco de dados
+2. **Métodos finder**: Métodos que retornam RecordSets (findById, findByXXX)
+3. **Métodos de comando**: Métodos para INSERT, UPDATE, DELETE
+4. **Gerenciamento de conexão**: Decida se o Gateway gerencia a conexão ou a recebe
+5. **Retorno de dados**: Use RecordSet, DataTable, array de dicionários ou similar
+6. **Transações**: Gerencie transações fora do Gateway (na Service Layer)
 
-### Techniques
+### Técnicas
 
-- **Static Methods**: Use static methods if Gateway doesn't maintain state
-- **Instance per Table**: Create Gateway instance to use
-- **Generic RecordSet**: Return platform's generic data structures
-- **Finder Methods**: find* methods for various queries
-- **Command Methods**: insert/update/delete methods for modifications
-- **Connection Injection**: Inject connection instead of creating internally
+- **Métodos Estáticos**: Use métodos estáticos se o Gateway não mantiver estado
+- **Instância por Tabela**: Crie uma instância do Gateway para usar
+- **RecordSet Genérico**: Retorne as estruturas de dados genéricas da plataforma
+- **Métodos Finder**: Métodos find* para diversas consultas
+- **Métodos de Comando**: Métodos insert/update/delete para modificações
+- **Injeção de Conexão**: Injete a conexão em vez de criá-la internamente
 
-## Known Uses
+## Usos Conhecidos
 
-- **ADO.NET Applications**: TableAdapters in DataSets
-- **Java DAO Pattern**: Data Access Objects in Java applications
-- **Enterprise Applications**: Data access layer in corporate apps
-- **Legacy System Integration**: Gateway for table-based legacy systems
-- **Reporting Systems**: Data access for report generation
-- **CRUD Applications**: Simple Create-Read-Update-Delete applications
+- **Aplicações ADO.NET**: TableAdapters em DataSets
+- **Padrão DAO Java**: Data Access Objects em aplicações Java
+- **Aplicações Empresariais**: Camada de acesso a dados em aplicações corporativas
+- **Integração com Sistemas Legados**: Gateway para sistemas legados baseados em tabelas
+- **Sistemas de Relatórios**: Acesso a dados para geração de relatórios
+- **Aplicações CRUD**: Aplicações simples de Criar-Ler-Atualizar-Deletar
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Row Data Gateway**](002_row-data-gateway.md): Alternative with Gateway per row
-- [**Active Record**](003_active-record.md): Combines Gateway with domain object
-- [**Data Mapper**](004_data-mapper.md): Maps to rich domain objects
-- [**Table Module**](../domain-logic/003_table-module.md): Uses Table Data Gateway to obtain data
-- [**Transaction Script**](../domain-logic/001_transaction-script.md): Can use Gateway for access
-- [**Service Layer**](../domain-logic/004_service-layer.md): Service Layer can use Gateways
-- [**GoF Gateway**](../base/001_gateway.md): Base Gateway pattern
-- [**Record Set**](../base/011_record-set.md): Data structure returned
+- [**Row Data Gateway**](002_row-data-gateway.md): Alternativa com Gateway por linha
+- [**Active Record**](003_active-record.md): Combina Gateway com objeto de domínio
+- [**Data Mapper**](004_data-mapper.md): Mapeia para objetos de domínio ricos
+- [**Table Module**](../domain-logic/003_table-module.md): Usa o Table Data Gateway para obter dados
+- [**Transaction Script**](../domain-logic/001_transaction-script.md): Pode usar Gateway para acesso
+- [**Service Layer**](../domain-logic/004_service-layer.md): Service Layer pode usar Gateways
+- [**GoF Gateway**](../base/001_gateway.md): Padrão base Gateway
+- [**Record Set**](../base/011_record-set.md): Estrutura de dados retornada
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): Gateway responsible for access
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): client depends on interface
-- [021 - Prohibition of Duplication](../../clean-code/001_prohibition-logic-duplication.md): SQL not duplicated
-- [007 - Lines per Class Limit](../../object-calisthenics/007_limite-maximo-linhas-classe.md): concise Gateway
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): Gateway responsável pelo acesso
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): client depende da interface
+- [021 - Prohibition of Duplication](../../clean-code/proibicao-duplicacao-logica.md): SQL não duplicado
+- [007 - Lines per Class Limit](../../object-calisthenics/007_limite-maximo-linhas-classe.md): Gateway conciso
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

@@ -1,14 +1,14 @@
 # Inheritance Mappers
 
-**Type**: Object-Relational Mapping Pattern (Structural)
+**Tipo**: Padrão Object-Relational (Estrutural)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Structure Data Mappers in a way that reflects the inheritance hierarchy of the domain objects being mapped, allowing reuse of common mapping code through Mapper inheritance.
+Estruturar Data Mappers de forma que reflita a hierarquia de herança dos objetos de domínio sendo mapeados, permitindo a reutilização de código de mapeamento comum por meio da herança de Mappers.
 
-## Also Known As
+## Também Conhecido Como
 
 - Hierarchical Mappers
 - Mapper Inheritance
@@ -16,33 +16,33 @@ Structure Data Mappers in a way that reflects the inheritance hierarchy of the d
 
 ---
 
-## Motivation
+## Motivação
 
-When using the Data Mapper pattern with a hierarchy of domain objects (e.g., Animal → Dog, Cat), the question arises of how to structure the Mappers. One approach would be to create completely independent Mappers for each class, but this would lead to massive code duplication — every Mapper would repeat the logic for mapping common fields (id, name) defined in the Animal superclass.
+Ao usar o padrão Data Mapper com uma hierarquia de objetos de domínio (ex.: Animal → Dog, Cat), surge a questão de como estruturar os Mappers. Uma abordagem seria criar Mappers completamente independentes para cada classe, mas isso levaria a uma enorme duplicação de código — cada Mapper repetiria a lógica para mapear os campos comuns (id, name) definidos na superclasse Animal.
 
-Inheritance Mappers solves this problem by making the Mappers mirror the domain's inheritance hierarchy: create an `AbstractAnimalMapper` that knows how to map common fields, and then `DogMapper` and `CatMapper` inherit from it, adding only the code to map their specific fields. This maximizes reuse and maintains DRY.
+O Inheritance Mappers resolve esse problema fazendo os Mappers espelharem a hierarquia de herança do domínio: criar um `AbstractAnimalMapper` que sabe mapear os campos comuns, e então `DogMapper` e `CatMapper` herdam dele, adicionando apenas o código para mapear seus campos específicos. Isso maximiza a reutilização e mantém o DRY.
 
-The pattern works with any inheritance mapping strategy (Single Table, Class Table, Concrete Table). For example, with Class Table Inheritance, the `AbstractAnimalMapper` maps the `animals` table, and `DogMapper` inherits and adds logic to JOIN and map the `dogs` table. The Mapper inheritance structure decouples mapping logic from schema strategy.
-
----
-
-## Applicability
-
-Use Inheritance Mappers when:
-
-- You are using the Data Mapper pattern (not Active Record) with object hierarchies
-- Classes in the hierarchy share common fields that would be duplicated if each Mapper were independent
-- Mapping logic (queries, transformations) has common parts that can be abstracted
-- You want changes in the domain superclass to automatically reflect in all subclass Mappers
-- The domain hierarchy is stable — inheritance refactorings are rare
-- You want to keep mapping logic organized in a way that reflects the domain structure
+O padrão funciona com qualquer estratégia de mapeamento de herança (Single Table, Class Table, Concrete Table). Por exemplo, com Class Table Inheritance, o `AbstractAnimalMapper` mapeia a tabela `animals`, e `DogMapper` herda e adiciona lógica para fazer JOIN e mapear a tabela `dogs`. A estrutura de herança dos Mappers desacopla a lógica de mapeamento da estratégia de schema.
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Inheritance Mappers quando:
+
+- Você está usando o padrão Data Mapper (não Active Record) com hierarquias de objetos
+- Classes na hierarquia compartilham campos comuns que seriam duplicados se cada Mapper fosse independente
+- A lógica de mapeamento (queries, transformações) possui partes comuns que podem ser abstraídas
+- Você quer que mudanças na superclasse do domínio reflitam automaticamente em todos os Mappers de subclasse
+- A hierarquia do domínio é estável — refatorações de herança são raras
+- Você quer manter a lógica de mapeamento organizada de forma que reflita a estrutura do domínio
+
+---
+
+## Estrutura
 
 ```
-Domain Layer:
+Camada de Domínio:
 ┌──────────────────────────────────────────────────────────┐
 │                    <<abstract>>                          │
 │                       Animal                             │
@@ -59,7 +59,7 @@ Domain Layer:
 │ - breed: String    │        │ - furColor: String │
 └────────────────────┘        └────────────────────┘
 
-Mapper Layer:
+Camada de Mapper:
 ┌──────────────────────────────────────────────────────────┐
 │             <<abstract>>                                 │
 │          AbstractAnimalMapper                            │
@@ -82,122 +82,122 @@ Mapper Layer:
 
 ---
 
-## Participants
+## Participantes
 
-- **AbstractAnimalMapper** (Abstract Base Mapper): Contains shared logic for mapping common fields (id, name). May have template methods that define the general flow of find/insert/update, leaving details to subclasses.
+- **AbstractAnimalMapper** (Mapper Base Abstrato): Contém a lógica compartilhada para mapear campos comuns (id, name). Pode ter template methods que definem o fluxo geral de find/insert/update, deixando os detalhes para as subclasses.
 
-- **DogMapper / CatMapper** (Concrete Mappers): Inherit from the base Mapper and implement specific logic for mapping additional fields (breed, furColor). Can call protected methods from the superclass.
+- **DogMapper / CatMapper** (Mappers Concretos): Herdam do Mapper base e implementam a lógica específica para mapear campos adicionais (breed, furColor). Podem chamar métodos protegidos da superclasse.
 
-- **Domain Objects** (Animal, Dog, Cat): The domain objects being mapped. The Mapper hierarchy mirrors the domain hierarchy.
+- **Domain Objects** (Animal, Dog, Cat): Os objetos de domínio sendo mapeados. A hierarquia de Mappers espelha a hierarquia de domínio.
 
-- **Database Schema**: Can use any strategy (Single Table, Class Table, Concrete Table). The Inheritance Mappers pattern is independent of schema strategy.
+- **Schema do Banco de Dados**: Pode usar qualquer estratégia (Single Table, Class Table, Concrete Table). O padrão Inheritance Mappers é independente da estratégia de schema.
 
-- **Template Methods**: Methods in the Mapper superclass that define the skeleton of the mapping algorithm, delegating specific steps to subclasses.
-
----
-
-## Collaborations
-
-When the client requests `dogMapper.find(id)`, the DogMapper executes the specific query (which may include JOIN if using Class Table). When constructing the Dog object from the ResultSet, it calls `mapCommonFields(rs, dog)` inherited from AbstractAnimalMapper to populate id and name, then adds its own logic to populate breed.
-
-In the insert operation, DogMapper first calls `super.insertCommonFields(dog)` which inserts into the `animals` table and returns the generated ID. Then, it uses this ID to insert into the `dogs` table with specific fields. The flow is coordinated by Mapper inheritance.
+- **Template Methods**: Métodos no Mapper superclasse que definem o esqueleto do algoritmo de mapeamento, delegando etapas específicas para as subclasses.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+Quando o cliente requisita `dogMapper.find(id)`, o DogMapper executa a query específica (que pode incluir JOIN se usar Class Table). Ao construir o objeto Dog a partir do ResultSet, ele chama `mapCommonFields(rs, dog)` herdado do AbstractAnimalMapper para popular id e name, e depois adiciona sua própria lógica para popular breed.
 
-1. **Code Reuse**: Mapping logic for common fields is written once in the Mapper superclass.
-2. **DRY in Mapping**: Avoids duplication of mapping code between subclass Mappers.
-3. **Maintainability**: Changes to superclass domain fields require changes only in the base Mapper.
-4. **Clear Structure**: The Mapper hierarchy mirrors the domain, facilitating navigation and understanding.
-5. [**Template Method**](../../gof/behavioral/010_template-method.md): Allows defining complex mapping flows in the superclass with hooks for subclasses.
-6. **Schema Flexibility**: Works with any schema inheritance strategy (Single/Class/Concrete Table).
-
-### Disadvantages
-
-1. **Inheritance Coupling**: Mappers become tightly coupled to the domain hierarchy — inheritance refactorings require changes to Mappers.
-2. **Debug Complexity**: Execution flow crosses multiple inheritance levels, making debugging difficult.
-3. **Base Class Fragility**: Changes to AbstractMapper can break all subclass Mappers.
-4. **Language Limitations**: In languages without multiple inheritance, Mappers cannot inherit from multiple sources if needed.
-5. **Testing Difficulty**: Testing concrete Mappers requires setup of base Mappers, increasing test complexity.
+Na operação de inserção, o DogMapper primeiro chama `super.insertCommonFields(dog)` que insere na tabela `animals` e retorna o ID gerado. Então usa esse ID para inserir na tabela `dogs` com os campos específicos. O fluxo é coordenado pela herança dos Mappers.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **Protected Methods**: Use `protected` visibility for auxiliary mapping methods that should be accessible by subclasses but not by clients.
+1. **Reutilização de Código**: A lógica de mapeamento para campos comuns é escrita uma vez no Mapper superclasse.
+2. **DRY no Mapeamento**: Evita duplicação de código de mapeamento entre Mappers de subclasse.
+3. **Manutenibilidade**: Mudanças nos campos do domínio da superclasse requerem mudanças apenas no Mapper base.
+4. **Estrutura Clara**: A hierarquia de Mappers espelha o domínio, facilitando a navegação e compreensão.
+5. [**Template Method**](../../gof/behavioral/010_template-method.md): Permite definir fluxos complexos de mapeamento na superclasse com hooks para subclasses.
+6. **Flexibilidade de Schema**: Funciona com qualquer estratégia de herança de schema (Single/Class/Concrete Table).
 
-2. **Template Method Pattern**: Structure main methods (find, insert) as templates in the superclass with hooks (abstract methods) for subclasses to fill in.
+### Desvantagens
 
-3. **Superclass Initialization**: Concrete Mapper constructors must call superclass constructors to ensure proper initialization (e.g., connection pool).
-
-4. **Shared Identity Map**: If using Identity Map, share an instance between Mappers in the hierarchy to avoid multiple instances of the same object.
-
-5. **Exception Handling**: Centralize database exception handling in the Mapper superclass when possible.
-
-6. **Dependency Injection**: Inject dependencies (DataSource, connections) into the base Mapper and propagate to subclasses.
-
-### Implementation Techniques
-
-1. **Abstract Find Method**: Define `find(id)` as abstract in the base Mapper, forcing each concrete Mapper to implement its own query.
-
-2. **Protected Field Mappers**: Create methods like `protected void mapId(ResultSet rs, Animal animal)` in the superclass to be reused.
-
-3. **Strategy for Schema**: Use Strategy pattern for schema-specific logic (Single Table vs Class Table), keeping Mappers independent of strategy.
-
-4. **Lazy Initialization**: Concrete Mappers can use lazy initialization to create instances of related Mappers (e.g., address) only when needed.
-
-5. **Reflection for Instantiation**: Use reflection in the superclass to instantiate domain objects of the correct type, avoiding duplication of instantiation code.
-
-6. **Query Builders**: Encapsulate query construction in helper methods in the superclass (e.g., `buildSelectCommonFields()`) that subclasses can extend.
+1. **Acoplamento por Herança**: Mappers ficam fortemente acoplados à hierarquia de domínio — refatorações de herança requerem mudanças nos Mappers.
+2. **Complexidade de Depuração**: O fluxo de execução cruza múltiplos níveis de herança, dificultando a depuração.
+3. **Fragilidade da Classe Base**: Mudanças no AbstractMapper podem quebrar todos os Mappers de subclasse.
+4. **Limitações de Linguagem**: Em linguagens sem herança múltipla, Mappers não podem herdar de múltiplas fontes se necessário.
+5. **Dificuldade de Testes**: Testar Mappers concretos requer setup dos Mappers base, aumentando a complexidade dos testes.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **MyBatis Mapper Inheritance**: MyBatis allows XML mappers to inherit from base mappers, reusing common SQL fragments.
+### Considerações de Implementação
 
-2. **Custom ORMs in Corporate Systems**: Large financial systems frequently implement Inheritance Mappers for Financial Instrument hierarchies.
+1. **Métodos Protegidos**: Usar visibilidade `protected` para métodos auxiliares de mapeamento que devem ser acessíveis pelas subclasses mas não pelos clientes.
 
-3. **Rails + Repository Pattern**: Rails applications using Repository instead of Active Record frequently implement hierarchical repositories.
+2. **Padrão Template Method**: Estruturar métodos principais (find, insert) como templates na superclasse com hooks (métodos abstratos) para as subclasses preencherem.
 
-4. **Java Persistence Frameworks**: Frameworks like iBatis and early Hibernate encouraged structuring Mappers in hierarchies.
+3. **Inicialização da Superclasse**: Construtores de Mappers concretos devem chamar construtores da superclasse para garantir inicialização adequada (ex.: connection pool).
 
-5. **Entity Framework Migrations**: EF migrations can be structured in a hierarchy to share base migrations.
+4. **Identity Map Compartilhado**: Se usar Identity Map, compartilhar uma instância entre Mappers da hierarquia para evitar múltiplas instâncias do mesmo objeto.
 
-6. **Doctrine ORM (PHP)**: Supports hierarchical mapping where child entity mappers reference parent mapper configurations.
+5. **Tratamento de Exceções**: Centralizar o tratamento de exceções de banco de dados no Mapper superclasse quando possível.
 
----
+6. **Injeção de Dependência**: Injetar dependências (DataSource, conexões) no Mapper base e propagar às subclasses.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**Data Mapper**](../data-source/004_data-mapper.md): Inheritance Mappers is a specialization of Data Mapper for object hierarchies.
-- [**GoF Template Method**](../../gof/behavioral/010_template-method.md): Used extensively to define skeleton of mapping algorithms in the Mapper superclass.
-- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Can complement to switch schema strategies (Single/Class/Concrete Table) without changing Mappers.
-- [**Layer Supertype**](../base/003_layer-supertype.md): AbstractMapper is a Layer Supertype for all Mappers in the application.
-- [**Single Table Inheritance**](010_single-table-inheritance.md): Inheritance Mappers works well with STI — superclass maps single table and discriminator.
-- [**Class Table Inheritance**](011_class-table-inheritance.md): Mappers inherit and add JOIN logic to map subclass tables.
-- [**Registry**](../base/005_registry.md): Mappers can be registered in a Registry for dynamic lookup by domain type.
+1. **Método Find Abstrato**: Definir `find(id)` como abstrato no Mapper base, forçando cada Mapper concreto a implementar sua própria query.
 
-### Relation with Rules
+2. **Mappers de Campo Protegidos**: Criar métodos como `protected void mapId(ResultSet rs, Animal animal)` na superclasse para serem reutilizados.
 
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): abstract mappers
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): one mapper per hierarchy
+3. **Strategy para Schema**: Usar padrão Strategy para lógica específica de schema (Single Table vs Class Table), mantendo os Mappers independentes da estratégia.
 
----
+4. **Inicialização Lazy**: Mappers concretos podem usar inicialização lazy para criar instâncias de Mappers relacionados (ex.: endereço) apenas quando necessário.
 
-## Business Rules Relationship
+5. **Reflection para Instanciação**: Usar reflection na superclasse para instanciar objetos de domínio do tipo correto, evitando duplicação de código de instanciação.
 
-- **[021] Prohibition of Logic Duplication**: Inheritance Mappers eliminates duplication of common field mapping logic.
-- **[010] Single Responsibility Principle**: Each Mapper has the single responsibility of mapping its domain class.
-- **[014] Dependency Inversion Principle**: Abstract Mappers depend on abstractions (interfaces), not concrete Mappers.
-- **[022] Prioritization of Simplicity and Clarity**: Clear hierarchical structure reflects and documents the domain.
+6. **Query Builders**: Encapsular a construção de queries em métodos auxiliares na superclasse (ex.: `buildSelectCommonFields()`) que subclasses podem estender.
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **MyBatis Mapper Inheritance**: MyBatis permite que mappers XML herdem de mappers base, reutilizando fragmentos SQL comuns.
+
+2. **ORMs Customizados em Sistemas Corporativos**: Grandes sistemas financeiros frequentemente implementam Inheritance Mappers para hierarquias de Instrumentos Financeiros.
+
+3. **Rails + Repository Pattern**: Aplicações Rails que usam Repository em vez de Active Record frequentemente implementam repositories hierárquicos.
+
+4. **Java Persistence Frameworks**: Frameworks como iBatis e primeiras versões do Hibernate encorajavam a estruturação de Mappers em hierarquias.
+
+5. **Entity Framework Migrations**: Migrações do EF podem ser estruturadas em hierarquia para compartilhar migrações base.
+
+6. **Doctrine ORM (PHP)**: Suporta mapeamento hierárquico onde mappers de entidades filhas referenciam configurações do mapper pai.
+
+---
+
+## Padrões Relacionados
+
+- [**Data Mapper**](../data-source/004_data-mapper.md): Inheritance Mappers é uma especialização do Data Mapper para hierarquias de objetos.
+- [**GoF Template Method**](../../gof/behavioral/010_template-method.md): Usado extensivamente para definir o esqueleto dos algoritmos de mapeamento no Mapper superclasse.
+- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Pode complementar para trocar estratégias de schema (Single/Class/Concrete Table) sem alterar os Mappers.
+- [**Layer Supertype**](../base/003_layer-supertype.md): AbstractMapper é um Layer Supertype para todos os Mappers da aplicação.
+- [**Single Table Inheritance**](010_single-table-inheritance.md): Inheritance Mappers funciona bem com STI — superclasse mapeia tabela única e discriminador.
+- [**Class Table Inheritance**](011_class-table-inheritance.md): Mappers herdam e adicionam lógica de JOIN para mapear as tabelas de subclasse.
+- [**Registry**](../base/005_registry.md): Mappers podem ser registrados em um Registry para busca dinâmica por tipo de domínio.
+
+### Relação com Rules
+
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): mappers abstratos
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): um mapper por hierarquia
+
+---
+
+## Relação com Regras de Negócio
+
+- **[021] Proibição de Duplicação de Lógica**: Inheritance Mappers elimina a duplicação de lógica de mapeamento de campos comuns.
+- **[010] Single Responsibility Principle**: Cada Mapper tem a única responsabilidade de mapear sua classe de domínio.
+- **[014] Dependency Inversion Principle**: Mappers Abstratos dependem de abstrações (interfaces), não de Mappers concretos.
+- **[022] Priorização de Simplicidade e Clareza**: Estrutura hierárquica clara reflete e documenta o domínio.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

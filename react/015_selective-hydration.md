@@ -200,9 +200,9 @@ React automaticamente prioriza componentes baseado em interação do usuário:
 
 ### Relação com Rules
 
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): manter boundaries claras
-- [028 - Tratamento de Exceção Assíncrona](../../clean-code/008_tratamento-excecao-assincrona.md): error boundaries importantes
-- [032 - Cobertura Mínima de Teste](../../clean-code/012_cobertura-teste-minima-qualidade.md): testar diferentes estados
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): manter boundaries claras
+- [028 - Tratamento de Exceção Assíncrona](../../clean-code/tratamento-excecao-assincrona.md): error boundaries importantes
+- [032 - Cobertura Mínima de Teste](../../clean-code/cobertura-teste-minima-qualidade.md): testar diferentes estados
 
 ## Comparação com Hydration Tradicional
 

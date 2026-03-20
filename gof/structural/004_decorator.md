@@ -1,35 +1,35 @@
 # Decorator
 
-**Classification**: Structural Pattern
+**Classificação**: Padrão Estrutural
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality, allowing behaviors to be added to individual objects, rather than to an entire class.
+Anexar responsabilidades adicionais a um objeto de forma dinâmica. Os Decorators fornecem uma alternativa flexível à subclassificação para estender funcionalidades, permitindo que comportamentos sejam adicionados a objetos individuais, em vez de a uma classe inteira.
 
-## Also Known As
+## Também Conhecido Como
 
 - Wrapper
 
-## Motivation
+## Motivação
 
-Sometimes we want to add responsibilities to individual objects, not to an entire class. A graphical toolkit should allow adding properties like borders or scrolling to any user interface component. One way would be inheritance, but this is inflexible: border added statically. Client cannot control how and when to decorate component.
+Às vezes queremos adicionar responsabilidades a objetos individuais, não a uma classe inteira. Um toolkit gráfico deve permitir adicionar propriedades como bordas ou rolagem a qualquer componente de interface do usuário. Uma forma seria herança, mas isso é inflexível: a borda é adicionada de forma estática. O cliente não pode controlar como e quando decorar o componente.
 
-A more flexible approach is to enclose component in another object that adds the border. The enclosing object is decorator, conforming to the interface of the component it decorates. Decorator forwards requests to the component and can perform additional actions. Transparency allows decorating decorator recursively, allowing unlimited number of added responsibilities.
+Uma abordagem mais flexível é envolver o componente em outro objeto que adiciona a borda. O objeto envolvente é o decorator, que segue a interface do componente que decora. O Decorator encaminha requisições para o componente e pode realizar ações adicionais. A transparência permite decorar o decorator recursivamente, permitindo um número ilimitado de responsabilidades adicionadas.
 
-## Applicability
+## Aplicabilidade
 
-Use the Decorator pattern when:
+Use o padrão Decorator quando:
 
-- Add responsibilities to individual objects dynamically and transparently, without affecting other objects
-- For responsibilities that can be withdrawn
-- When extension by subclassing is impractical (would cause subclass explosion)
-- You need to add functionality to objects at runtime
-- You want to combine several behaviors through composition
-- You want to add behavior without modifying existing code (OCP)
+- Adicionar responsabilidades a objetos individuais de forma dinâmica e transparente, sem afetar outros objetos
+- Para responsabilidades que podem ser retiradas
+- Quando a extensão por subclassificação é impraticável (causaria explosão de subclasses)
+- Você precisa adicionar funcionalidade a objetos em tempo de execução
+- Você quer combinar vários comportamentos por meio de composição
+- Você quer adicionar comportamento sem modificar código existente (OCP)
 
-## Structure
+## Estrutura
 
 ```
 Client
@@ -60,78 +60,78 @@ ConcreteDecoratorB extends Decorator
     └── super.operation()
 ```
 
-## Participants
+## Participantes
 
-- **Component**: Defines interface for objects that can have responsibilities added to them dynamically
-- **ConcreteComponent**: Defines object to which additional responsibilities can be attached
-- [**Decorator**](004_decorator.md): Maintains reference to Component object and defines interface conforming to Component's interface
-- **ConcreteDecorator**: Adds responsibilities to the component
+- **Component**: Define a interface para objetos que podem ter responsabilidades adicionadas a eles dinamicamente
+- **ConcreteComponent**: Define o objeto ao qual responsabilidades adicionais podem ser anexadas
+- [**Decorator**](004_decorator.md): Mantém referência a um objeto Component e define interface que segue a interface do Component
+- **ConcreteDecorator**: Adiciona responsabilidades ao componente
 
-## Collaborations
+## Colaborações
 
-- Decorator forwards requests to its Component object
-- Can optionally perform additional operations before/after forwarding
+- O Decorator encaminha requisições ao seu objeto Component
+- Pode opcionalmente realizar operações adicionais antes/depois de encaminhar
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **More flexibility than static inheritance**: Add/remove responsibilities at runtime
-- **Avoids feature-laden classes**: Pay only for functionality used; functionality can be composed from simple pieces
-- **Facilitates incremental customization**: Apply decorators progressively
-- **Respects Open/Closed Principle**: Extends functionality without modifying existing classes
-- **Single Responsibility**: Divides functionality between specialized classes
+- **Mais flexível que herança estática**: Adicione/remova responsabilidades em tempo de execução
+- **Evita classes sobrecarregadas de funcionalidades**: Pague apenas pela funcionalidade utilizada; a funcionalidade pode ser composta de peças simples
+- **Facilita a personalização incremental**: Aplique decorators progressivamente
+- **Respeita o Princípio Aberto/Fechado**: Estende funcionalidade sem modificar classes existentes
+- **Responsabilidade Única**: Divide funcionalidade entre classes especializadas
 
-### Disadvantages
+### Desvantagens
 
-- **Many small objects**: Design can result in many small similar objects, making learning and debugging difficult
-- **Object identity**: Decorator and decorated component are not identical; identity tests fail
-- **Complexity**: Long chain of decorators can be hard to understand and debug
+- **Muitos objetos pequenos**: O design pode resultar em muitos objetos pequenos e similares, tornando aprendizado e depuração difíceis
+- **Identidade de objeto**: Decorator e componente decorado não são idênticos; testes de identidade falham
+- **Complexidade**: Uma longa cadeia de decorators pode ser difícil de entender e depurar
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Conforming interface**: Decorator must conform to interface of component it decorates
+1. **Conformidade de interface**: O Decorator deve seguir a interface do componente que decora
 
-2. **Omit abstract Decorator class**: When only one responsibility needs to be added, abstract Decorator is not necessary
+2. **Omitir a classe Decorator abstrata**: Quando apenas uma responsabilidade precisa ser adicionada, o Decorator abstrato não é necessário
 
-3. **Keep Component lightweight**: Component should focus on interface, not store data; otherwise, complexity of decorators increases
+3. **Manter o Component leve**: O Component deve focar na interface, não armazenar dados; caso contrário, a complexidade dos decorators aumenta
 
-4. **Changing skin vs changing guts**: Decorator changes skin (interface); Strategy changes guts (algorithm)
+4. **Mudar a casca vs mudar as entranhas**: Decorator muda a casca (interface); Strategy muda as entranhas (algoritmo)
 
-### Techniques
+### Técnicas
 
-- **Decorator Chain**: Chain multiple decorators
-- **Transparent Enclosure**: Decorator is completely transparent to client
-- **Semi-transparent Decorator**: Decorator adds methods to interface
-- **Immutable Decorators**: Decorators that don't modify state
+- **Cadeia de Decorators**: Encadeie múltiplos decorators
+- **Encapsulamento Transparente**: O Decorator é completamente transparente para o cliente
+- **Decorator Semitransparente**: O Decorator adiciona métodos à interface
+- **Decorators Imutáveis**: Decorators que não modificam estado
 
-## Known Uses
+## Usos Conhecidos
 
-- **Java I/O Streams**: `BufferedInputStream`, `DataInputStream` decorate `InputStream`
-- **Java Collections**: `UnmodifiableList`, `SynchronizedList` decorate `List`
-- **Logging Decorators**: Add logging to components
-- **Caching Decorators**: Add cache to repositories or services
-- **Transaction Decorators**: Add transactional control
-- **Retry/Circuit Breaker**: Add resilience to calls
+- **Java I/O Streams**: `BufferedInputStream`, `DataInputStream` decoram `InputStream`
+- **Coleções Java**: `UnmodifiableList`, `SynchronizedList` decoram `List`
+- **Decorators de Log**: Adicionam logging a componentes
+- **Decorators de Cache**: Adicionam cache a repositórios ou serviços
+- **Decorators de Transação**: Adicionam controle transacional
+- **Retry/Circuit Breaker**: Adicionam resiliência a chamadas
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Adapter**](001_adapter.md): Changes interface; Decorator enhances responsibilities
-- [**Composite**](003_composite.md): Structurally similar; Decorator adds responsibilities, Composite aggregates
-- [**Strategy**](../clean-code/001_strategy.md): Changes object's guts; Decorator changes skin
-- [**Proxy**](007_proxy.md): Controls access; Decorator adds functionality
-- [**Chain of Responsibility**](013_chain-of-responsibility.md): Decorator can implement chain by forwarding to decorated
+- [**Adapter**](001_adapter.md): Muda a interface; Decorator aprimora responsabilidades
+- [**Composite**](003_composite.md): Estruturalmente similar; Decorator adiciona responsabilidades, Composite agrega
+- [**Strategy**](../gof/behavioral/009_strategy.md): Muda as entranhas do objeto; Decorator muda a casca
+- [**Proxy**](007_proxy.md): Controla acesso; Decorator adiciona funcionalidade
+- [**Chain of Responsibility**](013_chain-of-responsibility.md): Decorator pode implementar cadeia encaminhando para o decorado
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): implements (extension without modification)
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): each decorator one responsibility
-- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): decorator substitutes component
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): depends on abstraction
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): implementa (extensão sem modificação)
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): cada decorator tem uma responsabilidade
+- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): decorator substitui o componente
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): depende de abstração
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

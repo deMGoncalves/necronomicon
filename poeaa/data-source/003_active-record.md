@@ -1,173 +1,173 @@
 # Active Record
 
-**Classification**: Data Source Architectural Pattern
+**Classificação**: Padrão Arquitetural de Fonte de Dados
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-An object that encapsulates a row in a database table, encapsulates database access, and adds domain logic over that data. Object knows how to persist itself.
+Um objeto que encapsula uma linha em uma tabela de banco de dados, encapsula o acesso ao banco de dados e adiciona lógica de domínio sobre esses dados. O objeto sabe como persistir a si mesmo.
 
-## Also Known As
+## Também Conhecido Como
 
 - Self-Persistent Object
 - Smart Record
 - Domain Object with Persistence
 
-## Motivation
+## Motivação
 
-Active Record combines data and behavior in a single object, where object represents a database row and contains both domain logic and persistence logic. It's an intuitive approach that reduces impedance mismatch by making object "know" how to save itself.
+O Active Record combina dados e comportamento em um único objeto, onde o objeto representa uma linha do banco de dados e contém tanto lógica de domínio quanto lógica de persistência. É uma abordagem intuitiva que reduz a incompatibilidade objeto-relacional ao fazer o objeto "saber" como salvar a si mesmo.
 
-Consider a Person object: it has properties (name, email, age) corresponding to columns, business methods (sendEmail(), calculateAge()) implementing logic, and persistence methods (save(), delete(), find()) interacting with database. Client uses Person as a rich domain object without worrying about persistence details.
+Considere um objeto Person: ele possui propriedades (name, email, age) correspondentes às colunas, métodos de negócio (sendEmail(), calculateAge()) implementando a lógica, e métodos de persistência (save(), delete(), find()) interagindo com o banco de dados. O client usa Person como um objeto de domínio rico sem se preocupar com detalhes de persistência.
 
-This simplicity makes Active Record extremely popular in web frameworks like Ruby on Rails and Laravel. For applications with moderate domain logic and direct mapping between objects and tables, Active Record offers significant productivity without the complexity of separate persistence layers.
+Essa simplicidade torna o Active Record extremamente popular em frameworks web como Ruby on Rails e Laravel. Para aplicações com lógica de domínio de complexidade moderada e mapeamento direto entre objetos e tabelas, o Active Record oferece produtividade significativa sem a complexidade de camadas de persistência separadas.
 
-## Applicability
+## Aplicabilidade
 
-Use Active Record when:
+Use Active Record quando:
 
-- Domain logic has low to moderate complexity
-- Object structure maps directly to table structure
-- Relationships are relatively simple
-- Rapid productivity is more important than strict separation
-- Chosen framework (Rails, Laravel) uses Active Record by default
-- Team prefers pragmatic approach to rigorous architectural separation
+- A lógica de domínio tem complexidade baixa a moderada
+- A estrutura do objeto mapeia diretamente para a estrutura da tabela
+- Os relacionamentos são relativamente simples
+- A produtividade rápida é mais importante do que a separação estrita
+- O framework escolhido (Rails, Laravel) usa Active Record por padrão
+- A equipe prefere uma abordagem pragmática à separação arquitetural rigorosa
 
-## Structure
+## Estrutura
 
 ```
-Client (Application/UI)
-└── Uses: Active Record objects
+Client (Aplicação/UI)
+└── Usa: objetos Active Record
 
-Active Record (domain objects + persistence)
+Active Record (objetos de domínio + persistência)
 ├── Person (Active Record)
-│   ├── Properties: id, name, email, age
-│   ├── Business Methods:
+│   ├── Propriedades: id, name, email, age
+│   ├── Métodos de Negócio:
 │   │   ├── sendEmail()
 │   │   ├── isAdult()
 │   │   └── updateProfile(data)
-│   ├── Persistence Methods:
-│   │   ├── save(): persists object
-│   │   ├── delete(): removes from database
-│   │   ├── reload(): reloads from database
-│   │   └── validates(): validates before save
-│   └── Static Methods (Finders):
+│   ├── Métodos de Persistência:
+│   │   ├── save(): persiste o objeto
+│   │   ├── delete(): remove do banco de dados
+│   │   ├── reload(): recarrega do banco de dados
+│   │   └── validates(): valida antes de salvar
+│   └── Métodos Estáticos (Finders):
 │       ├── find(id): Person
 │       ├── findByEmail(email): Person
 │       └── all(): Person[]
 │
 ├── Order (Active Record)
-│   ├── Properties: id, customerId, date, total
-│   ├── Business Methods:
+│   ├── Propriedades: id, customerId, date, total
+│   ├── Métodos de Negócio:
 │   │   ├── calculateTotal()
 │   │   ├── addItem(product, quantity)
 │   │   └── cancel()
-│   └── Persistence Methods:
+│   └── Métodos de Persistência:
 │       ├── save()
 │       └── delete()
 │
 └── Product (Active Record)
-    ├── Properties: id, name, price, stock
-    ├── Business Methods:
+    ├── Propriedades: id, name, price, stock
+    ├── Métodos de Negócio:
     │   ├── isAvailable()
     │   └── adjustStock(quantity)
-    └── Persistence Methods:
+    └── Métodos de Persistência:
         └── save()
 
-Database
-└── Tables mirrored by Active Record classes
+Banco de Dados
+└── Tabelas espelhadas pelas classes Active Record
 ```
 
-## Participants
+## Participantes
 
-- **Active Record Class**: Class representing table; combines data, logic, and persistence
-- **Properties**: Fields corresponding to table columns
-- **Business Methods**: Methods implementing domain logic
-- **Persistence Methods**: save(), delete(), reload() for persistence
-- **Finder Methods**: Static methods for queries (find, where, all)
-- **Database Connection**: Connection used to execute SQL
-- **Validations**: Validation rules before persisting
+- **Classe Active Record**: Classe que representa a tabela; combina dados, lógica e persistência
+- **Propriedades**: Campos correspondentes às colunas da tabela
+- **Métodos de Negócio**: Métodos que implementam a lógica de domínio
+- **Métodos de Persistência**: save(), delete(), reload() para persistência
+- **Métodos Finder**: Métodos estáticos para consultas (find, where, all)
+- **Conexão com o Banco de Dados**: Conexão usada para executar o SQL
+- **Validações**: Regras de validação antes de persistir
 
-## Collaborations
+## Colaborações
 
-- Client creates new Active Record instance or obtains via finder
-- To create: Client instantiates object, sets properties, calls save()
-- Active Record validates data and executes INSERT SQL
-- To load: Client calls Person.find(5) (static method)
-- Finder executes SELECT, creates instance, populates properties, returns object
-- Client invokes business methods on loaded object
-- To update: Client modifies properties or calls business methods
-- Client calls save(); Active Record executes UPDATE SQL
-- To delete: Client calls delete(); Active Record executes DELETE SQL
+- O Client cria uma nova instância de Active Record ou a obtém via finder
+- Para criar: o Client instancia o objeto, define as propriedades e chama save()
+- O Active Record valida os dados e executa o INSERT SQL
+- Para carregar: o Client chama Person.find(5) (método estático)
+- O finder executa o SELECT, cria a instância, popula as propriedades e retorna o objeto
+- O Client invoca métodos de negócio no objeto carregado
+- Para atualizar: o Client modifica as propriedades ou chama métodos de negócio
+- O Client chama save(); o Active Record executa o UPDATE SQL
+- Para deletar: o Client chama delete(); o Active Record executa o DELETE SQL
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Simplicity**: Straightforward and intuitive approach; easy to learn
-- **Productivity**: Rapid development with less boilerplate code
-- **Convenience**: Object knows how to persist itself
-- **Integration**: Well integrated with modern web frameworks
-- **Fewer classes**: Doesn't require separate classes for mapping
-- **Direct CRUD**: CRUD operations extremely simple
+- **Simplicidade**: Abordagem direta e intuitiva; fácil de aprender
+- **Produtividade**: Desenvolvimento rápido com menos código boilerplate
+- **Conveniência**: O objeto sabe como persistir a si mesmo
+- **Integração**: Bem integrado com frameworks web modernos
+- **Menos classes**: Não requer classes separadas para mapeamento
+- **CRUD direto**: Operações CRUD extremamente simples
 
-### Disadvantages
+### Desvantagens
 
-- **Coupling**: Domain logic coupled to persistence and database schema
-- **Testing difficulty**: Difficult to test business logic without database
-- **Limited complexity**: Doesn't scale well to very complex domains
-- **Impedance mismatch**: Difficult to handle complex OO mappings
-- **Schema changes**: Database changes affect domain objects
-- **Weak separation**: Violates separation of responsibilities principle
+- **Acoplamento**: Lógica de domínio acoplada à persistência e ao esquema do banco de dados
+- **Dificuldade de teste**: Difícil testar lógica de negócio sem banco de dados
+- **Complexidade limitada**: Não escala bem para domínios muito complexos
+- **Incompatibilidade**: Difícil tratar mapeamentos OO complexos
+- **Mudanças no esquema**: Alterações no banco de dados afetam os objetos de domínio
+- **Separação fraca**: Viola o princípio de separação de responsabilidades
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Base class inheritance**: Active Records usually inherit from common base class
-2. **Convention over configuration**: Use conventions to map classes to tables
-3. **Finders**: Implement static methods for common queries
-4. **Validations**: Define validations executed before save()
-5. **Callbacks**: Hooks for before_save, after_create, etc
-6. **Relationships**: Declare has_many, belongs_to, etc
+1. **Herança de classe base**: Active Records geralmente herdam de uma classe base comum
+2. **Convenção sobre configuração**: Use convenções para mapear classes a tabelas
+3. **Finders**: Implemente métodos estáticos para consultas comuns
+4. **Validações**: Defina validações executadas antes de save()
+5. **Callbacks**: Hooks para before_save, after_create, etc
+6. **Relacionamentos**: Declare has_many, belongs_to, etc
 
-### Techniques
+### Técnicas
 
-- **Convention over Configuration**: Class name maps to table name
-- **Automatic Attributes**: Properties generated automatically from columns
-- **Finder Methods**: find(), where(), all() for queries
-- **Associations**: Declare relationships (has_many, belongs_to)
-- **Validations**: Declarative validations before persisting
-- **Callbacks**: Lifecycle hooks (before_save, after_create)
-- **Scopes**: Named scopes for reusable queries
+- **Convenção sobre Configuração**: O nome da classe mapeia para o nome da tabela
+- **Atributos Automáticos**: Propriedades geradas automaticamente a partir das colunas
+- **Métodos Finder**: find(), where(), all() para consultas
+- **Associações**: Declare relacionamentos (has_many, belongs_to)
+- **Validações**: Validações declarativas antes de persistir
+- **Callbacks**: Hooks de ciclo de vida (before_save, after_create)
+- **Scopes**: Escopos nomeados para consultas reutilizáveis
 
-## Known Uses
+## Usos Conhecidos
 
-- **Ruby on Rails**: ActiveRecord standard ORM in Rails
-- **Laravel/Eloquent**: Laravel framework ORM (PHP)
-- **Castle ActiveRecord**: Active Record for .NET
-- **Django Models**: Django models have Active Record characteristics
-- **Yii Framework**: PHP framework Active Record
-- **RedBeanPHP**: Active Record ORM for PHP
+- **Ruby on Rails**: ActiveRecord é o ORM padrão do Rails
+- **Laravel/Eloquent**: ORM do framework Laravel (PHP)
+- **Castle ActiveRecord**: Active Record para .NET
+- **Django Models**: Os models do Django têm características de Active Record
+- **Yii Framework**: Active Record do framework PHP
+- **RedBeanPHP**: ORM Active Record para PHP
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Row Data Gateway**](002_row-data-gateway.md): Active Record adds business logic
-- [**Data Mapper**](004_data-mapper.md): Completely separates objects from persistence
-- [**Domain Model**](../domain-logic/002_domain-model.md): Active Record is simple form of Domain Model
-- [**Table Data Gateway**](001_table-data-gateway.md): Alternative without business logic
-- [**Unit of Work**](../object-relational/001_unit-of-work.md): Can be combined to manage transactions
-- [**Identity Map**](../object-relational/002_identity-map.md): Can be added to ensure unique identity
-- [**Repository**](../object-relational/016_repository.md): Alternative that encapsulates persistence
+- [**Row Data Gateway**](002_row-data-gateway.md): Active Record adiciona lógica de negócio
+- [**Data Mapper**](004_data-mapper.md): Separa completamente objetos da persistência
+- [**Domain Model**](../domain-logic/002_domain-model.md): Active Record é uma forma simples de Domain Model
+- [**Table Data Gateway**](001_table-data-gateway.md): Alternativa sem lógica de negócio
+- [**Unit of Work**](../object-relational/001_unit-of-work.md): Pode ser combinado para gerenciar transações
+- [**Identity Map**](../object-relational/002_identity-map.md): Pode ser adicionado para garantir identidade única
+- [**Repository**](../object-relational/016_repository.md): Alternativa que encapsula a persistência
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): violation; mixes responsibilities
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): domain depends on persistence
-- [032 - Test Coverage](../../clean-code/012_cobertura-teste-minima-qualidade.md): makes unit testing difficult
-- [022 - Prioritization of Simplicity](../../clean-code/002_prioritization-simplicity-clarity.md): simple for moderate cases
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): violação; mistura responsabilidades
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): domínio depende da persistência
+- [032 - Test Coverage](../../clean-code/cobertura-teste-minima-qualidade.md): dificulta testes unitários
+- [022 - Prioritization of Simplicity](../../clean-code/priorizacao-simplicidade-clareza.md): simples para casos moderados
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

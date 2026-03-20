@@ -228,8 +228,8 @@ grep -rn "TODO:.*20[12][0-9]" src/ | head -5
 
 ## Rules Relacionadas
 
-- [clean-code/003 - YAGNI](../../clean-code/003_prohibition-speculative-functionality.md): não criar TODOs especulativos
-- [clean-code/019 - Boy Scout Rule](../../clean-code/019_regra-escoteiro-refatoracao-continua.md): resolver TODOs ao passar
+- [clean-code/003 - YAGNI](../../clean-code/proibicao-funcionalidade-especulativa.md): não criar TODOs especulativos
+- [clean-code/019 - Boy Scout Rule](../../clean-code/regra-escoteiro-refatoracao-continua.md): resolver TODOs ao passar
 
 ---
 

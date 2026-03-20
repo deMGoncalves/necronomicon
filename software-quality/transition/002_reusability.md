@@ -218,7 +218,7 @@ export const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 ## Rules Relacionadas
 
-- [clean-code/001 - DRY](../../clean-code/001_proibicao-duplicacao-logica.md)
+- [clean-code/001 - DRY](../../clean-code/proibicao-duplicacao-logica.md)
 - [object-calisthenics/003 - Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md)
 - [solid/001 - Single Responsibility](../../solid/001_principio-responsabilidade-unica.md)
 

@@ -1,124 +1,124 @@
 # Singleton
 
-**Classification**: Creational Pattern
+**Classificação**: Padrão Criacional
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Ensure a class has only one instance and provide a global point of access to it. Controls access to shared resources such as database connections or files.
+Garantir que uma classe tenha apenas uma instância e fornecer um ponto global de acesso a ela. Controla o acesso a recursos compartilhados como conexões de banco de dados ou arquivos.
 
-## Also Known As
+## Também Conhecido Como
 
 - Single Instance
 
-## Motivation
+## Motivação
 
-It's important that some classes have exactly one instance. Although there may be many printers in a system, there should be only one print spooler. There should be only one file system and one window manager.
+É importante que algumas classes tenham exatamente uma instância. Embora possa haver muitas impressoras em um sistema, deve haver apenas um spooler de impressão. Deve haver apenas um sistema de arquivos e um gerenciador de janelas.
 
-How to ensure a class has only one instance and that it's easily accessible? A global variable makes the object accessible, but doesn't prevent instantiation of multiple objects. The solution is to make the class itself responsible for maintaining its single instance, ensuring no other can be created.
+Como garantir que uma classe tenha apenas uma instância e que ela seja facilmente acessível? Uma variável global torna o objeto acessível, mas não impede a instanciação de múltiplos objetos. A solução é tornar a própria classe responsável por manter sua instância única, garantindo que nenhuma outra possa ser criada.
 
-## Applicability
+## Aplicabilidade
 
-Use the Singleton pattern when:
+Use o padrão Singleton quando:
 
-- There must be exactly one instance of a class, accessible to clients from a well-known point
-- The single instance must be extensible by subclassing, and clients must be able to use the extended instance without modifying code
-- You need stricter control over global variables
-- Costly resources must be shared (connections, thread pools)
-- A central coordinator object is necessary (event bus, logger)
+- Deve existir exatamente uma instância de uma classe, acessível aos clientes a partir de um ponto bem conhecido
+- A instância única deve ser extensível por herança, e os clientes devem poder usar a instância estendida sem modificar o código
+- Você precisa de controle mais rigoroso sobre variáveis globais
+- Recursos custosos devem ser compartilhados (conexões, pools de threads)
+- Um objeto coordenador central é necessário (event bus, logger)
 
-## Structure
+## Estrutura
 
 ```
 Singleton
-├── Private static property: instance
-├── Private/protected constructor
-└── Public static method getInstance()
-    ├── If instance is null
+├── Propriedade estática privada: instance
+├── Construtor privado/protegido
+└── Método estático público getInstance()
+    ├── Se instance é nulo
     │   └── instance = new Singleton()
-    └── Returns instance
+    └── Retorna instance
 
 Client
-└── Accesses: Singleton.getInstance()
+└── Acessa: Singleton.getInstance()
 ```
 
-## Participants
+## Participantes
 
-- [**Singleton**](005_singleton.md): Defines getInstance() operation that allows clients to access its single instance; getInstance() is a class operation (static method); may be responsible for creating its own single instance
+- [**Singleton**](005_singleton.md): Define a operação getInstance() que permite aos clientes acessar sua instância única; getInstance() é uma operação de classe (método estático); pode ser responsável por criar sua própria instância única
 
-## Collaborations
+## Colaborações
 
-- Clients access Singleton instance exclusively through getInstance() operation
+- Clientes acessam a instância Singleton exclusivamente por meio da operação getInstance()
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Controlled access**: Encapsulates its single instance, having control over how and when it's accessed
-- **Reduced namespace**: Improvement over global variables; avoids polluting namespace
-- **Allows refinement**: Can be extended by subclassing; configurable to use desired instance
-- **Flexible**: More flexible than class operations (static methods); can change decision about single instance
-- **Lazy initialization**: Instance created only when needed
+- **Acesso controlado**: Encapsula sua instância única, tendo controle sobre como e quando é acessada
+- **Namespace reduzido**: Melhora em relação a variáveis globais; evita poluir o namespace
+- **Permite refinamento**: Pode ser estendido por herança; configurável para usar a instância desejada
+- **Flexível**: Mais flexível do que operações de classe (métodos estáticos); pode mudar a decisão sobre instância única
+- **Inicialização preguiçosa**: Instância criada apenas quando necessária
 
-### Disadvantages
+### Desvantagens
 
-- **SRP violation**: Class has two responsibilities (business logic + instance control)
-- **Difficult to test**: Mocks and isolation are complicated
-- **Hidden global state**: Creates implicit dependencies and coupling
-- **Concurrency**: Requires care in multi-threaded environments
-- **DIP violation**: Clients depend on concrete class
+- **Violação do SRP**: A classe tem duas responsabilidades (lógica de negócio + controle de instância)
+- **Difícil de testar**: Mocks e isolamento são complicados
+- **Estado global oculto**: Cria dependências implícitas e acoplamento
+- **Concorrência**: Requer cuidado em ambientes multi-thread
+- **Violação do DIP**: Clientes dependem da classe concreta
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Ensure single instance**: Make constructor private/protected
+1. **Garantir instância única**: Tornar o construtor privado/protegido
 
-2. **Subclassing**: If allowing subclassing, use singleton registry or make getInstance() consult environment variable/configuration
+2. **Herança**: Se permitir herança, usar registro de singleton ou fazer getInstance() consultar variável de ambiente/configuração
 
-3. **Thread-safety**: In multi-threaded environments, synchronize access to getInstance() or use eager initialization
+3. **Thread-safety**: Em ambientes multi-thread, sincronizar acesso a getInstance() ou usar inicialização antecipada
 
-4. **Lazy vs Eager initialization**:
-   - Lazy: Creates when first requested (resource economy)
-   - Eager: Creates at class loading (thread-safe by default)
+4. **Inicialização preguiçosa vs antecipada**:
+   - Preguiçosa: Cria quando primeiro solicitado (economia de recursos)
+   - Antecipada: Cria no carregamento da classe (thread-safe por padrão)
 
-5. **ES6 Modules**: In JavaScript, modules are naturally singletons
+5. **Módulos ES6**: Em JavaScript, módulos são naturalmente singletons
 
-### Techniques
+### Técnicas
 
-- **Double-checked locking**: Optimize lazy initialization in multi-threaded
-- **Enum Singleton**: In Java, use enum to guarantee single instance
-- **Module Pattern**: In JavaScript, use ES6 module or IIFE
-- **Dependency Injection**: Prefer injecting singleton via DI instead of calling getInstance()
+- **Double-checked locking**: Otimizar inicialização preguiçosa em multi-thread
+- **Enum Singleton**: Em Java, usar enum para garantir instância única
+- **Module Pattern**: Em JavaScript, usar módulo ES6 ou IIFE
+- **Injeção de Dependência**: Preferir injetar singleton via DI em vez de chamar getInstance()
 
-## Known Uses
+## Usos Conhecidos
 
-- **Logger**: `Logger.getInstance()` in various languages
-- **Configuration Manager**: Application configuration manager
-- **Thread Pools**: Shared thread pool
-- **Cache**: Global application cache
-- **Database Connection Pool**: Database connection pool
-- **Event Bus**: Centralized event bus
-- **Window Manager**: Window manager in operating systems
+- **Logger**: `Logger.getInstance()` em várias linguagens
+- **Configuration Manager**: Gerenciador de configuração da aplicação
+- **Thread Pools**: Pool de threads compartilhado
+- **Cache**: Cache global da aplicação
+- **Database Connection Pool**: Pool de conexões de banco de dados
+- **Event Bus**: Event bus centralizado
+- **Window Manager**: Gerenciador de janelas em sistemas operacionais
 
-## Related Patterns
+## Padrões Relacionados
 
-- **Abstract Factory/Builder/Prototype**: Can be implemented as Singletons
-- [**Facade**](../structural/005_facade.md): Facade objects are often Singletons
-- **State/Strategy**: Stateless state/strategy objects can be Singletons
-- [**Flyweight**](../structural/006_flyweight.md): Flyweight Factory is often Singleton
-- **Monostate**: Alternative that shares state but allows multiple instances
+- **Abstract Factory/Builder/Prototype**: Podem ser implementados como Singletons
+- [**Facade**](../structural/005_facade.md): Objetos Facade são frequentemente Singletons
+- **State/Strategy**: Objetos de estado/strategy sem estado podem ser Singletons
+- [**Flyweight**](../structural/006_flyweight.md): A Flyweight Factory é frequentemente Singleton
+- **Monostate**: Alternativa que compartilha estado mas permite múltiplas instâncias
 
-### Relation to Rules
+### Relação com Rules
 
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): conflicts (prefer DI)
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): violates (double responsibility)
-- [032 - Minimum Test Coverage](../../clean-code/012_cobertura-teste-minima-qualidade.md): hinders
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): complements
-- [045 - Stateless Processes](../../twelve-factor/006_processos-stateless.md): conflicts
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): conflita (prefira DI)
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): viola (dupla responsabilidade)
+- [032 - Minimum Test Coverage](../../clean-code/cobertura-teste-minima-qualidade.md): dificulta
+- [029 - Object Immutability](../../clean-code/imutabilidade-objetos-freeze.md): complementa
+- [045 - Stateless Processes](../../twelve-factor/006_processos-stateless.md): conflita
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

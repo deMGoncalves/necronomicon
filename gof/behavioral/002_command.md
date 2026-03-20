@@ -1,137 +1,137 @@
 # Command
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Encapsulate a request as an object, thereby letting you parameterize clients with different requests, queue or log requests, and support undoable operations.
+Encapsular uma solicitação como um objeto, permitindo parametrizar clientes com diferentes solicitações, enfileirar ou registrar solicitações e suportar operações desfazíveis.
 
-## Also Known As
+## Também Conhecido Como
 
 - Action
 - Transaction
 
-## Motivation
+## Motivação
 
-Sometimes it's necessary to issue requests to objects without knowing anything about the operation being requested or the receiver. GUI toolkits include objects like buttons and menus that carry out a request in response to user input. But the toolkit can't implement the request explicitly because only the application knows what to do.
+Às vezes é necessário emitir solicitações a objetos sem saber nada sobre a operação sendo solicitada ou sobre o receptor. Toolkits de GUI incluem objetos como botões e menus que executam uma solicitação em resposta à entrada do usuário. Mas o toolkit não pode implementar a solicitação explicitamente porque apenas a aplicação sabe o que fazer.
 
-The Command pattern allows the toolkit to make requests of objects without knowing anything about the request or the receiver. It turns the request into an object that can be stored and passed like other objects. The key is an abstract Command interface declaring an interface for executing operations.
+O padrão Command permite ao toolkit fazer solicitações a objetos sem saber nada sobre a solicitação ou o receptor. Ele transforma a solicitação em um objeto que pode ser armazenado e passado como outros objetos. A chave é uma interface Command abstrata que declara uma interface para executar operações.
 
-## Applicability
+## Aplicabilidade
 
-Use the Command pattern when you want to:
+Use o padrão Command quando quiser:
 
-- Parameterize objects with an action to perform (callbacks in procedural languages)
-- Specify, queue, and execute requests at different times (command has lifetime independent of original request)
-- Support undo; Execute operation can store state for reversing effects; Command has Undo operation; executed commands stored in history list
-- Support logging of changes to recover after crash
-- Structure a system around high-level operations built on primitives (transaction support)
+- Parametrizar objetos com uma ação a ser executada (callbacks em linguagens procedurais)
+- Especificar, enfileirar e executar solicitações em momentos diferentes (o command tem tempo de vida independente da solicitação original)
+- Suportar desfazer; a operação Execute pode armazenar estado para reverter efeitos; Command tem operação Undo; comandos executados são armazenados em uma lista de histórico
+- Suportar registro de alterações para recuperação após falha
+- Estruturar um sistema em torno de operações de alto nível construídas sobre primitivas (suporte a transações)
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Creates: ConcreteCommand and configures Receiver
+└── Cria: ConcreteCommand e configura Receiver
 
 Invoker
-├── Maintains: Command
-└── Executes: command.execute()
+├── Mantém: Command
+└── Executa: command.execute()
 
 Command (Interface)
 ├── execute()
-└── undo() (optional)
+└── undo() (opcional)
 
 ConcreteCommand implements Command
-├── Composes: Receiver
-├── Maintains: state for undo
+├── Compõe: Receiver
+├── Mantém: estado para undo
 ├── execute()
 │   └── receiver.action()
 └── undo()
-    └── restore state
+    └── restaura estado
 
 Receiver
-└── action() → knows how to perform operations
+└── action() → sabe como executar as operações
 ```
 
-## Participants
+## Participantes
 
-- [**Command**](002_command.md): Declares interface for executing an operation
-- **ConcreteCommand**: Defines a binding between a Receiver object and an action; implements Execute by invoking corresponding operations on Receiver
-- **Client**: Creates a ConcreteCommand object and sets its receiver
-- **Invoker**: Asks the command to carry out the request
-- **Receiver**: Knows how to perform the operations associated with carrying out the request; any class can serve as Receiver
+- [**Command**](002_command.md): Declara a interface para executar uma operação
+- **ConcreteCommand**: Define um vínculo entre um objeto Receiver e uma ação; implementa Execute invocando as operações correspondentes no Receiver
+- **Client**: Cria um objeto ConcreteCommand e define seu receptor
+- **Invoker**: Solicita ao comando que execute a solicitação
+- **Receiver**: Sabe como executar as operações associadas ao cumprimento da solicitação; qualquer classe pode servir como Receiver
 
-## Collaborations
+## Colaborações
 
-- Client creates ConcreteCommand and specifies its receiver
-- Invoker stores ConcreteCommand object
-- Invoker issues request by calling Execute on command; when commands are undoable, ConcreteCommand stores state before invoking Execute
-- ConcreteCommand object invokes operations on its receiver to carry out the request
+- Client cria ConcreteCommand e especifica seu receptor
+- Invoker armazena o objeto ConcreteCommand
+- Invoker emite a solicitação chamando Execute no comando; quando os comandos são desfazíveis, ConcreteCommand armazena estado antes de invocar Execute
+- O objeto ConcreteCommand invoca operações em seu receptor para executar a solicitação
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Decouples invoker from executor**: Object that invokes the operation is decoupled from the one that knows how to perform it
-- **Commands are objects**: Can be manipulated and extended like any other object
-- **Can assemble into composite commands**: Assemble commands into composite
-- **Easy to add new Commands**: Don't need to change existing classes
-- **Support for undo/redo**: Store history of executed commands
-- **Support for transactions**: Group commands and execute atomically
+- **Desacopla invocador do executor**: O objeto que invoca a operação é desacoplado daquele que sabe como executá-la
+- **Commands são objetos**: Podem ser manipulados e estendidos como qualquer outro objeto
+- **Podem ser compostos em comandos compostos**: Montagem de comandos em compostos
+- **Fácil adicionar novos Commands**: Não é necessário alterar classes existentes
+- **Suporte a undo/redo**: Armazena histórico de comandos executados
+- **Suporte a transações**: Agrupa comandos e os executa atomicamente
 
-### Disadvantages
+### Desvantagens
 
-- **Increases number of classes**: Each concrete command requires new class
-- **Complexity**: Can complicate design for simple operations
+- **Aumenta o número de classes**: Cada comando concreto requer uma nova classe
+- **Complexidade**: Pode complicar o design para operações simples
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **How intelligent should a command be**: Varies from merely defining a binding between receiver and actions to implementing everything without delegating to receiver
+1. **Quão inteligente deve ser um command**: Varia desde apenas definir um vínculo entre receptor e ações até implementar tudo sem delegar ao receptor
 
-2. **Supporting undo/redo**: ConcreteCommand must store additional state
-   - Receiver (object that performed the operation)
-   - Arguments to the operation on the receiver
-   - Original values in receiver that may change
+2. **Suportando undo/redo**: ConcreteCommand deve armazenar estado adicional
+   - Receiver (objeto que executou a operação)
+   - Argumentos para a operação no receptor
+   - Valores originais no receptor que podem ter sido alterados
 
-3. **Avoiding error accumulation**: Errors can accumulate in undo process; use Memento to store state
+3. **Evitando acúmulo de erros**: Erros podem se acumular no processo de undo; use Memento para armazenar estado
 
-4. **Using templates for Commands**: In languages that support them, use templates/generics to parameterize Command with Receiver and Action
+4. **Usando templates para Commands**: Em linguagens que suportam, use templates/generics para parametrizar Command com Receiver e Action
 
-### Techniques
+### Técnicas
 
-- **Macro Commands**: Composite of commands for complex operations
-- **Command History**: Stack of executed commands for undo/redo
-- **Command Queue**: Queue of commands for later execution
-- **Transactional Commands**: Commands that can be committed or rolled back
+- **Macro Commands**: Composite de comandos para operações complexas
+- **Histórico de Comandos**: Pilha de comandos executados para undo/redo
+- **Fila de Comandos**: Fila de comandos para execução posterior
+- **Comandos Transacionais**: Comandos que podem ser confirmados ou revertidos
 
-## Known Uses
+## Usos Conhecidos
 
-- **GUI Frameworks**: MenuItem commands, Button actions
-- **Text Editors**: Undo/redo operations (cut, paste, delete, format)
-- **Transactional Systems**: Database transactions, business transactions
-- **Task Scheduling**: Job queues, delayed execution
-- **Macro Recording**: Recording and replaying sequences of commands
-- **Game Commands**: Player actions, AI behaviors
+- **Frameworks GUI**: Comandos de MenuItem, ações de Button
+- **Editores de Texto**: Operações de undo/redo (recortar, colar, excluir, formatar)
+- **Sistemas Transacionais**: Transações de banco de dados, transações de negócio
+- **Agendamento de Tarefas**: Filas de jobs, execução adiada
+- **Gravação de Macros**: Gravação e reprodução de sequências de comandos
+- **Comandos em Jogos**: Ações do jogador, comportamentos de IA
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Composite**](008_composite.md): Can implement MacroCommands
-- [**Memento**](006_memento.md): Can keep state for undo
-- [**Prototype**](../creational/004_prototype.md): Command that must be copied before being placed in history can use Prototype
-- [**Chain of Responsibility**](001_chain-of-responsibility.md): Commands can be handled in chain
-- [**Strategy**](009_strategy.md): Command is object representing request; Strategy is object representing algorithm
+- [**Composite**](008_composite.md): Pode implementar MacroCommands
+- [**Memento**](006_memento.md): Pode manter estado para undo
+- [**Prototype**](../creational/004_prototype.md): Command que deve ser copiado antes de ser colocado no histórico pode usar Prototype
+- [**Chain of Responsibility**](001_chain-of-responsibility.md): Commands podem ser tratados em cadeia
+- [**Strategy**](009_strategy.md): Command é um objeto que representa uma solicitação; Strategy é um objeto que representa um algoritmo
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate invocation from execution
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): add commands without modifying invoker
-- [038 - Command-Query Separation Principle](../../clean-code/018_conformidade-principio-inversao-consulta.md): command is pure command
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar invocação da execução
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): adicionar commands sem modificar o invoker
+- [038 - Command-Query Separation Principle](../../clean-code/conformidade-principio-inversao-consulta.md): command é um comando puro
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

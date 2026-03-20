@@ -155,8 +155,8 @@ function works() { } // Use OPTIMIZE
 
 ## Rules Relacionadas
 
-- [clean-code/007 - Error Handling](../../clean-code/007_qualidade-tratamento-erros-dominio.md)
-- [clean-code/019 - Boy Scout Rule](../../clean-code/019_regra-escoteiro-refatoracao-continua.md)
+- [clean-code/007 - Error Handling](../../clean-code/qualidade-tratamento-erros-dominio.md)
+- [clean-code/019 - Boy Scout Rule](../../clean-code/regra-escoteiro-refatoracao-continua.md)
 
 ---
 

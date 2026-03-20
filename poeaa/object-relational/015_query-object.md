@@ -1,49 +1,49 @@
 # Query Object
 
-**Type**: Object-Relational Mapping Pattern (Metadata)
+**Tipo**: Padrão Object-Relational (Metadados)
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Represent a database query as an object that can be constructed, composed, and interpreted programmatically, eliminating hardcoded SQL strings and enabling type-safe, reusable queries.
+Representar uma query de banco de dados como um objeto que pode ser construído, composto e interpretado programaticamente, eliminando strings SQL hardcoded e habilitando queries type-safe e reutilizáveis.
 
-## Also Known As
+## Também Conhecido Como
 
 - Criteria API
 - Query Builder
-- Specification Pattern (when combined with Domain Model)
+- Specification Pattern (quando combinado com Domain Model)
 
 ---
 
-## Motivation
+## Motivação
 
-Writing SQL queries as literal strings scattered throughout code creates multiple problems. First, these strings are opaque to the compiler — syntax errors, incorrect column names, and incompatible types are only discovered at runtime. Second, building queries dynamically (e.g., adding filters conditionally) requires string concatenation, which is error-prone and vulnerable to SQL injection. Third, complex queries duplicated in multiple places violate DRY.
+Escrever queries SQL como strings literais espalhadas pelo código cria múltiplos problemas. Primeiro, essas strings são opacas para o compilador — erros de sintaxe, nomes de colunas incorretos e tipos incompatíveis são descobertos apenas em tempo de execução. Segundo, construir queries dinamicamente (ex.: adicionar filtros condicionalmente) requer concatenação de strings, que é propensa a erros e vulnerável a SQL injection. Terceiro, queries complexas duplicadas em múltiplos lugares violam o DRY.
 
-Query Object solves these problems by representing the query as an object structure instead of text. For example, instead of `"SELECT * FROM users WHERE age > 18 AND status = 'ACTIVE'"`, you build: `query.select("*").from("users").where(age.greaterThan(18).and(status.equals("ACTIVE")))`. This object-oriented representation can be validated at compile-time (if type-safe), composed dynamically without dangerous concatenation, and reused through methods that return query fragments.
+O Query Object resolve esses problemas representando a query como uma estrutura de objetos em vez de texto. Por exemplo, em vez de `"SELECT * FROM users WHERE age > 18 AND status = 'ACTIVE'"`, você constrói: `query.select("*").from("users").where(age.greaterThan(18).and(status.equals("ACTIVE")))`. Essa representação orientada a objetos pode ser validada em tempo de compilação (se type-safe), composta dinamicamente sem concatenação perigosa e reutilizada por meio de métodos que retornam fragmentos de query.
 
-The pattern is essential in systems where queries are not known until runtime (e.g., advanced search interfaces where users select filters), or where the same framework needs to generate SQL for multiple databases (the Query Object is interpreted and translated to the specific SQL dialect of the target database).
-
----
-
-## Applicability
-
-Use Query Object when:
-
-- Queries need to be built dynamically based on user input or business conditions
-- You want to avoid hardcoded SQL and gain type-safety in queries (when possible)
-- The application needs to support multiple databases and queries must be portable
-- Complex queries are reused in multiple places and deserve abstraction
-- You need to compose queries from parts (e.g., add filters, ordering, pagination conditionally)
-- The system has an advanced search interface where users specify arbitrary filter criteria
+O padrão é essencial em sistemas onde as queries não são conhecidas até o tempo de execução (ex.: interfaces de busca avançada onde usuários selecionam filtros), ou onde o mesmo framework precisa gerar SQL para múltiplos bancos de dados (o Query Object é interpretado e traduzido para o dialeto SQL específico do banco de dados alvo).
 
 ---
 
-## Structure
+## Aplicabilidade
+
+Use Query Object quando:
+
+- Queries precisam ser construídas dinamicamente com base em entrada do usuário ou condições de negócio
+- Você quer evitar SQL hardcoded e ganhar type-safety nas queries (quando possível)
+- A aplicação precisa suportar múltiplos bancos de dados e as queries devem ser portáveis
+- Queries complexas são reutilizadas em múltiplos lugares e merecem abstração
+- Você precisa compor queries a partir de partes (ex.: adicionar filtros, ordenação, paginação condicionalmente)
+- O sistema possui interface de busca avançada onde usuários especificam critérios de filtro arbitrários
+
+---
+
+## Estrutura
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    Client Code                               │
+│                    Código Cliente                             │
 │  query = QueryBuilder.select("*")                            │
 │            .from("users")                                    │
 │            .where(Criteria.eq("status", "ACTIVE")           │
@@ -51,7 +51,7 @@ Use Query Object when:
 │            .orderBy("name")                                  │
 │  results = database.execute(query)                           │
 └────────────────────────────┬─────────────────────────────────┘
-                             │ builds
+                             │ constrói
                 ┌────────────▼────────────┐
                 │   Query Object          │
                 │ ─────────────────────   │
@@ -61,7 +61,7 @@ Use Query Object when:
                 │ - orderByClause: List   │
                 │ + toSQL(): String       │
                 └────────────┬────────────┘
-                             │ contains
+                             │ contém
                 ┌────────────▼────────────┐
                 │   Criteria              │
                 │ ─────────────────────   │
@@ -77,11 +77,11 @@ Use Query Object when:
 │ (field, val) │ │ (f, val) │ │ (left,right)│
 └──────────────┘ └──────────┘ └─────────────┘
 
-         │ interpreted by
+         │ interpretado por
          ▼
 ┌─────────────────────────┐
 │  Query Interpreter      │
-│  (SQL Generator)        │
+│  (Gerador SQL)          │
 │ ──────────────────────  │
 │ + generateSQL(Query)    │
 │ + applyDialect(vendor)  │
@@ -90,122 +90,122 @@ Use Query Object when:
 
 ---
 
-## Participants
+## Participantes
 
-- [**Query Object**](015_query-object.md): Represents the complete structure of an SQL query (SELECT, FROM, WHERE, ORDER BY, etc). Provides methods to add clauses and generate final SQL.
+- [**Query Object**](015_query-object.md): Representa a estrutura completa de uma query SQL (SELECT, FROM, WHERE, ORDER BY, etc.). Fornece métodos para adicionar cláusulas e gerar o SQL final.
 
-- **Criteria / Specification**: Represents logical conditions (WHERE clauses). Can be composed using boolean operators (AND, OR, NOT) to create complex expressions.
+- **Criteria / Specification**: Representa condições lógicas (cláusulas WHERE). Pode ser composto usando operadores booleanos (AND, OR, NOT) para criar expressões complexas.
 
-- **Query Builder**: Fluent API that facilitates construction of Query Objects through a type-safe, readable interface (`.where()`, `.orderBy()`, etc).
+- **Query Builder**: API fluente que facilita a construção de Query Objects por meio de uma interface type-safe e legível (`.where()`, `.orderBy()`, etc.).
 
-- **Query Interpreter**: Component responsible for transforming the object structure into an SQL string specific to the target database dialect.
+- **Query Interpreter**: Componente responsável por transformar a estrutura de objetos em uma string SQL específica para o dialeto do banco de dados alvo.
 
-- **Database Executor**: Receives the Query Object, invokes the Interpreter to obtain SQL, and executes the query on the database returning results.
-
----
-
-## Collaborations
-
-The client uses the Query Builder to incrementally build a Query Object, adding SELECT, FROM, WHERE clauses with composed Criteria. For example: `query.where(age.greaterThan(18))` creates an instance of GreaterThanCriteria and adds it to the Query Object's whereClause.
-
-When the client requests execution (`database.execute(query)`), the Database Executor passes the Query Object to the Query Interpreter. The Interpreter traverses the object structure, calls `toSQL()` methods on each component (Criteria, OrderBy, etc), and builds the final SQL string considering the database dialect. The SQL is then executed and results are returned.
+- **Database Executor**: Recebe o Query Object, invoca o Interpreter para obter o SQL e executa a query no banco de dados retornando os resultados.
 
 ---
 
-## Consequences
+## Colaborações
 
-### Advantages
+O cliente usa o Query Builder para construir incrementalmente um Query Object, adicionando cláusulas SELECT, FROM, WHERE com Criteria compostos. Por exemplo: `query.where(age.greaterThan(18))` cria uma instância de GreaterThanCriteria e a adiciona à whereClause do Query Object.
 
-1. **Type-Safety**: In typed languages, Query Objects can detect errors at compile-time (non-existent fields, incompatible types).
-2. **Dynamic Composition**: Queries can be built conditionally without dangerous string concatenation.
-3. **Reusability**: Query fragments (common Criteria) can be extracted into methods and reused.
-4. **Database Abstraction**: Query Objects can be translated to different SQL dialects, facilitating portability.
-5. **SQL Injection Prevention**: Parameters are always properly bound, eliminating injection risk.
-6. **Testability**: Queries can be tested without executing on the database — validate Query Object structure.
-
-### Disadvantages
-
-1. **Learning Curve**: Developers need to learn Query Object API instead of writing SQL directly.
-2. **Performance Overhead**: Query Object interpretation has computational cost compared to precompiled SQL.
-3. **Limited Expressiveness**: Very complex queries (window functions, recursive CTEs) may be difficult or impossible to represent.
-4. **Complicated Debugging**: When query fails, it's hard to see the final generated SQL — requires logging interpreted SQL.
-5. **Leaky Abstractions**: Developers still need to understand underlying SQL to effectively use the API.
+Quando o cliente solicita a execução (`database.execute(query)`), o Database Executor passa o Query Object ao Query Interpreter. O Interpreter percorre a estrutura de objetos, chama métodos `toSQL()` em cada componente (Criteria, OrderBy, etc.) e constrói a string SQL final considerando o dialeto do banco de dados. O SQL é então executado e os resultados são retornados.
 
 ---
 
-## Implementation
+## Consequências
 
-### Implementation Considerations
+### Vantagens
 
-1. **API Choice**: Decide between fluent API (method chaining), criteria API (composed objects), or internal DSL. Fluent is more readable; criteria is more flexible.
+1. **Type-Safety**: Em linguagens tipadas, Query Objects podem detectar erros em tempo de compilação (campos inexistentes, tipos incompatíveis).
+2. **Composição Dinâmica**: Queries podem ser construídas condicionalmente sem concatenação perigosa de strings.
+3. **Reutilização**: Fragmentos de query (Criteria comuns) podem ser extraídos em métodos e reutilizados.
+4. **Abstração de Banco de Dados**: Query Objects podem ser traduzidos para diferentes dialetos SQL, facilitando a portabilidade.
+5. **Prevenção de SQL Injection**: Parâmetros são sempre vinculados corretamente, eliminando o risco de injection.
+6. **Testabilidade**: Queries podem ser testadas sem executar no banco de dados — validar a estrutura do Query Object.
 
-2. **Type-Safety vs Flexibility**: Type-safe APIs (using generics, typed properties) detect errors early but are more verbose. String-based APIs are flexible but lose validation.
+### Desvantagens
 
-3. **Dialect Support**: Implement Interpreter strategy for each database (MySQL, PostgreSQL, Oracle) to translate Query Objects to specific SQL.
-
-4. **Bound Parameters**: Always use prepared statements with bound parameters. Query Objects should generate parameterized SQL, not interpolating values.
-
-5. **Query Optimization**: The Interpreter can apply optimizations (reorder joins, eliminate redundant clauses) during translation.
-
-6. **SQL Caching**: Cache generated SQL for identical Query Objects to avoid repeated reinterpretation.
-
-### Implementation Techniques
-
-1. **Composite Pattern**: Use Composite for Criteria — AndCriteria, OrCriteria contain other Criteria, allowing boolean expression trees.
-
-2. **Visitor Pattern**: Implement Query Interpreter as Visitor that traverses Query Object structure generating SQL.
-
-3. **Builder Pattern**: Use Builder for fluent construction of complex queries with state validation.
-
-4. **Specification Pattern**: Combine Query Object with Specification — each Specification can generate a Criteria to be used in queries.
-
-5. **Method Chaining**: Return `this` in Query Builder methods to allow chaining: `query.where().orderBy().limit()`.
-
-6. **Expression Trees**: In languages with support (C# LINQ), use expression trees to create type-safe queries from lambdas.
+1. **Curva de Aprendizado**: Desenvolvedores precisam aprender a API do Query Object em vez de escrever SQL diretamente.
+2. **Overhead de Performance**: A interpretação do Query Object tem custo computacional comparado ao SQL pré-compilado.
+3. **Expressividade Limitada**: Queries muito complexas (window functions, CTEs recursivos) podem ser difíceis ou impossíveis de representar.
+4. **Depuração Complicada**: Quando a query falha, é difícil ver o SQL final gerado — requer log do SQL interpretado.
+5. **Abstrações Vazadas**: Desenvolvedores ainda precisam entender o SQL subjacente para usar a API efetivamente.
 
 ---
 
-## Known Uses
+## Implementação
 
-1. **Hibernate Criteria API**: Classic Hibernate API for building queries programmatically: `session.createCriteria(User.class).add(Restrictions.eq("status", "ACTIVE"))`.
+### Considerações de Implementação
 
-2. **JPA Criteria API**: JPA 2.0+ standard for type-safe queries using generated metamodel: `CriteriaBuilder`, `CriteriaQuery`, `Root`.
+1. **Escolha da API**: Decidir entre API fluente (method chaining), criteria API (objetos compostos) ou DSL interno. Fluente é mais legível; criteria é mais flexível.
 
-3. **LINQ (C#)**: Language Integrated Query — queries are expression tree objects that can be interpreted to SQL (Entity Framework) or executed in memory.
+2. **Type-Safety vs. Flexibilidade**: APIs type-safe (usando generics, propriedades tipadas) detectam erros cedo mas são mais verbosas. APIs baseadas em string são flexíveis mas perdem validação.
 
-4. **SQLAlchemy (Python)**: Core API allows building queries using Python objects: `select([users]).where(users.c.age > 18)`.
+3. **Suporte a Dialeto**: Implementar a estratégia Interpreter para cada banco de dados (MySQL, PostgreSQL, Oracle) para traduzir Query Objects para SQL específico.
 
-5. **jOOQ (Java)**: Type-safe DSL that mirrors SQL: `create.selectFrom(USERS).where(USERS.AGE.gt(18)).orderBy(USERS.NAME)`.
+4. **Parâmetros Vinculados**: Sempre usar prepared statements com parâmetros vinculados. Query Objects devem gerar SQL parametrizado, não interpolando valores.
 
-6. **QueryDSL (Java)**: Framework that generates type-safe query classes from JPA/Hibernate entities for fluent queries.
+5. **Otimização de Query**: O Interpreter pode aplicar otimizações (reordenar joins, eliminar cláusulas redundantes) durante a tradução.
 
----
+6. **Cache de SQL**: Fazer cache do SQL gerado para Query Objects idênticos para evitar reinterpretação repetida.
 
-## Related Patterns
+### Técnicas de Implementação
 
-- [**GoF Interpreter**](../../gof/behavioral/003_interpreter.md): Query Object is a special case of Interpreter — interprets object structure into SQL.
-- [**GoF Composite**](../../gof/structural/003_composite.md): Criteria are composed using AND/OR to form expression trees.
-- [**GoF Builder**](../../gof/creational/002_builder.md): Query Builder uses Builder pattern for fluent query construction.
-- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Different Interpreters (MySQL, PostgreSQL) are Strategies for translating Query Object.
-- [**Repository**](016_repository.md): Repositories use Query Objects internally to build search queries.
-- **Specification** (Domain-Driven Design): Specifications can be converted to Query Object Criteria.
-- [**Metadata Mapping**](014_metadata-mapping.md): Query Objects use Metadata Mapping metamodel to validate field/table names.
+1. **Padrão Composite**: Usar Composite para Criteria — AndCriteria, OrCriteria contêm outros Criteria, permitindo árvores de expressão booleana.
 
-### Relation with Rules
+2. **Padrão Visitor**: Implementar o Query Interpreter como Visitor que percorre a estrutura do Query Object gerando SQL.
 
-- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): expressive query objects
-- [003 - Primitive Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md): encapsulate queries
+3. **Padrão Builder**: Usar Builder para construção fluente de queries complexas com validação de estado.
 
----
+4. **Padrão Specification**: Combinar Query Object com Specification — cada Specification pode gerar um Criteria para ser usado nas queries.
 
-## Business Rules Relationship
+5. **Method Chaining**: Retornar `this` nos métodos do Query Builder para permitir encadeamento: `query.where().orderBy().limit()`.
 
-- **[030] Prohibition of Unsafe Functions**: Query Objects eliminate SQL injection by always using bound parameters.
-- **[021] Prohibition of Logic Duplication**: Criteria and query fragments can be extracted and reused, eliminating duplication.
-- **[022] Prioritization of Simplicity and Clarity**: Fluent APIs make queries more readable than concatenated SQL strings.
-- **[014] Dependency Inversion Principle**: Domain code depends on abstraction (Query Object), not SQL details.
+6. **Expression Trees**: Em linguagens com suporte (C# LINQ), usar árvores de expressão para criar queries type-safe a partir de lambdas.
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+## Usos Conhecidos
+
+1. **Hibernate Criteria API**: API clássica do Hibernate para construir queries programaticamente: `session.createCriteria(User.class).add(Restrictions.eq("status", "ACTIVE"))`.
+
+2. **JPA Criteria API**: Padrão JPA 2.0+ para queries type-safe usando metamodelo gerado: `CriteriaBuilder`, `CriteriaQuery`, `Root`.
+
+3. **LINQ (C#)**: Language Integrated Query — queries são objetos de árvore de expressão que podem ser interpretados para SQL (Entity Framework) ou executados em memória.
+
+4. **SQLAlchemy (Python)**: A Core API permite construir queries usando objetos Python: `select([users]).where(users.c.age > 18)`.
+
+5. **jOOQ (Java)**: DSL type-safe que espelha o SQL: `create.selectFrom(USERS).where(USERS.AGE.gt(18)).orderBy(USERS.NAME)`.
+
+6. **QueryDSL (Java)**: Framework que gera classes de query type-safe a partir de entidades JPA/Hibernate para queries fluentes.
+
+---
+
+## Padrões Relacionados
+
+- [**GoF Interpreter**](../../gof/behavioral/003_interpreter.md): Query Object é um caso especial de Interpreter — interpreta estrutura de objetos em SQL.
+- [**GoF Composite**](../../gof/structural/003_composite.md): Criteria são compostos usando AND/OR para formar árvores de expressão.
+- [**GoF Builder**](../../gof/creational/002_builder.md): Query Builder usa o padrão Builder para construção fluente de queries.
+- [**GoF Strategy**](../../gof/behavioral/009_strategy.md): Diferentes Interpreters (MySQL, PostgreSQL) são Strategies para traduzir o Query Object.
+- [**Repository**](016_repository.md): Repositories usam Query Objects internamente para construir queries de busca.
+- **Specification** (Domain-Driven Design): Specifications podem ser convertidas em Criteria do Query Object.
+- [**Metadata Mapping**](014_metadata-mapping.md): Query Objects usam o metamodelo do Metadata Mapping para validar nomes de campos/tabelas.
+
+### Relação com Rules
+
+- [009 - Tell, Don't Ask](../../object-calisthenics/009_diga-nao-pergunte.md): query objects expressivos
+- [003 - Encapsulamento de Primitivos](../../object-calisthenics/003_encapsulamento-primitivos.md): encapsular queries
+
+---
+
+## Relação com Regras de Negócio
+
+- **[030] Proibição de Funções Inseguras**: Query Objects eliminam SQL injection sempre usando parâmetros vinculados.
+- **[021] Proibição de Duplicação de Lógica**: Criteria e fragmentos de query podem ser extraídos e reutilizados, eliminando duplicação.
+- **[022] Priorização de Simplicidade e Clareza**: APIs fluentes tornam as queries mais legíveis do que strings SQL concatenadas.
+- **[014] Dependency Inversion Principle**: Código de domínio depende de abstração (Query Object), não de detalhes SQL.
+
+---
+
+**Criado em**: 2025-01-10
+**Versão**: 1.0

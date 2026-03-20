@@ -204,7 +204,7 @@ function stillTemporary() { } // Atualize ou remova
 
 ## Rules Relacionadas
 
-- [clean-code/006 - Comments](../../clean-code/006_qualidade-comentarios-porque.md): NOTE explica o "porquê"
+- [clean-code/006 - Comments](../../clean-code/qualidade-comentarios-porque.md): NOTE explica o "porquê"
 
 ---
 

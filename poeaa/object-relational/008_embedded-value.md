@@ -1,50 +1,50 @@
 # Embedded Value
 
-**Classification**: Object-Relational Structural Pattern
+**Classificação**: Padrão Object-Relational Estrutural
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Map an object to multiple fields in the table containing the parent object.
+Mapear um objeto para múltiplos campos na tabela que contém o objeto pai.
 
-## Also Known As
+## Também Conhecido Como
 
 - Aggregate Mapping
 - Composite Value
 
-## Motivation
+## Motivação
 
-Many small objects make sense in code but don't warrant their own table. An address with street, city, state, and ZIP code is better as an object in code, but creating a separate addresses table would be over-engineering.
+Muitos objetos pequenos fazem sentido no código mas não justificam uma tabela própria. Um endereço com rua, cidade, estado e CEP é melhor como um objeto no código, mas criar uma tabela addresses separada seria over-engineering.
 
-Embedded Value solves this by mapping the value object's fields directly to columns in the owner object's table. The Customer's address lives in columns CUSTOMER_STREET, CUSTOMER_CITY, etc., in the CUSTOMERS table.
+O Embedded Value resolve isso mapeando os campos do objeto de valor diretamente para colunas na tabela do objeto proprietário. O endereço do Customer fica em colunas CUSTOMER_STREET, CUSTOMER_CITY, etc., na tabela CUSTOMERS.
 
-This pattern maintains the benefits of having rich objects in code while keeping the database schema simple and performant. It's especially useful for DDD Value Objects.
+Este padrão mantém os benefícios de ter objetos ricos no código enquanto mantém o esquema do banco de dados simples e performático. É especialmente útil para Value Objects de DDD.
 
-## Applicability
+## Aplicabilidade
 
-Use Embedded Value when:
+Use Embedded Value quando:
 
-- Value object is always used together with its owner
-- Object is small (2-6 fields)
-- Object is not shared between multiple owners
-- Performance: avoid unnecessary joins
-- Value Objects in Domain-Driven Design
-- Data is frequently accessed together
+- O objeto de valor é sempre usado junto com seu proprietário
+- O objeto é pequeno (2 a 6 campos)
+- O objeto não é compartilhado entre múltiplos proprietários
+- Performance: evitar joins desnecessários
+- Value Objects em Domain-Driven Design
+- Os dados são frequentemente acessados juntos
 
-## Structure
+## Estrutura
 
 ```
-Customer (in code)
+Customer (no código)
 ├── id
 ├── name
-└── address (Address object)
+└── address (objeto Address)
     ├── street
     ├── city
     ├── state
     └── zipCode
 
-CUSTOMERS (in database)
+CUSTOMERS (no banco de dados)
 ├── ID
 ├── NAME
 ├── CUSTOMER_STREET
@@ -52,85 +52,85 @@ CUSTOMERS (in database)
 ├── CUSTOMER_STATE
 └── CUSTOMER_ZIP
 
-Address is "embedded" in Customer columns
+Address está "embutido" nas colunas de Customer
 ```
 
-## Participants
+## Participantes
 
-- **Owner Object**: Object that contains the embedded value
-- [**Embedded Value**](008_embedded-value.md): Object mapped to owner columns
-- [**Mapper**](../base/002_mapper.md): Translates between nested object and flat columns
-- **Database Table**: Single table with columns for both owner and embedded
+- **Owner Object**: Objeto que contém o valor embutido
+- [**Embedded Value**](008_embedded-value.md): Objeto mapeado para colunas do proprietário
+- [**Mapper**](../base/002_mapper.md): Traduz entre o objeto aninhado e colunas planas
+- **Database Table**: Tabela única com colunas para o proprietário e o embutido
 
-## Collaborations
+## Colaborações
 
-- Mapper loads data from owner table
-- Mapper creates both owner object and embedded value object
-- Mapper injects embedded value into owner
-- On save, mapper extracts data from embedded value and persists in owner columns
-- No separate table or mapper for embedded value
+- Mapper carrega dados da tabela do proprietário
+- Mapper cria tanto o objeto proprietário quanto o objeto de valor embutido
+- Mapper injeta o valor embutido no proprietário
+- Ao salvar, mapper extrai os dados do valor embutido e os persiste nas colunas do proprietário
+- Não há tabela ou mapper separado para o valor embutido
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Performance**: No joins, single query
-- **Simplicity**: No additional tables
-- **Atomicity**: Owner and embedded always consistent
-- **Encapsulation**: Rich object in code
-- **Simple schema**: Fewer tables to manage
-- **Value Object support**: Perfect for DDD Value Objects
+- **Performance**: Sem joins, query única
+- **Simplicidade**: Sem tabelas adicionais
+- **Atomicidade**: Proprietário e embutido sempre consistentes
+- **Encapsulamento**: Objeto rico no código
+- **Esquema simples**: Menos tabelas para gerenciar
+- **Suporte a Value Object**: Perfeito para Value Objects de DDD
 
-### Disadvantages
+### Desvantagens
 
-- **Duplication**: Embedded value duplicated if used in multiple owners
-- **Schema changes**: Changing embedded requires changing multiple tables
-- **Complex queries**: Difficult to query by embedded fields
-- **Table size**: Many embedded values increase number of columns
-- **Null handling**: Hard to distinguish null embedded vs null fields
+- **Duplicação**: Valor embutido duplicado se usado em múltiplos proprietários
+- **Mudanças no esquema**: Alterar o embutido requer alterar múltiplas tabelas
+- **Queries complexas**: Difícil realizar queries por campos embutidos
+- **Tamanho da tabela**: Muitos valores embutidos aumentam o número de colunas
+- **Tratamento de nulo**: Difícil distinguir embutido nulo de campos nulos
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Naming convention**: Prefix columns with owner or embedded name
-2. **Null object**: How to represent absent embedded value
-3. **Multiple embedded**: Multiple embedded values of same type need different prefixes
-4. **Value Object immutability**: Embedded values should be immutable
-5. **Reuse**: If embedded is used in multiple contexts, consider separate table
-6. **Column explosion**: Limit number of embedded values per table
+1. **Convenção de nomenclatura**: Prefixar colunas com o nome do proprietário ou do embutido
+2. **Null object**: Como representar valor embutido ausente
+3. **Múltiplos embutidos**: Múltiplos valores embutidos do mesmo tipo precisam de prefixos diferentes
+4. **Imutabilidade do Value Object**: Valores embutidos devem ser imutáveis
+5. **Reutilização**: Se o embutido for usado em múltiplos contextos, considerar tabela separada
+6. **Explosão de colunas**: Limitar o número de valores embutidos por tabela
 
-### Techniques
+### Técnicas
 
-- **Prefix columns**: CUSTOMER_STREET, CUSTOMER_CITY avoids conflicts
-- **Null object pattern**: Return Null Object when all fields are null
-- **Factory methods**: Create embedded value from ResultSet
-- **Immutable values**: Embedded values should be immutable
-- **Column bundling**: Group related columns logically
+- **Prefixar colunas**: CUSTOMER_STREET, CUSTOMER_CITY evita conflitos
+- **Padrão Null Object**: Retornar Null Object quando todos os campos forem nulos
+- **Factory methods**: Criar valor embutido a partir do ResultSet
+- **Valores imutáveis**: Valores embutidos devem ser imutáveis
+- **Agrupamento de colunas**: Agrupar colunas relacionadas logicamente
 
-## Known Uses
+## Usos Conhecidos
 
-- **Address**: Addresses embedded in Customer, Order, etc.
-- [**Money**](../base/007_money.md): Monetary values (amount + currency) embedded
-- **Date Range**: Period with start/end date embedded
-- **Dimensions**: Height, width, depth in Product
-- **Coordinates**: Latitude/longitude in Location
-- **Name**: First/middle/last name in Person
+- **Address**: Endereços embutidos em Customer, Order, etc.
+- [**Money**](../base/007_money.md): Valores monetários (valor + moeda) embutidos
+- **Date Range**: Período com data de início/fim embutido
+- **Dimensions**: Altura, largura, profundidade em Product
+- **Coordinates**: Latitude/longitude em Location
+- **Name**: Nome/sobrenome em Person
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Dependent Mapping**](007_dependent-mapping.md): Alternative when separate table is needed
-- [**Serialized LOB**](009_serialized-lob.md): Alternative for complex objects
-- [**Value Object**](../base/006_value-object.md): DDD concept for embedded values
-- [**Foreign Key Mapping**](005_foreign-key-mapping.md): When sharing between owners
-- [**Data Mapper**](../data-source/004_data-mapper.md): Implements mapping
+- [**Dependent Mapping**](007_dependent-mapping.md): Alternativa quando uma tabela separada é necessária
+- [**Serialized LOB**](009_serialized-lob.md): Alternativa para objetos complexos
+- [**Value Object**](../base/006_value-object.md): Conceito DDD para valores embutidos
+- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Quando compartilhado entre proprietários
+- [**Data Mapper**](../data-source/004_data-mapper.md): Implementa o mapeamento
 
-### Relationship with Rules
+### Relação com Rules
 
-- [003 - Primitive Encapsulation](../../object-calisthenics/003_encapsulamento-primitivos.md): Value Objects
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): immutable embedded values
+- [003 - Encapsulamento de Primitivos](../../object-calisthenics/003_encapsulamento-primitivos.md): Value Objects
+- [029 - Imutabilidade de Objetos](../../clean-code/imutabilidade-objetos-freeze.md): valores embutidos imutáveis
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

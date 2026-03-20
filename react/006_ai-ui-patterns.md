@@ -202,8 +202,8 @@ Use hooks como `useChat` do Vercel AI SDK para gerenciamento de estado simplific
 
 ### Relação com Rules
 
-- [028 - Tratamento de Exceção Assíncrona](../../clean-code/008_tratamento-excecao-assincrona.md): crucial para robustez
-- [030 - Proibição de Funções Inseguras](../../clean-code/010_proibicao-funcoes-inseguras.md): proteger API keys
+- [028 - Tratamento de Exceção Assíncrona](../../clean-code/tratamento-excecao-assincrona.md): crucial para robustez
+- [030 - Proibição de Funções Inseguras](../../clean-code/proibicao-funcoes-inseguras.md): proteger API keys
 - [042 - Configurações via Ambiente](../../twelve-factor/003_configuracoes-via-ambiente.md): gerenciar credenciais
 - [050 - Logs como Fluxo de Eventos](../../twelve-factor/011_logs-fluxo-eventos.md): monitoring de interações com IA
 

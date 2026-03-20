@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-The module/package intended for reuse must have the same release scope as its consumer. The granularity of reuse is the granularity of release.
+O módulo/pacote destinado à reutilização deve ter o mesmo escopo de release que seu consumidor. A granularidade de reutilização é a granularidade de release.
 
-## Why it matters
+## Por que importa
 
-REP violations lead to packages that are difficult to version and consume, forcing clients to accept modules they don't use, or to wait for unnecessary releases to get a fix.
+Violações do REP levam a pacotes difíceis de versionar e consumir, forçando os clientes a aceitar módulos que não utilizam, ou a aguardar releases desnecessários para obter uma correção.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The reusable package must be minimally cohesive (SRP applied at package level).
-- [ ] All items in the reusable package must be released under the same version (no *sub-versioning*).
-- [ ] The folder/package must have a single reuse purpose (e.g., *Logging*, *Validation*, *DomainPrimitives*).
+- [ ] O pacote reutilizável deve ser minimamente coeso (SRP aplicado no nível de pacote).
+- [ ] Todos os itens do pacote reutilizável devem ser lançados sob a mesma versão (sem *sub-versioning*).
+- [ ] A pasta/pacote deve ter um único propósito de reutilização (ex.: *Logging*, *Validation*, *DomainPrimitives*).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Monorepos with Workspaces**: Environments where dependency management is strictly controlled so that the version is always synchronized.
+- **Monorepos com Workspaces**: Ambientes onde o gerenciamento de dependências é estritamente controlado para que a versão esteja sempre sincronizada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if the package contains classes that are not used together by clients.
+Verificar se o pacote contém classes que não são utilizadas em conjunto pelos clientes.
 
-### Automatic
+### Automático
 
-Dependency analysis: `dependency-analysis` to identify unused classes.
+Análise de dependências: `dependency-analysis` para identificar classes não utilizadas.
 
-## Related to
+## Relacionado a
 
-- [016 - Common Closure Principle](../package-principles/002_common-closure-principle.md): complements
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reinforces
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reinforces
-- [017 - Common Reuse Principle](../package-principles/003_common-reuse-principle.md): complements
-- [040 - Single Codebase](../twelve-factor/001_single-codebase.md): complements
+- [016 - Common Closure Principle](../package-principles/002_common-closure-principle.md): complementa
+- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reforça
+- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reforça
+- [017 - Common Reuse Principle](../package-principles/003_common-reuse-principle.md): complementa
+- [040 - Single Codebase](../twelve-factor/001_single-codebase.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

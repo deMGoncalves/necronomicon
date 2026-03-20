@@ -1,4 +1,4 @@
-# Encapsulation of Domain Primitives (Value Objects)
+# Encapsulamento de Primitivos de Domínio (Value Objects)
 
 **ID**: CREATIONAL-003
 **Severity**: 🔴 Critical
@@ -6,47 +6,47 @@
 
 ---
 
-## What it is
+## O que é
 
-Requires that primitive types (such as `number`, `boolean`) and the `String` class that represent domain concepts (e.g., *Email*, *CPF*, *Currency*) be encapsulated in their own immutable *Value Objects*.
+Exige que tipos primitivos (como `number`, `boolean`) e a classe `String` que representam conceitos de domínio (por exemplo, *Email*, *CPF*, *Currency*) sejam encapsulados em seus próprios *Value Objects* imutáveis.
 
-## Why it matters
+## Por que importa
 
-Ensures that validation, formatting, and business rules intrinsic to the data are defined and verified once in the constructor, avoiding inconsistencies and serious bugs from passing invalid data between methods.
+Garante que validação, formatação e regras de negócio intrínsecas aos dados sejam definidas e verificadas uma única vez no construtor, evitando inconsistências e bugs graves decorrentes da passagem de dados inválidos entre métodos.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Input parameters and return values of public methods must not be primitive/String types if they represent a specific domain concept.
-- [ ] All *Value Objects* must be immutable.
-- [ ] The validation logic for format and business rules of the value must be contained and executed in the *Value Object* constructor.
+- [ ] Parâmetros de entrada e valores de retorno de métodos públicos não devem ser do tipo primitivo/String se representarem um conceito específico de domínio.
+- [ ] Todos os *Value Objects* devem ser imutáveis.
+- [ ] A lógica de validação de formato e regras de negócio do valor deve estar contida e ser executada no construtor do *Value Object*.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Generic Primitives**: Primitive types used for counting (`i`, `index`), control booleans (`isValid`), or numbers without domain meaning (e.g., time delta).
+- **Primitivos Genéricos**: Tipos primitivos usados para contagem (`i`, `index`), booleanos de controle (`isValid`) ou números sem significado de domínio (por exemplo, delta de tempo).
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Identify String or Number being passed as an argument in multiple methods, representing, for example, an *ID* or *Path*.
+Identificar String ou Number sendo passados como argumento em múltiplos métodos, representando, por exemplo, um *ID* ou *Path*.
 
-## Automatic
+## Automático
 
-TypeScript: Detect excessive use of `string` or `number` for typed fields that should be dedicated classes.
+TypeScript: Detectar uso excessivo de `string` ou `number` para campos tipados que deveriam ser classes dedicadas.
 
-## Related to
+## Relacionado a
 
-- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reinforces
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reinforces
-- [024 - Prohibition of Magic Constants](../clean-code/004_prohibition-magic-constants.md): reinforces
-- [006 - Prohibition of Abbreviated Names](../object-calisthenics/006_prohibition-abbreviated-names.md): reinforces
-- [033 - Parameter Limit per Function](../clean-code/013_parameter-limit-per-function.md): reinforces
-- [029 - Object Immutability](../clean-code/009_object-immutability.md): reinforces
-- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): complements
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): complements
-- [035 - Prohibition of Misleading Names](../clean-code/015_prohibition-misleading-names.md): reinforces
+- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reforça
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reforça
+- [024 - Prohibition of Magic Constants](../clean-code/proibicao-constantes-magicas.md): reforça
+- [006 - Prohibition of Abbreviated Names](../object-calisthenics/006_prohibition-abbreviated-names.md): reforça
+- [033 - Parameter Limit per Function](../clean-code/limite-parametros-funcao.md): reforça
+- [029 - Object Immutability](../clean-code/imutabilidade-objetos-freeze.md): reforça
+- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): complementa
+- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): complementa
+- [035 - Prohibition of Misleading Names](../clean-code/proibicao-nomes-enganosos.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

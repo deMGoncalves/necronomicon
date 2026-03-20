@@ -1,37 +1,37 @@
 # Bridge
 
-**Classification**: Structural Pattern
+**Classificação**: Padrão Estrutural
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Decouple an abstraction from its implementation so that the two can vary independently. Allows abstraction and implementation to be developed separately and that client code in relation to the abstract interface.
+Desacoplar uma abstração de sua implementação para que as duas possam variar independentemente. Permite que abstração e implementação sejam desenvolvidas separadamente e que o código cliente se relacione com a interface abstrata.
 
-## Also Known As
+## Também Conhecido Como
 
 - Handle/Body
 
-## Motivation
+## Motivação
 
-When an abstraction can have one of several possible implementations, the usual way to accommodate them is through inheritance. But inheritance permanently binds an implementation to the abstraction, making it difficult to modify, extend, and reuse abstractions and implementations independently.
+Quando uma abstração pode ter uma de várias implementações possíveis, a forma usual de acomodá-las é através de herança. Mas a herança vincula permanentemente uma implementação à abstração, tornando difícil modificar, estender e reutilizar abstrações e implementações de forma independente.
 
-Consider portable Window classes that must work on X Window System and IBM Presentation Manager. Using inheritance to define WindowXWindow and WindowPM makes it difficult to compose Window with different window abstractions (IconWindow, TransientWindow). We'd have to create platform-specific versions of each type: XIconWindow, PMIconWindow, XTransientWindow, PMTransientWindow - class explosion.
+Considere classes Window portáteis que devem funcionar no X Window System e no IBM Presentation Manager. Usar herança para definir WindowXWindow e WindowPM dificulta compor Window com diferentes abstrações de janela (IconWindow, TransientWindow). Teríamos que criar versões específicas de plataforma para cada tipo: XIconWindow, PMIconWindow, XTransientWindow, PMTransientWindow — explosão de classes.
 
-The Bridge pattern avoids this by separating the abstraction hierarchy (Window) from the implementation hierarchy (WindowImpl). Window maintains reference to WindowImpl and delegates implementation-dependent operations.
+O padrão Bridge evita isso separando a hierarquia de abstração (Window) da hierarquia de implementação (WindowImpl). Window mantém referência a WindowImpl e delega operações dependentes de implementação.
 
-## Applicability
+## Aplicabilidade
 
-Use the Bridge pattern when:
+Use o padrão Bridge quando:
 
-- You want to avoid permanent binding between abstraction and implementation (such as when implementation must be selected or switched at runtime)
-- Both abstractions and implementations should be extensible by subclassing
-- Changes in the implementation of an abstraction should not impact clients
-- You want to share an implementation among multiple objects and hide this fact from the client
-- You have class proliferation resulting from a two-dimensional hierarchy
-- You want to split a monolithic class that has several variants of functionality
+- Você quer evitar vínculo permanente entre abstração e implementação (como quando a implementação deve ser selecionada ou trocada em tempo de execução)
+- Tanto as abstrações quanto as implementações devem ser extensíveis por subclassing
+- Mudanças na implementação de uma abstração não devem impactar os clientes
+- Você quer compartilhar uma implementação entre múltiplos objetos e ocultar esse fato do cliente
+- Você tem proliferação de classes resultante de uma hierarquia bidimensional
+- Você quer dividir uma classe monolítica que possui várias variantes de funcionalidade
 
-## Structure
+## Estrutura
 
 ```
 Client
@@ -56,77 +56,77 @@ ConcreteImplementorB implements Implementor
 └── operationImpl() → specific implementation B
 ```
 
-## Participants
+## Participantes
 
-- **Abstraction**: Defines the abstraction's interface; maintains reference to object of type Implementor
-- **RefinedAbstraction**: Extends the interface defined by Abstraction
-- **Implementor**: Defines the interface for implementation classes; doesn't need to correspond exactly to Abstraction's interface
-- **ConcreteImplementor**: Implements the Implementor interface and defines its concrete implementation
+- **Abstraction**: Define a interface da abstração; mantém referência a um objeto do tipo Implementor
+- **RefinedAbstraction**: Estende a interface definida por Abstraction
+- **Implementor**: Define a interface para as classes de implementação; não precisa corresponder exatamente à interface de Abstraction
+- **ConcreteImplementor**: Implementa a interface Implementor e define sua implementação concreta
 
-## Collaborations
+## Colaborações
 
-- Abstraction forwards client requests to its Implementor object
+- Abstraction encaminha requisições dos clientes para seu objeto Implementor
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Decouples interface and implementation**: Implementation not permanently bound to interface
-- **Improves extensibility**: Extend Abstraction and Implementor hierarchies independently
-- **Hides implementation details**: Can hide details from clients
-- **Reduces compilations**: Change in implementation doesn't require recompilation of Abstraction and clients
-- **Implementation sharing**: Multiple abstractions can share same implementation
+- **Desacopla interface e implementação**: A implementação não está permanentemente vinculada à interface
+- **Melhora a extensibilidade**: Estenda as hierarquias de Abstraction e Implementor de forma independente
+- **Oculta detalhes de implementação**: Pode ocultar detalhes dos clientes
+- **Reduz recompilações**: Mudança na implementação não requer recompilação de Abstraction e clientes
+- **Compartilhamento de implementação**: Múltiplas abstrações podem compartilhar a mesma implementação
 
-### Disadvantages
+### Desvantagens
 
-- **Increases complexity**: Introduces additional indirection
-- **Overhead**: Slight performance penalty due to delegation
+- **Aumenta a complexidade**: Introduz indireção adicional
+- **Overhead**: Leve penalidade de desempenho devido à delegação
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Only one Implementor**: Bridge still useful even with only one implementation if you want to avoid coupling
+1. **Apenas um Implementor**: Bridge ainda é útil mesmo com apenas uma implementação se você quiser evitar acoplamento
 
-2. **Creating the right Implementor object**: How and where to decide which ConcreteImplementor to instantiate
-   - If Abstraction knows all ConcreteImplementors, it can instantiate appropriate one in constructor
-   - Delegate decision to another object (Factory, Abstract Factory)
-   - Choose default implementation and change it later as needed
+2. **Criando o objeto Implementor correto**: Como e onde decidir qual ConcreteImplementor instanciar
+   - Se Abstraction conhece todos os ConcreteImplementors, pode instanciar o apropriado no construtor
+   - Delegar a decisão para outro objeto (Factory, Abstract Factory)
+   - Escolher implementação padrão e alterá-la posteriormente conforme necessário
 
-3. **Sharing implementors**: Use reference counting when Implementor is shared
+3. **Compartilhando implementors**: Use contagem de referências quando o Implementor é compartilhado
 
-4. **Multiple inheritance**: Can use multiple inheritance to combine abstraction and implementation, but binds the two
+4. **Herança múltipla**: Pode usar herança múltipla para combinar abstração e implementação, mas vincula as duas
 
-### Techniques
+### Técnicas
 
-- **Factory for Implementors**: Use Factory to choose appropriate implementation
-- **Strategy within Bridge**: Implementor can be Strategy pattern
-- **Lazy initialization**: Defer creation of Implementor until first needed
+- **Factory para Implementors**: Use Factory para escolher a implementação adequada
+- **Strategy dentro do Bridge**: O Implementor pode ser o padrão Strategy
+- **Inicialização preguiçosa**: Adie a criação do Implementor até que seja necessário pela primeira vez
 
-## Known Uses
+## Usos Conhecidos
 
-- **JDBC**: Driver interface (Implementor) and Connection/Statement (Abstraction)
-- **GUI Frameworks**: Abstract window toolkit and platform-specific implementations
-- **Collections**: Interface (Abstraction) and specific implementations (ArrayList, LinkedList)
-- **Graphics Rendering**: Drawing abstraction and rendering engines (DirectX, OpenGL, Vulkan)
-- **Device Drivers**: Device abstraction and specific drivers
-- **Persistence Layers**: ORM abstraction and database-specific implementations
+- **JDBC**: Interface de driver (Implementor) e Connection/Statement (Abstraction)
+- **Frameworks GUI**: Abstract window toolkit e implementações específicas de plataforma
+- **Coleções**: Interface (Abstraction) e implementações específicas (ArrayList, LinkedList)
+- **Renderização Gráfica**: Abstração de desenho e motores de renderização (DirectX, OpenGL, Vulkan)
+- **Drivers de Dispositivo**: Abstração de dispositivo e drivers específicos
+- **Camadas de Persistência**: Abstração ORM e implementações específicas de banco de dados
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Abstract Factory**](../creational/001_abstract-factory.md): Can create and configure a particular Bridge
-- [**Adapter**](001_adapter.md): Changes interface of existing object; Bridge separates interface from implementation proactively
-- **State/Strategy**: Implementations can be States or Strategies
-- [**Template Method**](../clean-code/002_template-method.md): Inheritance to vary algorithm; Bridge uses composition to vary implementation
+- [**Abstract Factory**](../creational/001_abstract-factory.md): Pode criar e configurar um Bridge específico
+- [**Adapter**](001_adapter.md): Muda a interface de um objeto existente; Bridge separa interface de implementação de forma proativa
+- **State/Strategy**: As implementações podem ser States ou Strategies
+- [**Template Method**](../gof/behavioral/010_template-method.md): Herança para variar algoritmo; Bridge usa composição para variar implementação
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): allows independent extension
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): abstraction depends on interface
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separates responsibilities
-- [013 - Interface Segregation Principle](../../solid/004_interface-segregation-principle.md): specific interfaces
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): permite extensão independente
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): abstração depende de interface
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separa responsabilidades
+- [013 - Interface Segregation Principle](../../solid/004_interface-segregation-principle.md): interfaces específicas
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

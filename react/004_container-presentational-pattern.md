@@ -107,7 +107,7 @@ Presentational Component
 
 - [010 - Princípio da Responsabilidade Única](../../solid/001_single-responsibility-principle.md): implementa
 - [020 - Separação de Command-Query](../../package-principles/006_separacao-command-query-cqrs.md): relaciona-se
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): reforça
 
 ## Exemplo de Implementação
 

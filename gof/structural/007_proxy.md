@@ -1,35 +1,35 @@
 # Proxy
 
-**Classification**: Structural Pattern
+**Classificação**: Padrão Estrutural
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Provide a surrogate or placeholder for another object to control access to it. Creates a representative object that controls access to the original object, allowing you to perform something before or after the request reaches the original object.
+Fornecer um substituto ou representante para outro objeto a fim de controlar o acesso a ele. Cria um objeto representante que controla o acesso ao objeto original, permitindo realizar algo antes ou depois da requisição chegar ao objeto original.
 
-## Also Known As
+## Também Conhecido Como
 
 - Surrogate
 
-## Motivation
+## Motivação
 
-One reason to control access to an object is to defer the full cost of its creation and initialization until we actually need to use it. Consider a document editor that can embed graphical objects. Some graphical objects (large raster images) are expensive to create. But opening a document should be fast; we shouldn't create all expensive objects at once.
+Uma razão para controlar o acesso a um objeto é adiar o custo total de sua criação e inicialização até que realmente precisemos usá-lo. Considere um editor de documentos que pode incorporar objetos gráficos. Alguns objetos gráficos (imagens raster grandes) são caros de criar. Mas abrir um documento deve ser rápido; não devemos criar todos os objetos caros de uma vez.
 
-The solution is to use another object, an image proxy, in place of the real image. The proxy acts like the image and takes care of instantiating it when the document requires it. The proxy forwards subsequent requests directly to the image.
+A solução é usar outro objeto, um proxy de imagem, no lugar da imagem real. O proxy age como a imagem e cuida de instanciá-la quando o documento precisar. O proxy encaminha requisições subsequentes diretamente para a imagem.
 
-## Applicability
+## Aplicabilidade
 
-Proxy is applicable whenever there's a need for a more versatile or sophisticated reference than a simple pointer. Common situations:
+O Proxy é aplicável sempre que há necessidade de uma referência mais versátil ou sofisticada do que um simples ponteiro. Situações comuns:
 
-- **Remote Proxy**: Local representative for an object in a different address space
-- **Virtual Proxy**: Creates expensive objects on demand (lazy initialization)
-- **Protection Proxy**: Controls access to the original object (rights verification)
-- **Smart Reference**: Replacement for a pointer that performs additional actions when the object is accessed (counting references, loading persistent object, locking)
-- **Cache Proxy**: Maintains cache of expensive results
-- **Logging Proxy**: Records calls to the real object
+- **Remote Proxy**: Representante local para um objeto em um espaço de endereços diferente
+- **Virtual Proxy**: Cria objetos caros sob demanda (inicialização preguiçosa)
+- **Protection Proxy**: Controla o acesso ao objeto original (verificação de direitos)
+- **Smart Reference**: Substituto de um ponteiro que realiza ações adicionais quando o objeto é acessado (contagem de referências, carregamento de objeto persistente, bloqueio)
+- **Cache Proxy**: Mantém cache de resultados caros
+- **Logging Proxy**: Registra chamadas ao objeto real
 
-## Structure
+## Estrutura
 
 ```
 Client
@@ -50,73 +50,73 @@ Proxy implements Subject
     └── Post-processing
 ```
 
-## Participants
+## Participantes
 
-- **Subject**: Defines common interface for RealSubject and Proxy so that Proxy can be used anywhere RealSubject is expected
-- **RealSubject**: Defines the real object that the proxy represents
-- [**Proxy**](007_proxy.md): Maintains a reference that lets it access RealSubject; provides interface identical to Subject; controls access to RealSubject and may be responsible for creating and deleting it
+- **Subject**: Define interface comum para RealSubject e Proxy para que o Proxy possa ser usado em qualquer lugar onde RealSubject for esperado
+- **RealSubject**: Define o objeto real que o proxy representa
+- [**Proxy**](007_proxy.md): Mantém uma referência que permite acessar o RealSubject; fornece interface idêntica ao Subject; controla o acesso ao RealSubject e pode ser responsável por criá-lo e excluí-lo
 
-## Collaborations
+## Colaborações
 
-- Proxy forwards requests to RealSubject when appropriate, depending on the proxy type
+- O Proxy encaminha requisições ao RealSubject quando apropriado, dependendo do tipo de proxy
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Transparent control**: Introduces a level of indirection when accessing an object; specific types exploit this
-- **Remote Proxy**: Hides that the object resides in a different address space
-- **Virtual Proxy**: Optimizations like creating object on demand
-- **Protection/Smart Proxies**: Allow additional tasks when accessing the object
-- **Copy-on-write**: Virtual proxy optimization; defers copying until modification
+- **Controle transparente**: Introduz um nível de indireção ao acessar um objeto; tipos específicos exploram isso
+- **Remote Proxy**: Oculta que o objeto reside em um espaço de endereços diferente
+- **Virtual Proxy**: Otimizações como criar o objeto sob demanda
+- **Protection/Smart Proxies**: Permitem tarefas adicionais ao acessar o objeto
+- **Copy-on-write**: Otimização de proxy virtual; adia a cópia até a modificação
 
-### Disadvantages
+### Desvantagens
 
-- **Overhead**: Introduces an indirection layer that may slow down operations
-- **Complexity**: Increases system complexity
+- **Overhead**: Introduz uma camada de indireção que pode desacelerar operações
+- **Complexidade**: Aumenta a complexidade do sistema
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Operator overloading**: In languages that permit it, can overload access operator (C++ `->`); in languages like Java, it's not possible
+1. **Sobrecarga de operadores**: Em linguagens que permitem, pode-se sobrecarregar o operador de acesso (C++ `->`); em linguagens como Java, não é possível
 
-2. **Proxy doesn't need to know concrete type**: If proxy only forwards requests, it can work with any RealSubject
+2. **O proxy não precisa conhecer o tipo concreto**: Se o proxy apenas encaminha requisições, pode trabalhar com qualquer RealSubject
 
-3. **Lazy initialization of RealSubject**: Virtual proxy can defer creation
+3. **Inicialização preguiçosa do RealSubject**: O proxy virtual pode adiar a criação
 
-4. **Protection Proxy**: Check permissions before forwarding
+4. **Protection Proxy**: Verificar permissões antes de encaminhar
 
-### Techniques
+### Técnicas
 
-- **Lazy Initialization**: Create RealSubject only when necessary
-- **Reference Counting**: Count references and delete RealSubject when not used
-- **Caching**: Cache results of expensive operations
-- **Access Control**: Verify credentials before allowing access
+- **Inicialização Preguiçosa**: Crie o RealSubject apenas quando necessário
+- **Contagem de Referências**: Conte referências e exclua o RealSubject quando não utilizado
+- **Caching**: Armazene em cache resultados de operações caras
+- **Controle de Acesso**: Verifique credenciais antes de permitir acesso
 
-## Known Uses
+## Usos Conhecidos
 
-- **RMI/RPC**: Java RMI, gRPC use remote proxies
-- **ORM Frameworks**: Hibernate lazy loading uses virtual proxies
-- **Spring AOP**: Proxies for aspects (transactions, security)
-- **ES6 Proxy**: JavaScript Proxy API to intercept operations
-- **Image Loading**: Virtual proxies to load images on demand
-- **Security Proxies**: Authentication/authorization verification
+- **RMI/RPC**: Java RMI, gRPC usam proxies remotos
+- **Frameworks ORM**: Lazy loading do Hibernate usa proxies virtuais
+- **Spring AOP**: Proxies para aspectos (transações, segurança)
+- **ES6 Proxy**: API Proxy do JavaScript para interceptar operações
+- **Carregamento de Imagens**: Proxies virtuais para carregar imagens sob demanda
+- **Proxies de Segurança**: Verificação de autenticação/autorização
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Adapter**](001_adapter.md): Provides different interface to the object; Proxy provides same interface
-- [**Decorator**](004_decorator.md): Adds responsibilities; Proxy controls access; Decorator may have same implementation as Proxy but different intent
-- [**Facade**](005_facade.md): Provides simplified interface; Proxy provides same interface as subject
-- [**Singleton**](../creational/005_singleton.md): Proxy can control access to singleton
+- [**Adapter**](001_adapter.md): Fornece interface diferente ao objeto; Proxy fornece a mesma interface
+- [**Decorator**](004_decorator.md): Adiciona responsabilidades; Proxy controla acesso; Decorator pode ter a mesma implementação que Proxy, mas intenção diferente
+- [**Facade**](005_facade.md): Fornece interface simplificada; Proxy fornece a mesma interface que o sujeito
+- [**Singleton**](../creational/005_singleton.md): Proxy pode controlar o acesso ao singleton
 
-### Relation to Rules
+### Relação com Rules
 
-- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): Proxy substitutes RealSubject
-- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): client depends on Subject
-- [036 - Function Side Effects Restriction](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): proxy can add effects
+- [012 - Liskov Substitution Principle](../../solid/003_liskov-substitution-principle.md): Proxy substitui o RealSubject
+- [014 - Dependency Inversion Principle](../../solid/005_dependency-inversion-principle.md): cliente depende do Subject
+- [036 - Function Side Effects Restriction](../../clean-code/restricao-funcoes-efeitos-colaterais.md): proxy pode adicionar efeitos
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

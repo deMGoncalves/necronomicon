@@ -229,8 +229,8 @@ IDEAs são candidatas naturais para:
 
 ## Rules Relacionadas
 
-- [clean-code/003 - YAGNI](../../clean-code/003_prohibition-speculative-functionality.md): IDEA ≠ implementar agora
-- [clean-code/019 - Boy Scout Rule](../../clean-code/019_regra-escoteiro-refatoracao-continua.md): avaliar IDEAs ao modificar área
+- [clean-code/003 - YAGNI](../../clean-code/proibicao-funcionalidade-especulativa.md): IDEA ≠ implementar agora
+- [clean-code/019 - Boy Scout Rule](../../clean-code/regra-escoteiro-refatoracao-continua.md): avaliar IDEAs ao modificar área
 
 ---
 

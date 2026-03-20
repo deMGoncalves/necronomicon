@@ -1,4 +1,4 @@
-# Method Chaining Restriction
+# Restrição de Encadeamento de Métodos
 
 **ID**: STRUCTURAL-005
 **Severity**: 🟡 Medium
@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-Limits method call chaining and chained property access (*train wrecks*), allowing at most one method call or property access per line.
+Limita o encadeamento de chamadas de métodos e acesso encadeado a propriedades (*train wrecks*), permitindo no máximo uma chamada de método ou acesso a propriedade por linha.
 
-## Why it matters
+## Por que importa
 
-Excessive chaining (e.g., `a.b().c().d()`) violates the Law of Demeter (Principle of Least Knowledge), increasing client coupling to internal details of the object structure. The restriction improves readability by forcing line breaks or the use of temporary variables.
+Encadeamento excessivo (por exemplo, `a.b().c().d()`) viola a Lei de Demeter (Princípio do Mínimo Conhecimento), aumentando o acoplamento do cliente a detalhes internos da estrutura do objeto. A restrição melhora a legibilidade ao forçar quebras de linha ou o uso de variáveis temporárias.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Each statement must contain at most one method call or one property access (e.g., `a.b()`).
-- [ ] Multiple calls on the same line (e.g., `object.getA().getB()`) are prohibited.
-- [ ] Multiple calls must be broken into separate lines or delegated to a new method.
+- [ ] Cada instrução deve conter no máximo uma chamada de método ou um acesso a propriedade (por exemplo, `a.b()`).
+- [ ] Múltiplas chamadas na mesma linha (por exemplo, `object.getA().getB()`) são proibidas.
+- [ ] Múltiplas chamadas devem ser divididas em linhas separadas ou delegadas a um novo método.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Fluent Interfaces/Builders**: Design patterns (*Builder* or *Chaining*) that return `this` to configure an object (e.g., `new Query().where().limit()`).
-- **Static Constants**: Access to static constants from utility classes.
+- **Interfaces Fluentes/Builders**: Padrões de design (*Builder* ou *Chaining*) que retornam `this` para configurar um objeto (por exemplo, `new Query().where().limit()`).
+- **Constantes Estáticas**: Acesso a constantes estáticas de classes utilitárias.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for two or more consecutive dots (`.`) (excluding floating point) in a single statement line.
+Buscar por dois ou mais pontos consecutivos (`.`) (excluindo ponto flutuante) em uma única linha de instrução.
 
-### Automatic
+### Automático
 
-ESLint: `no-chaining` (with custom plugins).
+ESLint: `no-chaining` (com plugins customizados).
 
-## Related to
+## Relacionado a
 
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reinforces
-- [006 - Prohibition of Abbreviated Names](../object-calisthenics/006_prohibition-abbreviated-names.md): complements
-- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](../clean-code/002_prioritization-simplicity-clarity.md): complements
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reforça
+- [006 - Prohibition of Abbreviated Names](../object-calisthenics/006_prohibition-abbreviated-names.md): complementa
+- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reforça
+- [022 - Prioritization of Simplicity and Clarity](../clean-code/priorizacao-simplicidade-clareza.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

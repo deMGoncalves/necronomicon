@@ -1,44 +1,44 @@
 # Table Module
 
-**Classification**: Domain Logic Pattern
+**Classificação**: Padrão de Lógica de Domínio
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Organize domain logic with one class per database table. A single instance of the class contains shared behavior operating over a RecordSet representing multiple rows of the table.
+Organizar a lógica de domínio com uma classe por tabela do banco de dados. Uma única instância da classe contém o comportamento compartilhado que opera sobre um RecordSet representando múltiplas linhas da tabela.
 
-## Also Known As
+## Também Conhecido Como
 
 - Table Gateway
 - Table Object
 
-## Motivation
+## Motivação
 
-Table Module offers a middle ground between simplicity of Transaction Script and richness of Domain Model. Instead of independent procedures or objects per row, you have one class that encapsulates common behavior for all rows of a table.
+O Table Module oferece um meio-termo entre a simplicidade do Transaction Script e a riqueza do Domain Model. Em vez de procedimentos independentes ou objetos por linha, você tem uma classe que encapsula o comportamento comum para todas as linhas de uma tabela.
 
-Consider a contract system where you need to calculate recognized revenue. With Table Module, a ContractsModule class would have a calculateRecognitions(contractsRecordSet) method that processes multiple contracts simultaneously. The RecordSet passes between layers carrying data, while the module provides all business logic.
+Considere um sistema de contratos onde é preciso calcular a receita reconhecida. Com o Table Module, uma classe ContractsModule teria um método calculateRecognitions(contractsRecordSet) que processa múltiplos contratos simultaneamente. O RecordSet transita entre as camadas carregando os dados, enquanto o módulo fornece toda a lógica de negócio.
 
-This approach works particularly well on platforms with robust support for tabular data structures, like ADO.NET DataSets or JDBC Result Sets. Shared behavior is centralized, but you still work with familiar data structures.
+Essa abordagem funciona particularmente bem em plataformas com suporte robusto a estruturas de dados tabulares, como ADO.NET DataSets ou JDBC Result Sets. O comportamento compartilhado é centralizado, mas você ainda trabalha com estruturas de dados familiares.
 
-## Applicability
+## Aplicabilidade
 
-Use Table Module when:
+Use Table Module quando:
 
-- Domain logic has moderate complexity
-- Platform provides excellent support for RecordSet structures
-- Team is comfortable with data-oriented programming
-- There is common behavior shared between rows of the same table
-- Batch processing over multiple rows is common
-- Overhead of full Domain Model is not justified
+- A lógica de domínio tiver complexidade moderada
+- A plataforma oferecer excelente suporte a estruturas RecordSet
+- A equipe estiver confortável com programação orientada a dados
+- Houver comportamento comum compartilhado entre linhas da mesma tabela
+- O processamento em lote sobre múltiplas linhas for comum
+- A sobrecarga de um Domain Model completo não for justificada
 
-## Structure
+## Estrutura
 
 ```
-Client (Presentation Layer)
-└── Uses: TableModule + RecordSet
+Cliente (Camada de Apresentação)
+└── Usa: TableModule + RecordSet
 
-TableModule (one class per table)
+TableModule (uma classe por tabela)
 ├── ProductsModule
 │   ├── calculateDiscount(RecordSet)
 │   ├── applyPriceAdjustment(RecordSet)
@@ -54,91 +54,91 @@ TableModule (one class per table)
     └── findActiveCustomers(): RecordSet
 
 RecordSet
-└── Data structure containing multiple rows and columns
+└── Estrutura de dados contendo múltiplas linhas e colunas
 ```
 
-## Participants
+## Participantes
 
-- [**Table Module**](003_table-module.md): Class containing business logic for all rows of a specific table
-- **RecordSet**: Data structure representing multiple rows; can be DataSet, DataTable, or similar
-- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Provides data to Table Module (often returns RecordSets)
-- **Client**: User interface or service layer that invokes Table Modules
+- [**Table Module**](003_table-module.md): Classe que contém a lógica de negócio para todas as linhas de uma tabela específica
+- **RecordSet**: Estrutura de dados que representa múltiplas linhas; pode ser DataSet, DataTable ou similar
+- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Fornece dados ao Table Module (frequentemente retorna RecordSets)
+- **Cliente**: Interface de usuário ou camada de serviço que invoca os Table Modules
 
-## Collaborations
+## Colaborações
 
-- Client obtains RecordSet from Table Data Gateway or directly from database
-- Client passes RecordSet to Table Module to process business logic
-- Table Module executes operations over all rows in the RecordSet
-- Table Module may modify RecordSet in-place or return new RecordSet
-- Modified RecordSet returns to Client or is passed for persistence
+- O cliente obtém o RecordSet do Table Data Gateway ou diretamente do banco de dados
+- O cliente passa o RecordSet ao Table Module para processar a lógica de negócio
+- O Table Module executa operações sobre todas as linhas do RecordSet
+- O Table Module pode modificar o RecordSet in-place ou retornar um novo RecordSet
+- O RecordSet modificado retorna ao cliente ou é passado para persistência
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Moderate simplicity**: More structured than Transaction Script; less complex than Domain Model
-- **Native RecordSet**: Leverages platform's native support for tabular structures
-- **Centralized behavior**: All logic for table in one place
-- **Batch performance**: Processes multiple rows efficiently
-- **Familiar to developers**: Familiar data structure; low learning curve
-- **Natural sharing**: Easy to share behavior between rows
+- **Simplicidade moderada**: Mais estruturado que Transaction Script; menos complexo que Domain Model
+- **RecordSet nativo**: Aproveita o suporte nativo da plataforma a estruturas tabulares
+- **Comportamento centralizado**: Toda a lógica da tabela em um único lugar
+- **Desempenho em lote**: Processa múltiplas linhas com eficiência
+- **Familiar aos desenvolvedores**: Estrutura de dados conhecida; baixa curva de aprendizado
+- **Compartilhamento natural**: Fácil compartilhar comportamento entre linhas
 
-### Disadvantages
+### Desvantagens
 
-- **RecordSet coupling**: Strong dependency on platform-specific data structures
-- **Limited complexity**: Doesn't scale well to very complex domains
-- **Limited OO**: Doesn't leverage polymorphism, inheritance, and other advanced features
-- **Object-relational mapping**: Still has impedance mismatch, just different
-- **Weak identity**: Difficult to track identity of individual objects
-- **Difficulty with relationships**: Complex relationships are hard to manage
+- **Acoplamento ao RecordSet**: Forte dependência de estruturas de dados específicas da plataforma
+- **Complexidade limitada**: Não escala bem para domínios muito complexos
+- **OO limitado**: Não aproveita polimorfismo, herança e outros recursos avançados
+- **Mapeamento objeto-relacional**: Ainda há impedância, apenas diferente
+- **Identidade fraca**: Difícil rastrear a identidade de objetos individuais
+- **Dificuldade com relacionamentos**: Relacionamentos complexos são difíceis de gerenciar
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **One class per table**: Create separate Table Module for each database table
-2. **Instance vs static**: Decide if methods should be static or instance methods
-3. **RecordSet as parameter**: Methods receive RecordSets and operate on them
-4. **Returning RecordSets**: Queries return RecordSets for subsequent processing
-5. **Validation**: Encapsulate business validations in modules
-6. **Transactions**: Manage transactions externally to the module
+1. **Uma classe por tabela**: Crie um Table Module separado para cada tabela do banco de dados
+2. **Instância vs estático**: Decida se os métodos devem ser estáticos ou de instância
+3. **RecordSet como parâmetro**: Os métodos recebem RecordSets e operam sobre eles
+4. **Retornando RecordSets**: As consultas retornam RecordSets para processamento subsequente
+5. **Validação**: Encapsule as validações de negócio nos módulos
+6. **Transações**: Gerencie as transações externamente ao módulo
 
-### Techniques
+### Técnicas
 
-- **Static Methods**: Use static methods if no state in module
-- **Instance Methods**: Use instance if module needs to maintain state (connections, configuration)
-- **RecordSet Manipulation**: Operations that modify RecordSet in-place
-- **Query Methods**: Return filtered or transformed RecordSets
-- **Calculation Methods**: Calculate values based on data in RecordSet
-- **Validation Methods**: Validate business rules over multiple rows
+- **Métodos Estáticos**: Use métodos estáticos se o módulo não tiver estado
+- **Métodos de Instância**: Use instância se o módulo precisar manter estado (conexões, configuração)
+- **Manipulação de RecordSet**: Operações que modificam o RecordSet in-place
+- **Métodos de Consulta**: Retornam RecordSets filtrados ou transformados
+- **Métodos de Cálculo**: Calculam valores com base nos dados do RecordSet
+- **Métodos de Validação**: Validam regras de negócio sobre múltiplas linhas
 
-## Known Uses
+## Usos Conhecidos
 
-- **ADO.NET Applications**: .NET applications using DataSets and DataTables
-- **Classic ASP/VB6**: Classic Visual Basic applications with ADO RecordSets
-- **Java with JDBC**: Java applications processing ResultSets
-- **Report Generation**: Reporting systems operating over tabular data
-- **Data Migration Tools**: ETL tools processing batch data
-- **Administrative Interfaces**: Admin interfaces with batch operations
+- **Aplicações ADO.NET**: Aplicações .NET usando DataSets e DataTables
+- **Classic ASP/VB6**: Aplicações Visual Basic clássicas com ADO RecordSets
+- **Java com JDBC**: Aplicações Java processando ResultSets
+- **Geração de Relatórios**: Sistemas de relatórios operando sobre dados tabulares
+- **Ferramentas de Migração de Dados**: Ferramentas ETL processando dados em lote
+- **Interfaces Administrativas**: Interfaces de administração com operações em lote
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Transaction Script**](001_transaction-script.md): Table Module adds organization by table
-- [**Domain Model**](002_domain-model.md): Richer and OO; Table Module simpler
-- [**Service Layer**](004_service-layer.md): Table Modules can form Service Layer
-- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Provides RecordSets to Table Module
-- [**Row Data Gateway**](../data-source/002_row-data-gateway.md): Alternative oriented to single row
-- [**Active Record**](../data-source/003_active-record.md): Combines data and behavior per instance
-- [**Record Set**](../base/011_record-set.md): Data structure used by Table Module
+- [**Transaction Script**](001_transaction-script.md): O Table Module adiciona organização por tabela
+- [**Domain Model**](002_domain-model.md): Mais rico e OO; Table Module é mais simples
+- [**Service Layer**](004_service-layer.md): Table Modules podem formar uma Service Layer
+- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Fornece RecordSets ao Table Module
+- [**Row Data Gateway**](../data-source/002_row-data-gateway.md): Alternativa orientada a linha única
+- [**Active Record**](../data-source/003_active-record.md): Combina dados e comportamento por instância
+- [**Record Set**](../base/011_record-set.md): Estrutura de dados usada pelo Table Module
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): module per table
-- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): operates on row collections
-- [007 - Maximum Lines per Class Limit](../../object-calisthenics/007_limite-maximo-linhas-classe.md): modules should be concise
-- [022 - Prioritization of Simplicity](../../clean-code/002_prioritization-simplicity-clarity.md): simple solution for moderate complexity
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): módulo por tabela
+- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): opera sobre coleções de linhas
+- [007 - Maximum Lines per Class Limit](../../object-calisthenics/007_limite-maximo-linhas-classe.md): módulos devem ser concisos
+- [022 - Prioritization of Simplicity](../../clean-code/priorizacao-simplicidade-clareza.md): solução simples para complexidade moderada
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

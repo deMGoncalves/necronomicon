@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "clean-code/cobertura-teste-minima-qualidade.md",
+                "file": "clean-code/priorizacao-simplicidade-clareza.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "cobertura-teste-minima-qualidade"
+              "title": "priorizacao-simplicidade-clareza"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "clean-code/cobertura-teste-minima-qualidade.md",
+                "file": "clean-code/priorizacao-simplicidade-clareza.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for cobertura-teste-minima-qualidade"
+              "title": "Backlinks for priorizacao-simplicidade-clareza"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "clean-code/cobertura-teste-minima-qualidade.md",
+                "file": "clean-code/priorizacao-simplicidade-clareza.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from cobertura-teste-minima-qualidade"
+              "title": "Outgoing links from priorizacao-simplicidade-clareza"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "clean-code/cobertura-teste-minima-qualidade.md",
+                "file": "clean-code/priorizacao-simplicidade-clareza.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of cobertura-teste-minima-qualidade"
+              "title": "Outline of priorizacao-simplicidade-clareza"
             }
           }
         ]
@@ -186,41 +186,41 @@
   "active": "c77dec5062175e09",
   "lastOpenFiles": [
     "clean-code/clean-code.md",
-    "templates/zettel-rule.md.tmp.4033219.1774031120614",
-    "clean-code/cobertura-teste-minima-qualidade.md",
-    "clean-code/tratamento-excecao-assincrona.md",
-    "clean-code/restricao-imports-relativos.md",
-    "clean-code/restricao-funcoes-efeitos-colaterais.md",
-    "clean-code/regra-escoteiro-refatoracao-continua.md",
-    "clean-code/qualidade-tratamento-erros-dominio.md",
-    "clean-code/qualidade-comentarios-porque.md",
-    "clean-code/proibicao-nomes-enganosos.md",
-    "clean-code/proibicao-funcoes-inseguras.md",
-    "clean-code/proibicao-funcionalidade-especulativa.md",
-    "clean-code/proibicao-duplicacao-logica.md",
-    "clean-code/proibicao-constantes-magicas.md",
-    "clean-code/proibicao-argumentos-sinalizadores.md",
-    "clean-code/proibicao-anti-padrao-blob.md",
+    "anti-patterns/cut-and-paste-programming.md",
     "clean-code/priorizacao-simplicidade-clareza.md",
-    "clean-code/nomes-classes-metodos-consistentes.md",
-    "clean-code/limite-parametros-funcao.md",
-    "clean-code/imutabilidade-objetos-freeze.md",
-    "clean-code/conformidade-principio-inversao-consulta.md",
-    "templates/zettel-rule.md.tmp.4033219.1774026332883",
-    "templates/zettel-rule.md.tmp.4033219.1774026328681",
-    "templates/zettel-rule.md.tmp.4033219.1774024558131",
-    "templates/zettel-rule.md",
-    "templates/zettel-padrao.md",
-    "templates/zettel-mecanismo.md",
-    "templates/zettel-conceito.md",
-    "templates/zettel-api.md",
-    "templates/zettel-rule.md.tmp.4033219.1774019766956",
-    "templates/zettel-rule.md.tmp.4033219.1774019269667",
-    "templates/zettel-rule.md.tmp.4033219.1774016870426",
-    "clean-code/clean-code.md.tmp.4033219.1774015218053",
+    "clean-code/limite-parametros-funcao.md.tmp.4033219.1774034892319",
+    "clean-code/qualidade-comentarios-porque.md.tmp.4033219.1774034891180",
+    "clean-code/tratamento-excecao-assincrona.md.tmp.4033219.1774034889954",
+    "clean-code/proibicao-funcionalidade-especulativa.md.tmp.4033219.1774034875222",
+    "clean-code/proibicao-duplicacao-logica.md.tmp.4033219.1774034873072",
+    "clean-code/priorizacao-simplicidade-clareza.md.tmp.4033219.1774034870058",
+    "clean-code/cobertura-teste-minima-qualidade.md",
+    "anti-patterns/the-blob.md",
+    "anti-patterns/anti-patterns.md",
+    "anti-patterns/anti-patterns.md.tmp.4033219.1774034661439",
+    "anti-patterns/pyramid-of-doom.md",
+    "anti-patterns/callback-hell.md",
+    "anti-patterns/message-chains.md",
+    "anti-patterns/data-clumps.md",
+    "anti-patterns/middle-man.md",
+    "anti-patterns/refused-bequest.md",
+    "anti-patterns/speculative-generality.md",
+    "anti-patterns/divergent-change.md",
+    "anti-patterns/shotgun-surgery.md",
+    "anti-patterns/primitive-obsession.md",
+    "anti-patterns/feature-envy.md",
+    "anti-patterns/large-class.md",
+    "anti-patterns/long-method.md",
+    "anti-patterns/premature-optimization.md",
+    "anti-patterns/clever-code.md",
+    "anti-patterns/overengineering.md",
+    "anti-patterns/poltergeists.md",
+    "anti-patterns/boat-anchor.md",
+    "anti-patterns/spaghetti-code.md",
+    "templates/zettel-anti-pattern.md.tmp.4033219.1774034309556",
+    "anti-patterns",
+    "clean-code/conformidade-principio-inversao-consulta.md.tmp.4033219.1774031462214",
     "Untitled 1.canvas",
-    "Untitled.base",
-    "Untitled.canvas",
-    "clean-code/clean-code.md.tmp.4033219.1774014187983"
+    "Untitled.canvas"
   ]
 }

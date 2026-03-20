@@ -1,19 +1,19 @@
-# CDD Methodology (Cognitive-Driven Development)
+# Metodologia CDD (Cognitive-Driven Development)
 
-## Overview
+## Visão Geral
 
-CDD (Cognitive-Driven Development) is a development and code review methodology focused on the **cognitive load** that code imposes on developers who need to read, understand, and modify it.
+CDD (Cognitive-Driven Development) é uma metodologia de desenvolvimento e revisão de código focada na **carga cognitiva** que o código impõe aos desenvolvedores que precisam lê-lo, entendê-lo e modificá-lo.
 
-## Fundamental Principles
+## Princípios Fundamentais
 
-### 1. Cognitive Complexity > Cyclomatic Complexity
+### 1. Complexidade Cognitiva > Complexidade Ciclomática
 
-While Cyclomatic Complexity (CC) measures the number of execution paths, **Cognitive Complexity** measures the mental effort required to understand the code.
+Enquanto a Complexidade Ciclomática (CC) mede o número de caminhos de execução, a **Complexidade Cognitiva** mede o esforço mental necessário para compreender o código.
 
-**Example:**
+**Exemplo:**
 
 ```javascript
-// CC = 4, but low cognitive complexity
+// CC = 4, mas baixa complexidade cognitiva
 function validateUser(user) {
   if (!user) return false;
   if (!user.email) return false;
@@ -21,13 +21,13 @@ function validateUser(user) {
   return true;
 }
 
-// CC = 4, but HIGH cognitive complexity
+// CC = 4, mas ALTA complexidade cognitiva
 function processData(data) {
   if (data) {
     if (data.items) {
       for (let item of data.items) {
         if (item.active) {
-          // nested processing
+          // processamento aninhado
         }
       }
     }
@@ -37,118 +37,118 @@ function processData(data) {
 
 ### 2. ICP (Intrinsic Complexity Points)
 
-ICP is a composite metric that considers:
+ICP é uma métrica composta que considera:
 
-- **Cyclomatic Complexity** (execution paths)
-- **Nesting Depth** (indentation levels)
-- **Number of Responsibilities** (SRP violation)
-- **Coupling** (dependencies)
+- **Complexidade Ciclomática** (caminhos de execução)
+- **Profundidade de Aninhamento** (níveis de indentação)
+- **Número de Responsabilidades** (violação do SRP)
+- **Acoplamento** (dependências)
 
-See `icp-calculation.md` for calculation details.
+Consulte `icp-calculation.md` para detalhes de cálculo.
 
-### 3. The "Reading is More Important than Writing" Rule
+### 3. A Regra "Ler é Mais Importante que Escrever"
 
-Code is read **10x more times** than it is written. CDD prioritizes:
+O código é lido **10 vezes mais** do que é escrito. O CDD prioriza:
 
-- **Readability** > Conciseness
-- **Clarity** > Cleverness
-- **Explicit** > Implicit
+- **Legibilidade** > Concisão
+- **Clareza** > Esperteza
+- **Explícito** > Implícito
 
-## CDD Analysis Layers
+## Camadas de Análise CDD
 
-### Layer 1: ICP Analysis
+### Camada 1: Análise de ICP
 
-Quantifies the code's cognitive complexity through ICP.
+Quantifica a complexidade cognitiva do código por meio do ICP.
 
-**Goal:** ICP ≤ 5 for most methods
+**Meta:** ICP ≤ 5 para a maioria dos métodos
 
-### Layer 2: Rules Validation
+### Camada 2: Validação de Rules
 
-Verifies compliance with architectural and design rules:
+Verifica a conformidade com regras arquiteturais e de design:
 
-- **Structural**: Layout, organization, naming
-- **Behavioral**: SOLID principles, design patterns
-- **Creational**: Encapsulation, immutability
-- **Infrastructure**: 12 Factor App, deployment
+- **Estruturais**: Layout, organização, nomenclatura
+- **Comportamentais**: Princípios SOLID, padrões de design
+- **Criacionais**: Encapsulamento, imutabilidade
+- **Infraestrutura**: 12 Factor App, implantação
 
-### Layer 3: Pattern Identification
+### Camada 3: Identificação de Padrões
 
-Identifies opportunities to apply known patterns:
+Identifica oportunidades de aplicar padrões conhecidos:
 
-- **GoF Patterns**: Solutions to common design problems
-- **PoEAA Patterns**: Enterprise architectural patterns
+- **Padrões GoF**: Soluções para problemas comuns de design
+- **Padrões PoEAA**: Padrões arquiteturais empresariais
 
-## Application in Code Review
+## Aplicação em Code Review
 
-### Step 1: Quick Scan (2-5 minutes)
+### Passo 1: Varredura Rápida (2-5 minutos)
 
-- Identify files with ICP > 5
-- Identify obvious rule violations (names, structure)
-- Identify known anti-patterns
+- Identificar arquivos com ICP > 5
+- Identificar violações óbvias de rules (nomes, estrutura)
+- Identificar anti-padrões conhecidos
 
-### Step 2: Deep Analysis (10-20 minutes)
+### Passo 2: Análise Profunda (10-20 minutos)
 
-- Calculate detailed ICP for critical files
-- Verify compliance with relevant rules
-- Identify refactoring opportunities
+- Calcular ICP detalhado para arquivos críticos
+- Verificar conformidade com as rules relevantes
+- Identificar oportunidades de refatoração
 
-### Step 3: Contextual Calibration (5 minutes)
+### Passo 3: Calibração Contextual (5 minutos)
 
-- Consider PR type (fix, feature, refactor)
-- Consider business context (urgency, technical debt)
-- Calibrate severity based on real impact
+- Considerar o tipo de PR (fix, feature, refactor)
+- Considerar o contexto de negócio (urgência, dívida técnica)
+- Calibrar severidade com base no impacto real
 
-## Success Metrics
+## Métricas de Sucesso
 
-### For the Code
+### Para o Código
 
-- **Average ICP** of the project ≤ 4
-- **0% of methods** with ICP > 10
-- **≥ 80% compliance** with critical rules
+- **ICP médio** do projeto ≤ 4
+- **0% dos métodos** com ICP > 10
+- **≥ 80% de conformidade** com rules críticas
 
-### For the Team
+### Para o Time
 
-- **Bug reduction** in code with low ICP
-- **Increased velocity** in modifications
-- **Technical debt reduction** over time
+- **Redução de bugs** em código com ICP baixo
+- **Aumento de velocidade** em modificações
+- **Redução de dívida técnica** ao longo do tempo
 
-## Anti-Patterns to Avoid
+## Anti-Padrões a Evitar
 
-### 1. Paralyzing Perfectionism
+### 1. Perfeccionismo Paralisante
 
-❌ Block PRs for minor violations of non-critical rules
-✅ Focus on violations that impact maintainability and bugs
+❌ Bloquear PRs por violações menores de rules não críticas
+✅ Focar em violações que impactam manutenibilidade e bugs
 
-### 2. Rule Rigidity
+### 2. Rigidez de Rules
 
-❌ Apply rules rigidly without considering context
-✅ Calibrate severity based on PR type and urgency
+❌ Aplicar rules rigidamente sem considerar o contexto
+✅ Calibrar severidade com base no tipo de PR e urgência
 
-### 3. Superficial Analysis
+### 3. Análise Superficial
 
-❌ Review only code style and formatting
-✅ Analyze cognitive complexity and design
+❌ Revisar apenas estilo de código e formatação
+✅ Analisar complexidade cognitiva e design
 
-### 4. Lack of Pragmatism
+### 4. Falta de Pragmatismo
 
-❌ Demand perfect code that is never delivered
-✅ Accept "good enough" that delivers value
+❌ Exigir código perfeito que nunca é entregue
+✅ Aceitar o "bom o suficiente" que entrega valor
 
-## References
+## Referências
 
-- **Rules** (51 architectural rules):
-  - `references/object-calisthenics/` - 9 Object Calisthenics rules
-  - `references/solid/` - 5 SOLID principles
-  - `references/package-principles/` - 6 Package principles
-  - `references/clean-code/` - 19 Clean Code rules
-  - `references/twelve-factor/` - 12 Twelve-Factor App rules
+- **Rules** (51 regras arquiteturais):
+  - `references/object-calisthenics/` - 9 regras de Object Calisthenics
+  - `references/solid/` - 5 princípios SOLID
+  - `references/package-principles/` - 6 princípios de Pacotes
+  - `references/clean-code/` - 19 regras de Clean Code
+  - `references/twelve-factor/` - 12 regras do Twelve-Factor App
 
-- **Patterns** (66 design patterns):
-  - `references/gof/` - 23 GoF patterns (creational, structural, behavioral)
-  - `references/poeaa/` - 43 PoEAA patterns (domain-logic, data-source, object-relational, web-presentation, offline-concurrency, session-state, base)
+- **Padrões** (66 padrões de design):
+  - `references/gof/` - 23 padrões GoF (criacionais, estruturais, comportamentais)
+  - `references/poeaa/` - 43 padrões PoEAA (domain-logic, data-source, object-relational, web-presentation, offline-concurrency, session-state, base)
 
-- **ICP Calculation**: `references/icp-calculation.md`
+- **Cálculo de ICP**: `references/icp-calculation.md`
 
-## Version
+## Versão
 
-CDD Methodology v1.0 - March 2026
+Metodologia CDD v1.0 - Março 2026

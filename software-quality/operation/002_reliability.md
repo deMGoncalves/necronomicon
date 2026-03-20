@@ -165,9 +165,9 @@ try {
 
 ## Rules Relacionadas
 
-- [clean-code/007 - Error Handling](../../clean-code/007_qualidade-tratamento-erros-dominio.md)
-- [clean-code/008 - Async Exceptions](../../clean-code/008_tratamento-excecao-assincrona.md)
-- [clean-code/016 - Side Effects](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md)
+- [clean-code/007 - Error Handling](../../clean-code/qualidade-tratamento-erros-dominio.md)
+- [clean-code/008 - Async Exceptions](../../clean-code/tratamento-excecao-assincrona.md)
+- [clean-code/016 - Side Effects](../../clean-code/restricao-funcoes-efeitos-colaterais.md)
 
 ## Patterns Relacionados
 

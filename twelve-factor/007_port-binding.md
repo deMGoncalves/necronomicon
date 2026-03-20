@@ -1,48 +1,48 @@
-# Service Exposure via Port Binding
+# Exposição de Serviços via Port Binding
 
 **ID**: INFRASTRUCTURE-046
-**Severity**: 🟠 High
-**Category**: Infrastructure
+**Severidade**: 🟠 Alto
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-The application must be **completely self-contained** and expose its services through *port binding*. It must not depend on an external web server (Apache, Nginx) injected at runtime to be executable — the HTTP server must be embedded in the application.
+A aplicação deve ser **completamente autocontida** e expor seus serviços por meio de *port binding*. Não deve depender de um servidor web externo (Apache, Nginx) injetado em tempo de execução para ser executável — o servidor HTTP deve estar embutido na aplicação.
 
-## Why it matters
+## Por que importa
 
-Port binding ensures that the application is portable and can be executed in any environment without external server configuration. The application becomes a service that can be consumed by other applications via URL, creating a natural microservices architecture.
+O port binding garante que a aplicação seja portável e possa ser executada em qualquer ambiente sem configuração de servidor externo. A aplicação se torna um serviço que pode ser consumido por outras aplicações via URL, criando uma arquitetura natural de microsserviços.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The application must start its own HTTP/HTTPS server and *bind* to a port specified by environment variable.
-- [ ] Depending on external web server configuration (VirtualHost, .htaccess) to function correctly is prohibited.
-- [ ] The execution port must be configurable via `PORT` or equivalent variable, not hardcoded.
+- [ ] A aplicação deve iniciar seu próprio servidor HTTP/HTTPS e fazer *bind* em uma porta especificada por variável de ambiente.
+- [ ] É proibido depender de configuração de servidor web externo (VirtualHost, .htaccess) para funcionar corretamente.
+- [ ] A porta de execução deve ser configurável via variável `PORT` ou equivalente, não hardcoded.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Reverse Proxy**: Use of Nginx/HAProxy in front of the application for TLS termination, load balancing, or routing — provided the application works without it.
-- **Frontend SPA Applications**: Static applications that are served by CDN or static file server.
+- **Reverse Proxy**: Uso de Nginx/HAProxy na frente da aplicação para terminação TLS, balanceamento de carga ou roteamento — desde que a aplicação funcione sem ele.
+- **Aplicações Frontend SPA**: Aplicações estáticas servidas por CDN ou servidor de arquivos estáticos.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if the application can be started and accessed only with `npm start` or `bun run start`, without additional server configuration.
+Verificar se a aplicação pode ser iniciada e acessada apenas com `npm start` ou `bun run start`, sem configuração adicional de servidor.
 
-### Automatic
+### Automático
 
-CI/CD: Tests that start the application in a clean container and verify if it responds on the configured port.
+CI/CD: Testes que iniciam a aplicação em um container limpo e verificam se ela responde na porta configurada.
 
-## Related to
+## Relacionado a
 
-- [042 - Configurations via Environment](../twelve-factor/003_configuracoes-via-ambiente.md): reinforces
-- [043 - Backing Services as Resources](../twelve-factor/004_servicos-apoio-recursos.md): complements
-- [047 - Concurrency via Process Model](../twelve-factor/008_concorrencia-via-processos.md): complements
-- [048 - Process Disposability](../twelve-factor/009_descartabilidade-processos.md): complements
+- [042 - Configurações via Ambiente](../twelve-factor/003_configuracoes-via-ambiente.md): reforça
+- [043 - Serviços de Apoio como Recursos](../twelve-factor/004_servicos-apoio-recursos.md): complementa
+- [047 - Concorrência via Modelo de Processos](../twelve-factor/008_concorrencia-via-processos.md): complementa
+- [048 - Descartabilidade de Processos](../twelve-factor/009_descartabilidade-processos.md): complementa
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

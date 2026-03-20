@@ -1,42 +1,42 @@
 # Transaction Script
 
-**Classification**: Domain Logic Pattern
+**Classificação**: Padrão de Lógica de Domínio
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Organize business logic through procedures where each procedure handles a single request from the presentation layer.
+Organizar a lógica de negócio por meio de procedimentos onde cada procedimento lida com uma única requisição da camada de apresentação.
 
-## Also Known As
+## Também Conhecido Como
 
-- Procedural Business Logic
-- Service Method
+- Lógica de Negócio Procedural
+- Método de Serviço
 
-## Motivation
+## Motivação
 
-The simplest way to structure business logic is to use procedures that implement each system request as a separate script. If you receive a request to calculate revenue recognition, you write a procedure that performs the calculation.
+A maneira mais simples de estruturar a lógica de negócio é usar procedimentos que implementam cada requisição do sistema como um script separado. Se você recebe uma requisição para calcular o reconhecimento de receita, escreve um procedimento que realiza o cálculo.
 
-Each transaction has its own Transaction Script that interacts directly with the database or through a thin data access wrapper. The beauty of Transaction Script is its simplicity: it requires no sophisticated frameworks or knowledge of advanced patterns.
+Cada transação tem seu próprio Transaction Script que interage diretamente com o banco de dados ou por meio de um wrapper fino de acesso a dados. A beleza do Transaction Script está em sua simplicidade: não exige frameworks sofisticados nem conhecimento de padrões avançados.
 
-For simple applications with relatively straightforward business logic, Transaction Script works very well. It is especially appropriate when there is little or no code duplication between transactions.
+Para aplicações simples com lógica de negócio relativamente direta, o Transaction Script funciona muito bem. É especialmente adequado quando há pouca ou nenhuma duplicação de código entre as transações.
 
-## Applicability
+## Aplicabilidade
 
-Use Transaction Script when:
+Use Transaction Script quando:
 
-- Business logic is relatively simple
-- There is little or no code duplication between transactions
-- The application doesn't have significant domain complexity
-- Team has experience with procedural programming
-- Performance is critical and OO overhead is not desirable
-- Rapid prototyping is necessary
+- A lógica de negócio for relativamente simples
+- Houver pouca ou nenhuma duplicação de código entre as transações
+- A aplicação não tiver complexidade de domínio significativa
+- A equipe tiver experiência com programação procedural
+- O desempenho for crítico e a sobrecarga de OO não for desejável
+- A prototipagem rápida for necessária
 
-## Structure
+## Estrutura
 
 ```
-Presentation Layer
-└── Calls: TransactionScript
+Camada de Apresentação
+└── Chama: TransactionScript
 
 TransactionScript
 ├── validateInput()
@@ -44,84 +44,84 @@ TransactionScript
 ├── accessDatabase()
 └── returnResult()
 
-Database
-└── Accesses: directly or via thin wrapper
+Banco de Dados
+└── Acessado: diretamente ou via wrapper fino
 ```
 
-## Participants
+## Participantes
 
-- [**Transaction Script**](001_transaction-script.md): Procedure implementing a complete business transaction
-- **Presentation Layer**: Interface that invokes Transaction Scripts
-- **Database**: Data storage accessed by scripts
-- **Data Gateway** (optional): Thin wrapper over database access
+- [**Transaction Script**](001_transaction-script.md): Procedimento que implementa uma transação de negócio completa
+- **Camada de Apresentação**: Interface que invoca os Transaction Scripts
+- **Banco de Dados**: Armazenamento de dados acessado pelos scripts
+- **Data Gateway** (opcional): Wrapper fino sobre o acesso ao banco de dados
 
-## Collaborations
+## Colaborações
 
-- Presentation layer receives user request and calls appropriate Transaction Script
-- Transaction Script executes validation, business logic, and data access in sequence
-- Script may use Data Gateway to separate SQL from business code
-- Script returns result to presentation layer
+- A camada de apresentação recebe a requisição do usuário e chama o Transaction Script apropriado
+- O Transaction Script executa validação, lógica de negócio e acesso a dados em sequência
+- O script pode usar um Data Gateway para separar o SQL do código de negócio
+- O script retorna o resultado para a camada de apresentação
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Simplicity**: Easy to understand and implement for developers
-- **Procedural**: Familiar to programmers accustomed to procedural programming
-- **Performance**: Minimal overhead, direct execution without extra layers
-- **Suitable for simple logic**: Perfect when domain is simple and straightforward
-- **Testability**: Individual scripts are easy to test in isolation
+- **Simplicidade**: Fácil de entender e implementar pelos desenvolvedores
+- **Procedural**: Familiar a programadores acostumados com programação procedural
+- **Desempenho**: Sobrecarga mínima, execução direta sem camadas extras
+- **Adequado para lógica simples**: Perfeito quando o domínio é simples e direto
+- **Testabilidade**: Scripts individuais são fáceis de testar isoladamente
 
-### Disadvantages
+### Desvantagens
 
-- **Code duplication**: Shared logic tends to be duplicated between scripts
-- **Difficulty with complexity**: Doesn't scale well to complex domains
-- **Maintainability**: Grows disorganized as application grows
-- **No rich domain model**: Doesn't capture complexity or sophisticated domain rules
-- **Coupling**: Scripts often become coupled to database structure
+- **Duplicação de código**: A lógica compartilhada tende a ser duplicada entre os scripts
+- **Dificuldade com complexidade**: Não escala bem para domínios complexos
+- **Manutenibilidade**: Torna-se desorganizado à medida que a aplicação cresce
+- **Sem modelo de domínio rico**: Não captura a complexidade nem regras de domínio sofisticadas
+- **Acoplamento**: Os scripts frequentemente ficam acoplados à estrutura do banco de dados
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Script organization**: Group related scripts into service classes or modules
-2. **Data access**: Consider using Data Gateway to separate SQL from business logic
-3. **Reuse**: Extract common logic into shared helper functions
-4. **Transactions**: Manage database transactions explicitly
-5. **Validation**: Centralize input validation to avoid duplication
+1. **Organização dos scripts**: Agrupe scripts relacionados em classes de serviço ou módulos
+2. **Acesso a dados**: Considere usar Data Gateway para separar o SQL da lógica de negócio
+3. **Reuso**: Extraia lógica comum em funções auxiliares compartilhadas
+4. **Transações**: Gerencie as transações de banco de dados explicitamente
+5. **Validação**: Centralize a validação de entrada para evitar duplicação
 
-### Techniques
+### Técnicas
 
-- [**Service Layer**](004_service-layer.md): Group related Transaction Scripts in Service Layer
-- **Common Functions**: Extract duplicated code into utility functions
-- **Data Access Layer**: Separate data access into dedicated layer
-- **Error Handling**: Consistent error handling across all scripts
+- [**Service Layer**](004_service-layer.md): Agrupe Transaction Scripts relacionados em uma Service Layer
+- **Funções Comuns**: Extraia código duplicado em funções utilitárias
+- **Camada de Acesso a Dados**: Separe o acesso a dados em uma camada dedicada
+- **Tratamento de Erros**: Tratamento consistente de erros em todos os scripts
 
-## Known Uses
+## Usos Conhecidos
 
-- **Stored Procedures**: Business logic implemented in database stored procedures
-- **Servlets**: Java servlets with procedural logic to process requests
-- **CGI Scripts**: Classic CGI scripts in Perl, Python, or Ruby
-- **Serverless Functions**: AWS Lambda, Azure Functions with simple logic
-- **Batch Jobs**: Batch jobs with sequential processing
-- **Simple REST APIs**: REST endpoints with straightforward CRUD logic
+- **Stored Procedures**: Lógica de negócio implementada em stored procedures do banco de dados
+- **Servlets**: Servlets Java com lógica procedural para processar requisições
+- **Scripts CGI**: Scripts CGI clássicos em Perl, Python ou Ruby
+- **Funções Serverless**: AWS Lambda, Azure Functions com lógica simples
+- **Batch Jobs**: Trabalhos em lote com processamento sequencial
+- **APIs REST simples**: Endpoints REST com lógica CRUD direta
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Domain Model**](002_domain-model.md): OO alternative for complex logic; Transaction Script is simpler
-- [**Table Module**](003_table-module.md): Middle ground between Transaction Script and Domain Model
-- [**Service Layer**](004_service-layer.md): Transaction Scripts can form Service Layer
-- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Separate data access from business logic
-- [**Row Data Gateway**](../data-source/002_row-data-gateway.md): Alternative for row-oriented data access
-- [**GoF Command**](../../gof/behavioral/002_command.md): Transaction Script is simple implementation of Command pattern
+- [**Domain Model**](002_domain-model.md): Alternativa OO para lógica complexa; Transaction Script é mais simples
+- [**Table Module**](003_table-module.md): Meio-termo entre Transaction Script e Domain Model
+- [**Service Layer**](004_service-layer.md): Transaction Scripts podem formar uma Service Layer
+- [**Table Data Gateway**](../data-source/001_table-data-gateway.md): Separa o acesso a dados da lógica de negócio
+- [**Row Data Gateway**](../data-source/002_row-data-gateway.md): Alternativa para acesso a dados orientado a linhas
+- [**GoF Command**](../../gof/behavioral/002_command.md): Transaction Script é uma implementação simples do padrão Command
 
-### Relation to Rules
+### Relação com Rules
 
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): each script one transaction
-- [021 - Prohibition of Logic Duplication](../../clean-code/001_prohibition-logic-duplication.md): challenge with Transaction Script
-- [022 - Prioritization of Simplicity](../../clean-code/002_prioritization-simplicity-clarity.md): Transaction Script is simplest
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): cada script, uma transação
+- [021 - Prohibition of Logic Duplication](../../clean-code/proibicao-duplicacao-logica.md): desafio do Transaction Script
+- [022 - Prioritization of Simplicity](../../clean-code/priorizacao-simplicidade-clareza.md): Transaction Script é o mais simples
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

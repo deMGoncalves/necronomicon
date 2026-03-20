@@ -137,8 +137,8 @@ items.reduce((acc, item) => acc + item.price, 0) // ✓
 
 ## Rules Relacionadas
 
-- [clean-code/007 - Error Handling](../../clean-code/007_qualidade-tratamento-erros-dominio.md)
-- [clean-code/008 - Async Exceptions](../../clean-code/008_tratamento-excecao-assincrona.md)
+- [clean-code/007 - Error Handling](../../clean-code/qualidade-tratamento-erros-dominio.md)
+- [clean-code/008 - Async Exceptions](../../clean-code/tratamento-excecao-assincrona.md)
 - [object-calisthenics/002 - No Else Clause](../../object-calisthenics/002_prohibition-else-clause.md)
 
 ## Patterns Relacionados

@@ -1,43 +1,43 @@
 # Association Table Mapping
 
-**Classification**: Object-Relational Structural Pattern
+**Classificação**: Padrão Object-Relational Estrutural
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Save many-to-many association as link table with foreign keys to both tables. Uses intermediate table to represent bidirectional relationship between objects.
+Salvar associação muitos-para-muitos como uma tabela de ligação com chaves estrangeiras para ambas as tabelas. Usa tabela intermediária para representar o relacionamento bidirecional entre objetos.
 
-## Also Known As
+## Também Conhecido Como
 
 - Join Table Mapping
 - Link Table Mapping
 - Many-to-Many Mapping
 - Junction Table
 
-## Motivation
+## Motivação
 
-Many-to-many relationships are common in objects: Student has many Courses, Course has many Students. Relational databases don't support many-to-many directly - they require intermediate table. Association Table Mapping manages this link table transparently.
+Relacionamentos muitos-para-muitos são comuns em objetos: Student possui muitos Courses, Course possui muitos Students. Bancos de dados relacionais não suportam muitos-para-muitos diretamente — eles requerem uma tabela intermediária. O Association Table Mapping gerencia essa tabela de ligação de forma transparente.
 
-Association table contains only foreign keys pointing to the two related entities. For example, student_courses has student_id and course_id. When adding Course to Student, Mapper inserts row in link table. When removing, deletes row. When loading Student, Mapper joins tables via link table to retrieve Courses.
+A tabela de associação contém apenas chaves estrangeiras apontando para as duas entidades relacionadas. Por exemplo, student_courses tem student_id e course_id. Ao adicionar um Course a um Student, o Mapper insere uma linha na tabela de ligação. Ao remover, exclui a linha. Ao carregar um Student, o Mapper faz join nas tabelas via tabela de ligação para recuperar os Courses.
 
-Link table can be simple (only FKs) or rich (with additional attributes like enrollment date, grade). Rich link eventually becomes its own entity.
+A tabela de ligação pode ser simples (apenas FKs) ou rica (com atributos adicionais como data de matrícula, nota). Uma tabela de ligação rica eventualmente se torna sua própria entidade.
 
-## Applicability
+## Aplicabilidade
 
-Use Association Table Mapping when:
+Use Association Table Mapping quando:
 
-- Objects have many-to-many relationships
-- Normalized relational database is used
-- Relationship doesn't have significant attributes of its own
-- Both sides of relationship are independent entities
-- Bidirectional collections need to be navigated
-- ORM pattern requires explicit mapping
+- Objetos possuem relacionamentos muitos-para-muitos
+- Banco de dados relacional normalizado é utilizado
+- O relacionamento não possui atributos significativos próprios
+- Ambos os lados do relacionamento são entidades independentes
+- Coleções bidirecionais precisam ser navegadas
+- O padrão ORM requer mapeamento explícito
 
-## Structure
+## Estrutura
 
 ```
-Domain Objects (in memory)
+Domain Objects (em memória)
 Student
 ├── id: 1
 └── courses: [Course{id:101}, Course{id:102}]
@@ -46,111 +46,111 @@ Course
 ├── id: 101
 └── students: [Student{id:1}, Student{id:2}]
 
-Database (persisted)
-students table
+Banco de Dados (persistido)
+tabela students
 └── id: 1, name: "Alice"
 
-courses table
-├── id: 101, name: "Math"
-└── id: 102, name: "Physics"
+tabela courses
+├── id: 101, name: "Matemática"
+└── id: 102, name: "Física"
 
-student_courses (link table)
+student_courses (tabela de ligação)
 ├── student_id: 1, course_id: 101
 ├── student_id: 1, course_id: 102
 └── student_id: 2, course_id: 101
 ```
 
-## Participants
+## Participantes
 
-- **Entity A**: First entity in relationship (Student)
-- **Entity B**: Second entity in relationship (Course)
-- **Association Table**: Table containing only foreign keys
-- **Link Row**: Row in association table
-- [**Data Mapper**](../data-source/004_data-mapper.md): Manages insertion/deletion/query of links
+- **Entity A**: Primeira entidade no relacionamento (Student)
+- **Entity B**: Segunda entidade no relacionamento (Course)
+- **Association Table**: Tabela contendo apenas chaves estrangeiras
+- **Link Row**: Linha na tabela de associação
+- [**Data Mapper**](../data-source/004_data-mapper.md): Gerencia inserção/exclusão/consulta dos vínculos
 
-## Collaborations
+## Colaborações
 
-**When Adding Relationship:**
-- Client adds Course to Student.courses collection
-- On commit, Mapper detects change in collection
-- Mapper inserts row in student_courses with both IDs
-- Relationship now exists in database
+**Ao Adicionar Relacionamento:**
+- Client adiciona Course à coleção Student.courses
+- No commit, Mapper detecta mudança na coleção
+- Mapper insere linha em student_courses com ambos os IDs
+- Relacionamento agora existe no banco de dados
 
-**When Loading:**
-- Mapper loads Student from database
-- Mapper queries student_courses WHERE student_id = 1
-- Mapper obtains related course_ids
-- Mapper loads corresponding Courses
-- Mapper populates Student.courses with Course objects
+**Ao Carregar:**
+- Mapper carrega Student do banco de dados
+- Mapper consulta student_courses WHERE student_id = 1
+- Mapper obtém os course_ids relacionados
+- Mapper carrega os Courses correspondentes
+- Mapper preenche Student.courses com os objetos Course
 
-**When Removing:**
-- Client removes Course from Student.courses collection
-- On commit, Mapper detects removal
-- Mapper deletes corresponding row from student_courses
-- Relationship undone without affecting entities
+**Ao Remover:**
+- Client remove Course da coleção Student.courses
+- No commit, Mapper detecta a remoção
+- Mapper exclui a linha correspondente de student_courses
+- Relacionamento desfeito sem afetar as entidades
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Normalization**: Follows normalized relational design
-- **Independence**: Entities exist independently
-- **Bidirectionality**: Relationship navigable from both sides
-- **Flexibility**: Easy to add/remove associations
-- **Integrity**: Foreign keys maintain referential integrity
-- **Standard pattern**: Widely used and understood
+- **Normalização**: Segue design relacional normalizado
+- **Independência**: Entidades existem de forma independente
+- **Bidirecionalidade**: Relacionamento navegável de ambos os lados
+- **Flexibilidade**: Fácil adicionar/remover associações
+- **Integridade**: Chaves estrangeiras mantêm a integridade referencial
+- **Padrão difundido**: Amplamente utilizado e compreendido
 
-### Disadvantages
+### Desvantagens
 
-- **Join complexity**: Queries require additional joins
-- **Performance**: More tables to query
-- **Extra table**: Additional table to manage
-- **Richer links**: If link needs attributes, becomes entity
-- **Cascade deletes**: Requires careful configuration
-- **Bulk operations**: Bulk operations are complex
+- **Complexidade de join**: Queries requerem joins adicionais
+- **Performance**: Mais tabelas para consultar
+- **Tabela extra**: Tabela adicional para gerenciar
+- **Vínculos mais ricos**: Se o vínculo precisar de atributos, torna-se entidade
+- **Cascade deletes**: Requer configuração cuidadosa
+- **Operações em massa**: Operações em massa são complexas
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Table naming**: Convention for link table name
-2. **Composite key**: Compound primary key or own ID?
-3. **Bidirectionality**: Maintain both sides synchronized
-4. **Lazy/Eager**: Collection loading strategy
-5. **Cascade**: What happens when entity is deleted
-6. **Link attributes**: If link has attributes, consider entity
+1. **Nomenclatura da tabela**: Convenção para o nome da tabela de ligação
+2. **Chave composta**: Chave primária composta ou ID próprio?
+3. **Bidirecionalidade**: Manter ambos os lados sincronizados
+4. **Lazy/Eager**: Estratégia de carregamento da coleção
+5. **Cascade**: O que acontece quando a entidade é excluída
+6. **Atributos do vínculo**: Se o vínculo tiver atributos, considerar entidade
 
-### Techniques
+### Técnicas
 
-- **Composite PK**: Use (entity_a_id, entity_b_id) as primary key
-- **Unique Constraint**: Prevent duplicate links
-- **Cascade Delete**: Delete links when entity is removed
-- **Lazy Collection**: Don't load collection until accessed
-- **Join Fetch**: Use join to load collection efficiently
-- **Inverse Side**: Designate one side as "owner" of relationship
+- **PK Composta**: Usar (entity_a_id, entity_b_id) como chave primária
+- **Unique Constraint**: Prevenir vínculos duplicados
+- **Cascade Delete**: Excluir vínculos quando a entidade é removida
+- **Coleção Lazy**: Não carregar a coleção até ser acessada
+- **Join Fetch**: Usar join para carregar a coleção eficientemente
+- **Lado Inverso**: Designar um lado como "dono" do relacionamento
 
-## Known Uses
+## Usos Conhecidos
 
-- **Hibernate @ManyToMany**: With @JoinTable for link table
+- **Hibernate @ManyToMany**: Com @JoinTable para a tabela de ligação
 - **Entity Framework Many-to-Many**: Navigation properties
-- **ActiveRecord has_and_belongs_to_many**: HABTM with join table
-- **Sequelize belongsToMany**: With through option
-- **TypeORM @ManyToMany**: With @JoinTable
-- **Doctrine ManyToMany**: With JoinTable annotation
+- **ActiveRecord has_and_belongs_to_many**: HABTM com join table
+- **Sequelize belongsToMany**: Com a opção through
+- **TypeORM @ManyToMany**: Com @JoinTable
+- **Doctrine ManyToMany**: Com anotação JoinTable
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Foreign Key Mapping**](005_foreign-key-mapping.md): Link table has two foreign keys
-- [**Identity Field**](004_identity-field.md): IDs used in link table
-- [**Data Mapper**](../data-source/004_data-mapper.md): Implements the mapping
-- [**Dependent Mapping**](007_dependent-mapping.md): Alternative for dependent objects
-- [**Lazy Load**](003_lazy-load.md): Loads collections on demand
+- [**Foreign Key Mapping**](005_foreign-key-mapping.md): A tabela de ligação possui duas chaves estrangeiras
+- [**Identity Field**](004_identity-field.md): IDs usados na tabela de ligação
+- [**Data Mapper**](../data-source/004_data-mapper.md): Implementa o mapeamento
+- [**Dependent Mapping**](007_dependent-mapping.md): Alternativa para objetos dependentes
+- [**Lazy Load**](003_lazy-load.md): Carrega coleções sob demanda
 
-### Relation to Rules
+### Relação com Rules
 
-- [004 - First-Class Collections](../../object-calisthenics/004_colecoes-primeira-classe.md): well-encapsulated collections
+- [004 - Coleções de Primeira Classe](../../object-calisthenics/004_colecoes-primeira-classe.md): coleções bem encapsuladas
 
 ---
 
-**Created**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

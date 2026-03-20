@@ -1,131 +1,131 @@
 # Prototype
 
-**Classification**: Creational Pattern
+**Classificação**: Padrão Criacional
 
 ---
 
-## Intent and Objective
+## Intenção e Objetivo
 
-Specify the types of objects to be created using a prototypical instance and create new objects by copying this prototype. Allows adding and removing objects at runtime, specifying new objects by varying values and structures.
+Especificar os tipos de objetos a serem criados usando uma instância prototípica e criar novos objetos copiando esse protótipo. Permite adicionar e remover objetos em tempo de execução, especificando novos objetos pela variação de valores e estruturas.
 
-## Also Known As
+## Também Conhecido Como
 
 - Clone
 
-## Motivation
+## Motivação
 
-You could build a graphical editor that allows users to add new tools and objects. The editor defines abstract classes for graphical tools and a palette of available tools. But how can the editor allow users to add new tools without recompiling the system?
+Você poderia construir um editor gráfico que permite aos usuários adicionar novas ferramentas e objetos. O editor define classes abstratas para ferramentas gráficas e uma paleta de ferramentas disponíveis. Mas como o editor pode permitir que usuários adicionem novas ferramentas sem recompilar o sistema?
 
-The solution is to make tools create new graphical objects by copying or "cloning" a prototype instance. Users can add new tools simply by registering new prototypes in the palette. The editor then clones the appropriate prototype when it needs to create a new object.
+A solução é fazer com que as ferramentas criem novos objetos gráficos copiando ou "clonando" uma instância prototípica. Os usuários podem adicionar novas ferramentas simplesmente registrando novos protótipos na paleta. O editor então clona o protótipo adequado quando precisa criar um novo objeto.
 
-## Applicability
+## Aplicabilidade
 
-Use the Prototype pattern when:
+Use o padrão Prototype quando:
 
-- Classes to be instantiated are specified at runtime
-- Avoid building a hierarchy of factories parallel to the product hierarchy
-- Instances of a class can have only a few different combinations of state
-- Creating objects is costly, and cloning is more efficient
-- You want to hide the complexity of creation from the client
-- Objects need to be created dynamically from a database or configuration
+- As classes a serem instanciadas são especificadas em tempo de execução
+- Evitar construir uma hierarquia de fábricas paralela à hierarquia de produtos
+- Instâncias de uma classe podem ter apenas algumas combinações diferentes de estado
+- Criar objetos é custoso, e clonar é mais eficiente
+- Você deseja ocultar a complexidade da criação do cliente
+- Objetos precisam ser criados dinamicamente a partir de um banco de dados ou configuração
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Uses: Prototype (interface)
+└── Usa: Prototype (interface)
     └── clone(): Prototype
 
 Prototype (Interface)
 └── clone(): Prototype
 
 ConcretePrototype1 implements Prototype
-├── Maintains internal state
-└── clone() → returns copy of itself
+├── Mantém estado interno
+└── clone() → retorna cópia de si mesmo
 
 ConcretePrototype2 implements Prototype
-├── Maintains internal state
-└── clone() → returns copy of itself
+├── Mantém estado interno
+└── clone() → retorna cópia de si mesmo
 
-PrototypeRegistry (optional)
-├── Maintains: Map<String, Prototype>
+PrototypeRegistry (opcional)
+├── Mantém: Map<String, Prototype>
 ├── register(name, prototype)
 └── create(name) → return prototypes[name].clone()
 ```
 
-## Participants
+## Participantes
 
-- [**Prototype**](004_prototype.md): Declares interface for cloning itself
-- **ConcretePrototype**: Implements operation for cloning itself
-- **Client**: Creates new object by asking a prototype to clone itself
-- **PrototypeRegistry** (optional): Maintains registry of available prototypes
+- [**Prototype**](004_prototype.md): Declara a interface para clonar a si mesmo
+- **ConcretePrototype**: Implementa a operação para clonar a si mesmo
+- **Client**: Cria um novo objeto pedindo a um protótipo que clone a si mesmo
+- **PrototypeRegistry** (opcional): Mantém registro de protótipos disponíveis
 
-## Collaborations
+## Colaborações
 
-- Client asks a prototype to clone itself, instead of asking a factory to create a new object
+- Client pede a um protótipo que clone a si mesmo, em vez de pedir a uma fábrica que crie um novo objeto
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Hides concrete classes**: Reduces number of classes client needs to know
-- **Add/remove products at runtime**: Registering new prototype instance equivalent to adding new class
-- **Specify new objects by varying values**: Define new behaviors through object composition
-- **Reduce subclassing**: Factory Method requires hierarchy of creators; Prototype doesn't
-- **Dynamic configuration**: Classes can be determined dynamically
+- **Oculta classes concretas**: Reduz o número de classes que o cliente precisa conhecer
+- **Adicionar/remover produtos em tempo de execução**: Registrar nova instância de protótipo equivale a adicionar nova classe
+- **Especificar novos objetos variando valores**: Definir novos comportamentos por meio de composição de objetos
+- **Reduzir herança**: Factory Method requer hierarquia de criadores; Prototype não
+- **Configuração dinâmica**: As classes podem ser determinadas dinamicamente
 
-### Disadvantages
+### Desvantagens
 
-- **Implementing clone can be difficult**: Especially if objects have circular references or complex structures
-- **Deep vs Shallow copy**: Decision about copy depth can be complex
+- **Implementar clone pode ser difícil**: Especialmente se os objetos têm referências circulares ou estruturas complexas
+- **Cópia superficial vs profunda**: A decisão sobre a profundidade da cópia pode ser complexa
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Use prototype manager**: PrototypeRegistry maintains and provides prototypes
+1. **Usar gerenciador de protótipos**: PrototypeRegistry mantém e fornece protótipos
 
-2. **Implement clone operation**: Major difficulty when internal structures include objects without copy support
+2. **Implementar operação clone**: Principal dificuldade quando estruturas internas incluem objetos sem suporte a cópia
 
-3. **Shallow vs Deep copy**:
-   - Shallow: Copies only references (internal objects shared)
-   - Deep: Recursively copies entire structure (independent objects)
+3. **Cópia superficial vs profunda**:
+   - Superficial: Copia apenas referências (objetos internos são compartilhados)
+   - Profunda: Copia recursivamente toda a estrutura (objetos independentes)
 
-4. **Initialize clones**: May need `initialize()` method after clone to configure internal state
+4. **Inicializar clones**: Pode ser necessário método `initialize()` após o clone para configurar o estado interno
 
-5. **Protect prototypes**: Prototypes should not be modified after creation (immutability)
+5. **Proteger protótipos**: Protótipos não devem ser modificados após a criação (imutabilidade)
 
-### Techniques
+### Técnicas
 
-- **Copy Constructor**: Constructor that receives instance of same type
-- **Serialization**: Use serialization/deserialization for deep copy
-- **Registry Pattern**: Maintain catalog of named prototypes
-- **Object Pool**: Combine with Object Pool for clone reuse
+- **Copy Constructor**: Construtor que recebe instância do mesmo tipo
+- **Serialização**: Usar serialização/desserialização para cópia profunda
+- **Registry Pattern**: Manter catálogo de protótipos nomeados
+- **Object Pool**: Combinar com Object Pool para reutilização de clones
 
-## Known Uses
+## Usos Conhecidos
 
-- **JavaScript**: Language is based on prototypes (prototype-based inheritance)
-- **Object.create()**: Creates object with specified prototype
-- **Clone in Java**: `Cloneable` interface and `clone()` method
-- **Game Development**: Clone enemies, power-ups, terrains
-- **UI Components**: Clone configured widgets
-- **Document Templates**: Create documents from pre-configured templates
+- **JavaScript**: A linguagem é baseada em protótipos (herança baseada em protótipos)
+- **Object.create()**: Cria objeto com protótipo especificado
+- **Clone em Java**: Interface `Cloneable` e método `clone()`
+- **Desenvolvimento de Jogos**: Clonar inimigos, power-ups, terrenos
+- **Componentes UI**: Clonar widgets configurados
+- **Templates de Documento**: Criar documentos a partir de templates pré-configurados
 
-## Related Patterns
+## Padrões Relacionados
 
-- **Abstract Factory/Factory Method**: Can store set of prototypes to clone and return products
-- **Composite/Decorator**: Designs that make heavy use of these patterns often benefit from Prototype
-- [**Singleton**](005_singleton.md): Opposite - Prototype allows multiple instances, Singleton guarantees single
-- [**Memento**](../behavioral/006_memento.md): Prototype can be used to implement state snapshots
-- [**Command**](../behavioral/002_command.md): Commands can be cloned via Prototype
+- **Abstract Factory/Factory Method**: Pode armazenar conjunto de protótipos para clonar e retornar produtos
+- **Composite/Decorator**: Designs que fazem uso intenso desses padrões frequentemente se beneficiam de Prototype
+- [**Singleton**](005_singleton.md): Oposto — Prototype permite múltiplas instâncias, Singleton garante instância única
+- [**Memento**](../behavioral/006_memento.md): Prototype pode ser usado para implementar snapshots de estado
+- [**Command**](../behavioral/002_command.md): Commands podem ser clonados via Prototype
 
-### Relation to Rules
+### Relação com Rules
 
-- [029 - Object Immutability](../../clean-code/009_imutabilidade-objetos-freeze.md): protect prototypes
-- [036 - Restriction on Functions with Side Effects](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): clone should be pure
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): allows extension via registry
+- [029 - Object Immutability](../../clean-code/imutabilidade-objetos-freeze.md): proteger protótipos
+- [036 - Restriction on Functions with Side Effects](../../clean-code/restricao-funcoes-efeitos-colaterais.md): clone deve ser puro
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): permite extensão via registro
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

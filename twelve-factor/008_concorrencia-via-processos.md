@@ -1,47 +1,47 @@
-# Scalability via Process Model (Concurrency)
+# Escalabilidade via Modelo de Processos (Concorrência)
 
 **ID**: INFRASTRUCTURE-047
-**Severity**: 🟠 High
-**Category**: Infrastructure
+**Severidade**: 🟠 Alto
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-The application must scale horizontally through the execution of **multiple independent processes**, not through internal threads or a single monolithic process. Different types of work (web, worker, scheduler) must be separated into distinct process types.
+A aplicação deve escalar horizontalmente por meio da execução de **múltiplos processos independentes**, não por meio de threads internas ou um único processo monolítico. Diferentes tipos de trabalho (web, worker, scheduler) devem ser separados em tipos de processo distintos.
 
-## Why it matters
+## Por que importa
 
-The process model enables elastic scalability — adding more web processes to handle traffic, or more workers to process queues. Each process type can be scaled independently according to demand, optimizing resources.
+O modelo de processos permite escalabilidade elástica — adicionar mais processos web para lidar com tráfego, ou mais workers para processar filas. Cada tipo de processo pode ser escalado independentemente de acordo com a demanda, otimizando recursos.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The application must support execution of **multiple instances** of the same process without conflict.
-- [ ] Different workloads (HTTP, background jobs, scheduled tasks) must be separated into distinct processes.
-- [ ] The process must not *daemonize* or write PID files — process management is the responsibility of the execution environment.
+- [ ] A aplicação deve suportar a execução de **múltiplas instâncias** do mesmo processo sem conflito.
+- [ ] Cargas de trabalho diferentes (HTTP, background jobs, tarefas agendadas) devem ser separadas em processos distintos.
+- [ ] O processo não deve *daemonizar* ou escrever arquivos PID — o gerenciamento de processos é responsabilidade do ambiente de execução.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Internal Workers**: Use of worker threads for CPU-bound operations within a request, provided state is not shared between requests.
+- **Workers Internos**: Uso de worker threads para operações CPU-bound dentro de uma requisição, desde que o estado não seja compartilhado entre requisições.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if the application can run N simultaneous instances with a load balancer in front, without conflicts.
+Verificar se a aplicação pode executar N instâncias simultâneas com um load balancer na frente, sem conflitos.
 
-### Automatic
+### Automático
 
-Load tests: Scale horizontally and verify if throughput increases linearly.
+Testes de carga: Escalar horizontalmente e verificar se o throughput aumenta linearmente.
 
-## Related to
+## Relacionado a
 
-- [045 - Stateless Processes](../twelve-factor/006_processos-stateless.md): complements
-- [046 - Port Binding](../twelve-factor/007_port-binding.md): complements
-- [048 - Process Disposability](../twelve-factor/009_descartabilidade-processos.md): reinforces
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reinforces
+- [045 - Processos Stateless](../twelve-factor/006_processos-stateless.md): complementa
+- [046 - Port Binding](../twelve-factor/007_port-binding.md): complementa
+- [048 - Descartabilidade de Processos](../twelve-factor/009_descartabilidade-processos.md): reforça
+- [010 - Princípio da Responsabilidade Única](001_single-responsibility-principle.md): reforça
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

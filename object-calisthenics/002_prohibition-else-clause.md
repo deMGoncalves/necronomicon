@@ -1,4 +1,4 @@
-# Prohibition of ELSE Clause for Control Flow
+# Proibição da Cláusula ELSE para Fluxo de Controle
 
 **ID**: BEHAVIORAL-002
 **Severity**: 🟠 High
@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-Restricts the use of `else` and `else if` clauses, promoting replacement with *guard clauses* (early return) or polymorphism patterns to handle different execution paths.
+Restringe o uso de cláusulas `else` e `else if`, promovendo a substituição por *guard clauses* (retorno antecipado) ou padrões de polimorfismo para lidar com diferentes caminhos de execução.
 
-## Why it matters
+## Por que importa
 
-Improves control flow clarity, avoids unnecessary Cyclomatic Complexity, and enforces adherence to the Single Responsibility Principle (SRP), as each code block handles a specific condition.
+Melhora a clareza do fluxo de controle, evita Complexidade Ciclomática desnecessária e impõe a aderência ao Princípio da Responsabilidade Única (SRP), pois cada bloco de código trata uma condição específica.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The explicit use of `else` or `else if` keywords is prohibited.
-- [ ] Conditionals should be used primarily as *guard clauses* (pre-condition checking and return/error throwing).
-- [ ] Complex branching logic should be resolved via polymorphism (*Strategy* or *State* patterns).
+- [ ] O uso explícito das palavras-chave `else` ou `else if` é proibido.
+- [ ] Condicionais devem ser usados principalmente como *guard clauses* (verificação de pré-condição e retorno/lançamento de erro).
+- [ ] Lógica de ramificação complexa deve ser resolvida via polimorfismo (padrões *Strategy* ou *State*).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Language Control Structures**: Structures like `switch` (which generally behave like `if/else if`) may be used, provided each `case` returns or terminates execution.
+- **Estruturas de Controle de Linguagem**: Estruturas como `switch` (que geralmente se comportam como `if/else if`) podem ser usadas, desde que cada `case` retorne ou encerre a execução.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for ` else ` or ` else if ` in the code.
+Buscar por ` else ` ou ` else if ` no código.
 
-### Automatic
+### Automático
 
-ESLint: `no-else-return` and `no-lonely-if` with configurations to enforce early exit.
+ESLint: `no-else-return` e `no-lonely-if` com configurações para impor saída antecipada.
 
-## Related to
+## Relacionado a
 
-- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): reinforces
-- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reinforces
-- [011 - Open/Closed Principle](002_open-closed-principle.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](../clean-code/002_prioritization-simplicity-clarity.md): complements
-- [027 - Error Handling Quality](../clean-code/007_error-handling-quality.md): complements
+- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): reforça
+- [008 - Prohibition of Getters/Setters](../object-calisthenics/008_prohibition-getters-setters.md): reforça
+- [011 - Open/Closed Principle](002_open-closed-principle.md): reforça
+- [022 - Prioritization of Simplicity and Clarity](../clean-code/priorizacao-simplicidade-clareza.md): complementa
+- [027 - Error Handling Quality](../clean-code/qualidade-tratamento-erros-dominio.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

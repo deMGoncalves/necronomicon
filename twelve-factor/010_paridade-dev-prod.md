@@ -1,48 +1,48 @@
-# Dev/Prod Parity
+# Paridade Dev/Prod
 
 **ID**: INFRASTRUCTURE-049
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-Development, staging, and production environments must be as **similar as possible**. This includes minimizing time gaps (frequent deploy), personnel gaps (who develops also deploys), and tool gaps (same technologies in all environments).
+Os ambientes de desenvolvimento, staging e produção devem ser tão **similares quanto possível**. Isso inclui minimizar lacunas de tempo (deploy frequente), lacunas de pessoal (quem desenvolve também faz deploy) e lacunas de ferramentas (mesmas tecnologias em todos os ambientes).
 
-## Why it matters
+## Por que importa
 
-Divergences between environments cause bugs that only appear in production, making debugging difficult and deploys risky. Parity allows developers to trust that what works locally will work in production.
+Divergências entre ambientes causam bugs que só aparecem em produção, dificultando a depuração e tornando os deploys arriscados. A paridade permite que os desenvolvedores confiem que o que funciona localmente funcionará em produção.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The same **backing services** (database, cache, queue) must be used in dev and prod — using SQLite in dev and PostgreSQL in prod is prohibited.
-- [ ] The time between writing code and deploying to production must be less than **1 day** (ideally hours).
-- [ ] Containers or environment configurations must be **identical** between dev and prod (e.g., same Dockerfile).
+- [ ] Os mesmos **serviços de apoio** (banco de dados, cache, fila) devem ser usados em dev e prod — é proibido usar SQLite em dev e PostgreSQL em prod.
+- [ ] O tempo entre escrever o código e fazer deploy em produção deve ser inferior a **1 dia** (idealmente horas).
+- [ ] Containers ou configurações de ambiente devem ser **idênticos** entre dev e prod (ex.: mesmo Dockerfile).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Resource Scale**: Scale differences (fewer replicas, less CPU/memory) are acceptable provided the architecture is identical.
-- **Test Data**: Use of synthetic or anonymized data in dev is mandatory for security reasons.
+- **Escala de Recursos**: Diferenças de escala (menos réplicas, menos CPU/memória) são aceitáveis, desde que a arquitetura seja idêntica.
+- **Dados de Teste**: O uso de dados sintéticos ou anonimizados em dev é obrigatório por razões de segurança.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Compare technology stack and service versions between environments. Check if bugs reported in prod are reproducible in dev.
+Comparar o stack de tecnologia e as versões dos serviços entre os ambientes. Verificar se bugs reportados em prod são reproduzíveis em dev.
 
-### Automatic
+### Automático
 
-Infrastructure as Code: Compare manifests (Terraform, Docker Compose) between environments to detect divergences.
+Infrastructure as Code: Comparar manifestos (Terraform, Docker Compose) entre ambientes para detectar divergências.
 
-## Related to
+## Relacionado a
 
-- [042 - Configurations via Environment](../twelve-factor/003_configuracoes-via-ambiente.md): reinforces
-- [043 - Backing Services as Resources](../twelve-factor/004_servicos-apoio-recursos.md): reinforces
-- [044 - Strict Separation of Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): reinforces
-- [032 - Minimum Test Coverage](../clean-code/012_cobertura-teste-minima-qualidade.md): complements
+- [042 - Configurações via Ambiente](../twelve-factor/003_configuracoes-via-ambiente.md): reforça
+- [043 - Serviços de Apoio como Recursos](../twelve-factor/004_servicos-apoio-recursos.md): reforça
+- [044 - Separação Estrita de Build, Release, Run](../twelve-factor/005_separacao-build-release-run.md): reforça
+- [032 - Cobertura Mínima de Testes](../clean-code/cobertura-teste-minima-qualidade.md): complementa
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

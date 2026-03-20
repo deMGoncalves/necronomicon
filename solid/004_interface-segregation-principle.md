@@ -1,4 +1,4 @@
-# Application of Interface Segregation Principle (ISP)
+# Aplicação do Interface Segregation Principle (ISP)
 
 **ID**: STRUCTURAL-013
 **Severity**: 🟠 High
@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-Requires that clients not be forced to depend on interfaces they do not use. Multiple client-specific interfaces are preferable to a single general interface.
+Exige que os clientes não sejam forçados a depender de interfaces que não utilizam. Múltiplas interfaces específicas para cada cliente são preferíveis a uma única interface geral.
 
-## Why it matters
+## Por que importa
 
-ISP violations cause anemic classes (with empty methods or throwing exceptions) and increase unnecessary coupling, as clients are forced to depend on code that will never be executed.
+Violações do ISP causam classes anêmicas (com métodos vazios ou que lançam exceções) e aumentam o acoplamento desnecessário, pois os clientes são forçados a depender de código que nunca será executado.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Interfaces must have at most **5** public methods.
-- [ ] Classes that implement interfaces must not leave methods empty or throw "not supported" exceptions.
-- [ ] If an interface is used by more than **3** different clients, it should be reviewed for segregation.
+- [ ] Interfaces devem ter no máximo **5** métodos públicos.
+- [ ] Classes que implementam interfaces não devem deixar métodos vazios nem lançar exceções de "não suportado".
+- [ ] Se uma interface é utilizada por mais de **3** clientes diferentes, deve ser revisada para segregação.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Low-Level Interfaces**: Third-party *Framework* interfaces that require a high number of methods (e.g., `HttpRequestHandler`).
+- **Interfaces de Baixo Nível**: Interfaces de *Framework* de terceiros que exigem um alto número de métodos (ex.: `HttpRequestHandler`).
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for interfaces with 8 or more methods, or implementing classes that leave methods without functionality.
+Buscar interfaces com 8 ou mais métodos, ou classes que implementam interfaces deixando métodos sem funcionalidade.
 
-### Automatic
+### Automático
 
-SonarQube: High coupling complexity due to unused methods.
+SonarQube: Alta complexidade de acoplamento devido a métodos não utilizados.
 
-## Related to
+## Relacionado a
 
-- [010 - Single Responsibility Principle](../solid/001_single-responsibility-principle.md): reinforces
-- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): complements
-- [012 - Liskov Substitution Principle](../solid/003_liskov-substitution-principle.md): reinforces
-- [017 - Common Reuse Principle](003_common-reuse-principle.md): complements
-- [037 - Prohibition of Flag Arguments](../clean-code/017_prohibition-flag-arguments.md): reinforces
+- [010 - Single Responsibility Principle](../solid/001_single-responsibility-principle.md): reforça
+- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): complementa
+- [012 - Liskov Substitution Principle](../solid/003_liskov-substitution-principle.md): reforça
+- [017 - Common Reuse Principle](003_common-reuse-principle.md): complementa
+- [037 - Prohibition of Flag Arguments](../clean-code/proibicao-argumentos-sinalizadores.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

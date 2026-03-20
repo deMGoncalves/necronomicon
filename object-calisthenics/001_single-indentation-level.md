@@ -1,4 +1,4 @@
-# Single Indentation Level Restriction per Method
+# Restrição de Nível Único de Indentação por Método
 
 **ID**: STRUCTURAL-001
 **Severity**: 🟠 High
@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-Limits the complexity of a method or function by enforcing a single indentation level for code blocks (conditionals, *loops*, or *try-catch*), forcing the extraction of logic into separate methods.
+Limita a complexidade de um método ou função ao impor um único nível de indentação para blocos de código (condicionais, *loops* ou *try-catch*), forçando a extração de lógica em métodos separados.
 
-## Why it matters
+## Por que importa
 
-Reduces Cyclomatic Complexity (CC), drastically improving method readability and maintainability, and facilitating the writing of unit tests focused on a single responsibility.
+Reduz a Complexidade Ciclomática (CC), melhorando drasticamente a legibilidade e a manutenibilidade do método, e facilitando a escrita de testes unitários focados em uma única responsabilidade.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Methods and functions must contain at most a single indentation level for code blocks (after the initial method scope).
-- [ ] The use of *guard clauses* for early returns does not count as a new indentation level.
-- [ ] Anonymous functions passed as *callbacks* must not introduce a second indentation level in the parent method.
+- [ ] Métodos e funções devem conter no máximo um único nível de indentação para blocos de código (após o escopo inicial do método).
+- [ ] O uso de *guard clauses* para retornos antecipados não conta como um novo nível de indentação.
+- [ ] Funções anônimas passadas como *callbacks* não devem introduzir um segundo nível de indentação no método pai.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Specific Control Structures**: *Try/Catch/Finally* in error handling scope that cannot be delegated.
+- **Estruturas de Controle Específicas**: *Try/Catch/Finally* em escopo de tratamento de erros que não pode ser delegado.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check for the existence of nested code blocks (e.g., an `if` inside a `for`, or a `for` inside an `if`).
+Verificar a existência de blocos de código aninhados (por exemplo, um `if` dentro de um `for`, ou um `for` dentro de um `if`).
 
-### Automatic
+### Automático
 
 SonarQube/ESLint: `complexity.max-depth: 1`
 
-## Related to
+## Relacionado a
 
-- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reinforces
-- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): complements
-- [022 - Prioritization of Simplicity and Clarity](../clean-code/002_prioritization-simplicity-clarity.md): reinforces
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): complements
-- [011 - Open/Closed Principle](002_open-closed-principle.md): reinforces
+- [002 - Prohibition of ELSE Clause](../object-calisthenics/002_prohibition-else-clause.md): reforça
+- [007 - Maximum Lines per Class Limit](../object-calisthenics/007_maximum-lines-per-class.md): complementa
+- [022 - Prioritization of Simplicity and Clarity](../clean-code/priorizacao-simplicidade-clareza.md): reforça
+- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): complementa
+- [011 - Open/Closed Principle](002_open-closed-principle.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

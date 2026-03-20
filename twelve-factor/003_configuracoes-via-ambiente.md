@@ -1,49 +1,49 @@
-# Configurations via Environment Variables
+# Configurações via Variáveis de Ambiente
 
 **ID**: INFRASTRUCTURE-042
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítico
+**Categoria**: Infraestrutura
 
 ---
 
-## What it is
+## O que é
 
-All configurations that vary between environments (*deploy*) must be stored in **environment variables**, not in versioned configuration files or hardcoded in code. This includes credentials, service URLs, and feature flags.
+Todas as configurações que variam entre ambientes (*deploy*) devem ser armazenadas em **variáveis de ambiente**, não em arquivos de configuração versionados ou hardcoded no código. Isso inclui credenciais, URLs de serviços e feature flags.
 
-## Why it matters
+## Por que importa
 
-Hardcoded configurations or versioned files create credential leak risk, prevent flexible deploys, and violate the separation between code and configuration. Environment variables allow the same code to run in any environment.
+Configurações hardcoded ou em arquivos versionados criam risco de vazamento de credenciais, impedem deploys flexíveis e violam a separação entre código e configuração. Variáveis de ambiente permitem que o mesmo código seja executado em qualquer ambiente.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Credentials (API keys, passwords, tokens) must be accessed **exclusively** via `process.env` or equivalent.
-- [ ] Versioning `.env` files with real production or staging values is prohibited.
-- [ ] Code must work with **zero** environment-specific configuration files in the repository.
+- [ ] Credenciais (chaves de API, senhas, tokens) devem ser acessadas **exclusivamente** via `process.env` ou equivalente.
+- [ ] É proibido o versionamento de arquivos `.env` com valores reais de produção ou staging.
+- [ ] O código deve funcionar com **zero** arquivos de configuração específicos de ambiente no repositório.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Development Configurations**: `.env.example` file with example values for documentation.
-- **Structural Configurations**: Build configuration files (`tsconfig.json`, `biome.json`) that do not vary between deploys.
+- **Configurações de Desenvolvimento**: Arquivo `.env.example` com valores de exemplo para documentação.
+- **Configurações Estruturais**: Arquivos de configuração de build (`tsconfig.json`, `biome.json`) que não variam entre deploys.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for connection strings, API URLs, or hardcoded credentials in source code.
+Buscar strings de conexão, URLs de API ou credenciais hardcoded no código-fonte.
 
-### Automatic
+### Automático
 
-ESLint: Custom rules to detect strings that look like credentials. Git-secrets or Gitleaks for secret scanning.
+ESLint: Regras customizadas para detectar strings que parecem credenciais. Git-secrets ou Gitleaks para varredura de segredos.
 
-## Related to
+## Relacionado a
 
-- [030 - Prohibition of Unsafe Functions](../clean-code/010_proibicao-funcoes-inseguras.md): reinforces
-- [024 - Prohibition of Magic Constants](../clean-code/004_proibicao-constantes-magicas.md): reinforces
-- [041 - Explicit Declaration of Dependencies](../twelve-factor/002_declaracao-explicita-dependencias.md): complements
-- [043 - Backing Services as Resources](../twelve-factor/004_servicos-apoio-recursos.md): complements
-- [049 - Dev/Prod Parity](../twelve-factor/010_paridade-dev-prod.md): reinforces
+- [030 - Proibição de Funções Inseguras](../clean-code/proibicao-funcoes-inseguras.md): reforça
+- [024 - Proibição de Constantes Mágicas](../clean-code/proibicao-constantes-magicas.md): reforça
+- [041 - Declaração Explícita de Dependências](../twelve-factor/002_declaracao-explicita-dependencias.md): complementa
+- [043 - Serviços de Apoio como Recursos](../twelve-factor/004_servicos-apoio-recursos.md): complementa
+- [049 - Paridade Dev/Prod](../twelve-factor/010_paridade-dev-prod.md): reforça
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criado em**: 2025-01-10
+**Versão**: 1.0

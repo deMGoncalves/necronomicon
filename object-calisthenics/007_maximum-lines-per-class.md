@@ -1,4 +1,4 @@
-# Maximum Lines per Class File Limit
+# Limite Máximo de Linhas por Arquivo de Classe
 
 **ID**: STRUCTURAL-007
 **Severity**: 🔴 Critical
@@ -6,47 +6,47 @@
 
 ---
 
-## What it is
+## O que é
 
-Imposes a maximum limit on the number of lines of code in a class file (entity, *service*, controller), forcing the extraction of responsibilities to other classes.
+Impõe um limite máximo no número de linhas de código em um arquivo de classe (entidade, *service*, controller), forçando a extração de responsabilidades para outras classes.
 
-## Why it matters
+## Por que importa
 
-Violation of the line limit is a strong indicator that the class is violating the Single Responsibility Principle (SRP), resulting in classes with low cohesion, high coupling, and extreme difficulty in maintenance and testing.
+A violação do limite de linhas é um forte indicador de que a classe está violando o Princípio da Responsabilidade Única (SRP), resultando em classes com baixa coesão, alto acoplamento e extrema dificuldade de manutenção e testes.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Class files (including declarations, methods, and properties) must have at most 50 lines of code (excluding blank lines and comments).
-- [ ] Classes that reach 40 lines should be immediate candidates for refactoring.
-- [ ] Individual methods must have at most 15 lines of code.
+- [ ] Arquivos de classe (incluindo declarações, métodos e propriedades) devem ter no máximo 50 linhas de código (excluindo linhas em branco e comentários).
+- [ ] Classes que atingem 40 linhas devem ser candidatas imediatas a refatoração.
+- [ ] Métodos individuais devem ter no máximo 15 linhas de código.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Configuration/Initialization Classes**: Classes that only declare constants or mappings (e.g., *Mappers*, *Configuration*).
-- **Test Classes**: Test *suites* where each test method is small, but the file grows due to the number of scenarios.
+- **Classes de Configuração/Inicialização**: Classes que apenas declaram constantes ou mapeamentos (por exemplo, *Mappers*, *Configuration*).
+- **Classes de Teste**: *Suites* de teste onde cada método de teste é pequeno, mas o arquivo cresce devido ao número de cenários.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Visual counting or use of file metrics analysis tools.
+Contagem visual ou uso de ferramentas de análise de métricas de arquivo.
 
-### Automatic
+### Automático
 
-SonarQube/ESLint: `max-lines-per-file: 50` and `max-lines-per-method: 5`.
+SonarQube/ESLint: `max-lines-per-file: 50` e `max-lines-per-method: 5`.
 
-## Related to
+## Relacionado a
 
-- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): reinforces
-- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reinforces
-- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reinforces
-- [021 - Prohibition of Logic Duplication](../clean-code/001_prohibition-logic-duplication.md): reinforces
-- [023 - Prohibition of Speculative Functionality](../clean-code/003_prohibition-speculative-functionality.md): reinforces
-- [025 - Prohibition of The Blob Anti-Pattern](../clean-code/005_prohibition-blob-anti-pattern.md): reinforces
-- [016 - Common Closure Principle](002_common-closure-principle.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](../clean-code/002_prioritization-simplicity-clarity.md): complements
+- [001 - Single Indentation Level](../object-calisthenics/001_single-indentation-level.md): reforça
+- [004 - First Class Collections](../object-calisthenics/004_first-class-collections.md): reforça
+- [010 - Single Responsibility Principle](001_single-responsibility-principle.md): reforça
+- [021 - Prohibition of Logic Duplication](../clean-code/proibicao-duplicacao-logica.md): reforça
+- [023 - Prohibition of Speculative Functionality](../clean-code/proibicao-funcionalidade-especulativa.md): reforça
+- [025 - Prohibition of The Blob Anti-Pattern](../clean-code/proibicao-anti-padrao-blob.md): reforça
+- [016 - Common Closure Principle](002_common-closure-principle.md): reforça
+- [022 - Prioritization of Simplicity and Clarity](../clean-code/priorizacao-simplicidade-clareza.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

@@ -1,43 +1,43 @@
 # Visitor
 
-**Classification**: Behavioral Pattern
+**Classificação**: Padrão Comportamental
 
 ---
 
-## Intent and Purpose
+## Intenção e Objetivo
 
-Represent an operation to be performed on the elements of an object structure. Visitor lets you define a new operation without changing the classes of the elements on which it operates. Separates an algorithm from an object structure on which it operates.
+Representar uma operação a ser executada sobre os elementos de uma estrutura de objetos. Visitor permite definir uma nova operação sem alterar as classes dos elementos sobre os quais opera. Separa um algoritmo da estrutura de objetos sobre a qual opera.
 
-## Also Known As
+## Também Conhecido Como
 
 - Visitor
 
-## Motivation
+## Motivação
 
-Consider a compiler that represents programs as abstract syntax trees. It will perform operations on these trees for analysis, optimization, code generation. Most of these operations will need to treat nodes that represent different language constructs differently. Distributing all these operations across the various node classes leads to a system that's hard to understand, maintain, and change.
+Considere um compilador que representa programas como árvores de sintaxe abstrata. Ele executará operações nessas árvores para análise, otimização e geração de código. A maioria dessas operações precisará tratar nós que representam diferentes construções da linguagem de forma diferente. Distribuir todas essas operações pelas diversas classes de nós leva a um sistema difícil de entender, manter e alterar.
 
-We could define these operations in separate classes. To apply a particular operation like type checking, we create a TypeCheckingVisitor. This visitor traverses the tree visiting each node and performing appropriate type checking. To add a new operation, we just add a new Visitor subclass. Visitor uses a technique called double-dispatch: the operation executed depends on both the kind of request and the type of element it receives.
+Poderíamos definir essas operações em classes separadas. Para aplicar uma operação particular como verificação de tipos, criamos um TypeCheckingVisitor. Este visitor percorre a árvore visitando cada nó e realizando a verificação de tipos adequada. Para adicionar uma nova operação, basta adicionar uma nova subclasse Visitor. Visitor usa uma técnica chamada double-dispatch: a operação executada depende tanto do tipo de solicitação quanto do tipo do elemento que a recebe.
 
-## Applicability
+## Aplicabilidade
 
-Use the Visitor pattern when:
+Use o padrão Visitor quando:
 
-- An object structure contains many classes of objects with differing interfaces, and you want to perform operations on these objects that depend on their concrete classes
-- Many distinct and unrelated operations need to be performed on objects in an object structure, and you want to avoid "polluting" their classes with these operations
-- The classes defining the object structure rarely change, but you often want to define new operations over the structure
-- You need to perform operations on objects without modifying their classes
-- You have a stable class hierarchy but volatile operations
+- Uma estrutura de objetos contém muitas classes de objetos com interfaces diferentes, e você deseja executar operações nesses objetos que dependem de suas classes concretas
+- Muitas operações distintas e não relacionadas precisam ser executadas em objetos de uma estrutura de objetos, e você deseja evitar "poluir" suas classes com essas operações
+- As classes que definem a estrutura de objetos raramente mudam, mas você frequentemente deseja definir novas operações sobre a estrutura
+- Você precisa executar operações em objetos sem modificar suas classes
+- Você tem uma hierarquia de classes estável mas operações voláteis
 
-## Structure
+## Estrutura
 
 ```
 Client
-└── Uses: ObjectStructure, Visitor
+└── Usa: ObjectStructure, Visitor
 
 ObjectStructure
-├── Maintains: List<Element>
+├── Mantém: List<Element>
 └── accept(visitor)
-    └── For each element: element.accept(visitor)
+    └── Para cada elemento: element.accept(visitor)
 
 Element (Interface)
 └── accept(visitor: Visitor)
@@ -56,87 +56,87 @@ Visitor (Interface)
 
 ConcreteVisitor1 implements Visitor
 ├── visitConcreteElementA(element)
-│   └── A-specific operation
+│   └── Operação específica para A
 └── visitConcreteElementB(element)
-    └── B-specific operation
+    └── Operação específica para B
 
 ConcreteVisitor2 implements Visitor
 ├── visitConcreteElementA(element)
-│   └── Another operation for A
+│   └── Outra operação para A
 └── visitConcreteElementB(element)
-    └── Another operation for B
+    └── Outra operação para B
 ```
 
-## Participants
+## Participantes
 
-- [**Visitor**](011_visitor.md): Declares a Visit operation for each class of ConcreteElement in the object structure; the operation's name and signature identifies the class that sends the Visit request to the visitor
-- **ConcreteVisitor**: Implements each operation declared by Visitor; provides the context for the algorithm and stores its local state
-- **Element**: Defines an Accept operation that takes a visitor as an argument
-- **ConcreteElement**: Implements an Accept operation that takes a visitor as an argument
-- **ObjectStructure**: Can enumerate its elements; may provide a high-level interface to allow the visitor to visit its elements; may be a Composite or a collection
+- [**Visitor**](011_visitor.md): Declara uma operação Visit para cada classe de ConcreteElement na estrutura de objetos; o nome e a assinatura da operação identificam a classe que envia a solicitação Visit ao visitor
+- **ConcreteVisitor**: Implementa cada operação declarada por Visitor; fornece o contexto para o algoritmo e armazena seu estado local
+- **Element**: Define uma operação Accept que recebe um visitor como argumento
+- **ConcreteElement**: Implementa uma operação Accept que recebe um visitor como argumento
+- **ObjectStructure**: Pode enumerar seus elementos; pode fornecer uma interface de alto nível para permitir que o visitor visite seus elementos; pode ser um Composite ou uma coleção
 
-## Collaborations
+## Colaborações
 
-- A client that uses the Visitor pattern must create a ConcreteVisitor object and then traverse the object structure, visiting each element with the visitor
-- When an element is visited, it calls the Visitor operation that corresponds to its class; the element supplies itself as an argument to this operation to let the visitor access its state if necessary
+- Um cliente que usa o padrão Visitor deve criar um objeto ConcreteVisitor e percorrer a estrutura de objetos, visitando cada elemento com o visitor
+- Quando um elemento é visitado, ele chama a operação Visitor que corresponde à sua classe; o elemento fornece a si mesmo como argumento para essa operação para permitir ao visitor acessar seu estado se necessário
 
-## Consequences
+## Consequências
 
-### Advantages
+### Vantagens
 
-- **Easy to add new operations**: Adding a new operation is easy; just add a new visitor
-- **Gathers related operations**: Related operations defined in a visitor instead of spread across classes
-- **Accumulate state**: Visitors can accumulate state as they traverse the structure
-- **Can traverse unrelated structures**: Visitor not limited to structures that define accept
+- **Fácil adicionar novas operações**: Adicionar uma nova operação é simples; basta adicionar um novo visitor
+- **Reúne operações relacionadas**: Operações relacionadas definidas em um visitor em vez de espalhadas pelas classes
+- **Acumula estado**: Visitors podem acumular estado enquanto percorrem a estrutura
+- **Pode percorrer estruturas não relacionadas**: Visitor não está limitado a estruturas que definem accept
 
-### Disadvantages
+### Desvantagens
 
-- **Adding new ConcreteElement classes is hard**: Each new ConcreteElement requires a new Visit operation in each Visitor
-- **Breaking encapsulation**: Visitor may require access to elements' internal state
-- **Dependency**: Visitors depend on concrete element classes
+- **Adicionar novas classes ConcreteElement é difícil**: Cada novo ConcreteElement requer uma nova operação Visit em cada Visitor
+- **Quebra de encapsulamento**: Visitor pode precisar acessar o estado interno dos elementos
+- **Dependência**: Visitors dependem de classes de elementos concretos
 
-## Implementation
+## Implementação
 
-### Considerations
+### Considerações
 
-1. **Double dispatch**: Visitor uses double dispatch; the operation executed depends on both the type of Visitor and the type of Element
+1. **Double dispatch**: Visitor usa double dispatch; a operação executada depende tanto do tipo de Visitor quanto do tipo de Element
 
-2. **Who is responsible for traversal**: Visitor, ObjectStructure, or another object can be responsible; if ObjectStructure is Composite, can use Iterator
+2. **Quem é responsável pelo percurso**: Visitor, ObjectStructure ou outro objeto pode ser responsável; se ObjectStructure é Composite, pode usar Iterator
 
-3. **Visitor without abstract element class**: If the structure doesn't have a common abstract class for elements, Visitor needs a visit method for each type
+3. **Visitor sem classe abstrata de elemento**: Se a estrutura não tem uma classe abstrata comum para elementos, Visitor precisa de um método visit para cada tipo
 
-### Techniques
+### Técnicas
 
-- **Visitor with Composite**: Combine with Composite to traverse tree structures
-- **Visitor with Iterator**: Use Iterator for traversal
-- **Acyclic Visitor**: Variant that avoids cyclic dependencies
-- **Reflective Visitor**: Use reflection to avoid double dispatch
-- **Extension Methods**: In languages that support them, use extension methods as alternative
+- **Visitor com Composite**: Combinar com Composite para percorrer estruturas de árvore
+- **Visitor com Iterator**: Usar Iterator para o percurso
+- **Acyclic Visitor**: Variante que evita dependências cíclicas
+- **Reflective Visitor**: Usar reflexão para evitar double dispatch
+- **Extension Methods**: Em linguagens que os suportam, usar extension methods como alternativa
 
-## Known Uses
+## Usos Conhecidos
 
-- **Compilers**: AST traversal (type checking, optimization, code generation)
-- **Document Processing**: Operations on document object model
-- **Graphics**: Rendering operations on graphical scenes
-- **File Systems**: Operations on directory structures
-- **Tax Calculation**: Different tax visitors for different jurisdictions
-- **Reporting**: Different report formats on same data structure
+- **Compiladores**: Percurso de AST (verificação de tipos, otimização, geração de código)
+- **Processamento de Documentos**: Operações no modelo de objeto de documento
+- **Gráficos**: Operações de renderização em cenas gráficas
+- **Sistemas de Arquivos**: Operações em estruturas de diretórios
+- **Cálculo de Impostos**: Diferentes visitors de imposto para diferentes jurisdições
+- **Relatórios**: Diferentes formatos de relatório sobre a mesma estrutura de dados
 
-## Related Patterns
+## Padrões Relacionados
 
-- [**Composite**](008_composite.md): Visitor can be used to apply an operation over a Composite
-- [**Interpreter**](003_interpreter.md): Visitor can be used to interpret AST
-- [**Iterator**](004_iterator.md): Visitor can use Iterator to traverse structure
-- [**Strategy**](009_strategy.md): Visitor is Strategy applied to object structure
-- [**Command**](002_command.md): Visitor can treat each element visit as Command
+- [**Composite**](008_composite.md): Visitor pode ser usado para aplicar uma operação sobre um Composite
+- [**Interpreter**](003_interpreter.md): Visitor pode ser usado para interpretar uma AST
+- [**Iterator**](004_iterator.md): Visitor pode usar Iterator para percorrer a estrutura
+- [**Strategy**](009_strategy.md): Visitor é Strategy aplicado à estrutura de objetos
+- [**Command**](002_command.md): Visitor pode tratar cada visita a um elemento como Command
 
-### Relation to Rules
+### Relação com Rules
 
-- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): add operations without modifying elements
-- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separate operation from structure
-- [013 - Interface Segregation Principle](../../solid/004_interface-segregation-principle.md): visitor defines specific interface
+- [011 - Open/Closed Principle](../../solid/002_open-closed-principle.md): adicionar operações sem modificar elementos
+- [010 - Single Responsibility Principle](../../solid/001_single-responsibility-principle.md): separar operação da estrutura
+- [013 - Interface Segregation Principle](../../solid/004_interface-segregation-principle.md): visitor define interface específica
 
 ---
 
-**Created on**: 2025-01-11
-**Version**: 1.0
+**Criado em**: 2025-01-11
+**Versão**: 1.0

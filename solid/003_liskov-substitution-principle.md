@@ -1,4 +1,4 @@
-# Compliance with Liskov Substitution Principle (LSP)
+# Conformidade com o Liskov Substitution Principle (LSP)
 
 **ID**: BEHAVIORAL-012
 **Severity**: 🔴 Critical
@@ -6,43 +6,43 @@
 
 ---
 
-## What it is
+## O que é
 
-Requires that derived classes (subclasses) be substitutable for their base classes (superclasses) without altering the expected behavior of the program.
+Exige que classes derivadas (subclasses) sejam substituíveis por suas classes base (superclasses) sem alterar o comportamento esperado do programa.
 
-## Why it matters
+## Por que importa
 
-Violation of LSP breaks the cohesion of the type system and inheritance contract, forcing clients to check object type, which leads to OCP violation and introduces serious runtime bugs.
+A violação do LSP quebra a coesão do sistema de tipos e o contrato de herança, forçando os clientes a verificar o tipo do objeto, o que leva à violação do OCP e introduz bugs sérios em tempo de execução.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Subclasses must not throw exceptions that are not thrown by the base class (behavior).
-- [ ] Subclasses must not weaken preconditions or strengthen postconditions of the base class (signature/contract).
-- [ ] The use of type checks (`instanceof` or complex *type guards*) in client code that uses the base class interface is prohibited.
+- [ ] Subclasses não devem lançar exceções que não sejam lançadas pela classe base (comportamento).
+- [ ] Subclasses não devem enfraquecer pré-condições nem fortalecer pós-condições da classe base (assinatura/contrato).
+- [ ] O uso de verificações de tipo (`instanceof` ou *type guards* complexos) em código cliente que usa a interface da classe base é proibido.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Test Frameworks**: Use of *mocks* and *spies* in unit tests to simulate substitution behaviors in a controlled manner.
+- **Frameworks de Teste**: Uso de *mocks* e *spies* em testes unitários para simular comportamentos de substituição de forma controlada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for `if (object instanceof Subclass)` or use of a base class method that throws `UnsupportedOperationException`.
+Buscar por `if (object instanceof Subclass)` ou uso de um método da classe base que lança `UnsupportedOperationException`.
 
-### Automatic
+### Automático
 
-TypeScript/Compiler: Strict typing verification of parameters and returns of overridden methods.
+TypeScript/Compilador: Verificação estrita de tipagem de parâmetros e retornos de métodos sobrescritos.
 
-## Related to
+## Relacionado a
 
-- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): reinforces
-- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reinforces
-- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complements
-- [013 - Interface Segregation Principle](../solid/004_interface-segregation-principle.md): reinforces
-- [036 - Side Effect Function Restriction](../clean-code/016_side-effect-function-restriction.md): reinforces
+- [011 - Open/Closed Principle](../solid/002_open-closed-principle.md): reforça
+- [009 - Tell, Don't Ask](../object-calisthenics/009_tell-dont-ask.md): reforça
+- [003 - Primitive Encapsulation](../object-calisthenics/003_primitive-encapsulation.md): complementa
+- [013 - Interface Segregation Principle](../solid/004_interface-segregation-principle.md): reforça
+- [036 - Side Effect Function Restriction](../clean-code/restricao-funcoes-efeitos-colaterais.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0

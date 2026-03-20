@@ -126,9 +126,9 @@ Desenvolvedores podem criar hooks customizados combinando hooks built-in. Hooks 
 ### Relação com Rules
 
 - [010 - Princípio da Responsabilidade Única](../../solid/001_single-responsibility-principle.md): reforça
-- [021 - Proibição da Duplicação de Lógica](../../clean-code/001_prohibition-logic-duplication.md): implementa
-- [022 - Priorização da Simplicidade e Clareza](../../clean-code/002_prioritization-simplicity-clarity.md): reforça
-- [036 - Restrição de Funções com Efeitos Colaterais](../../clean-code/016_restricao-funcoes-efeitos-colaterais.md): relaciona-se
+- [021 - Proibição da Duplicação de Lógica](../../clean-code/proibicao-duplicacao-logica.md): implementa
+- [022 - Priorização da Simplicidade e Clareza](../../clean-code/priorizacao-simplicidade-clareza.md): reforça
+- [036 - Restrição de Funções com Efeitos Colaterais](../../clean-code/restricao-funcoes-efeitos-colaterais.md): relaciona-se
 
 ## Melhores Práticas Modernas (React 18+)
 

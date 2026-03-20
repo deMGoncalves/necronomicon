@@ -230,7 +230,7 @@ function alreadyFast() { }
 
 ## Rules Relacionadas
 
-- [clean-code/002 - KISS](../../clean-code/002_prioritization-simplicity-clarity.md): código simples geralmente é mais performático
+- [clean-code/002 - KISS](../../clean-code/priorizacao-simplicidade-clareza.md): código simples geralmente é mais performático
 - [object-calisthenics/001 - Single Indentation](../../object-calisthenics/001_single-indentation-level.md): menos aninhamento = menos complexidade
 
 ---

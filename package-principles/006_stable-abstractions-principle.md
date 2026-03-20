@@ -6,42 +6,42 @@
 
 ---
 
-## What it is
+## O que é
 
-A package should be as abstract as possible (have interfaces) if it is stable, and as concrete as possible if it is unstable.
+Um pacote deve ser tão abstrato quanto possível (ter interfaces) se for estável, e tão concreto quanto possível se for instável.
 
-## Why it matters
+## Por que importa
 
-SAP links package stability (SDP) to its abstraction (DIP). Violation occurs when a highly stable module (hard to change) is concrete, preventing extension. Or when an unstable module (easy to change) is abstract, delaying implementation.
+O SAP vincula a estabilidade do pacote (SDP) à sua abstração (DIP). A violação ocorre quando um módulo altamente estável (difícil de mudar) é concreto, impedindo a extensão. Ou quando um módulo instável (fácil de mudar) é abstrato, atrasando a implementação.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package's **Abstraction** (A), calculated as (Total Abstractions / Total Classes), should be **high** (close to 1) if its **Instability (I)** is low (close to 0).
-- [ ] The package's distance to the *Main Sequence* (D) in the A/I plane should not be greater than **0.1** (D = |A + I - 1|).
-- [ ] High-level packages (policy) should have more than **60%** abstract classes or interfaces.
+- [ ] A **Abstração** (A) do pacote, calculada como (Total de Abstrações / Total de Classes), deve ser **alta** (próxima de 1) se sua **Instabilidade (I)** for baixa (próxima de 0).
+- [ ] A distância do pacote à *Main Sequence* (D) no plano A/I não deve ser maior que **0.1** (D = |A + I - 1|).
+- [ ] Pacotes de alto nível (política) devem ter mais de **60%** de classes abstratas ou interfaces.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Pure Data Packages**: Modules that contain only *Value Objects* or DTOs and are not designed for polymorphism (A and I can be low).
+- **Pacotes de Dados Puros**: Módulos que contêm apenas *Value Objects* ou DTOs e não são projetados para polimorfismo (A e I podem ser baixos).
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Identify an important business module (stable) that is composed only of concrete classes.
+Identificar um módulo de negócio importante (estável) que é composto apenas por classes concretas.
 
-### Automatic
+### Automático
 
-Dependency analysis: Calculation of package abstraction (A), instability (I), and distance (D) metrics.
+Análise de dependências: Cálculo das métricas de abstração (A), instabilidade (I) e distância (D) dos pacotes.
 
-## Related to
+## Relacionado a
 
-- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reinforces
-- [019 - Stable Dependencies Principle](../package-principles/005_stable-dependencies-principle.md): complements
-- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): reinforces
-- [011 - Open/Closed Principle](002_open-closed-principle.md): reinforces
+- [014 - Dependency Inversion Principle](005_dependency-inversion-principle.md): reforça
+- [019 - Stable Dependencies Principle](../package-principles/005_stable-dependencies-principle.md): complementa
+- [012 - Liskov Substitution Principle](003_liskov-substitution-principle.md): reforça
+- [011 - Open/Closed Principle](002_open-closed-principle.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criado em**: 2025-10-04
+**Versão**: 1.0
