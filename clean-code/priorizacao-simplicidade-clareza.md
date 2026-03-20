@@ -1,8 +1,8 @@
 ---
 titulo: Priorização de Simplicidade e Clareza (Princípio KISS)
 aliases:
-  - KISS
-  - Keep It Simple Stupid
+  - KISS — Keep It Simple, Stupid
+  - Keep It Simple, Stupid
 tipo: rule
 id: CC-02
 severidade: 🟠 Alto
@@ -26,7 +26,7 @@ criado: 2025-10-08
 
 # Priorização de Simplicidade e Clareza (Princípio KISS)
 
-*KISS — Keep It Simple Stupid*
+*KISS — Keep It Simple, Stupid*
 
 
 ---

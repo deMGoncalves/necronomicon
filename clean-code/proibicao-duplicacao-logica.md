@@ -1,7 +1,7 @@
 ---
 titulo: Proibição de Duplicação de Lógica (Princípio DRY)
 aliases:
-  - DRY
+  - DRY — Don't Repeat Yourself
   - Don't Repeat Yourself
 tipo: rule
 id: CC-01

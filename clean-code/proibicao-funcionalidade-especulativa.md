@@ -1,7 +1,7 @@
 ---
 titulo: Proibição de Funcionalidade Especulativa (Princípio YAGNI)
 aliases:
-  - YAGNI
+  - YAGNI — You Aren't Gonna Need It
   - You Aren't Gonna Need It
 tipo: rule
 id: CC-03

@@ -1,7 +1,7 @@
 ---
 titulo: Cobertura Mínima de Testes e Qualidade (TDD)
 aliases:
-  - TDD
+  - TDD — Test-Driven Development
   - Test Coverage
 tipo: rule
 id: CC-12

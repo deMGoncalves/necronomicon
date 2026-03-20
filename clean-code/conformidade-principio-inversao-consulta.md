@@ -1,7 +1,7 @@
 ---
 titulo: Conformidade com o Princípio de Separação Comando-Consulta (CQS)
 aliases:
-  - CQS
+  - CQS — Command Query Separation
   - Command Query Separation
 tipo: rule
 id: CC-18
