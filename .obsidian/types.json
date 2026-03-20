@@ -1,0 +1,15 @@
+{
+  "types": {
+    "titulo": "text",
+    "tipo": "text",
+    "id": "text",
+    "severidade": "text",
+    "origem": "text",
+    "tags": "tags",
+    "criado": "date",
+    "atualizado": "date",
+    "resolver": "text",
+    "relacionados": "multitext",
+    "classificacao": "text"
+  }
+}
