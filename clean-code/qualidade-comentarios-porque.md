@@ -69,7 +69,7 @@ function getUser(id) {
 ## Anti-Patterns Relacionados
 
 - **Redundant Comments** — comentários que apenas repetem o que o código diz
-- **Zombie Code** — código comentado que nunca é removido
+- [[lava-flow|Zombie Code]] — código comentado que nunca é removido
 
 ## Como Detectar
 

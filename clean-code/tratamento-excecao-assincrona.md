@@ -77,7 +77,7 @@ function fireAndForgetWithLog(promise) {
 
 ## Anti-Patterns Relacionados
 
-- **Floating Promises** — Promises criadas mas nunca aguardadas nem tratadas
+- [[callback-hell|Floating Promises]] — Promises criadas mas nunca aguardadas nem tratadas
 - **Fire and Forget sem tratamento** — disparar operação assíncrona ignorando falhas
 
 ## Como Detectar

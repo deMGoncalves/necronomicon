@@ -84,7 +84,7 @@ class UserService {
 
 ## Anti-Patterns Relacionados
 
-- **Copy-Paste Programming** — duplicar código em vez de extrair abstrações
+- [[cut-and-paste-programming|Copy-Paste Programming]] — duplicar código em vez de extrair abstrações
 
 ## Como Detectar
 

@@ -70,8 +70,8 @@ class UserService {
 
 ## Anti-Patterns Relacionados
 
-- **Gold Plating** — adicionar funcionalidades não solicitadas "de presente"
-- **Premature Abstraction** — criar abstrações antes de ter dois casos de uso reais
+- [[overengineering|Gold Plating]] — adicionar funcionalidades não solicitadas "de presente"
+- [[speculative-generality|Premature Abstraction]] — criar abstrações antes de ter dois casos de uso reais
 
 ## Como Detectar
 

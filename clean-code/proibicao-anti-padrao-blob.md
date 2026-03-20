@@ -86,8 +86,8 @@ class PaymentService {
 
 ## Anti-Patterns Relacionados
 
-- **God Object / The Blob** — classe que conhece e controla todo o sistema
-- **Feature Envy** — métodos que usam dados de outras classes mais do que os próprios
+- [[the-blob|God Object / The Blob]] — classe que conhece e controla todo o sistema
+- [[feature-envy|Feature Envy]] — métodos que usam dados de outras classes mais do que os próprios
 
 ## Como Detectar
 

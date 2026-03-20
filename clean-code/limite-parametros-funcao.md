@@ -76,7 +76,7 @@ createOrder({
 
 ## Anti-Patterns Relacionados
 
-- **Long Parameter List** — sinal clássico de que a função faz coisas demais
+- [[data-clumps|Long Parameter List]] — sinal clássico de que a função faz coisas demais
 
 ## Como Detectar
 

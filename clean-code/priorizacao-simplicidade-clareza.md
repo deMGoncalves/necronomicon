@@ -72,8 +72,8 @@ function getDiscount(user) {
 
 ## Anti-Patterns Relacionados
 
-- **Overengineering** — adicionar complexidade sem necessidade real
-- **Clever Code** — código "inteligente" que sacrifica legibilidade por concisão
+- [[overengineering|Overengineering]] — adicionar complexidade sem necessidade real
+- [[clever-code|Clever Code]] — código "inteligente" que sacrifica legibilidade por concisão
 
 ## Como Detectar
 
