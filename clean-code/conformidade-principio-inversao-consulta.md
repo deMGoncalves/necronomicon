@@ -91,11 +91,11 @@ Buscar métodos que retornam um valor, mas contêm lógica de persistência (`sa
 
 ### Automático
 
-ESLint: Regras customizadas que verificam o padrão de nomes de métodos de leitura/escrita e seus retornos.
+Biome: sem regra nativa para CQS; revisar via code review buscando métodos que retornam valor e contêm chamadas de persistência ou mutação de estado.
 
 ## Relação com ICP
 
-Reduz **Responsabilidades** (Query ≠ Command significa que cada método tem uma responsabilidade) e **CC_base** (métodos focados têm menos ramificações, pois não precisam lidar com dois contextos diferentes).
+Reduz **[[componente-responsabilidades|Responsabilidades]]** (Query ≠ Command significa que cada método tem uma responsabilidade) e **[[componente-cc-base|CC_base]]** (métodos focados têm menos ramificações, pois não precisam lidar com dois contextos diferentes).
 
 ## Relacionados
 

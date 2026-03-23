@@ -28,6 +28,7 @@ criado: 2025-10-08
 
 *KISS — Keep It Simple, Stupid*
 
+![KISS Principle](https://www.youtube.com/watch?v=HmBG-1cdHUw)
 
 ---
 
@@ -83,11 +84,11 @@ Verificar se o código requer mais de 5 segundos de análise para entender seu p
 
 ### Automático
 
-SonarQube/ESLint: `complexity.max-cycles: 5`.
+Biome: [`noExcessiveCognitiveComplexity`](https://biomejs.dev/linter/rules/no-excessive-cognitive-complexity/) com limite configurável via `maxAllowedComplexity`.
 
 ## Relação com ICP
 
-Impacta diretamente o **CC_base** (limite de CC = 5) e o **Aninhamento** (evitar lógica desnecessariamente encadeada). A conformidade com KISS mantém o ICP ≤ 3 para a maioria dos métodos.
+Impacta diretamente o **[[componente-cc-base|CC_base]]** (limite de CC = 5) e o **[[componente-aninhamento|Aninhamento]]** (evitar lógica desnecessariamente encadeada). A conformidade com KISS mantém o [[calculo-icp|ICP]] ≤ 3 para a maioria dos métodos.
 
 ## Relacionados
 

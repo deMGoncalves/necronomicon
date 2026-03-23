@@ -81,11 +81,11 @@ Buscar métodos vazios, parâmetros não utilizados ou código que nunca é cham
 
 ### Automático
 
-SonarQube/ESLint: `no-unused-vars`, `no-empty-function`.
+Biome: [`noUnusedVariables`](https://biomejs.dev/linter/rules/no-unused-variables/), [`noUnusedImports`](https://biomejs.dev/linter/rules/no-unused-imports/) e [`noEmptyBlockStatements`](https://biomejs.dev/linter/rules/no-empty-block-statements/).
 
 ## Relação com ICP
 
-Reduz **Responsabilidades** (funcionalidades especulativas adicionam responsabilidades extras sem necessidade) e **Acoplamento** (menos dependências desnecessárias importadas para suportar features não existentes).
+Reduz **[[componente-responsabilidades|Responsabilidades]]** (funcionalidades especulativas adicionam responsabilidades extras sem necessidade) e **[[componente-acoplamento|Acoplamento]]** (menos dependências desnecessárias importadas para suportar features não existentes).
 
 ## Relacionados
 

@@ -91,11 +91,11 @@ Buscar `return null`, `return -1`, ou `catch (e) {}` em código de negócio.
 
 ### Automático
 
-ESLint: `no-return-null`, `no-empty-catch`.
+Biome: [`noEmptyBlockStatements`](https://biomejs.dev/linter/rules/no-empty-block-statements/) detecta blocos `catch` vazios; ausência de retorno nulo requer revisão manual.
 
 ## Relação com ICP
 
-Reduz **CC_base** (menos caminhos de verificação nula distribuídos pelo sistema) e **Responsabilidades** (tratamento de erro centralizado em exceções específicas em vez de espalhado em verificações de retorno).
+Reduz **[[componente-cc-base|CC_base]]** (menos caminhos de verificação nula distribuídos pelo sistema) e **[[componente-responsabilidades|Responsabilidades]]** (tratamento de erro centralizado em exceções específicas em vez de espalhado em verificações de retorno).
 
 ## Relacionados
 

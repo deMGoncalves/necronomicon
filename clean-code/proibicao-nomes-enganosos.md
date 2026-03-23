@@ -82,11 +82,11 @@ Verificar se um nome de variável contradiz seu uso ou o tipo de dado real que c
 
 ### Automático
 
-ESLint: Regras customizadas contra notação húngara e para verificar padrões de lista.
+Biome: [`useNamingConvention`](https://biomejs.dev/linter/rules/use-naming-convention/) configurado para rejeitar prefixos de tipo húngaro e forçar convenções de coleção.
 
 ## Relação com ICP
 
-Impacto indireto: nomes enganosos aumentam o custo cognitivo de auditar o ICP — o desenvolvedor gasta energia entendendo o nome antes de conseguir analisar a complexidade real do código.
+Impacto indireto: nomes enganosos aumentam o custo cognitivo de auditar o [[calculo-icp|ICP]] — o desenvolvedor gasta energia entendendo o nome antes de conseguir analisar a complexidade real do código.
 
 ## Relacionados
 

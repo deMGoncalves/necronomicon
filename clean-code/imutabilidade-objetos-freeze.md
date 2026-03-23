@@ -75,8 +75,8 @@ interface Product {
 
 ## Anti-Patterns Relacionados
 
-- **Shared Mutable State** — múltiplos módulos modificando o mesmo objeto sem coordenação
-- **Accidental Mutation** — modificar parâmetro de função sem intenção explícita
+- [[shared-mutable-state|Shared Mutable State]] — múltiplos módulos modificando o mesmo objeto sem coordenação
+- [[accidental-mutation|Accidental Mutation]] — modificar parâmetro de função sem intenção explícita
 
 ## Como Detectar
 
@@ -86,11 +86,11 @@ Verificar a ausência de `Object.freeze()` em métodos *Factory* ou construtores
 
 ### Automático
 
-TypeScript: Uso de `readonly` nas propriedades.
+Biome: sem regra nativa para `Object.freeze`; usar `readonly` em todas as propriedades via TypeScript.
 
 ## Relação com ICP
 
-Reduz **Responsabilidades**: objetos imutáveis têm uma única responsabilidade (representar um estado), eliminando métodos de mutação que adicionariam responsabilidades extras à classe.
+Reduz **[[componente-responsabilidades|Responsabilidades]]**: objetos imutáveis têm uma única responsabilidade (representar um estado), eliminando métodos de mutação que adicionariam responsabilidades extras à classe.
 
 ## Relacionados
 

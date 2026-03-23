@@ -84,11 +84,11 @@ Verificar classes terminando em verbos (`Manager`, `Processor`) ou funções com
 
 ### Automático
 
-ESLint: `naming-convention` com regras para classes e funções.
+Biome: [`useNamingConvention`](https://biomejs.dev/linter/rules/use-naming-convention/) configurado para `PascalCase` em classes e `camelCase` em métodos.
 
 ## Relação com ICP
 
-Impacto indireto: nomes que revelam intenção reduzem a necessidade de leitura profunda do código para entender CC e Responsabilidades. Código com nomes claros tem ICP mais fácil de auditar.
+Impacto indireto: nomes que revelam intenção reduzem a necessidade de leitura profunda do código para entender CC e [[componente-responsabilidades|Responsabilidades]]. Código com nomes claros tem [[calculo-icp|ICP]] mais fácil de auditar.
 
 ## Relacionados
 

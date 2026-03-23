@@ -77,11 +77,11 @@ Buscar `../` em qualquer arquivo de código-fonte.
 
 ### Automático
 
-ESLint/Biome: Regra `no-relative-imports` configurada para proibir qualquer uso de `../`.
+Biome: sem regra nativa para bloquear `../`; combinar `paths` no `tsconfig.json` com [`noRelativePackageJsonFiles`](https://biomejs.dev/linter/rules/no-relative-package-json-files/) para reforçar uso exclusivo de aliases.
 
 ## Relação com ICP
 
-Reduz **Acoplamento**: path aliases tornam dependências explícitas e gerenciáveis. Imports relativos criam acoplamento frágil à estrutura de diretórios — mover um arquivo quebra todos os importadores.
+Reduz **[[componente-acoplamento|Acoplamento]]**: path aliases tornam dependências explícitas e gerenciáveis. Imports relativos criam acoplamento frágil à estrutura de diretórios — mover um arquivo quebra todos os importadores.
 
 ## Relacionados
 

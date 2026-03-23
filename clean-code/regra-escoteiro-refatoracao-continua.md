@@ -81,11 +81,11 @@ Code review: Verificar se o desenvolvedor apenas corrigiu o bug, ou se melhorou 
 
 ### Automático
 
-Análise de commits: Verificar se a refatoração está sendo feita em pequenas doses.
+Biome: [`noExcessiveCognitiveComplexity`](https://biomejs.dev/linter/rules/no-excessive-cognitive-complexity/) sinaliza métodos que ainda não foram refatorados; verificar diffs do PR em code review.
 
 ## Relação com ICP
 
-Reduz gradualmente todos os componentes do ICP ao longo do tempo: **CC_base** (eliminar ramificações desnecessárias), **Aninhamento** (adicionar guard clauses), **Responsabilidades** (extrair funções) e **Acoplamento** (remover dependências não utilizadas).
+Reduz gradualmente todos os componentes do [[calculo-icp|ICP]] ao longo do tempo: **[[componente-cc-base|CC_base]]** (eliminar ramificações desnecessárias), **[[componente-aninhamento|Aninhamento]]** (adicionar guard clauses), **[[componente-responsabilidades|Responsabilidades]]** (extrair funções) e **[[componente-acoplamento|Acoplamento]]** (remover dependências não utilizadas).
 
 ## Relacionados
 

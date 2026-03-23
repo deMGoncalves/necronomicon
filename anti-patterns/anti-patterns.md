@@ -72,6 +72,8 @@ O termo foi cunhado por **Andrew Koenig** (1995) e sistematizado no livro **"Ant
 | 🟠 Alto | [[clever-code\|Clever Code (Código Inteligente)]] |
 | 🟠 Alto | [[callback-hell\|Callback Hell (Inferno de Callbacks)]] |
 | 🟠 Alto | [[pyramid-of-doom\|Pyramid of Doom (Pirâmide da Perdição)]] |
+| 🟠 Alto | [[shared-mutable-state\|Shared Mutable State (Estado Mutável Compartilhado)]] |
+| 🟠 Alto | [[accidental-mutation\|Accidental Mutation (Mutação Acidental)]] |
 | 🟡 Médio | [[premature-optimization\|Premature Optimization (Otimização Prematura)]] |
 
 ---

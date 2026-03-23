@@ -84,11 +84,11 @@ Buscar parâmetros de função tipados como `boolean` ou com nomes como `isX`, `
 
 ### Automático
 
-ESLint: `no-flag-args` (regra customizada) ou `max-params`.
+Biome: sem regra nativa para flag args; buscar parâmetros do tipo `boolean` via [`useNamingConvention`](https://biomejs.dev/linter/rules/use-naming-convention/) e revisão de code review.
 
 ## Relação com ICP
 
-Reduz **Responsabilidades** (boolean flags = múltiplas responsabilidades em uma função) e **CC_base** (cada flag adiciona um ponto de decisão ao grafo de controle).
+Reduz **[[componente-responsabilidades|Responsabilidades]]** (boolean flags = múltiplas responsabilidades em uma função) e **[[componente-cc-base|CC_base]]** (cada flag adiciona um ponto de decisão ao grafo de controle).
 
 ## Relacionados
 

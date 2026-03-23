@@ -80,11 +80,11 @@ Buscar literais `string` ou `number` dentro de `if`, `switch` ou cálculos de ne
 
 ### Automático
 
-SonarQube/ESLint: `no-magic-numbers`, `no-magic-strings`.
+Biome: sem regra nativa para magic numbers; garantir uso de `UPPER_SNAKE_CASE` via [`useNamingConvention`](https://biomejs.dev/linter/rules/use-naming-convention/) e adotar `const enum` ou objetos de constantes no TypeScript.
 
 ## Relação com ICP
 
-Não reduz diretamente o ICP, mas elimina **Acoplamento** implícito: quando um valor mágico é duplicado, múltiplos módulos ficam acoplados ao mesmo literal sem rastreabilidade.
+Não reduz diretamente o [[calculo-icp|ICP]], mas elimina **[[componente-acoplamento|Acoplamento]]** implícito: quando um valor mágico é duplicado, múltiplos módulos ficam acoplados ao mesmo literal sem rastreabilidade.
 
 ## Relacionados
 

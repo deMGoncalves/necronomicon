@@ -94,11 +94,11 @@ Buscar trechos de código que parecem idênticos, mas possuem pequenas variaçõ
 
 ### Automático
 
-SonarQube/ESLint: `no-duplicated-code` (com análise semântica).
+Biome: sem detector nativo de duplicação semântica; usar revisão de código manual focando em blocos similares com mais de 5 linhas.
 
 ## Relação com ICP
 
-Reduz **Responsabilidades** (extrair lógica duplicada clarifica responsabilidades de cada módulo) e **Acoplamento** (módulos passam a depender de uma fonte única em vez de implementar a mesma lógica independentemente).
+Reduz **[[componente-responsabilidades|Responsabilidades]]** (extrair lógica duplicada clarifica responsabilidades de cada módulo) e **[[componente-acoplamento|Acoplamento]]** (módulos passam a depender de uma fonte única em vez de implementar a mesma lógica independentemente).
 
 ## Relacionados
 

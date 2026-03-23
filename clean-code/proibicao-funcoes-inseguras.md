@@ -81,11 +81,11 @@ Buscar `eval`, `new Function`, ou chaves de API *hardcoded*.
 
 ### Automático
 
-ESLint: `no-eval`, `no-implied-eval`.
+Biome: [`noEval`](https://biomejs.dev/linter/rules/no-eval/) e [`noGlobalEval`](https://biomejs.dev/linter/rules/no-global-eval/).
 
 ## Relação com ICP
 
-Impacta **Acoplamento**: `eval` cria dependência dinâmica e imprevisível com qualquer código que possa ser passado como string, tornando o acoplamento impossível de analisar estaticamente.
+Impacta **[[componente-acoplamento|Acoplamento]]**: `eval` cria dependência dinâmica e imprevisível com qualquer código que possa ser passado como string, tornando o acoplamento impossível de analisar estaticamente.
 
 ## Relacionados
 

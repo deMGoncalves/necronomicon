@@ -89,11 +89,11 @@ Buscar métodos que retornam um valor de consulta, mas também chamam um `setter
 
 ### Automático
 
-ESLint: `no-side-effects-in-conditions` e análise de *mutabilidade*.
+Biome: sem regra nativa para efeitos colaterais ocultos; revisar via code review buscando funções de Query que chamam setters ou modificam estado externo.
 
 ## Relação com ICP
 
-Reduz **Responsabilidades** (funções puras têm uma única responsabilidade — transformar dados) e **CC_base** (menos ramificações de estado que precisam ser consideradas em cada caminho).
+Reduz **[[componente-responsabilidades|Responsabilidades]]** (funções puras têm uma única responsabilidade — transformar dados) e **[[componente-cc-base|CC_base]]** (menos ramificações de estado que precisam ser consideradas em cada caminho).
 
 ## Relacionados
 

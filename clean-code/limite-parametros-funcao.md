@@ -86,11 +86,11 @@ Identificar assinaturas de métodos com 4 ou mais parâmetros.
 
 ### Automático
 
-Biome/ESLint: `max-params: ["error", 3]`.
+Biome: sem regra nativa para limite de parâmetros; usar [`useConsistentParameterDestructuring`](https://biomejs.dev/linter/rules/use-consistent-parameter-destructuring/) para promover Parameter Objects.
 
 ## Relação com ICP
 
-Reduz **Acoplamento**: funções com menos parâmetros dependem de menos dados externos. Também reduz **Responsabilidades**: muitos parâmetros frequentemente indicam que a função está orquestrando múltiplas preocupações.
+Reduz **[[componente-acoplamento|Acoplamento]]**: funções com menos parâmetros dependem de menos dados externos. Também reduz **[[componente-responsabilidades|Responsabilidades]]**: muitos parâmetros frequentemente indicam que a função está orquestrando múltiplas preocupações.
 
 ## Relacionados
 

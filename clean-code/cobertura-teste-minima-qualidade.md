@@ -93,7 +93,7 @@ Bun Test Runner/Jest: Configuração de `coverageThresholds`.
 
 ## Relação com ICP
 
-Impacto indireto: código testável exige naturalmente **CC_base** baixo e **Responsabilidades** únicas por função. Se um método é difícil de testar, seu ICP provavelmente está elevado.
+Impacto indireto: código testável exige naturalmente **[[componente-cc-base|CC_base]]** baixo e **[[componente-responsabilidades|Responsabilidades]]** únicas por função. Se um método é difícil de testar, seu [[calculo-icp|ICP]] provavelmente está elevado.
 
 ## Relacionados
 

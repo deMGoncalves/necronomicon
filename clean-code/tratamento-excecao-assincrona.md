@@ -88,11 +88,11 @@ Buscar chamadas de função que retornam Promises sem `await` ou `.catch()` imed
 
 ### Automático
 
-ESLint: `no-floating-promises`, `require-await`.
+Biome: [`useAwait`](https://biomejs.dev/linter/rules/use-await/) detecta funções `async` sem `await`; Promises flutuantes requerem revisão manual ou [`noAsyncPromiseExecutor`](https://biomejs.dev/linter/rules/no-async-promise-executor/).
 
 ## Relação com ICP
 
-Reduz **CC_base**: Promises tratadas explicitamente tornam os caminhos de execução visíveis e contáveis. Promises flutuantes ocultam caminhos de erro, criando complexidade ciclomática invisível.
+Reduz **[[componente-cc-base|CC_base]]**: Promises tratadas explicitamente tornam os caminhos de execução visíveis e contáveis. Promises flutuantes ocultam caminhos de erro, criando complexidade ciclomática invisível.
 
 ## Relacionados
 

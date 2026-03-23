@@ -79,11 +79,11 @@ Verificar se o código pode ser lido e compreendido sem precisar ler os comentá
 
 ### Automático
 
-ESLint: Regras para detectar comentários em linhas de código simples.
+Biome: sem regra nativa para qualidade de comentários; verificar manualmente se comentários descrevem o *quê* em vez do *porquê*.
 
 ## Relação com ICP
 
-Impacto indireto: código que precisa de comentários para explicar *o quê* geralmente tem CC alto ou nomes ruins — sintomas de ICP elevado. Comentários não reduzem o ICP, mas sua ausência (no caso correto) indica código autodocumentado com ICP baixo.
+Impacto indireto: código que precisa de comentários para explicar *o quê* geralmente tem [[componente-cc-base|CC]] alto ou nomes ruins — sintomas de [[calculo-icp|ICP]] elevado. Comentários não reduzem o ICP, mas sua ausência (no caso correto) indica código autodocumentado com ICP baixo.
 
 ## Relacionados
 

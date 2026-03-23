@@ -97,11 +97,11 @@ Identificar classes que são constantemente modificadas por diversas *feature re
 
 ### Automático
 
-SonarQube: LCOM (Lack of Cohesion in Methods) e WMC (Weighted Methods Per Class) muito elevados.
+Biome: [`noExcessiveCognitiveComplexity`](https://biomejs.dev/linter/rules/no-excessive-cognitive-complexity/) para classes com CC elevado; métricas de coesão (LCOM/WMC) requerem análise manual ou ferramenta dedicada.
 
 ## Relação com ICP
 
-Blobs acumulam todos os componentes do ICP: **CC_base** elevado (muitos caminhos), **Aninhamento** profundo, **Responsabilidades** múltiplas e **Acoplamento** máximo. A decomposição de um Blob é a ação de maior redução de ICP possível.
+Blobs acumulam todos os componentes do [[calculo-icp|ICP]]: **[[componente-cc-base|CC_base]]** elevado (muitos caminhos), **[[componente-aninhamento|Aninhamento]]** profundo, **[[componente-responsabilidades|Responsabilidades]]** múltiplas e **[[componente-acoplamento|Acoplamento]]** máximo. A decomposição de um Blob é a ação de maior redução de ICP possível.
 
 ## Relacionados
 
