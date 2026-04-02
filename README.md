@@ -145,7 +145,7 @@ docs/                  ← documentação arquitetural sincronizada
     Quick                  Task          Feature
        │                     │              │
        │              ┌──────▼──────┐  ┌───▼──────────────┐
-       │              │ 🟢 @arch    │  │   🟢 @architect   │
+       │              │ 🟢 @arch    │  │   🟢 @architect  │
        │              │ specs light │  │ PRD+design+specs │
        │              └──────┬──────┘  └───┬──────────────┘
        │                     │             │
