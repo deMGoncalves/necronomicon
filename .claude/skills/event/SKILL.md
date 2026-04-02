@@ -1,10 +1,11 @@
 ---
 name: event
-description: Convenção de uso de eventos DOM e custom events. Use quando criar event handlers e comunicação entre componentes.
+description: Convenção de uso de eventos DOM e custom events — quando criar event handlers, disparar custom events ou comunicar entre componentes via eventos DOM
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Event
@@ -106,6 +107,20 @@ Use quando criar event handlers que respondem a interações do usuário ou quan
 | Assincronia | Pode ser async se necessário |
 | Parâmetro | Recebe evento ou dado transformado por modificador |
 | Nome | Usar Symbol via bracket notation para encapsulamento |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — evento ad-hoc sem tipagem ou bubbling
+element.dispatchEvent(new Event('change'))
+
+// ✅ Bom — custom event com detail, bubbles e composed
+element.dispatchEvent(new CustomEvent('user:updated', {
+  detail: { userId: '123', name: 'Alice' },
+  bubbles: true,
+  composed: true,
+}))
+```
 
 ## Proibições
 

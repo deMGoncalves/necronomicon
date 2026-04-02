@@ -1,10 +1,11 @@
 ---
 name: render
-description: Convenção de renderização e re-renderização de componentes. Use quando criar componentes visuais e otimizar atualizações de DOM.
+description: Convenção de renderização e re-renderização de componentes — quando implementar renderização de componentes, otimizar re-renders ou revisar código que atualiza o DOM de forma ineficiente
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Render
@@ -129,6 +130,23 @@ Use quando criar componentes visuais que precisam renderizar HTML e CSS, ou quan
 | Condicional | Renderização pode usar lógica condicional simples |
 | Interpolação | Valores interpolados são recalculados em cada render |
 | Closure | Funções capturam contexto da instância |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — re-render completo desnecessário
+render() {
+  this.shadowRoot.innerHTML = `<div>${this.data}</div>`
+  // limpa e reconstrói tudo
+}
+
+// ✅ Bom — atualização cirúrgica do DOM
+render() {
+  const el = this.shadowRoot.querySelector('.data')
+  if (el) el.textContent = this.data
+  // atualiza só o que mudou
+}
+```
 
 ## Proibições
 

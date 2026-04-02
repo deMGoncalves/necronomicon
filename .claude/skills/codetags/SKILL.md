@@ -1,10 +1,11 @@
 ---
 name: codetags
-description: Convenção de marcação de código com comment tags padronizadas. Use quando precisar anotar trechos de código com marcadores de débito técnico, correções pendentes ou observações.
+description: Convenção de marcação de código com comment tags padronizadas. Use quando o @reviewer identificar violações no código e precisar anotá-las com marcadores padronizados, ao registrar débito técnico, bugs ou otimizações pendentes com rastreabilidade.
 model: sonnet
 allowed-tools: Read, Edit, Grep, Glob
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Codetags
@@ -21,43 +22,20 @@ Use quando o reviewer identificar violações no código e precisar anotar os tr
 
 | Princípio | Descrição |
 |-----------|-----------|
-| Rastreabilidade | Cada marcação vincula o trecho a uma regra ou skill violada |
+| Ensinar | Cada marcação explica o porquê do problema e o caminho para melhorar |
 | Busca facilitada | Tags padronizadas permitem busca global por tipo de problema |
 | Ação clara | Cada tag indica o tipo de ação necessária |
+| Tom parceiro | Escreva como um colega ensinando, não como um sistema de auditoria |
 
-## Tags Disponíveis
-
-| Tag | Significado | Quando Usar |
-|-----|-------------|-------------|
-| FIXME | Corrigir | Código quebrado, incorreto ou inseguro que precisa de correção urgente |
-| TODO | A fazer | Pendência funcional ou melhoria planejada que precisa ser implementada |
-| HACK | Gambiarra | Solução temporária que funciona mas não é ideal, indica necessidade de refatoração |
-| BUG | Erro | Vincular trecho a um bug rastreado com número de ticket |
-| XXX | Atenção | Área questionável que merece atenção, menos urgente que FIXME |
-| NOTE | Nota | Observação importante sobre decisão ou contexto não óbvio |
-| OPTIMIZE | Performance | Código funcional mas ineficiente que pode ser otimizado |
-| REVIEW | Revisar | Trecho que precisa de revisão para confirmar se está correto |
+→ Consulte [references/tags-reference.md](references/tags-reference.md) — índice das 16 tags organizadas por severidade (🔴🟠🟡🟢), com link para o arquivo individual de cada tag.
 
 ## Formato da Marcação
 
-| Aspecto | Formato |
-|---------|---------|
-| Estrutura | `// TAG(rule-id): descrição` |
-| Com ticket | `// BUG(#1234): descrição do problema` |
-| Sem rule | `// TAG: descrição` |
-| Posição | Linha imediatamente acima do trecho marcado |
+```typescript
+// TAG(rule-id): descrição
+```
 
-## Mapeamento Reviewer para Tags
-
-| Severidade Reviewer | Tag | Critério |
-|---------------------|-----|----------|
-| Crítica | FIXME | Violação que bloqueia aprovação |
-| Alta | TODO | Violação que precisa ser corrigida |
-| Média | XXX | Violação que merece atenção |
-| Performance (CC alto) | OPTIMIZE | Complexidade ciclomática acima do ideal |
-| Performance (Big-O) | OPTIMIZE | Complexidade algorítmica O(n^2) ou pior conforme skill bigo |
-| Solução temporária | HACK | Workaround detectado no código |
-| Observação arquitetural | NOTE | Contexto relevante sobre decisão |
+→ Consulte [references/reviewer-mapping.md](references/reviewer-mapping.md) para mapeamento de severidades para tags.
 
 ## Regras de Aplicação
 
@@ -66,8 +44,31 @@ Use quando o reviewer identificar violações no código e precisar anotar os tr
 | Uma tag por violação | Cada violação recebe exatamente uma marcação |
 | Linha acima | A tag é inserida na linha imediatamente acima do trecho violado |
 | Não duplicar | Se já existe tag no trecho, atualizar ao invés de adicionar nova |
-| Incluir rule-id | Sempre vincular à regra ou skill violada quando aplicável |
+| Explicar o impacto | Descreva o que pode dar errado por causa do problema — não apenas o sintoma |
 | Descrição concisa | Máximo uma linha com o problema e a correção sugerida |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — comentário livre, vago, sem ensinar nada
+// TODO: arrumar isso depois
+// fix: validação não funciona
+function calculateDiscount(amount: number) {
+  return amount * 0.1  // isso tá errado
+}
+
+// ✅ Bom — codetag que explica o porquê e orienta a melhoria
+// TODO: Esta função aceita qualquer número, incluindo negativos e zero.
+// Isso pode causar descontos incorretos em casos de borda. Adicionar
+// validação no início garante que o cálculo só acontece com dados válidos.
+//
+// FIXME: O valor 0.1 não comunica o que representa. Extrair para uma
+// constante nomeada (ex: DEFAULT_DISCOUNT_RATE) deixa o código mais legível
+// e facilita ajustar a taxa no futuro sem precisar caçar o número no código.
+function calculateDiscount(amount: number) {
+  return amount * 0.1
+}
+```
 
 ## Proibições
 
@@ -75,7 +76,7 @@ Use quando o reviewer identificar violações no código e precisar anotar os tr
 |--------------|-------|
 | Tags sem descrição | Tag vazia não comunica o problema |
 | Múltiplas tags no mesmo trecho | Escolher a tag mais relevante para a violação principal |
-| Tags genéricas sem rule-id | Perdem rastreabilidade com as regras arquiteturais |
+| Codetag sem explicação do porquê | Um comentário que não ensina não ajuda o dev a crescer |
 | FIXME para problemas menores | Reservar FIXME para violações críticas reais |
 | TODO sem ação clara | A descrição deve indicar o que precisa ser feito |
 
@@ -96,3 +97,7 @@ Use quando o reviewer identificar violações no código e precisar anotar os tr
 - [039 - Regra do Escoteiro](../../rules/039_regra-escoteiro-refatoracao-continua.md): tags guiam a refatoração contínua indicando onde melhorar
 - [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada tag tem uma responsabilidade clara de comunicação
 - [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): tags padronizadas eliminam marcações ad-hoc sem padrão
+
+**Skills relacionadas:**
+- [`software-quality`](../software-quality/SKILL.md) — complementa: fatores McCall determinam a severidade da codetag (Integrity → FIXME, Efficiency → OPTIMIZE)
+- [`anti-patterns`](../anti-patterns/SKILL.md) — reforça: codetags são o mecanismo para anotar violações de anti-patterns

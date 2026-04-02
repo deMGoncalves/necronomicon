@@ -1,10 +1,11 @@
 ---
 name: enum
-description: Convenção para criação de enums eliminando strings/numbers mágicos. Use quando identificar valores literais repetidos mais de 1x.
+description: Convenção para criação de enums eliminando strings/numbers mágicos — quando identificar strings ou números mágicos repetidos mais de uma vez, ao criar constantes de domínio ou ao revisar código com literais hardcoded em condicionais
 model: haiku
 allowed-tools: Write, Read, Edit, Glob, Grep
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Enum
@@ -49,6 +50,22 @@ export const Status = Object.freeze({
   ACTIVE: 'active',
   COMPLETED: 'completed',
 })
+```
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — magic strings e numbers
+if (order.status === 'pending') { /* ... */ }
+if (user.role === 'admin') { /* ... */ }
+const timeout = 3000  // o que significa esse número?
+
+// ✅ Bom — enums eliminam ambiguidade
+enum OrderStatus { Pending = 'pending', Active = 'active', Cancelled = 'cancelled' }
+enum UserRole { Admin = 'admin', Editor = 'editor', Viewer = 'viewer' }
+const REQUEST_TIMEOUT_MS = 3000
+
+if (order.status === OrderStatus.Pending) { /* ... */ }
 ```
 
 ## Proibições

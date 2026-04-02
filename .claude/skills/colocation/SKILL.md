@@ -1,102 +1,132 @@
 ---
 name: colocation
-description: Convenção de organização de arquivos co-located. Use quando criar novos arquivos, componentes ou módulos para saber onde posicioná-los na estrutura de pastas.
+description: Arquitetura Vertical Slice para organização de src/ em 3 níveis hierárquicos (Context → Container → Component). Use ao criar novos arquivos, definir estrutura de feature ou decidir onde posicionar código novo.
 model: haiku
 allowed-tools: Bash, Glob, Read
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "2.0.0"
 ---
 
-# Colocation
+# Colocation — Vertical Slice Architecture
 
-Convenção de organização de arquivos co-located.
+Toda implementação em `src/` segue uma arquitetura vertical slice: cada feature é um corte vertical completo da requisição ao banco, organizada em **3 níveis hierárquicos**. Código relacionado fica junto — nunca espalhado por tipo.
+
+→ Consulte [references/vertical-slice.md](references/vertical-slice.md) para a referência completa com exemplos e guia de decisão.
 
 ---
 
 ## Quando Usar
 
-Use quando criar novos arquivos, componentes ou módulos para saber onde posicioná-los na estrutura de pastas.
+Use sempre que:
+- Criar nova feature (Task ou Feature mode)
+- Decidir onde posicionar um arquivo novo em `src/`
+- @architect definir o path da implementação em `specs.md`
+- @developer criar a estrutura de diretórios para uma task
 
-## Princípio
+---
 
-| Princípio | Descrição |
-|-----------|-----------|
-| Proximidade | Se dois arquivos mudam juntos, devem morar juntos |
+## Os 3 Níveis
 
-## Hierarquia de Diretórios
+```
+src/
+└── [context]/           ← Domínio de negócio
+    └── [container]/     ← Subdomínio ou serviço
+        └── [component]/ ← Operação específica
+            ├── controller.ts        ← HTTP handlers + validação de input
+            ├── service.ts           ← Business logic pura
+            ├── model.ts             ← Types, interfaces, schemas
+            ├── repository.ts        ← Acesso a dados (DB, APIs)
+            └── [component].test.ts  ← Testes unitários e integração
+```
 
-### Application
+| Nível | O que é | Exemplos |
+|-------|---------|---------|
+| **Context** | Domínio de negócio de alto nível | `user`, `order`, `notification`, `payment` |
+| **Container** | Subdomínio ou agrupamento funcional | `auth`, `cart`, `profile`, `inbox` |
+| **Component** | Operação ou recurso específico | `login`, `checkout`, `list`, `create` |
 
-| Nível | Nome | Descrição |
-|-------|------|-----------|
-| 1 | Context | Domínio ou área de negócio |
-| 2 | Container | Agrupamento funcional |
-| 3 | Component | Unidade de trabalho |
+---
 
-### Packages
+## Responsabilidade de cada arquivo
 
-| Categoria | Propósito |
-|-----------|-----------|
-| Infrastructure | Infraestrutura base (directive, dom, echo, event) |
-| Utilities | Utilitários e helpers (http, middleware, mixin, router) |
-| UI Components | Componentes de interface (book, artifact) |
-| Design System | Tokens e design (pixel) |
-| Compatibility | Polyfills e patches (polyfill) |
+| Arquivo | Responsabilidade |
+|---------|-----------------|
+| `controller.ts` | Recebe HTTP request, valida input, chama service, retorna response |
+| `service.ts` | Business logic pura — sem HTTP, sem DB direto |
+| `model.ts` | Types, interfaces, schemas, DTOs |
+| `repository.ts` | Acesso a dados — queries, writes, abstrações de DB/API |
+| `[component].test.ts` | Testes unitários e de integração da feature |
 
-## Posicionamento
+---
 
-| Preciso criar | Onde colocar |
-|---------------|--------------|
-| Feature da aplicação | Application / Context ou Container |
-| Código reutilizável | Packages / Categoria apropriada |
-| Componente UI reutilizável | Packages / UI Components |
-| Utilitário genérico | Packages / Utilities |
-| Design tokens | Packages / Design System |
-| Configuração de Claude | Claude Assets / Tipo apropriado |
-| Configuração de projeto | Raiz do projeto |
-| Scripts de automação | Raiz / scripts |
+## Exemplos
 
-## Tipos de Claude Assets
+### ❌ Ruim — organização horizontal por tipo
 
-| Tipo | Propósito |
-|------|-----------|
-| Skills | Convenções invocáveis |
-| Commands | Ações executáveis |
-| Hooks | Automações de eventos |
-| Rules | Regras de governança |
+```
+src/
+├── controllers/
+│   ├── user.controller.ts
+│   └── order.controller.ts
+├── services/
+│   ├── user.service.ts
+│   └── order.service.ts
+├── models/
+│   ├── user.model.ts
+│   └── order.model.ts
+└── repositories/
+    ├── user.repository.ts
+    └── order.repository.ts
+```
 
-## Arquivos Co-located
+Para trabalhar em `user/auth/login`, o @developer precisa abrir 4 diretórios diferentes.
 
-| Tipo de Módulo | Arquivos Relacionados |
-|----------------|----------------------|
-| Web Component | Classe, template, estilo, contrato, testes, stories, documentação |
-| Utilitário simples | Arquivo único |
-| Módulo complexo | Pasta com sub-módulos |
-| Testes | Co-located com código testado ou separado por tipo |
+### ✅ Bom — vertical slice (tudo junto na vertical)
 
-## Critérios de Decisão
+```
+src/
+├── user/                    ← Context
+│   ├── auth/                ← Container
+│   │   ├── login/           ← Component
+│   │   │   ├── controller.ts
+│   │   │   ├── service.ts
+│   │   │   ├── model.ts
+│   │   │   ├── repository.ts
+│   │   │   └── login.test.ts
+│   │   └── register/
+│   │       └── [mesmos arquivos]
+│   └── profile/
+│       └── update/
+│
+└── order/                   ← Context
+    └── cart/                ← Container
+        ├── add-item/        ← Component
+        └── checkout/
+```
 
-| Pergunta | Resposta Sim | Resposta Não |
-|----------|--------------|--------------|
-| É reutilizável? | Packages | Application |
-| É parte da aplicação? | Application | Packages ou config |
-| É infraestrutura? | Packages / Infrastructure | Application |
-| É UI reutilizável? | Packages / UI Components | Application |
-| É para Claude Code? | Claude Assets | Outro local |
-| Depende de lógica de negócio? | Application | Packages |
-| Usado por múltiplos contextos? | Packages | Application |
+Para trabalhar em `user/auth/login`, o @developer abre **um único diretório**.
+
+---
 
 ## Proibições
 
 | O que evitar | Razão |
 |--------------|-------|
-| Separar arquivos relacionados | Arquivos que mudam juntos devem estar juntos (rule 016) |
-| Criar estrutura profunda prematuramente | Manter simples até necessidade real (rule 022) |
-| Colocar lógica de negócio em packages | Packages devem ser agnósticos de domínio |
-| Misturar concerns em um diretório | Cada módulo deve ter responsabilidade única (rule 010) |
+| `src/controllers/`, `src/services/` | Organização horizontal por tipo — viola coesão (rule 016) |
+| `src/utils/`, `src/helpers/`, `src/common/` | Genérico sem domínio — atrai código de qualquer lugar |
+| Componente misturando HTTP + DB direto | Cada arquivo tem uma responsabilidade (rule 010) |
+| Feature espalhada por múltiplos contextos | Se está em 2 contextos, reveja o modelo de domínio |
+
+---
 
 ## Fundamentação
 
-- [016 - Princípio do Fechamento Comum](../../rules/016_principio-fechamento-comum.md): classes que mudam juntas devem estar no mesmo pacote, co-location garante que arquivos relacionados fiquem próximos facilitando manutenção
-- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada módulo deve ter uma única razão para mudar, organização por responsabilidade facilita identificar impacto de mudanças
-- [015 - Princípio da Equivalência de Lançamento e Reuso](../../rules/015_principio-equivalencia-lancamento-reuso.md): módulos em packages devem ser reutilizáveis e coesos
+**Rules relacionadas:**
+- [016 - Princípio do Fechamento Comum](../../rules/016_principio-fechamento-comum.md): classes que mudam juntas devem estar no mesmo pacote — reforça
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada arquivo tem uma responsabilidade — reforça
+- [021 - Proibição da Duplicação de Lógica](../../rules/021_proibicao-duplicacao-logica.md): vertical slice evita que a mesma lógica seja duplicada em múltiplos contextos — complementa
+
+**Skills relacionadas:**
+- [`revelation`](../revelation/SKILL.md) — complementa: index.ts de cada módulo expõe apenas a interface pública do component
+- [`solid`](../solid/SKILL.md) — reforça: SRP e DIP guiam as responsabilidades dentro de cada arquivo do component

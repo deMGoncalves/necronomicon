@@ -1,10 +1,11 @@
 ---
 name: bracket
-description: Convenção de Symbol para métodos privados e contratos. Use quando criar métodos que precisam de decorators ou definir interfaces para mixins.
+description: Convenção de Symbol para métodos privados e contratos. Use quando definir métodos privados em Web Components, ao criar contratos de interface via Symbol ou ao revisar código que usa string-based naming para privacidade.
 model: sonnet
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Bracket
@@ -53,6 +54,25 @@ Use quando criar métodos que precisam de decorators ou definir interfaces para 
 | Ação | `verbNoun` | `connectArc` |
 | Capacidade | `adjective` | `hideable` |
 | Recurso | `noun` | `controller` |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — privacidade por convenção fraca
+class MyComponent extends HTMLElement {
+  _privateMethod() { /* não é realmente privado */ }
+  __init() { /* convenção frágil */ }
+}
+
+// ✅ Bom — privacidade via Symbol
+const render = Symbol('render')
+const init = Symbol('init')
+
+class MyComponent extends HTMLElement {
+  [render]() { /* método privado real via Symbol */ }
+  [init]() { /* acesso controlado */ }
+}
+```
 
 ## Proibições
 

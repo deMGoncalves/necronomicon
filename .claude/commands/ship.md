@@ -1,27 +1,49 @@
 ---
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*)
-description: Preparar todas as alterações, criar commit seguindo Conventional Commits e enviar para o remoto
+description: "Prepara as alterações, cria commit Conventional Commits e envia para o remoto. Use após concluir uma Feature, Task ou Quick fix."
+allowed-tools: Bash(git add *), Bash(git status), Bash(git diff *), Bash(git commit *), Bash(git push *), Bash(git log *)
 ---
 
-## Contexto
+## Propósito
 
-- Status do repositório: `git status --short`
-- Branch atual: `git branch --show-current`
-- Commits recentes para referência de estilo: `git log --oneline -5`
-- Alterações a serem commitadas: `git diff --stat`
+Commita e envia as alterações atuais para o repositório remoto.
+
+Estado atual:
+!`git status --short`
+
+Commits recentes (referência de estilo):
+!`git log --oneline -5`
 
 ## Instruções
 
-1. Execute `git status` para ver todos os arquivos não rastreados e modificados
-2. Execute `git diff` para ver alterações preparadas e não preparadas
-3. Analise todas as alterações e elabore uma mensagem de commit seguindo o formato Conventional Commits:
-   - `feat:` para novas funcionalidades
-   - `fix:` para correções de bugs
-   - `refactor:` para refatoração de código
-   - `chore:` para tarefas de manutenção
-   - `docs:` para alterações de documentação
-4. Prepare todas as alterações com `git add -A`
-5. Envie para o repositório remoto
-6. Execute `git status` para confirmar o sucesso
+1. Execute `git status` — confirme os arquivos a commitar
 
-IMPORTANTE: Siga as convenções de commit do CLAUDE.md. Use o formato HEREDOC para mensagens de commit.
+2. Execute `git diff --stat` — entenda o escopo das alterações
+
+3. Elabore a mensagem de commit seguindo Conventional Commits:
+
+   | Prefixo | Quando usar |
+   |---------|-------------|
+   | `feat:` | Nova funcionalidade |
+   | `fix:` | Correção de bug |
+   | `refactor:` | Refatoração sem mudança de comportamento |
+   | `docs:` | Alterações em documentação |
+   | `chore:` | Manutenção, configs, scripts |
+   | `test:` | Adição ou correção de testes |
+
+4. Prepare os arquivos com `git add` específico (evitar `git add -A` com arquivos sensíveis)
+
+5. Crie o commit com HEREDOC:
+   ```bash
+   git commit -m "$(cat <<'EOF'
+   tipo: descrição concisa no imperativo
+
+   Co-Authored-By: deMGoncalves <noreply@github.com>
+   EOF
+   )"
+   ```
+
+6. Envie: `git push`
+
+7. Confirme: `git status`
+
+**Não commitar:** `.env` com valores reais, secrets, credenciais hardcoded.

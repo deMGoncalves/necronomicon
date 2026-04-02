@@ -1,10 +1,12 @@
 ---
 name: arc42
-description: Template de documentação arquitetural Arc42 com 12 seções. Use quando @architect precisa criar ou atualizar documentação em docs/arc42/.
+description: Template de documentação arquitetural Arc42 com 12 seções. Use quando @architect precisa criar ou atualizar documentação em docs/arc42/ — ao documentar uma nova feature, após mudanças arquiteturais ou na Fase 4 do workflow.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
+  category: documentation
 ---
 
 # Arc42
@@ -64,7 +66,76 @@ Template de documentação arquitetural com 12 seções padronizadas.
 - Idioma: português brasileiro
 - Seção §9 é índice de ADRs (não conteúdo duplicado)
 
+## Exemplos
+
+```markdown
+// ❌ Ruim — documentação livre sem estrutura
+## Arquitetura
+O sistema usa microsserviços e tem um banco PostgreSQL.
+Ele se conecta com a API de pagamentos.
+
+// ✅ Bom — Arc42 com seções estruturadas e contexto claro
+# §1 — Introdução e Objetivos
+
+## Visão Geral
+Sistema de e-commerce para venda de produtos digitais.
+
+## Requisitos Funcionais
+| ID   | Requisito                          |
+|------|------------------------------------|
+| RF-1 | Usuário pode criar conta           |
+| RF-2 | Usuário pode adicionar ao carrinho |
+
+## Objetivos de Qualidade
+| Qualidade      | Métrica           |
+|----------------|-------------------|
+| Disponibilidade| 99.9% uptime      |
+| Performance    | Latência < 200ms  |
+
+---
+
+# §3 — Contexto e Escopo
+
+## Contexto do Sistema
+```
+[Usuário] --usa--> [Sistema E-commerce] --integra--> [Gateway Pagamento]
+```
+
+## Interfaces Externas
+| Sistema         | Protocolo | Responsabilidade      |
+|-----------------|-----------|----------------------|
+| Gateway Stripe  | REST      | Processar pagamentos |
+| Email Service   | SMTP      | Enviar confirmações  |
+
+---
+
+# §5 — Building Block View
+
+## Nível 1 — Containers
+- Frontend (React SPA)
+- Backend API (Node.js)
+- PostgreSQL Database
+
+## Nível 2 — Componentes do Backend
+- AuthController
+- OrderService
+- PaymentGateway (integração externa)
+
+---
+
+# §9 — Decisões Arquiteturais
+
+→ Ver [docs/adr/](../../adr/) para ADRs individuais:
+- ADR-001: Escolha de Node.js para backend
+- ADR-002: PostgreSQL vs MongoDB
+```
+
 ## Fundamentação
 
 - Arquitetura documentada garante onboarding rápido e rastreabilidade de decisões
 - Referência: arc42.org template, adaptado para projetos JS/TS
+
+**Skills relacionadas:**
+- [`c4model`](../c4model/SKILL.md) — reforça: arc42 §5 usa diagramas C4 para building blocks
+- [`adr`](../adr/SKILL.md) — reforça: arc42 §9 centraliza ADRs de decisão arquitetural
+- [`bdd`](../bdd/SKILL.md) — complementa: arc42 §10 integra com features BDD para requisitos

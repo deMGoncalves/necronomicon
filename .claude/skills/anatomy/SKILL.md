@@ -1,10 +1,11 @@
 ---
 name: anatomy
-description: Convenção de organização de membros dentro de uma classe. Use quando criar ou refatorar classes para ordenar membros corretamente.
+description: Convenção de organização de membros dentro de uma classe. Use quando criar ou refatorar classes, Web Components ou módulos JavaScript — sempre que a ordem de declaração de membros precisar ser validada ou corrigida.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Anatomy
@@ -34,6 +35,41 @@ Use quando criar ou refatorar classes para ordenar membros corretamente.
 - Getters e setters do mesmo nome ficam juntos (getter primeiro)
 - Dentro de cada grupo, ordenar alfabeticamente pelo nome
 - Membros privados usam prefixo `#`
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — ordem incorreta
+class UserService {
+  constructor(private repo: UserRepository) {}
+
+  get name() { return this.#name }
+
+  #name = ''
+
+  findById(id: string) { return this.repo.find(id) }
+
+  static create() { return new UserService(new UserRepository()) }
+}
+
+// ✅ Bom — seguindo Anatomy
+class UserService {
+  // 1. Privados
+  #name = ''
+
+  // 2. Getters/Setters
+  get name() { return this.#name }
+
+  // 3. Constructor
+  constructor(private repo: UserRepository) {}
+
+  // 4. Métodos
+  findById(id: string) { return this.repo.find(id) }
+
+  // 5. Estáticos
+  static create() { return new UserService(new UserRepository()) }
+}
+```
 
 ## Proibições
 

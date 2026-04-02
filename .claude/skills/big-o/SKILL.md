@@ -1,10 +1,11 @@
 ---
 name: big-o
-description: Convenção de análise de complexidade algorítmica Big-O. Use quando avaliar performance de métodos que iteram sobre coleções, fazem buscas ou combinam loops.
+description: Convenção de análise de complexidade algorítmica Big-O. Use quando avaliar performance de métodos que iteram sobre coleções, fazem buscas, combinam loops aninhados ou executam operações recursivas — ao otimizar algoritmos com complexidade acima de O(n).
 model: haiku
 allowed-tools: Read, Grep, Glob
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Big-O
@@ -73,6 +74,32 @@ Use quando avaliar métodos que iteram sobre coleções, fazem buscas, combinam 
 | `array.map(x => other.find())` | O(n * m) — quadrática se n ≈ m |
 | `array.map(x => other.includes())` | O(n * m) — quadrática se n ≈ m |
 | `array.forEach(x => set.has())` | O(n) — Set.has é O(1) |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — O(n²) busca duplicados com loop aninhado
+function findDuplicates(items: string[]): string[] {
+  const duplicates: string[] = []
+  for (let i = 0; i < items.length; i++) {      // O(n)
+    for (let j = i + 1; j < items.length; j++) { // O(n)
+      if (items[i] === items[j]) duplicates.push(items[i])
+    }
+  }
+  return duplicates
+}
+
+// ✅ Bom — O(n) usando Set
+function findDuplicates(items: string[]): string[] {
+  const seen = new Set<string>()
+  const duplicates = new Set<string>()
+  for (const item of items) {  // O(n)
+    if (seen.has(item)) duplicates.add(item)  // O(1) lookup
+    else seen.add(item)
+  }
+  return [...duplicates]
+}
+```
 
 ## Proibições
 

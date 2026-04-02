@@ -1,10 +1,11 @@
 ---
 name: alphabetical
-description: Convenção de organização de propriedades em objetos/JSON. Use quando criar ou modificar objetos para ordenar propriedades alfabeticamente.
+description: Convenção de organização de propriedades em objetos/JSON — quando criar ou modificar objetos JavaScript/JSON/TypeScript — ao ordenar propriedades, imports, exports ou qualquer lista de atributos
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Alphabetical
@@ -55,6 +56,26 @@ Não aplicar ordem alfabética quando:
 | Arrays ordenados | Ordem tem significado funcional |
 | Construtores | Parâmetros seguem ordem de importância |
 | APIs externas | Estrutura definida por contrato externo |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — propriedades em ordem aleatória
+const config = {
+  timeout: 3000,
+  apiUrl: 'https://api.example.com',
+  debug: false,
+  maxRetries: 3,
+}
+
+// ✅ Bom — propriedades em ordem alfabética
+const config = {
+  apiUrl: 'https://api.example.com',
+  debug: false,
+  maxRetries: 3,
+  timeout: 3000,
+}
+```
 
 ## Proibições
 

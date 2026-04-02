@@ -1,10 +1,11 @@
 ---
 name: story
-description: Convenção de estrutura de stories para Storybook. Use quando criar ou atualizar stories de componentes.
+description: Convenção de estrutura de stories para Storybook — quando criar ou atualizar stories para o Storybook — ao estruturar histórias de componentes com variantes, estados e documentação
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Story
@@ -72,6 +73,31 @@ Use quando criar ou atualizar stories de componentes.
 | Simplicidade | Story deve mostrar uso básico do componente |
 | Isolamento | Cada story é independente |
 | Documentação | ArgTypes documentam comportamento |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — story sem metadados ou variantes
+export default { component: Button }
+export const Default = {}
+
+// ✅ Bom — story estruturada com metadados e variantes
+import type { Meta, StoryObj } from '@storybook/web-components'
+
+const meta: Meta = {
+  title: 'Components/Button',
+  component: 'app-button',
+  tags: ['autodocs'],
+}
+export default meta
+
+export const Primary: StoryObj = {
+  args: { label: 'Click me', variant: 'primary' }
+}
+export const Disabled: StoryObj = {
+  args: { label: 'Disabled', disabled: true }
+}
+```
 
 ## Proibições
 

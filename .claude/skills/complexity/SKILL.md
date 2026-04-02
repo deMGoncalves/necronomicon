@@ -1,10 +1,11 @@
 ---
 name: complexity
-description: Convenção para manter complexidade ciclomática dentro do limite CC ≤ 5. Use quando escrever ou refatorar métodos que possuem lógica de controle de fluxo.
+description: Convenção para manter complexidade ciclomática dentro do limite CC ≤ 5. Use quando escrever ou refatorar métodos que possuem lógica de controle de fluxo, condicionais aninhadas ou loops — ao medir ou reduzir a complexidade ciclomática de um método.
 model: haiku
 allowed-tools: Read, Write, Edit, Glob, Grep
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Complexity
@@ -21,40 +22,50 @@ Use quando escrever ou refatorar métodos que contêm estruturas de controle de 
 
 A CC conta o número de caminhos independentes através do código. Cada estrutura de controle adiciona +1 ao total. Um método sem desvios tem CC = 1.
 
-## Regras de Contagem
-
-| Estrutura | Pontos | Descrição |
-|-----------|--------|-----------|
-| `if` | +1 | Cada condicional simples |
-| `else if` | +1 | Cada ramo adicional de condicional |
-| `for` | +1 | Loop clássico com índice |
-| `for...of` | +1 | Iteração sobre iteráveis |
-| `for...in` | +1 | Iteração sobre propriedades |
-| `while` | +1 | Loop com condição de entrada |
-| `do...while` | +1 | Loop com condição de saída |
-| `case` | +1 | Cada ramo de switch |
-| `catch` | +1 | Bloco de tratamento de exceção |
-| Ternário | +1 | Operador condicional inline |
-| `&&` em condição | +1 | Operador lógico que cria caminho alternativo |
-| `\|\|` em condição | +1 | Operador lógico que cria caminho alternativo |
+→ Consulte [references/cc-counting-rules.md](references/cc-counting-rules.md) para regras detalhadas de contagem.
 
 ## Limites
 
-| Unidade | Limite | Ação |
-|---------|--------|------|
-| Método/Função | CC ≤ 5 | Obrigatório — refatorar se exceder |
-| Método/Função | CC = 4–5 | Atenção — revisar se pode ser simplificado |
+| CC | Status | Ação |
+|----|--------|------|
+| 1–5 | ✅ Dentro do limite | OK |
+| 6–7 | ⚠️ Atenção | Considerar refatoração |
+| 8–10 | 🟠 Alto — refatorar | Obrigatório (rule 022) |
+| > 10 | 🔴 Crítico | Refatoração urgente |
 
-## Técnicas de Refatoração
+→ Consulte [references/refactoring-techniques.md](references/refactoring-techniques.md) para técnicas de redução de CC.
 
-| CC Alto Por | Técnica | Como Aplicar |
-|-------------|---------|--------------|
-| Múltiplos `if` em sequência | Guard Clauses | Retorno antecipado para cada condição (rule 002) |
-| `if/else if` por tipo | Polimorfismo | Extrair comportamento por tipo em classes separadas |
-| `switch` grande | Strategy | Mapa de funções por chave em vez de `switch` |
-| Loop com condição interna | Extrair Método | Mover corpo do loop para método próprio |
-| Lógica aninhada | Extrair Método | Quebrar em métodos menores e compostos |
-| Operadores lógicos combinados | Extrair Predicado | Nomear condição composta em função separada |
+## Exemplos
+
+```typescript
+// ❌ Ruim — CC = 7 (excede limite de 5)
+function processOrder(order: Order): string {
+  if (order.status === 'pending') {         // +1
+    if (order.items.length > 0) {           // +1
+      if (order.payment === 'card') {       // +1
+        if (order.amount > 1000) {         // +1
+          return applyDiscount(order)
+        } else {                           // +1
+          return processPayment(order)
+        }
+      } else if (order.payment === 'pix') { // +1
+        return processPix(order)
+      }
+    }
+  }
+  return 'invalid'                          // +1
+}
+
+// ✅ Bom — CC = 2 por método (guard clauses + extração)
+function processOrder(order: Order): string {
+  if (!isValidOrder(order)) return 'invalid'
+  return order.payment === 'pix' ? processPix(order) : processCardPayment(order)
+}
+
+function processCardPayment(order: Order): string {
+  return order.amount > 1000 ? applyDiscount(order) : processPayment(order)
+}
+```
 
 ## Proibições
 
@@ -73,3 +84,6 @@ A CC conta o número de caminhos independentes através do código. Cada estrutu
 - [002 - Proibição da Cláusula ELSE](../../rules/002_proibicao-clausula-else.md): cada `else if` adiciona +1 ao CC, guard clauses mantêm o fluxo linear
 - [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): métodos com CC alto indicam múltiplas responsabilidades concentradas
 - [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): métodos com no máximo 15 linhas naturalmente limitam o espaço para estruturas de controle
+
+**Skills relacionadas:**
+- [`cdd`](../cdd/SKILL.md) — depende: CDD usa CC calculado por esta skill no componente CC_base do ICP

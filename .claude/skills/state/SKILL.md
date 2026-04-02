@@ -1,10 +1,11 @@
 ---
 name: state
-description: Convenção de controle de estado em Web Components usando Element Internals API. Use quando criar estados gerenciáveis via internals.states com contrato Symbol.
+description: Convenção de controle de estado em Web Components usando Element Internals API — quando criar estados gerenciáveis via internals.states em Web Components, ao implementar estados CSS customizados (:state()) ou ao revisar código que usa atributos para gerenciar estado
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # State
@@ -85,6 +86,27 @@ Use quando criar estados em Web Components que precisam ser gerenciáveis via at
 | Nome correlacionado | Symbol tem sufixo -able relacionado ao nome do estado |
 | Bracket notation | Método usa Symbol entre colchetes para contrato privado |
 | Importação | Symbol exportado de interface.js e importado na classe |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — estado via atributo (exposto, sem encapsulamento)
+class MyInput extends HTMLElement {
+  setValid() {
+    this.setAttribute('data-valid', '')  // estado exposto no DOM
+  }
+}
+
+// ✅ Bom — estado via Element Internals
+class MyInput extends HTMLElement {
+  #internals = this.attachInternals()
+
+  setValid() {
+    this.#internals.states.add('valid')  // estado encapsulado
+    // CSS: my-input:state(valid) { ... }
+  }
+}
+```
 
 ## Proibições
 

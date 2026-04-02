@@ -1,10 +1,11 @@
 ---
 name: mixin
-description: Convenção de uso de mixins para composição de comportamentos em Web Components. Use quando criar ou modificar componentes que precisam de funcionalidades reutilizáveis.
+description: Convenção de uso de mixins para composição de comportamentos em Web Components. Use quando criar ou modificar componentes que precisam de funcionalidades reutilizáveis, ao compor comportamentos sem herança múltipla ou ao revisar código com classes base inchadas.
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Mixin
@@ -98,6 +99,31 @@ Use quando criar ou modificar componentes que precisam de funcionalidades reutil
 | Isolados | Cada mixin tem responsabilidade única |
 | Reativos | Respondem a mudanças de atributos |
 | Testáveis | Podem ser testados isoladamente |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — herança para reutilização (acoplamento)
+class LoggingBase {
+  log(msg: string) { console.log(msg) }
+}
+class ValidationBase extends LoggingBase {
+  validate(v: unknown) { /* ... */ }
+}
+class UserComponent extends ValidationBase { /* herda tudo */ }
+
+// ✅ Bom — Mixin para composição sem herança
+const WithLogging = (Base: typeof HTMLElement) => class extends Base {
+  log(msg: string) { console.log(`[${this.tagName}]`, msg) }
+}
+const WithValidation = (Base: typeof HTMLElement) => class extends Base {
+  validate(v: unknown) { return v !== null && v !== undefined }
+}
+
+class UserComponent extends WithValidation(WithLogging(HTMLElement)) {
+  // compõe apenas o que precisa
+}
+```
 
 ## Proibições
 

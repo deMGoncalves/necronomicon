@@ -1,10 +1,11 @@
 ---
 name: constructor
-description: Convenção de estrutura do constructor em Web Components. Use quando criar ou modificar constructors de componentes customizados.
+description: Convenção de estrutura do constructor em Web Components. Use quando criar Web Components customizados, ao implementar constructors de Custom Elements ou ao revisar código que viola a sequência de inicialização do constructor.
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Constructor
@@ -71,6 +72,28 @@ Use quando criar ou modificar constructors de componentes customizados.
 | 1 | Chamar super() | Sim |
 | 2 | Criar Shadow DOM | Se visual |
 | 3 | Operações síncronas mínimas | Opcional |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — inicialização fora de ordem
+class MyButton extends HTMLElement {
+  constructor() {
+    this.attachShadow({ mode: 'open' })  // erro: super() não foi chamado
+    super()
+    this.render()
+  }
+}
+
+// ✅ Bom — sequência correta
+class MyButton extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.render()
+  }
+}
+```
 
 ## Proibições
 

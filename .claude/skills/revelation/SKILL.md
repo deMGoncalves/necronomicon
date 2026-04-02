@@ -1,10 +1,11 @@
 ---
 name: revelation
-description: Convenção de estrutura de index para módulos. Use quando criar ou organizar exports de um módulo.
+description: Convenção de estrutura de index para módulos — quando criar ou organizar o arquivo index de um módulo — ao definir quais símbolos são públicos vs internos e ao estruturar as re-exportações
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Revelation
@@ -52,6 +53,21 @@ export { default } from './button.js'
 export { default as Button } from './button/index.js'
 export { default as Text } from './text/index.js'
 export { default as Icon } from './icon/index.js'
+```
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — expõe tudo sem controle
+export * from './UserService'
+export * from './UserRepository'
+export * from './UserValidator'
+export * from './internal/UserHelpers'  // vaza implementação interna
+
+// ✅ Bom — Revelation Pattern — expõe apenas interface pública
+export { UserService } from './UserService'
+export type { User, CreateUserDTO } from './types'
+// UserRepository, UserHelpers são detalhes de implementação — não exportados
 ```
 
 ## Proibições

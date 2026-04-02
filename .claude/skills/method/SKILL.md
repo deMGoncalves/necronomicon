@@ -1,10 +1,11 @@
 ---
 name: method
-description: Convenção de implementação de métodos em classes. Use quando criar métodos que executam ações e devem retornar o contexto.
+description: Convenção de implementação de métodos em classes — quando criar métodos de ação em classes, ao implementar operações que coordenam comportamentos e devem retornar contexto para encadeamento
 model: sonnet
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Method
@@ -74,6 +75,32 @@ Use quando criar métodos que executam ações, operações ou coordenam comport
 | Intenção clara | Nome revela o que o método faz sem necessidade de comentário |
 | Específico | Evitar nomes genéricos que não expressam intenção real |
 | Conciso | Nome curto mas suficientemente descritivo |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — método sem retorno (não encadeia)
+class QueryBuilder {
+  where(condition: string) {
+    this.conditions.push(condition)
+    // retorno implícito undefined
+  }
+}
+const q = new QueryBuilder()
+q.where('id = 1')
+q.where('status = active')  // chamadas separadas
+
+// ✅ Bom — método retorna this para encadeamento
+class QueryBuilder {
+  where(condition: string): this {
+    this.conditions.push(condition)
+    return this
+  }
+}
+const q = new QueryBuilder()
+  .where('id = 1')
+  .where('status = active')  // fluent interface
+```
 
 ## Proibições
 

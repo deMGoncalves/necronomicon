@@ -1,11 +1,10 @@
 ---
 name: c4model
-description: Template C4 Model com 4 níveis de abstração para visualização arquitetural (Context, Container, Component, Code). Use quando @architect precisa criar ou atualizar docs/c4/ para comunicar arquitetura a diferentes audiências.
+description: Template C4 Model com 4 níveis de abstração para visualização arquitetural (Context, Container, Component, Code). Use quando @architect precisa criar ou atualizar docs/c4/ para comunicar arquitetura a diferentes audiências — ao criar diagramas de contexto, container, componente ou código.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
 metadata:
+  author: deMGoncalves
   version: "1.0.0"
   category: documentation
 ---
@@ -46,6 +45,83 @@ Consulte os templates em references/:
 - Level 3-4: tipos, interfaces, padrões específicos
 - Idioma: português brasileiro
 - Relacionada com: arc42 §5 (Building Block View)
+
+## Exemplos
+
+```markdown
+// ❌ Ruim — um único diagrama tentando mostrar tudo
+[diagrama caótico misturando usuários finais, sistemas externos, APIs internas,
+ banco de dados, código de classes — tudo em um único nível sem separação de concerns]
+
+Diagrama contém:
+- Usuário → Frontend → AuthService → UserRepository → PostgreSQL
+- Admin → Dashboard → OrderService → PaymentGateway (externo)
+- Mobile App → API Gateway → Logger → Kafka
+Audiência: CTO? Dev? Stakeholder? — ninguém entende
+
+---
+
+// ✅ Bom — C4 em 4 níveis progressivos de abstração
+
+## Nível 1 — System Context (para todos: CTO, stakeholders, negócio)
+
+```
+[Usuário] --usa--> [Sistema E-commerce]
+[Sistema E-commerce] --integra--> [Gateway de Pagamento Stripe]
+[Sistema E-commerce] --integra--> [Serviço de Email SendGrid]
+```
+
+Pergunta: "O que o sistema faz?" → Venda de produtos com pagamento online.
+
+---
+
+## Nível 2 — Container (para arquitetos, tech leads)
+
+```
+[Frontend React SPA] --chamadas HTTP--> [Backend API Node.js]
+[Backend API] --lê/escreve--> [PostgreSQL Database]
+[Backend API] --publica eventos--> [RabbitMQ]
+[Worker Service] --consome--> [RabbitMQ]
+```
+
+Pergunta: "Quais tecnologias compõem o sistema?"
+→ React, Node.js, PostgreSQL, RabbitMQ
+
+---
+
+## Nível 3 — Component (para desenvolvedores)
+
+Backend API Node.js contém:
+- AuthController (autentica usuários)
+- OrderService (processa pedidos)
+- PaymentGateway (integra com Stripe)
+- UserRepository (acessa tabela users)
+
+Pergunta: "Como o backend é organizado internamente?"
+→ Controllers, Services, Repositories
+
+---
+
+## Nível 4 — Code (para desenvolvedores — apenas se necessário)
+
+```typescript
+class OrderService {
+  constructor(
+    private repo: OrderRepository,
+    private payment: PaymentGateway
+  ) {}
+
+  async createOrder(order: Order): Promise<OrderId> {
+    const savedOrder = await this.repo.save(order)
+    await this.payment.charge(order.total)
+    return savedOrder.id
+  }
+}
+```
+
+Pergunta: "Como OrderService é implementado?"
+→ DIP: depende de abstrações (Repository, Gateway)
+```
 
 ## Fundamentação
 

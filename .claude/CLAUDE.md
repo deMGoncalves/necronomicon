@@ -1,121 +1,141 @@
-# Necronomicon — Claude Code Config
+# oh my claude
 
-## Propósito
+Você está no projeto de **Cleber de Moraes Goncalves** ([@deMGoncalves](https://github.com/deMGoncalves)).
+Este é o workflow pessoal de desenvolvimento assistido por IA. Siga as convenções abaixo em toda interação.
 
-Vault de configuração do Claude Code. Regras em `.claude/rules/` + skills em `.claude/skills/` + agents em `.claude/agents/` formam o ecossistema **Spec Flow** para desenvolvimento assistido por IA.
-
-## Spec Flow: Research → Spec → Code → Docs
-
-| Fase | Agente | Entrada | Artefatos produzidos |
-|------|--------|---------|----------------------|
-| 1. Research | 🟢 @architect | Feature request | `changes/00X/PRD.md`, `changes/00X/design.md` |
-| 2. Spec | 🟢 @architect | PRD + design | `changes/00X/specs.md`, `changes/00X/tasks.md` |
-| 3. Code | 🟡 @developer → 🔴 @tester → 🟣 @reviewer | specs.md | Código em `src/` |
-| 4. Docs | 🟢 @architect | Código implementado | `docs/arc42/`, `docs/c4/`, `docs/adr/`, `docs/bdd/` |
-
-**🔵 @leader orquestra todas as fases.** Recebe o prompt, entende o escopo (fluxo completo ou parcial), delega e coordena. O workflow não é rígido — @leader adapta conforme o pedido do usuário.
-
-## Agentes
-
-| Cor | Agent | Papel | Modelo |
-|-----|-------|-------|--------|
-| 🔵 | @leader | Tech Lead — orquestra Spec Flow, gerencia `tasks.md`, coordena loops de feedback | opus |
-| 🟢 | @architect | Solution Architect — cria PRD/design/specs, escreve `docs/` (Arc42, C4, ADR, BDD), aplica GoF + PoEAA | opus |
-| 🟡 | @developer | Developer JS/TS — implementa `specs.md`, aplica 70 rules + 26 skills | sonnet |
-| 🔴 | @tester | QA Engineer — testa, valida cobertura ≥85% domain, retorna para @developer se falhar | sonnet |
-| 🟣 | @reviewer | Code Reviewer — CDD/ICP, anota violações via codetags, retorna para @developer se rejeitar | opus |
-
-## Loop de Feedback (Fase 3: Code)
-
-```
-@leader → @developer → @tester ──(falhou)──→ @developer
-                           │
-                        (passou)
-                           ↓
-                       @reviewer ──(rejeitado)──→ @developer → @tester
-                           │
-                       (aprovado)
-                           ↓
-                        @leader → Fase 4: Docs
-```
-
-## Estrutura de Arquivos
-
-```
-.claude/
-├── CLAUDE.md          ← hub central (este arquivo)
-├── agents/            ← leader, architect, developer, tester, reviewer
-├── skills/            ← 26 skills (code + arch/docs)
-├── rules/             ← 70 regras (001–070)
-├── hooks/             ← lint.sh, loop.sh, prompt.sh
-└── settings.json      ← hooks + permissions
-
-changes/
-└── 00X_feature-name/
-    ├── PRD.md         ← objetivos, requisitos, regras de negócio
-    ├── design.md      ← decisões técnicas, patterns, arquitetura
-    ├── specs.md       ← interfaces, schemas, exemplos de código
-    └── tasks.md       ← tarefas T-001…T-NNN com critérios de aceite
-
-docs/
-├── arc42/             ← 12 seções arquiteturais (§1–§12)
-├── c4/                ← 4 níveis: Context → Container → Component → Code
-├── adr/               ← Architecture Decision Records (ADR-NNN)
-└── bdd/               ← Features Gherkin em pt-BR (.feature)
-```
-
-## Skills (26 total)
-
-| Grupo | Skills |
-|-------|--------|
-| Estrutura de classe | anatomy, constructor, bracket |
-| Membros | getter, setter, method |
-| Comportamento | event, dataflow, render, state |
-| Dados | enum, token, alphabetical |
-| Organização | colocation, revelation, story |
-| Composição | mixin, complexity |
-| Performance | big-o |
-| Anotação | codetags |
-| Design Patterns | **gof**, **poeaa** |
-| Documentação Arquitetural | **arc42**, **c4model**, **adr**, **bdd** |
-
-## Regras (70 total)
-
-| Categoria | IDs | Fonte |
-|-----------|-----|-------|
-| Object Calisthenics | 001–009 | Object Calisthenics (Jeff Bay) |
-| SOLID | 010–014 | Clean Architecture (Uncle Bob) |
-| Package Principles | 015–020 | Clean Architecture (Uncle Bob) |
-| Clean Code | 021–039 | Clean Code + práticas gerais |
-| Twelve-Factor | 040–051 | The Twelve-Factor App |
-| Anti-Patterns | 052–070 | Refactoring (Fowler) + AntiPatterns (Brown) |
-
-Próximo ID disponível: `071` · Referências cruzadas bidirecionais obrigatórias.
-Tipos de relação: `reforça` · `complementa` · `substitui` · `depende`
-Severidade: 🔴 bloqueia PR · 🟠 exige justificativa · 🟡 melhoria esperada
-
-## Hooks Ativos
-
-| Evento | Hook | Trigger | Comportamento |
-|--------|------|---------|---------------|
-| `PostToolUse` | `lint.sh` | `Write\|Edit\|NotebookEdit` | `biome check --write` em .ts/.tsx/.js/.jsx/.json |
-| `Stop` | `loop.sh` | Fim de cada resposta | Verifica `tasks.md`; bloqueia se há `- [ ]` pendentes |
-| `UserPromptSubmit` | `prompt.sh` | Todo prompt do usuário | Injeta contexto para routing ao @leader em tarefas de dev |
-
-## Formato Obrigatório de Regras
-
-```markdown
-# [Título da Regra]
-**ID**: [CATEGORIA-NNN ou AP-NN-NNN]
-**Severidade**: [🔴 Crítica | 🟠 Alta | 🟡 Média]
-**Categoria**: [Estrutural | Comportamental | Criacional | Infraestrutura]
 ---
-## O que é
-## Por que importa
-## Critérios Objetivos   ← checkboxes [ ]
-## Exceções Permitidas
-## Como Detectar        ← subseções Manual e Automático
-## Relacionada com      ← links com tipo de relação
+
+## Ao receber um pedido de desenvolvimento
+
+**Classifique primeiro.** Antes de qualquer ação, determine o modo:
+
+| Modo | Quando | O que fazer |
+|------|--------|-------------|
+| **Quick** | Fix pontual, ≤ 2 arquivos, sem nova entidade | Ir direto ao @developer |
+| **Task** | Novo contrato de interface, escopo claro | Criar `changes/00X/` + pedir specs ao @architect |
+| **Feature** | Nova entidade, incerteza técnica, impacto amplo | Executar as 4 fases completas |
+
+Se o pedido for ambíguo, pergunte ao usuário qual modo preferir antes de prosseguir.
+
+### Heurística rápida
+
+1. Muda ≤ 2 arquivos existentes sem novo contrato? → **Quick**
+2. Tem interface nova mas domínio existente? → **Task**
+3. Novo bounded context, auth, ou impacto em N módulos? → **Feature**
+
 ---
-**Criada em**: AAAA-MM-DD  **Versão**: 1.0
+
+## Agents disponíveis
+
+Consulte `.claude/agents/` para o sistema prompt completo de cada agent.
+
+| Agent | Cor | Quando usar |
+|-------|-----|-------------|
+| @leader | blue | Orquestração — classifica, delega, gerencia re-spec |
+| @architect | green | Research (PRD+design+specs) ou specs light |
+| @developer | yellow | Implementação (Quick: pedido direto / Task+Feature: via specs.md) |
+| @tester | red | Testes — `bun test --coverage` — cobertura ≥85% domain |
+| @reviewer | purple | Code review — CDD/ICP + 70 rules + segurança |
+
+**Loops de feedback são limitados a 3 iterações.** Após 3 falhas do @developer, acione re-spec via @architect.
+
+---
+
+## Skills disponíveis
+
+Carregue a skill relevante ao contexto. Localização: `.claude/skills/`
+
+| Contexto | Skills |
+|----------|--------|
+| Revisão de código | `cdd`, `codetags`, `software-quality`, `complexity` |
+| Implementação | `complexity`, `codetags`, `clean-code`, `anti-patterns` |
+| Estrutura de src/ | `colocation` — toda implementação usa vertical slice `src/[context]/[container]/[component]/` |
+| Design arquitetural | `gof`, `poeaa`, `solid`, `package-principles` |
+| Documentação | `arc42`, `c4model`, `adr`, `bdd` |
+| Infraestrutura | `twelve-factor` |
+| Frontend React | `react` |
+
+---
+
+## Regras (70)
+
+Aplique as regras em `.claude/rules/`. Severidade:
+- 🔴 **Crítica** — não submeter código com violação
+- 🟠 **Alta** — corrigir antes de entregar
+- 🟡 **Média** — anotar com codetag
+
+| Categoria | IDs |
+|-----------|-----|
+| Object Calisthenics | 001–009 |
+| SOLID | 010–014 |
+| Package Principles | 015–020 |
+| Clean Code | 021–039 |
+| Twelve-Factor | 040–051 |
+| Anti-Patterns | 052–070 |
+
+Próximo ID disponível: `071`
+
+---
+
+## Codetags
+
+Ao identificar violações, anote diretamente no código com **tom educativo** — explique o porquê, o impacto e o caminho para melhorar. Nunca referencie arquivos de configuração internos.
+
+Tags disponíveis: `FIXME` (crítica), `TODO` (alta), `XXX` (média), `SECURITY` (crítica), `OPTIMIZE` (média), `NOTE` / `INFO` (baixa)
+
+```typescript
+// FIXME: Esta função concatena input do usuário diretamente na query, abrindo
+// espaço para SQL Injection. Prepared statements resolvem isso separando
+// o código dos dados — e ainda deixam o código mais legível.
+
+// TODO: Com 5 parâmetros, fica difícil saber o que cada um representa na
+// chamada. Agrupar em um objeto de configuração torna a intenção clara e
+// facilita adicionar campos sem quebrar quem já usa o método.
+
+// XXX: O if/else aninhado funciona, mas a leitura fica cansativa. Retornos
+// antecipados (guard clauses) linearizam o fluxo — cada condição fica
+// evidente sem precisar acompanhar o aninhamento.
 ```
+
+---
+
+## Commands
+
+Use os commands em `.claude/commands/` para operações de workflow:
+
+| Command | Quando acionar |
+|---------|---------------|
+| `/start [nome]` | Inicializar nova Feature ou Task |
+| `/status` | Ver progresso de features em andamento |
+| `/audit [branch\|pr <n>\|src/path]` | Code review completo via @reviewer — posta em PR se quiser |
+| `/docs [path]` | Sincronizar documentação arquitetural |
+| `/ship` | Commitar e publicar alterações |
+| `/sync` | Atualizar branch com remoto |
+
+---
+
+## Contexto persistente
+
+Cada Feature/Task mantém contexto em `changes/00X_nome/`:
+- `PRD.md` — (só Feature) requisitos e regras de negócio
+- `design.md` — (só Feature) decisões técnicas e patterns
+- `specs.md` — interfaces, contratos, critérios de aceite
+- `tasks.md` — tarefas + counters: `<!-- attempts-developer: 0 -->`, `<!-- attempts-tester: 0 -->`, `<!-- attempts-reviewer: 0 -->`
+
+---
+
+## Hooks ativos
+
+| Evento | Comportamento |
+|--------|--------------|
+| `PostToolUse` Write/Edit | `biome check --write` automático em .ts/.tsx/.js/.jsx/.json |
+| `Stop` | Bloqueia se há `- [ ]` pendentes em `changes/*/tasks.md` |
+| `UserPromptSubmit` | Injeta hint de modo (Quick/Task/Feature) ao processar pedidos |
+
+Se o loop travar: `touch .claude/.loop-skip` — remova após resolver.
+
+---
+
+## Grafo de dependências
+
+Consulte `.claude/GRAPH.md` para o mapa completo de dependências entre rules, skills e agents.

@@ -1,10 +1,11 @@
 ---
 name: setter
-description: Convenção de uso de setters para tratamento de escrita de valores. Use quando criar setters que modificam membros privados com sincronização de estado.
+description: Convenção de uso de setters para tratamento de escrita de valores. Use quando criar setters que precisam validar input, sincronizar estado interno ou disparar efeitos colaterais — ao revisar setters que são simples atribuições.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Setter
@@ -51,6 +52,20 @@ Use quando criar setters que precisam tratar a escrita de um valor, sempre assoc
 | Nunca público | Setter não deve modificar propriedade pública |
 | Um para um | Cada setter modifica um único membro privado |
 | Nome correspondente | Nome do setter corresponde ao nome do membro privado |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — setter trivial (viola rule 008)
+set email(value: string) { this.#email = value }  // sem validação
+
+// ✅ Bom — setter com validação e sincronização
+set email(value: string) {
+  if (!value.includes('@')) throw new InvalidEmailError(value)
+  this.#email = value
+  this.internals.states.add('email-validated')
+}
+```
 
 ## Proibições
 

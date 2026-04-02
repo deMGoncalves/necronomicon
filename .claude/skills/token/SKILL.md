@@ -1,10 +1,11 @@
 ---
 name: token
-description: Convenção de uso de Design Tokens em estilos CSS. Use quando criar ou modificar estilos para substituir valores hardcoded pelos tokens corretos do Design System.
+description: Convenção de uso de Design Tokens em estilos CSS — quando criar ou modificar estilos CSS, ao revisar código que usa valores hardcoded de cor, espaçamento ou tipografia em vez dos tokens do Design System
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Token
@@ -123,6 +124,24 @@ As propriedades abaixo **não possuem token** e podem usar valores diretos:
 | `transform` | Qualquer função de transformação |
 | `cursor` | `pointer`, `default`, `not-allowed` |
 | `pointer-events`, `user-select` | Qualquer valor válido |
+
+## Exemplos
+
+```css
+/* ❌ Ruim — valores hardcoded */
+.button {
+  background: #3B82F6;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+/* ✅ Bom — Design Tokens */
+.button {
+  background: var(--color-action-default);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-body);
+}
+```
 
 ## Proibições
 

@@ -1,11 +1,10 @@
 ---
 name: gof
-description: Referência completa dos 23 GoF Design Patterns (Gang of Four) organizados em Criacionais, Estruturais e Comportamentais. Use quando precisar selecionar ou implementar padrões de design orientado a objetos, ou quando @architect recomenda um pattern para uma feature.
+description: Referência completa dos 23 GoF Design Patterns (Gang of Four) organizados em Criacionais, Estruturais e Comportamentais. Use quando precisar selecionar ou implementar padrões GoF, ao receber recomendação de pattern do @architect, ou ao revisar código com problemas de design que um pattern resolveria.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
 metadata:
+  author: deMGoncalves
   version: "2.0.0"
   category: design-patterns
 ---
@@ -67,6 +66,56 @@ metadata:
 | Máquina de estados | State |
 | Estrutura em árvore (componentes UI) | Composite |
 
+## Exemplos
+
+```typescript
+// ❌ Ruim — lógica condicional que cresce com cada novo tipo
+function createNotification(type: string) {
+  if (type === 'email') return new EmailNotification()
+  if (type === 'sms') return new SmsNotification()
+  if (type === 'push') return new PushNotification()
+  // cada novo tipo = modificar este método (viola OCP)
+}
+
+// ✅ Bom — Factory Method: extensível sem modificar código existente
+abstract class NotificationFactory {
+  abstract create(): Notification
+}
+class EmailFactory extends NotificationFactory {
+  create() { return new EmailNotification() }
+}
+class SmsFactory extends NotificationFactory {
+  create() { return new SmsNotification() }
+}
+// adicionar Push = nova classe, sem alterar existentes
+```
+
+```typescript
+// ❌ Ruim — lógica de validação espalhada e repetida
+function processOrder(order: Order) {
+  if (order.status === 'pending') {
+    order.status = 'processing'
+  } else if (order.status === 'processing') {
+    order.status = 'shipped'
+  } else if (order.status === 'shipped') {
+    order.status = 'delivered'
+  }
+  // adicionar novo status = modificar toda estrutura condicional
+}
+
+// ✅ Bom — State Pattern: cada estado encapsula comportamento
+interface OrderState {
+  next(order: Order): void
+}
+class PendingState implements OrderState {
+  next(order: Order) { order.setState(new ProcessingState()) }
+}
+class ProcessingState implements OrderState {
+  next(order: Order) { order.setState(new ShippedState()) }
+}
+// adicionar novo estado = nova classe, sem modificar existentes
+```
+
 ## Proibições
 
 - Não use patterns para problemas simples (overengineering — rule 064)
@@ -79,3 +128,7 @@ metadata:
 - rule 011 (OCP): Factory Method e Strategy permitem extensão sem modificação
 - rule 014 (DIP): Abstract Factory e Bridge dependem de abstrações
 - rule 064 (Overengineering): aplicar apenas quando o problema justifica
+
+**Skills relacionadas:**
+- [`poeaa`](../poeaa/SKILL.md) — complementa: PoEAA aplica GoF em arquitetura enterprise
+- [`solid`](../solid/SKILL.md) — depende: muitos GoF patterns implementam princípios SOLID

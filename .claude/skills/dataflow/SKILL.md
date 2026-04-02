@@ -1,10 +1,11 @@
 ---
 name: dataflow
-description: Convenção de comunicação entre componentes via barramento de eventos. Use quando criar fluxos de dados reativos e desacoplados entre componentes.
+description: Convenção de comunicação entre componentes via barramento de eventos — quando criar fluxos de dados reativos entre componentes desacoplados, ao implementar comunicação via barramento de eventos ou ao revisar código que usa referências diretas entre componentes
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Dataflow
@@ -168,6 +169,29 @@ source/event:type/sink|filter1=value1|filter2=value2
 | Transform | Aplica filtros ao payload |
 | Execute | Chama método, define atributo ou setter |
 | Disconnected | Aborta todos os controllers |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — acoplamento direto entre componentes
+class CartComponent {
+  updateTotal() {
+    const header = document.querySelector('app-header')
+    header.cartCount = this.items.length  // acoplamento direto
+  }
+}
+
+// ✅ Bom — comunicação via evento (dataflow)
+class CartComponent {
+  updateTotal() {
+    this.dispatchEvent(new CustomEvent('cart:updated', {
+      detail: { count: this.items.length },
+      bubbles: true, composed: true,
+    }))
+  }
+}
+// app-header escuta o evento sem conhecer o cart
+```
 
 ## Proibições
 

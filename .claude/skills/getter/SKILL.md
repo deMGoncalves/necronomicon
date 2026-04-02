@@ -1,10 +1,11 @@
 ---
 name: getter
-description: Convenção de uso de getters para tratamento de leitura de valores. Use quando criar getters que acessam membros privados com lógica de tratamento.
+description: Convenção de uso de getters para tratamento de leitura de valores. Use quando criar getters que precisam transformar, validar ou formatar dados antes de expor — ao revisar getters que retornam valores brutos sem lógica.
 model: haiku
 allowed-tools: Read, Write, Edit
-user-invocable: true
-location: managed
+metadata:
+  author: deMGoncalves
+  version: "1.0.0"
 ---
 
 # Getter
@@ -43,6 +44,22 @@ Use quando criar getters que precisam tratar a leitura de um valor, sempre assoc
 | Nunca público | Getter não deve ler propriedade pública |
 | Um para um | Cada getter acessa um único membro privado |
 | Nome correspondente | Nome do getter corresponde ao nome do membro privado |
+
+## Exemplos
+
+```typescript
+// ❌ Ruim — getter trivial sem lógica (deve ser property)
+get name() { return this.#name }  // apenas retorna, sem transformação
+
+// ✅ Bom — getter com lógica de transformação
+get displayName() {
+  return this.#name?.trim().toLowerCase() ?? 'anonymous'
+}
+
+get isValid() {
+  return this.#email.includes('@') && this.#name.length > 0
+}
+```
 
 ## Proibições
 
