@@ -13,6 +13,38 @@ Personal workflow for AI-assisted development. It's not a framework, not a tool 
 
 ---
 
+## Plugin Installation
+
+Install `oh-my-claude` as a Claude Code plugin to use it in any project.
+
+### Option 1 — Local (development / testing)
+
+```bash
+claude --plugin-dir /path/to/fury_oh-my-claude
+```
+
+### Option 2 — Permanent (user-level install)
+
+```bash
+/plugin marketplace add melisource/fury_oh-my-claude
+/plugin install oh-my-claude@oh-my-claude-marketplace
+```
+
+Once installed, commands are available with the `oh-my-claude:` namespace:
+
+| Standalone (cloned repo) | Plugin (installed) |
+|---|---|
+| `/start` | `/oh-my-claude:start` |
+| `/ship` | `/oh-my-claude:ship` |
+| `/audit` | `/oh-my-claude:audit` |
+| `/status` | `/oh-my-claude:status` |
+| `/docs` | `/oh-my-claude:docs` |
+| `/sync` | `/oh-my-claude:sync` |
+
+Skills and agents are loaded automatically with the same namespace prefix.
+
+---
+
 ## Setup
 
 ### Prerequisites
