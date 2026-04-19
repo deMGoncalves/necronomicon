@@ -1,65 +1,65 @@
-# Factor 09 — Disposability
+# Fator 09 — Disposability
 
-**deMGoncalves Rule:** [048 - Process Disposability](../../../rules/048_descartabilidade-processos.md)
-**Question:** Fast startup (<10s) + graceful shutdown (SIGTERM handled)?
+**Regra deMGoncalves:** [048 - Descartabilidade de Processos](../../../rules/048_descartabilidade-processos.md)
+**Questão:** Startup rápido (<10s) + shutdown graceful (SIGTERM tratado)?
 
-## What It Is
+## O que é
 
-Application processes must be **disposable** — they can be started or stopped at any time. This requires fast initialization, graceful shutdown, and robustness against sudden termination (SIGTERM/SIGKILL).
+Os processos da aplicação devem ser **descartáveis** — podem ser iniciados ou parados a qualquer momento. Isso requer inicialização rápida, shutdown graceful e robustez contra terminação súbita (SIGTERM/SIGKILL).
 
-**Disposability = fast deploys + elastic scalability + fast recovery.**
+**Descartabilidade = deploys rápidos + escalabilidade elástica + recuperação rápida.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] **Startup** time less than **10 seconds** to be ready
-- [ ] Process handles **SIGTERM** and finishes in-progress requests gracefully
-- [ ] Background jobs are **idempotent** and use retry (can be interrupted)
+- [ ] Tempo de **startup** inferior a **10 segundos** para estar pronto
+- [ ] Processo trata **SIGTERM** e finaliza requisições em andamento graciosamente
+- [ ] Jobs de background são **idempotentes** e usam retry (podem ser interrompidos)
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Slow startup (>30s) ❌
+// Startup lento (>30s) ❌
 app.listen(3000, async () => {
   await loadHugeDatasetIntoMemory();  // 45s
   await warmupAllCaches();  // 20s
-  console.log('Ready');
+  console.log('Pronto');
 });
 
-// No SIGTERM handling ❌
-// Process is killed abruptly
-// In-progress requests are lost
+// Sem tratamento de SIGTERM ❌
+// Processo é encerrado abruptamente
+// Requisições em andamento são perdidas
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Fast startup (<5s) ✅
+// Startup rápido (<5s) ✅
 const server = app.listen(process.env.PORT, () => {
-  console.log('Server ready');
+  console.log('Servidor pronto');
 });
 
-// Graceful shutdown ✅
+// Shutdown graceful ✅
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, closing server gracefully');
+  console.log('SIGTERM recebido, encerrando servidor graciosamente');
 
   server.close(async () => {
-    // Finish in-progress requests
+    // Finalizar requisições em andamento
     await cleanupConnections();
     process.exit(0);
   });
 
-  // Timeout if not finished in 30s
+  // Timeout se não finalizar em 30s
   setTimeout(() => {
-    console.error('Forced shutdown');
+    console.error('Encerramento forçado');
     process.exit(1);
   }, 30000);
 });
 
-// Idempotent jobs ✅
+// Jobs idempotentes ✅
 queue.process('email', async (job) => {
   const { userId, templateId } = job.data;
 
-  // Check if already processed (idempotence)
+  // Verificar se já foi processado (idempotência)
   const sent = await db.emailLog.findOne({ userId, templateId });
   if (sent) return;
 
@@ -67,9 +67,9 @@ queue.process('email', async (job) => {
 });
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: No SIGTERM handling — add graceful shutdown
-process.on('SIGTERM', () => process.exit(0));  // violation
+// FIXME: Sem tratamento de SIGTERM — adicionar shutdown graceful
+process.on('SIGTERM', () => process.exit(0));  // violação
 ```

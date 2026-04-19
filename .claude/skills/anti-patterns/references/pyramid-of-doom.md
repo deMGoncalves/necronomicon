@@ -1,61 +1,61 @@
 # Pyramid of Doom (Arrow Anti-Pattern)
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 066
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 066
 
-## What It Is
+## O Que É
 
-Excessive nesting of conditionals (`if`/`else`) and loops that creates a pyramid or arrow-shaped visual structure. Each nesting level adds cognitive complexity and increases Cyclomatic Complexity Index.
+Aninhamento excessivo de condicionais (`if`/`else`) e loops que cria uma estrutura visual em pirâmide ou seta. Cada nível de aninhamento adiciona complexidade cognitiva e aumenta o Índice de Complexidade Ciclomática.
 
-## Symptoms
+## Sintomas
 
-- Code with 4 or more indentation levels
-- `if` inside `if` inside `for` inside `if`
-- To understand the happy path, you need to read all nesting levels
-- CC (Cyclomatic Complexity) > 10
+- Código com 4 ou mais níveis de indentação
+- `if` dentro de `if` dentro de `for` dentro de `if`
+- Para entender o caminho feliz, é necessário ler todos os níveis de aninhamento
+- CC (Complexidade Ciclomática) > 10
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Pyramid — happy path buried at level 4
+// ❌ Pirâmide — caminho feliz enterrado no nível 4
 function processOrder(order) {
   if (order) {
     if (order.items.length > 0) {
       if (order.user.isActive) {
         if (order.payment.isValid) {
-          return fulfill(order); // happy path at level 4
+          return fulfill(order); // caminho feliz no nível 4
         } else {
-          return { error: 'Invalid payment' };
+          return { error: 'Pagamento inválido' };
         }
       } else {
-        return { error: 'Inactive user' };
+        return { error: 'Usuário inativo' };
       }
     } else {
-      return { error: 'Empty order' };
+      return { error: 'Pedido vazio' };
     }
   } else {
-    return { error: 'Order not found' };
+    return { error: 'Pedido não encontrado' };
   }
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Guard clauses — happy path at level zero
+// ✅ Guard clauses — caminho feliz no nível zero
 function processOrder(order) {
-  if (!order) return { error: 'Order not found' };
-  if (order.items.length === 0) return { error: 'Empty order' };
-  if (!order.user.isActive) return { error: 'Inactive user' };
-  if (!order.payment.isValid) return { error: 'Invalid payment' };
+  if (!order) return { error: 'Pedido não encontrado' };
+  if (order.items.length === 0) return { error: 'Pedido vazio' };
+  if (!order.user.isActive) return { error: 'Usuário inativo' };
+  if (!order.payment.isValid) return { error: 'Pagamento inválido' };
 
   return fulfill(order);
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Pyramid of Doom — 4 nesting levels
-// TODO: Apply Guard Clauses to linearize flow
+// FIXME: Pyramid of Doom — 4 níveis de aninhamento
+// TODO: Aplicar Guard Clauses para linearizar o fluxo
 ```

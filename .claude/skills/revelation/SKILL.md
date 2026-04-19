@@ -1,6 +1,6 @@
 ---
 name: revelation
-description: Convention for module index structure — when creating or organizing a module's index file — when defining which symbols are public vs internal and structuring re-exports
+description: Convenção para estrutura de index de módulos — ao criar ou organizar arquivo index de um módulo — ao definir quais símbolos são públicos vs internos e estruturar re-exports
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,38 +10,49 @@ metadata:
 
 # Revelation
 
-Convention for module index structure (Module Revelation Pattern).
+Convenção para estrutura de index de módulos (Module Revelation Pattern).
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating or organizing module exports.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar ou organizar arquivo `index.js`/`index.ts` de um módulo; ao definir quais símbolos são públicos vs internos; ao estruturar re-exports |
+| **Prerequisites** | Conceito de encapsulamento e interface pública de módulo; rules 010 (SRP), 015 (REP) |
+| **Constraints** | Index deve conter apenas imports e re-exports diretos — sem lógica, sem variáveis intermediárias; `export *` é proibido pois vaza detalhes de implementação |
+| **Scope** | Estrutura e sintaxe do Module Revelation Pattern: `export { default }`, `export { default as Name }`, `import 'path'` com side-effect |
 
-## Principle
+---
 
-| Principle | Description |
-|-----------|-------------|
-| Single Entry Point | Index.js is the only public interface of the module |
-| Simplicity | Only re-exports, no additional logic |
+## Quando Usar
 
-## Rules
+Use ao criar ou organizar exports de módulos.
 
-| Rule | Description |
-|------|-------------|
-| Only re-exports | Index contains only imports and direct re-exports |
-| No logic | Code beyond import/export is prohibited |
-| No variables | Declaring intermediate variables is prohibited |
+## Princípio
 
-## Structure
+| Princípio | Descrição |
+|-----------|-----------|
+| Ponto de Entrada Único | Index.js é a única interface pública do módulo |
+| Simplicidade | Apenas re-exports, sem lógica adicional |
 
-| Syntax | Usage |
-|--------|-------|
-| `import 'path'` | Side-effect import |
-| `export { default } from 'path'` | Re-export default as default |
-| `export { default as Name } from 'path'` | Re-export default with name |
+## Regras
 
-## Example
+| Regra | Descrição |
+|-------|-----------|
+| Apenas re-exports | Index contém apenas imports e re-exports diretos |
+| Sem lógica | Código além de import/export é proibido |
+| Sem variáveis | Declarar variáveis intermediárias é proibido |
+
+## Estrutura
+
+| Sintaxe | Uso |
+|---------|-----|
+| `import 'path'` | Import com side-effect |
+| `export { default } from 'path'` | Re-export default como default |
+| `export { default as Name } from 'path'` | Re-export default com nome |
+
+## Exemplo
 
 ```javascript
 // packages/book/button/index.js
@@ -55,32 +66,32 @@ export { default as Text } from './text/index.js'
 export { default as Icon } from './icon/index.js'
 ```
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — exposes everything without control
+// ❌ Ruim — expõe tudo sem controle
 export * from './UserService'
 export * from './UserRepository'
 export * from './UserValidator'
-export * from './internal/UserHelpers'  // leaks internal implementation
+export * from './internal/UserHelpers'  // vaza detalhes de implementação
 
-// ✅ Good — Revelation Pattern — exposes only public interface
+// ✅ Bom — Revelation Pattern — expõe apenas interface pública
 export { UserService } from './UserService'
 export type { User, CreateUserDTO } from './types'
-// UserRepository, UserHelpers are implementation details — not exported
+// UserRepository, UserHelpers são detalhes de implementação — não exportados
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Logic in index.js | Index should have only re-exports (rule 010) |
-| Intermediate variables | Declaring variables is prohibited, only direct import/export |
-| Transformations in index | Transformation logic belongs to modules, not index |
-| Index without exports | Every module should expose clear interface |
+| O que evitar | Razão |
+|--------------|-------|
+| Lógica no index.js | Index deve ter apenas re-exports (rule 010) |
+| Variáveis intermediárias | Declarar variáveis é proibido, apenas import/export direto |
+| Transformações no index | Lógica de transformação pertence aos módulos, não ao index |
+| Index sem exports | Todo módulo deve expor interface clara |
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): index has single responsibility of exposing module's public interface, without additional logic
-- [015 - Release Reuse Equivalency Principle](../../rules/015_principio-equivalencia-lancamento-reuso.md): cohesive module with clear interface facilitates reuse in other contexts
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): simple and direct index is easier to understand and maintain
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): index tem responsabilidade única de expor interface pública do módulo, sem lógica adicional
+- [015 - Princípio de Equivalência de Lançamento e Reuso](../../rules/015_principio-equivalencia-lancamento-reuso.md): módulo coeso com interface clara facilita reuso em outros contextos
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): index simples e direto é mais fácil de entender e manter

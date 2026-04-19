@@ -1,47 +1,47 @@
 # Golden Hammer
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 068
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 068
 
-## What It Is
+## O Que É
 
-Using a familiar technology, tool, or pattern to solve all problems, regardless of whether it's the most suitable solution. "If the only tool you have is a hammer, everything looks like a nail." — Abraham Maslow.
+Usar uma tecnologia, ferramenta ou padrão familiar para resolver todos os problemas, independentemente de ser a solução mais adequada. "Se a única ferramenta que você tem é um martelo, tudo parece um prego." — Abraham Maslow.
 
-## Symptoms
+## Sintomas
 
-- Same tool/pattern applied in 3+ significantly different contexts
-- The same database, framework, or pattern is applied in very different contexts
-- Technical decisions based on familiarity, not suitability to the problem
-- Resistance to evaluating alternatives: "we already use X for everything, let's use it here too"
-- Using microservice pattern in systems where single monolith would suffice
-- Using NoSQL database in strongly relational systems or vice versa
-- Overpowered solutions for simple problems (e.g., Kafka for 10 messages/day)
+- Mesma ferramenta/padrão aplicado em 3+ contextos significativamente diferentes
+- O mesmo banco de dados, framework ou padrão é aplicado em contextos muito diferentes
+- Decisões técnicas baseadas em familiaridade, não em adequação ao problema
+- Resistência a avaliar alternativas: "já usamos X para tudo, vamos usar aqui também"
+- Usar padrão de microsserviço em sistemas onde um único monolito seria suficiente
+- Usar banco de dados NoSQL em sistemas fortemente relacionais ou vice-versa
+- Soluções superdimensionadas para problemas simples (ex: Kafka para 10 mensagens/dia)
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Using Redis (distributed cache) to store config that changes once per week
+// ❌ Usar Redis (cache distribuído) para armazenar config que muda uma vez por semana
 const config = await redis.get('app:config');
-// Overpowered solution: a JSON file or environment variable would solve it
+// Solução superdimensionada: um arquivo JSON ou variável de ambiente resolveria
 
-// ❌ Using GraphQL for an API with 2 simple endpoints
-// because "we use GraphQL for everything"
+// ❌ Usar GraphQL para uma API com 2 endpoints simples
+// porque "usamos GraphQL para tudo"
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Solution proportional to problem (KISS + Right Tool for the Job)
-import config from './config.json'; // or process.env.CONFIG
+// ✅ Solução proporcional ao problema (KISS + Ferramenta Certa para o Trabalho)
+import config from './config.json'; // ou process.env.CONFIG
 
-// ✅ Simple REST for simple API
+// ✅ REST simples para API simples
 app.get('/users/:id', getUserHandler);
 app.post('/users', createUserHandler);
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Golden Hammer — Redis for static config (overkill)
-// TODO: Use config.json or env vars; reserve Redis for real cache
+// FIXME: Golden Hammer — Redis para config estática (superdimensionado)
+// TODO: Usar config.json ou variáveis de ambiente; reservar Redis para cache real
 ```

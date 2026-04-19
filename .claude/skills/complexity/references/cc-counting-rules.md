@@ -1,13 +1,13 @@
-# Cyclomatic Complexity — Counting Rules
+# Complexidade Ciclomática — Regras de Contagem
 
-## What is CC
+## O que é CC
 
-Cyclomatic Complexity (CC) = number of independent execution paths in a method.
-Formula: CC = E - N + 2 (edges - nodes + 2) or simply: 1 + number of decision points.
+Complexidade Ciclomática (CC) = número de caminhos de execução independentes em um método.
+Fórmula: CC = E - N + 2 (arestas - nós + 2) ou simplesmente: 1 + número de pontos de decisão.
 
-## Decision Points (+1 per occurrence)
+## Pontos de Decisão (+1 por ocorrência)
 
-| Structure | Points | Example |
+| Estrutura | Pontos | Exemplo |
 |-----------|--------|---------|
 | `if` | +1 | `if (condition)` |
 | `else if` | +1 | `else if (condition)` |
@@ -16,22 +16,22 @@ Formula: CC = E - N + 2 (edges - nodes + 2) or simply: 1 + number of decision po
 | `for...in` | +1 | `for (const key in obj)` |
 | `while` | +1 | `while (condition)` |
 | `do...while` | +1 | `do { ... } while (condition)` |
-| `case` in switch | +1 | `case 'value':` |
+| `case` em switch | +1 | `case 'value':` |
 | `catch` | +1 | `catch (error)` |
-| Ternary `?:` | +1 | `a ? b : c` |
-| `&&` in condition | +1 | `if (a && b)` |
-| `\|\|` in condition | +1 | `if (a \|\| b)` |
+| Ternário `?:` | +1 | `a ? b : c` |
+| `&&` em condição | +1 | `if (a && b)` |
+| `\|\|` em condição | +1 | `if (a \|\| b)` |
 
-## Limit Interpretation
+## Interpretação dos Limites
 
-| CC | Status | Action |
-|----|--------|--------|
-| 1–5 | ✅ Within limit | OK |
-| 6–7 | ⚠️ Warning | Consider refactoring |
-| 8–10 | 🟠 High — refactor | Mandatory (rule 022) |
-| > 10 | 🔴 Critical | Urgent refactoring |
+| CC | Status | Ação |
+|----|--------|------|
+| 1–5 | ✅ Dentro do limite | OK |
+| 6–7 | ⚠️ Aviso | Considerar refatoração |
+| 8–10 | 🟠 Alta — refatorar | Obrigatório (rule 022) |
+| > 10 | 🔴 Crítica | Refatoração urgente |
 
-## Counting Example
+## Exemplo de Contagem
 
 ```typescript
 function process(x: number, y: string): string {  // CC = 1 (base)
@@ -41,9 +41,9 @@ function process(x: number, y: string): string {  // CC = 1 (base)
     } else if (y === 'b') { // +1 = CC 4
       return 'good'
     }
-  } else {              // no extra points
+  } else {              // sem pontos extras
     for (let i = 0; i < x; i++) {  // +1 = CC 5
-      if (i % 2 === 0) {           // +1 = CC 6 ← ABOVE LIMIT
+      if (i % 2 === 0) {           // +1 = CC 6 ← ACIMA DO LIMITE
         console.log(i)
       }
     }

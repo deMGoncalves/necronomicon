@@ -1,24 +1,24 @@
 # Prototype
 
-**Category:** Creational
-**Intent:** Specify the types of objects to create using a prototypical instance and create new objects by copying that prototype.
+**Categoria:** Criacional
+**Intenção:** Especificar os tipos de objetos a criar usando uma instância prototípica e criar novos objetos copiando esse protótipo.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Object creation is expensive (e.g., heavy initialization, configuration parsing)
-- Need to create variations of an object without subclassing
-- System should be independent of how its products are created and composed
-- When working with objects that have complex initial state
+- A criação de objetos é custosa (ex.: inicialização pesada, parsing de configuração)
+- Necessidade de criar variações de um objeto sem subclassificação
+- O sistema deve ser independente de como seus produtos são criados e compostos
+- Ao trabalhar com objetos que possuem estado inicial complexo
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When direct creation is simple enough (overengineering — rule 064)
-- When the object contains circular references that are difficult to clone
-- When shallow copy can introduce accidental mutation (rule 052)
+- Quando a criação direta é simples o suficiente (overengineering — rule 064)
+- Quando o objeto contém referências circulares que são difíceis de clonar
+- Quando cópia superficial (shallow copy) pode introduzir mutação acidental (rule 052)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Cloneable<T> {
@@ -32,7 +32,7 @@ class UserProfile implements Cloneable<UserProfile> {
     readonly preferences: Record<string, unknown>
   ) {}
 
-  // Creates deep copy of object
+  // Cria cópia profunda do objeto
   clone(): UserProfile {
     return new UserProfile(
       this.name,
@@ -48,22 +48,22 @@ class UserProfile implements Cloneable<UserProfile> {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const adminProfile = baseProfile.clone()
 const namedProfile = adminProfile.withName('admin')
 ```
 
-## Related to
+## Relacionado a
 
-- [abstract-factory.md](abstract-factory.md): complements — Prototype can be used within Abstract Factory to create products by cloning
-- [builder.md](builder.md): complements — Prototype can clone the final result of a Builder
-- [rule 052 - Prohibition of Accidental Mutation](../../../rules/052_proibicao-mutacao-acidental.md): reinforces — shallow copies in objects with nested references cause accidental mutation
-- [rule 029 - Object Immutability](../../../rules/029_imutabilidade-objetos-freeze.md): reinforces — clone and freeze ensures prototype immutability
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use when direct creation is sufficient
+- [abstract-factory.md](abstract-factory.md): complementa — Prototype pode ser usado dentro do Abstract Factory para criar produtos por clonagem
+- [builder.md](builder.md): complementa — Prototype pode clonar o resultado final de um Builder
+- [rule 052 - Proibição de Mutação Acidental](../../../rules/052_proibicao-mutacao-acidental.md): reforça — cópias superficiais em objetos com referências aninhadas causam mutação acidental
+- [rule 029 - Imutabilidade de Objetos](../../../rules/029_imutabilidade-objetos-freeze.md): reforça — clonar e congelar garante a imutabilidade do protótipo
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use quando a criação direta é suficiente
 
 ---
 
-**GoF Category:** Creational
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Criacional
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

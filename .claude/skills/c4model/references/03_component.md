@@ -93,7 +93,7 @@ src/
 
 ---
 
-## Related to
+## Relacionado a
 
 - [arc42 §5 — Building Block View](../../arc42/references/05_building_block_view.md): equivalente — Nível 2 de §5 corresponde aos componentes aqui
 - [c4model Level 2 — Container](02_container.md): depende — Level 3 decompõe um container específico de Level 2

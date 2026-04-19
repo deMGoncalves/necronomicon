@@ -1,6 +1,6 @@
 ---
 name: constructor
-description: Convention for constructor structure in Web Components. Use when creating custom Web Components, when implementing Custom Element constructors, or when reviewing code that violates constructor initialization sequence.
+description: Convenção para estrutura de constructor em Web Components. Use ao criar Web Components personalizados, ao implementar constructors de Custom Element, ou ao revisar código que viola sequência de inicialização do constructor.
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
 metadata:
@@ -10,82 +10,93 @@ metadata:
 
 # Constructor
 
-Convention for constructor structure in Web Components.
+Convenção para estrutura de constructor em Web Components.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating or modifying constructors of custom components.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Criação ou modificação de qualquer Web Component (`extends HTMLElement`); implementação do constructor de um Custom Element |
+| **Prerequisites** | Entendimento do ciclo de vida de Custom Elements (`constructor` → `connectedCallback` → `attributeChangedCallback`); skill `anatomy` para posicionamento correto do constructor na classe |
+| **Constraints** | Proibido acessar atributos, DOM externo ou fazer chamadas de API no constructor; constructor deve ser sempre síncrono; componentes headless não devem ter constructor definido |
+| **Scope** | Sequência de inicialização (`super()` → Shadow DOM → operações síncronas mínimas); configuração de `delegatesFocus`; categorias de componente (visual, headless, interativo) |
 
-## Principle
+---
 
-| Principle | Description |
+## Quando Usar
+
+Use ao criar ou modificar constructors de componentes personalizados.
+
+## Princípio
+
+| Princípio | Descrição |
 |-----------|-----------|
-| Initialization | Constructor sets up only basic component structure |
-| Simplicity | Minimal logic in constructor, only essential setup |
+| Inicialização | Constructor configura apenas estrutura básica do componente |
+| Simplicidade | Lógica mínima no constructor, apenas setup essencial |
 
-## Basic Rules
+## Regras Básicas
 
-| Rule | Description |
+| Regra | Descrição |
 |-------|-----------|
-| Super first | Always call super() as first line |
-| Shadow DOM | Create Shadow DOM if component has visualization |
-| No complex logic | Avoid calculations or heavy operations |
-| No DOM access | Don't access attributes or external DOM |
-| Synchronous | Constructor must always be synchronous |
+| Super first | Sempre chamar super() como primeira linha |
+| Shadow DOM | Criar Shadow DOM se componente tem visualização |
+| Sem lógica complexa | Evitar cálculos ou operações pesadas |
+| Sem acesso ao DOM | Não acessar atributos ou DOM externo |
+| Síncrono | Constructor deve sempre ser síncrono |
 
-## Constructor Types
+## Tipos de Constructor
 
-### Visual Component
+### Componente Visual
 
-| Aspect | Configuration |
+| Aspecto | Configuração |
 |---------|--------------|
-| Super | Mandatory call |
-| Shadow DOM | Create with attachShadow |
-| Mode | Always open |
-| DelegatesFocus | true for interactive components |
+| Super | Chamada obrigatória |
+| Shadow DOM | Criar com attachShadow |
+| Mode | Sempre open |
+| DelegatesFocus | true para componentes interativos |
 
-### Headless Component
+### Componente Headless
 
-| Aspect | Configuration |
+| Aspecto | Configuração |
 |---------|--------------|
-| Constructor | Do not define (omit) |
-| Mixin | Use Headless |
-| Shadow DOM | Do not create |
-| Purpose | Behavior/logic components |
+| Constructor | Não definir (omitir) |
+| Mixin | Usar Headless |
+| Shadow DOM | Não criar |
+| Propósito | Componentes de comportamento/lógica |
 
 ## DelegatesFocus
 
-| Use true | Use false/omit |
+| Usar true | Usar false/omitir |
 |-----------|-------------------|
-| Components with focusable elements | Visual-only components |
-| Buttons and links | Icons and images |
-| Inputs and forms | Passive containers |
-| Interactive labels and text | Decorations |
-| Interactive containers | Separators |
+| Componentes com elementos focáveis | Componentes apenas visuais |
+| Botões e links | Ícones e imagens |
+| Inputs e formulários | Containers passivos |
+| Labels e texto interativo | Decorações |
+| Containers interativos | Separadores |
 
-## Execution Sequence
+## Sequência de Execução
 
-| Order | Action | Mandatory |
+| Ordem | Ação | Obrigatória |
 |-------|------|-------------|
-| 1 | Call super() | Yes |
-| 2 | Create Shadow DOM | If visual |
-| 3 | Minimal synchronous operations | Optional |
+| 1 | Chamar super() | Sim |
+| 2 | Criar Shadow DOM | Se visual |
+| 3 | Operações síncronas mínimas | Opcional |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — initialization out of order
+// ❌ Bad — inicialização fora de ordem
 class MyButton extends HTMLElement {
   constructor() {
-    this.attachShadow({ mode: 'open' })  // error: super() not called
+    this.attachShadow({ mode: 'open' })  // erro: super() não chamado
     super()
     this.render()
   }
 }
 
-// ✅ Good — correct sequence
+// ✅ Good — sequência correta
 class MyButton extends HTMLElement {
   constructor() {
     super()
@@ -95,37 +106,37 @@ class MyButton extends HTMLElement {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
+| O que evitar | Razão |
 |--------------|-------|
-| Accessing attributes in constructor | Attributes not yet processed by attributeChanged |
-| Modifying external DOM | Component not yet connected to DOM |
-| Asynchronous operations | Constructor must be synchronous (rule 022) |
-| Adding event listeners | Use connected callback to ensure component is in DOM |
-| Business logic | Belongs in methods, constructor only initializes structure (rule 010) |
-| API calls | Use connected callback or specific methods |
-| Constructor with more than 15 lines | Violates rule 007, simplify initialization |
+| Acessar atributos no constructor | Atributos ainda não processados pelo attributeChanged |
+| Modificar DOM externo | Componente ainda não conectado ao DOM |
+| Operações assíncronas | Constructor deve ser síncrono (rule 022) |
+| Adicionar event listeners | Usar connected callback para garantir que componente está no DOM |
+| Lógica de negócio | Pertence a métodos, constructor apenas inicializa estrutura (rule 010) |
+| Chamadas de API | Usar connected callback ou métodos específicos |
+| Constructor com mais de 15 linhas | Viola rule 007, simplificar inicialização |
 
-## Shadow DOM Options
+## Opções de Shadow DOM
 
-| Option | Values | Usage |
+| Opção | Valores | Uso |
 |-------|---------|-----|
-| mode | open | Always use open for accessibility |
-| delegatesFocus | true/false | true for interactive components |
+| mode | open | Sempre usar open para acessibilidade |
+| delegatesFocus | true/false | true para componentes interativos |
 
-## Component Categories
+## Categorias de Componente
 
-| Category | Shadow DOM | DelegatesFocus | Example |
+| Categoria | Shadow DOM | DelegatesFocus | Exemplo |
 |-----------|------------|----------------|---------|
-| Interactive | Yes | Yes | Button, Link, Label |
-| Container | Yes | Yes | Card, Container |
-| Visual | Yes | No | Icon |
-| Behavioral | No | N/A | On, Redirect |
+| Interativo | Sim | Sim | Button, Link, Label |
+| Container | Sim | Sim | Card, Container |
+| Visual | Sim | Não | Icon |
+| Comportamental | Não | N/A | On, Redirect |
 
-## Internals API
+## API Internals
 
-Components that need Custom Element Internals (states, form association) should use lazy getter:
+Componentes que precisam de Custom Element Internals (estados, associação de formulário) devem usar getter lazy:
 
 ```javascript
 get internals() {
@@ -133,8 +144,8 @@ get internals() {
 }
 ```
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): constructor has single responsibility of initializing basic component structure
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): simple and predictable constructor, without complex logic
-- [007 - Line Restriction in Classes](../../rules/007_restricao-linhas-classes.md): constructor should have maximum of 15 lines
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): constructor tem responsabilidade única de inicializar estrutura básica do componente
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): constructor simples e previsível, sem lógica complexa
+- [007 - Restrição de Linhas em Classes](../../rules/007_restricao-linhas-classes.md): constructor deve ter máximo de 15 linhas

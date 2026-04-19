@@ -1,38 +1,38 @@
-# Factor 12 — Admin Processes
+# Fator 12 — Admin Processes
 
-**deMGoncalves Rule:** [051 - Admin Processes](../../../rules/051_processos-administrativos.md)
-**Question:** Admin tasks executed as one-off processes (not separate scripts)?
+**Regra deMGoncalves:** [051 - Processos Administrativos](../../../rules/051_processos-administrativos.md)
+**Questão:** Tarefas administrativas executadas como processos one-off (não scripts separados)?
 
-## What It Is
+## O que é
 
-Administrative or maintenance tasks (database migrations, fix scripts, REPL console) must be executed as **one-off processes** in the same environment and with the same code as the main application, not as separate scripts or persistent processes.
+Tarefas administrativas ou de manutenção (migrações de banco, scripts de correção, console REPL) devem ser executadas como **processos one-off** no mesmo ambiente e com o mesmo código da aplicação principal, não como scripts separados ou processos persistentes.
 
-**Admin tasks = same code + same environment + same runtime.**
+**Tarefas admin = mesmo código + mesmo ambiente + mesmo runtime.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] Migration scripts executed as one-off using same runtime and dependencies as app
-- [ ] Admin tasks **versioned in repository** along with application code
-- [ ] Zero execution of scripts via direct SSH on server (use same deploy mechanism)
+- [ ] Scripts de migração executados como one-off usando o mesmo runtime e dependências da aplicação
+- [ ] Tarefas administrativas **versionadas no repositório** junto com o código da aplicação
+- [ ] Zero execução de scripts via SSH direto no servidor (usar o mesmo mecanismo de deploy)
 
-## ❌ Violation
+## ❌ Violação
 
 ```bash
-# Direct SSH to prod ❌
+# SSH direto em prod ❌
 ssh prod-server
 cd /app
-node scripts/fix-data.js  # code outside repo
+node scripts/fix-data.js  # código fora do repositório
 
-# Migration script with different dependencies ❌
-# migrations/001_add_users.sql executed manually
+# Script de migração com dependências diferentes ❌
+# migrations/001_add_users.sql executado manualmente
 mysql -u root -p < migrations/001_add_users.sql
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```bash
-# Migration as one-off process ✅
-# Same runtime, same dependencies, same app code
+# Migração como processo one-off ✅
+# Mesmo runtime, mesmas dependências, mesmo código da aplicação
 
 # Heroku
 heroku run npm run db:migrate
@@ -44,21 +44,21 @@ kubectl run migration --image=myapp:v1.2.3 --restart=Never \
 # Docker
 docker run --rm myapp:v1.2.3 npm run db:migrate
 
-# Scripts versioned in repo ✅
+# Scripts versionados no repositório ✅
 repo/
 ├── src/
 │   └── app.ts
 ├── migrations/
-│   └── 001_add_users.ts  # TypeScript, not SQL
+│   └── 001_add_users.ts  # TypeScript, não SQL
 └── package.json
     "scripts": {
       "db:migrate": "bun run migrations/run.ts"
     }
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Admin script not versioned — add in migrations/
-// File executed via SSH: /tmp/fix-users.js
+// FIXME: Script administrativo não versionado — adicionar em migrations/
+// Arquivo executado via SSH: /tmp/fix-users.js
 ```

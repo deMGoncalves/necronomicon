@@ -1,36 +1,36 @@
 # Data Clumps
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 053
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 053
 
-## What It Is
+## O Que É
 
-Groups of data that always appear together in function parameters, class attributes, or local variables, but don't have their own object to represent them as a cohesive concept. They're primitives that always travel together but never got married.
+Grupos de dados que sempre aparecem juntos em parâmetros de funções, atributos de classes ou variáveis locais, mas não possuem um objeto próprio para representá-los como conceito coeso. São primitivos que sempre viajam juntos mas nunca se casaram.
 
-## Symptoms
+## Sintomas
 
-- Functions that always receive `(street, city, zipCode, country)` instead of an `Address`
-- 3 or more parameters appear together in 2+ different functions
-- Attributes that are always read/written together in a class
-- Removing one data item from the group makes the others meaningless
-- Validation of the same fields repeated in multiple locations
+- Funções que sempre recebem `(rua, cidade, cep, pais)` em vez de um `Endereco`
+- 3 ou mais parâmetros aparecem juntos em 2+ funções diferentes
+- Atributos que são sempre lidos/escritos juntos em uma classe
+- Remover um item de dados do grupo torna os outros sem significado
+- Validação dos mesmos campos repetida em múltiplos locais
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Address as 4 separate parameters in multiple functions
+// ❌ Endereço como 4 parâmetros separados em múltiplas funções
 function createOrder(street, city, zipCode, country, productId, qty) { ... }
 function validateShipping(street, city, zipCode, country) { ... }
 function calculateFreight(street, city, zipCode, country) { ... }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Address as cohesive object (Introduce Parameter Object)
+// ✅ Endereço como objeto coeso (Introduce Parameter Object)
 class Address {
   constructor({ street, city, zipCode, country }) {
-    if (!zipCode) throw new Error('ZIP code required');
+    if (!zipCode) throw new Error('CEP obrigatório');
     Object.assign(this, { street, city, zipCode, country });
   }
 }
@@ -40,9 +40,9 @@ function validateShipping(address) { ... }
 function calculateFreight(address) { ... }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Data Clumps — (street, city, zipCode, country) appear in 3+ functions
-// TODO: Introduce Parameter Object: create Address class
+// FIXME: Data Clumps — (street, city, zipCode, country) aparecem em 3+ funções
+// TODO: Introduce Parameter Object: criar classe Address
 ```

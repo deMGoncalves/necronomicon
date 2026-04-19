@@ -1,25 +1,25 @@
 # Identity Map
 
-**Layer:** Object-Relational
-**Complexity:** Moderate
-**Intent:** Ensures each object is loaded only once by keeping a map of every object that has been loaded, and looks up objects in that map when referring to them.
+**Camada:** Object-Relational
+**Complexidade:** Moderada
+**Intenção:** Garante que cada objeto seja carregado apenas uma vez, mantendo um mapa de todos os objetos carregados e consultando esse mapa ao se referir a eles.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Prevent same record from being loaded multiple times in a request
-- Ensure identity consistency — two `findById('123')` should return the same object
-- In systems with Domain Model where object identity matters
-- To optimize redundant queries within a unit of work
+- Evitar que o mesmo registro seja carregado múltiplas vezes em uma requisição
+- Garantir consistência de identidade — dois `findById('123')` devem retornar o mesmo objeto
+- Em sistemas com Domain Model onde a identidade do objeto importa
+- Para otimizar queries redundantes dentro de uma unidade de trabalho
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple applications where duplicate loading is not a problem
-- When request scope is too short to justify the overhead
-- In stateless systems where map would be recreated with each request anyway
+- Aplicações simples onde carregamento duplicado não é um problema
+- Quando o escopo da requisição é curto demais para justificar o overhead
+- Em sistemas sem estado onde o mapa seria recriado a cada requisição de qualquer forma
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class IdentityMap {
@@ -37,7 +37,7 @@ class IdentityMap {
   }
 }
 
-// Repository using Identity Map
+// Repository usando Identity Map
 class UserRepository {
   constructor(
     private readonly db: Database,
@@ -45,11 +45,11 @@ class UserRepository {
   ) {}
 
   async findById(id: string): Promise<User | null> {
-    // First check identity map
+    // Verifica primeiro o identity map
     const cached = this.identityMap.get<User>('User', id)
     if (cached) return cached
 
-    // Load from database only if not in map
+    // Carrega do banco apenas se não estiver no mapa
     const row = await this.db.query('SELECT * FROM users WHERE id = ?', [id])
     if (!row) return null
 
@@ -60,12 +60,12 @@ class UserRepository {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [unit-of-work.md](unit-of-work.md): complements — Unit of Work uses Identity Map to track unique instances throughout transaction
-- [repository.md](repository.md): complements — repositories consult Identity Map before going to database
+- [unit-of-work.md](unit-of-work.md): complementa — Unit of Work usa Identity Map para rastrear instâncias únicas ao longo da transação
+- [repository.md](repository.md): complementa — repositórios consultam o Identity Map antes de ir ao banco
 
 ---
 
-**PoEAA Layer:** Object-Relational
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Object-Relational
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

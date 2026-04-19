@@ -1,48 +1,48 @@
-# Immutability and State (Rules 029, 036, 038)
+# Imutabilidade e Estado (Regras 029, 036, 038)
 
-## Rules
+## Regras
 
-- **029**: Immutable Value Objects and Entities (`Object.freeze()`)
-- **036**: Pure functions (no side effects in Queries)
-- **038**: Command-Query Separation (CQS)
+- **029**: Value Objects e Entidades imutáveis (`Object.freeze()`)
+- **036**: Funções puras (sem efeitos colaterais em Queries)
+- **038**: Separação Comando-Consulta (CQS)
 
 ## Checklist
 
-- [ ] Value Objects frozen with `Object.freeze()`
-- [ ] Queries don't modify state
-- [ ] Mutable objects cloned before modifying
-- [ ] Commands with verbal names (`update`, `save`, `delete`)
-- [ ] Methods are Query XOR Command (never hybrid)
+- [ ] Value Objects congelados com `Object.freeze()`
+- [ ] Queries não modificam estado
+- [ ] Objetos mutáveis clonados antes de modificar
+- [ ] Comandos com nomes verbais (`update`, `save`, `delete`)
+- [ ] Métodos são Query OU Command (nunca híbridos)
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
-// Mutability (029)
+// ❌ Violações
+// Mutabilidade (029)
 function createProduct(data) {
-  return { id: data.id, price: data.price }; // mutable!
+  return { id: data.id, price: data.price }; // mutável!
 }
 const product = createProduct({ id: 1, price: 50 });
-product.price = 0; // accidental mutation
+product.price = 0; // mutação acidental
 
-// Hidden side effect (036)
+// Efeito colateral oculto (036)
 function getActiveUsers(users) {
   return users.filter(u => {
-    if (!u.active) u.lastChecked = Date.now(); // side effect!
+    if (!u.active) u.lastChecked = Date.now(); // efeito colateral!
     return u.active;
   });
 }
 
-// CQS violated (038)
-function getAndActivateUser(id) { // hybrid Query+Command
+// CQS violado (038)
+function getAndActivateUser(id) { // híbrido Query+Command
   const user = db.find(id);
   user.active = true;
   db.save(user);
   return user;
 }
 
-// ✅ Compliance
-// Immutability
+// ✅ Conformidade
+// Imutabilidade
 function createProduct(data: ProductData) {
   return Object.freeze({ id: data.id, price: data.price });
 }
@@ -52,19 +52,19 @@ interface Product {
   readonly price: number;
 }
 
-// Pure Query
+// Query pura
 function getActiveUsers(users: User[]): User[] {
   return users.filter(u => u.active);
 }
 
-// Explicit Command
+// Comando explícito
 function markInactiveUsers(users: User[]) {
   users.filter(u => !u.active).forEach(u => {
     u.lastChecked = Date.now();
   });
 }
 
-// CQS: Query and Command separated
+// CQS: Query e Command separados
 function findUser(id: string): User { // Query
   return db.find(id);
 }
@@ -76,8 +76,8 @@ function activateUser(id: string): void { // Command
 }
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-- Immutability eliminates mutation responsibilities
-- Pure functions have lower CC_base (no state branches)
-- CQS separates responsibilities (Query ≠ Command)
+- Imutabilidade elimina responsabilidades de mutação
+- Funções puras têm CC_base menor (sem ramificações de estado)
+- CQS separa responsabilidades (Query ≠ Command)

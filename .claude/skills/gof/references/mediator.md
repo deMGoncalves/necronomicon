@@ -1,24 +1,24 @@
 # Mediator
 
-**Category:** Behavioral
-**Intent:** Define an object that encapsulates how a set of objects interact, promoting loose coupling by preventing objects from explicitly referencing each other.
+**Categoria:** Comportamental
+**Intenção:** Definir um objeto que encapsula como um conjunto de objetos interage, promovendo acoplamento fraco ao impedir que os objetos se refiram explicitamente uns aos outros.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Reduce coupling between components that communicate intensively
-- Orchestrate complex interactions between multiple objects
-- Implement chat systems, event rooms
-- Coordinate UI components with shared state
+- Reduzir acoplamento entre componentes que se comunicam intensivamente
+- Orquestrar interações complexas entre múltiplos objetos
+- Implementar sistemas de chat, salas de eventos
+- Coordenar componentes de UI com estado compartilhado
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When Mediator accumulates business logic — becomes God Object (rule 025 — The Blob)
-- When there are only two objects interacting — direct reference is simpler
-- When communication between components is simple and unidirectional
+- Quando o Mediator acumula lógica de negócio — torna-se God Object (rule 025 — The Blob)
+- Quando há apenas dois objetos interagindo — referência direta é mais simples
+- Quando a comunicação entre componentes é simples e unidirecional
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface ChatMediator {
@@ -44,11 +44,11 @@ class ChatUser {
   ) {}
 
   send(message: string): void { this.mediator.sendMessage(message, this) }
-  receive(message: string): void { console.log(`${this.name} received: ${message}`) }
+  receive(message: string): void { console.log(`${this.name} recebeu: ${message}`) }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const room = new ChatRoom()
@@ -56,14 +56,14 @@ const alice = new ChatUser('Alice', room)
 room.register(alice)
 ```
 
-## Related to
+## Relacionado a
 
-- [observer.md](observer.md): complements — Observer defines one-to-many dependency; Mediator centralizes many-to-many communication
-- [facade.md](facade.md): complements — both simplify relations; Facade simplifies interface to subsystem; Mediator coordinates objects that know each other mutually
-- [rule 025 - Prohibition of Anti-Pattern The Blob](../../../rules/025_proibicao-anti-pattern-the-blob.md): reinforces — Mediator should not accumulate business logic, only coordinate
-- [rule 070 - Prohibition of Shared Mutable State](../../../rules/070_proibicao-estado-mutavel-compartilhado.md): reinforces — Mediator centralizes communication, not shared state
+- [observer.md](observer.md): complementa — Observer define dependência um-para-muitos; Mediator centraliza comunicação muitos-para-muitos
+- [facade.md](facade.md): complementa — ambos simplificam relações; Facade simplifica interface para subsistema; Mediator coordena objetos que se conhecem mutuamente
+- [rule 025 - Proibição do Anti-Pattern The Blob](../../../rules/025_proibicao-anti-pattern-the-blob.md): reforça — Mediator não deve acumular lógica de negócio, apenas coordenar
+- [rule 070 - Proibição de Estado Mutável Compartilhado](../../../rules/070_proibicao-estado-mutavel-compartilhado.md): reforça — Mediator centraliza comunicação, não estado compartilhado
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

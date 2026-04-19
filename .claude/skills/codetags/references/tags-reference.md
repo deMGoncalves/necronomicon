@@ -1,63 +1,63 @@
-# Codetags — Tag Index
+# Codetags — Índice de Tags
 
-16 tags organized by severity. Each tag has its own file with complete definition, examples and resolution guidance.
-
----
-
-## 🔴 Critical — Resolve before commit
-
-| Tag | Meaning | File |
-|-----|---------|------|
-| `FIXME` | Confirmed bug — immediate correction | [fixme.md](fixme.md) |
-| `BUG` | Tracked defect with ticket | [bug.md](bug.md) |
-| `SECURITY` | Security vulnerability | [security.md](security.md) |
-| `XXX` | Dangerous or extremely fragile code | [xxx.md](xxx.md) |
-
-## 🟠 High — Resolve before merge
-
-| Tag | Meaning | File |
-|-----|---------|------|
-| `HACK` | Temporary workaround that works but isn't correct | [hack.md](hack.md) |
-| `DEPRECATED` | Obsolete code in removal process | [deprecated.md](deprecated.md) |
-| `REFACTOR` | Violates design principles — needs restructuring | [refactor.md](refactor.md) |
-| `CLEANUP` | Disorganized code — dead code, unused imports | [cleanup.md](cleanup.md) |
-
-## 🟡 Medium — Resolve in sprint
-
-| Tag | Meaning | File |
-|-----|---------|------|
-| `TODO` | Planned task not yet implemented | [todo.md](todo.md) |
-| `OPTIMIZE` | Optimization opportunity (theoretical, no current problem) | [optimize.md](optimize.md) |
-| `PERF` | Measured performance bottleneck causing real problem | [perf.md](perf.md) |
-| `REVIEW` | Needs specialist review before merge | [review.md](review.md) |
-
-## 🟢 Low — Informative
-
-| Tag | Meaning | File |
-|-----|---------|------|
-| `NOTE` | High relevance important context | [note.md](note.md) |
-| `INFO` | Technical detail or explanatory reference | [info.md](info.md) |
-| `IDEA` | Unvalidated suggestion for future exploration | [idea.md](idea.md) |
-| `QUESTION` | Doubt or ambiguity needing resolution | [question.md](question.md) |
+16 tags organizadas por severidade. Cada tag possui seu próprio arquivo com definição completa, exemplos e orientações de resolução.
 
 ---
 
-## Important distinctions
+## 🔴 Crítico — Resolver antes do commit
 
-| Confused pair | Difference |
-|---------------|------------|
-| `FIXME` vs `BUG` | FIXME = fix now without ticket; BUG = tracked defect |
-| `HACK` vs `REFACTOR` | HACK = works but incorrect; REFACTOR = works but violates design |
-| `OPTIMIZE` vs `PERF` | OPTIMIZE = theoretical opportunity; PERF = measured problem |
-| `NOTE` vs `INFO` | NOTE = high importance, read before modifying; INFO = optional detail |
-| `IDEA` vs `TODO` | IDEA = not validated; TODO = confirmed for implementation |
+| Tag | Significado | Arquivo |
+|-----|-------------|---------|
+| `FIXME` | Bug confirmado — correção imediata | [fixme.md](fixme.md) |
+| `BUG` | Defeito rastreado com ticket | [bug.md](bug.md) |
+| `SECURITY` | Vulnerabilidade de segurança | [security.md](security.md) |
+| `XXX` | Código perigoso ou extremamente frágil | [xxx.md](xxx.md) |
+
+## 🟠 Alta — Resolver antes do merge
+
+| Tag | Significado | Arquivo |
+|-----|-------------|---------|
+| `HACK` | Solução temporária que funciona mas não é correta | [hack.md](hack.md) |
+| `DEPRECATED` | Código obsoleto em processo de remoção | [deprecated.md](deprecated.md) |
+| `REFACTOR` | Viola princípios de design — precisa de reestruturação | [refactor.md](refactor.md) |
+| `CLEANUP` | Código desorganizado — código morto, imports não utilizados | [cleanup.md](cleanup.md) |
+
+## 🟡 Média — Resolver na sprint
+
+| Tag | Significado | Arquivo |
+|-----|-------------|---------|
+| `TODO` | Tarefa planejada ainda não implementada | [todo.md](todo.md) |
+| `OPTIMIZE` | Oportunidade de otimização (teórica, sem problema atual) | [optimize.md](optimize.md) |
+| `PERF` | Gargalo de performance medido causando problema real | [perf.md](perf.md) |
+| `REVIEW` | Precisa de revisão especializada antes do merge | [review.md](review.md) |
+
+## 🟢 Baixa — Informativa
+
+| Tag | Significado | Arquivo |
+|-----|-------------|---------|
+| `NOTE` | Contexto importante de alta relevância | [note.md](note.md) |
+| `INFO` | Detalhe técnico ou referência explicativa | [info.md](info.md) |
+| `IDEA` | Sugestão não validada para exploração futura | [idea.md](idea.md) |
+| `QUESTION` | Dúvida ou ambiguidade que precisa de resolução | [question.md](question.md) |
 
 ---
 
-## Marking format
+## Distinções importantes
+
+| Par confundido | Diferença |
+|----------------|-----------|
+| `FIXME` vs `BUG` | FIXME = corrigir agora sem ticket; BUG = defeito rastreado |
+| `HACK` vs `REFACTOR` | HACK = funciona mas é incorreto; REFACTOR = funciona mas viola design |
+| `OPTIMIZE` vs `PERF` | OPTIMIZE = oportunidade teórica; PERF = problema medido |
+| `NOTE` vs `INFO` | NOTE = alta importância, ler antes de modificar; INFO = detalhe opcional |
+| `IDEA` vs `TODO` | IDEA = não validado; TODO = confirmado para implementação |
+
+---
+
+## Formato de marcação
 
 ```typescript
-// TAG: violation description — necessary action
-// TAG: #ticket description when tracked
-// SECURITY: potential SQL injection — use prepared statements
+// TAG: descrição da violação — ação necessária
+// TAG: #ticket descrição quando rastreado
+// SECURITY: possível SQL injection — usar prepared statements
 ```

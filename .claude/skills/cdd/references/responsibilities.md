@@ -26,7 +26,7 @@ Responsabilidades mede quantas **responsabilidades distintas** um método execut
 | 7 | **Logging / Auditoria** | Registrar eventos, enviar métricas, auditoria |
 | 8 | **Tratamento de erros** | Capturar exceções, mapear para erros de domínio |
 
-## Examples
+## Exemplos
 
 ```javascript
 // 1 responsabilidade → +0 ICP

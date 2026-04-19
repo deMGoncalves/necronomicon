@@ -4,7 +4,7 @@
 **Rule deMGoncalves:** [020 - Princípio de Abstrações Estáveis](../../../rules/020_principio-abstracoes-estaveis.md)
 **Pergunta:** Um pacote estável (I baixo) é abstrato (A alto)? Um pacote instável (I alto) é concreto (A baixo)?
 
-## What It Is
+## O Que É
 
 **Um pacote deve ser tão abstrato quanto for estável, e tão concreto quanto for instável.**
 
@@ -33,9 +33,9 @@ D ≈ 1 → Zona de Dor ou Zona de Inutilidade
 ```
 
 ### Zonas
-- **Zone of Pain** (A=0, I=0): Pacote concreto e estável → difícil de mudar
-- **Zone of Uselessness** (A=1, I=1): Pacote abstrato e instável → sem valor
-- **Main Sequence** (A + I = 1): Equilíbrio ideal
+- **Zona de Dor** (A=0, I=0): Pacote concreto e estável → difícil de mudar
+- **Zona de Inutilidade** (A=1, I=1): Pacote abstrato e instável → sem valor
+- **Sequência Principal** (A + I = 1): Equilíbrio ideal
 
 ## Quando está sendo violado
 

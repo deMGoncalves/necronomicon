@@ -1,73 +1,73 @@
-# SECURITY — Security Vulnerability
+# SECURITY — Vulnerabilidade de Segurança
 
-**Severity:** 🔴 Critical
-**Blocks PR:** Yes (NEVER merge with pending SECURITY)
+**Severidade:** 🔴 Crítica
+**Bloqueia PR:** Sim (NUNCA fazer merge com SECURITY pendente)
 
-## What It Is
+## O Que É
 
-Marks code with potential or confirmed security vulnerability. This is the most critical codetag — code marked with SECURITY must not go to production until resolved.
+Marca código com vulnerabilidade de segurança potencial ou confirmada. Esta é a codetag mais crítica — código marcado com SECURITY não deve ir para produção até ser resolvido.
 
-## When to Use
+## Quando Usar
 
-- Injection (SQL, Command, XSS) — unsanitized input in query
-- Sensitive data exposure — logs with PII, secrets in code
-- Authentication/Authorization failure — permission bypass
-- Insecure configuration — CORS *, debug in prod
+- Injeção (SQL, Command, XSS) — entrada do usuário não sanitizada em query
+- Exposição de dados sensíveis — logs com PII, secrets no código
+- Falha de autenticação/autorização — bypass de permissão
+- Configuração insegura — CORS *, debug em produção
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Bug without security implication → use BUG or FIXME
-- Code works but is ugly → use REFACTOR
-- Performance improvement → use OPTIMIZE
-- Temporary code without risk → use HACK
+- Bug sem implicação de segurança → usar BUG ou FIXME
+- Código funciona mas é feio → usar REFACTOR
+- Melhoria de performance → usar OPTIMIZE
+- Código temporário sem risco → usar HACK
 
-## Format
+## Formato
 
 ```typescript
-// SECURITY: vulnerability type - necessary action
-// SECURITY: [OWASP-XX] risk description
-// SECURITY: description - impact: what could happen
+// SECURITY: tipo de vulnerabilidade - ação necessária
+// SECURITY: [OWASP-XX] descrição do risco
+// SECURITY: descrição - impacto: o que poderia acontecer
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// SECURITY: SQL injection - use prepared statement
+// SECURITY: SQL injection - usar prepared statement
 function getUser(username: string) {
   return db.query(`SELECT * FROM users WHERE username = '${username}'`);
-  // Attacker can pass: ' OR '1'='1
+  // Atacante pode passar: ' OR '1'='1
 }
 
-// ✅ Fixed
+// ✅ Corrigido
 function getUser(username: string) {
   return db.query('SELECT * FROM users WHERE username = ?', [username]);
 }
 
-// SECURITY: XSS - don't use innerHTML with user input
+// SECURITY: XSS - não usar innerHTML com entrada do usuário
 function renderComment(comment: Comment): void {
-  element.innerHTML = comment.text; // ❌ Can execute <script>
+  element.innerHTML = comment.text; // ❌ Pode executar <script>
 }
 
-// ✅ Fixed
+// ✅ Corrigido
 function renderComment(comment: Comment): void {
   element.textContent = comment.text;
-  // Or if need HTML: element.innerHTML = DOMPurify.sanitize(comment.text);
+  // Ou se precisar de HTML: element.innerHTML = DOMPurify.sanitize(comment.text);
 }
 
-// SECURITY: API key exposed in code - move to env vars
+// SECURITY: chave de API exposta no código - mover para variáveis de ambiente
 const stripe = new Stripe('sk_live_abc123xyz789'); // ❌
 
-// ✅ Fixed
+// ✅ Corrigido
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Immediately — don't merge until resolved
-- **Action:** STOP → Assess risk → Fix immediately → Review with specialist → Test with attack cases → Document → Remove comment
-- **Converted to:** N/A (removed after correction)
+- **Prazo:** Imediatamente — não fazer merge até resolver
+- **Ação:** PARAR → Avaliar risco → Corrigir imediatamente → Revisar com especialista → Testar com casos de ataque → Documentar → Remover comentário
+- **Convertido em:** N/A (removido após correção)
 
-## Related to
+## Relacionado a
 
 - Rules: [030](../../../.claude/rules/030_proibicao-funcoes-inseguras.md), [042](../../../.claude/rules/042_configuracoes-via-ambiente.md)
-- Similar tags: SECURITY is security critical, FIXME is functional critical
+- Tags similares: SECURITY é crítico de segurança, FIXME é crítico funcional

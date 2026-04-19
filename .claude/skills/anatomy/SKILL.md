@@ -1,6 +1,6 @@
 ---
 name: anatomy
-description: Convention for organizing members within a class. Use when creating or refactoring classes, Web Components, or JavaScript modules — whenever the declaration order of members needs to be validated or corrected.
+description: Convenção para organização de membros dentro de uma classe. Use ao criar ou refatorar classes, Web Components ou módulos JavaScript — sempre que a ordem de declaração de membros precisar ser validada ou corrigida.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,36 +10,47 @@ metadata:
 
 # Anatomy
 
-Convention for organizing members within a class.
+Convenção para organização de membros dentro de uma classe.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating or refactoring classes to order members correctly.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Criação ou refatoração de qualquer classe, Web Component ou módulo JavaScript/TypeScript com múltiplos membros |
+| **Prerequisites** | Entendimento da distinção entre membros privados (`#`), getters/setters, constructor, métodos de instância e métodos estáticos |
+| **Constraints** | Não aplica a objetos literais ou funções puras; a ordem de 7 grupos é fixa e não pode ser reordenada por preferência |
+| **Scope** | Ordem de declaração dos 7 grupos de membros dentro de uma classe: privados → getters/setters → getters/setters estáticos → constructor → métodos → métodos estáticos → bloco static |
 
-## Structure
+---
 
-| Order | Member | Ordering |
+## Quando Usar
+
+Use ao criar ou refatorar classes para ordenar membros corretamente.
+
+## Estrutura
+
+| Ordem | Membro | Ordenação |
 |-------|--------|-----------|
-| 1 | Private members (`#name`) | Alphabetical |
-| 2 | Getters and Setters | Alphabetical |
-| 3 | Static Getters and Setters | Alphabetical |
+| 1 | Membros privados (`#name`) | Alfabética |
+| 2 | Getters e Setters | Alfabética |
+| 3 | Getters e Setters estáticos | Alfabética |
 | 4 | Constructor | - |
-| 5 | Methods | Alphabetical |
-| 6 | Static Methods | Alphabetical |
-| 7 | `static {}` Block | - |
+| 5 | Métodos | Alfabética |
+| 6 | Métodos estáticos | Alfabética |
+| 7 | Bloco `static {}` | - |
 
-## Additional Rules
+## Regras Adicionais
 
-- Getters and setters of the same name stay together (getter first)
-- Within each group, order alphabetically by name
-- Private members use `#` prefix
+- Getters e setters do mesmo nome ficam juntos (getter primeiro)
+- Dentro de cada grupo, ordenar alfabeticamente por nome
+- Membros privados usam prefixo `#`
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — incorrect order
+// ❌ Ruim — ordem incorreta
 class UserService {
   constructor(private repo: UserRepository) {}
 
@@ -52,7 +63,7 @@ class UserService {
   static create() { return new UserService(new UserRepository()) }
 }
 
-// ✅ Good — following Anatomy
+// ✅ Bom — seguindo Anatomy
 class UserService {
   // 1. Private
   #name = ''
@@ -63,7 +74,7 @@ class UserService {
   // 3. Constructor
   constructor(private repo: UserRepository) {}
 
-  // 4. Methods
+  // 4. Métodos
   findById(id: string) { return this.repo.find(id) }
 
   // 5. Static
@@ -71,17 +82,17 @@ class UserService {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|--------------|-------|
-| Ordering methods by usage or frequency | Makes locating difficult, use alphabetical order (rule 022) |
-| Mixing private and public members | Clear separation facilitates understanding (rule 010) |
-| Placing getters and setters in different locations | Getter/setter pair should stay together for cohesion |
-| Class with more than 50 lines | Violates rule 007, extract responsibilities |
+| O que evitar | Motivo |
+|--------------|--------|
+| Ordenar métodos por uso ou frequência | Dificulta localização, usar ordem alfabética (rule 022) |
+| Misturar membros privados e públicos | Separação clara facilita compreensão (rule 010) |
+| Colocar getters e setters em locais diferentes | Par getter/setter deve ficar junto para coesão |
+| Classe com mais de 50 linhas | Viola rule 007, extrair responsabilidades |
 
-## Rationale
+## Justificativa
 
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): predictable code reduces cognitive cost, consistent structure facilitates reading
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): organization facilitates identifying responsibilities of each member
-- [007 - Line Restriction in Classes](../../rules/007_restricao-linhas-classes.md): class with maximum of 50 lines, methods with maximum of 15 lines
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): código previsível reduz custo cognitivo, estrutura consistente facilita leitura
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): organização facilita identificar responsabilidades de cada membro
+- [007 - Restrição de Linhas em Classes](../../rules/007_restricao-linhas-classes.md): classe com máximo de 50 linhas, métodos com máximo de 15 linhas

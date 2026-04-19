@@ -1,26 +1,26 @@
 # Efficiency — Eficiência
 
-**Dimension:** Operation
-**Default Severity:** 🟠 Important
-**Key Question:** Does it have good performance?
+**Dimensão:** Operação
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** Tem boa performance?
 
-## What It Is
+## O que é
 
-The amount of computational resources and code required for software to perform its functions. Efficiency encompasses execution time (CPU), memory usage, bandwidth consumption, and I/O optimization.
+A quantidade de recursos computacionais e código necessários para que o software execute suas funções. Eficiência engloba tempo de execução (CPU), uso de memória, consumo de banda e otimização de I/O.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Critical performance (< 100ms required) | 🔴 Blocker |
-| List with 10k+ items | 🟠 Important |
-| List with < 100 items | 🟡 Suggestion |
-| Rarely executed code | 🟡 Suggestion |
+| Performance crítica (< 100ms exigidos) | 🔴 Blocker |
+| Lista com 10k+ itens | 🟠 Importante |
+| Lista com < 100 itens | 🟡 Sugestão |
+| Código raramente executado | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Inefficient - unnecessary O(n²)
+// ❌ Ineficiente - O(n²) desnecessário
 function findDuplicates(items) {
   const duplicates = [];
   for (let i = 0; i < items.length; i++) {
@@ -33,7 +33,7 @@ function findDuplicates(items) {
   return duplicates;
 }
 
-// ✅ Efficient - O(n) with Set
+// ✅ Eficiente - O(n) com Set
 function findDuplicates(items) {
   const seen = new Set();
   const duplicates = new Set();
@@ -47,24 +47,24 @@ function findDuplicates(items) {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// OPTIMIZE: This O(n²) loop can be O(n) with Set
-// PERFORMANCE: N+1 queries - consider batch loading
+// OPTIMIZE: Este loop O(n²) pode ser O(n) com Set
+// PERFORMANCE: Consultas N+1 - considerar batch loading
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Critical performance (< 100ms required) | 🔴 Blocker |
-| List with 10k+ items | 🟠 Important |
-| List with < 100 items | 🟡 Suggestion |
-| Rarely executed code | 🟡 Suggestion |
+| Performance crítica (< 100ms exigidos) | 🔴 Blocker |
+| Lista com 10k+ itens | 🟠 Importante |
+| Lista com < 100 itens | 🟡 Sugestão |
+| Código raramente executado | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 022 - Prioritization of Simplicity and Clarity
-- 001 - Single Indentation Level
-- 055 - Maximum Lines per Method
+- 022 - Priorização da Simplicidade e Clareza
+- 001 - Nível Único de Indentação
+- 055 - Limite Máximo de Linhas por Método

@@ -1,52 +1,52 @@
 # Premature Optimization
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 069
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 069
 
-## What It Is
+## O Que É
 
-Optimizing code based on suspected slowness without measurement, before a performance problem is demonstrated. Donald Knuth: *"Premature optimization is the root of all evil."*
+Otimizar código baseado em suspeita de lentidão sem medição, antes de um problema de performance ser demonstrado. Donald Knuth: *"A otimização prematura é a raiz de todo mal."*
 
-## Symptoms
+## Sintomas
 
-- Optimization implemented without prior measurement (profiling, benchmark, production metrics)
-- Complex algorithms where O(n²) would be imperceptible for the real data volume
-- Cache implemented before any performance testing
-- Unreadable code justified by "it's faster"
-- Micro-optimizations in hot paths that aren't hot paths (e.g., `for` vs `map` in 20-element array)
-- "Let's use Web Workers because it might be slow"
+- Otimização implementada sem medição prévia (profiling, benchmark, métricas de produção)
+- Algoritmos complexos onde O(n²) seria imperceptível para o volume real de dados
+- Cache implementado antes de qualquer teste de performance
+- Código ilegível justificado por "é mais rápido"
+- Micro-otimizações em hot paths que não são hot paths (ex: `for` vs `map` em array de 20 elementos)
+- "Vamos usar Web Workers porque pode ficar lento"
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Manual cache due to "suspicion" it would be slow
+// ❌ Cache manual por "suspeita" de que seria lento
 const _userCache = new Map();
 function getUser(id) {
   if (_userCache.has(id)) return _userCache.get(id);
-  const user = db.find(id);       // db already has connection pool and query cache
-  _userCache.set(id, user);        // cache without invalidation, without TTL, without limit
+  const user = db.find(id);       // o banco já tem connection pool e cache de queries
+  _userCache.set(id, user);        // cache sem invalidação, sem TTL, sem limite
   return user;
 }
 
-// ❌ Avoid Array.map because "it's slower than for loop"
-// in a 20-element array that runs once per second
+// ❌ Evitar Array.map porque "é mais lento que for loop"
+// em um array de 20 elementos que roda uma vez por segundo
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Make it work → Make it right → Make it fast
+// ✅ Fazer funcionar → Fazer certo → Fazer rápido
 function getUser(id) {
   return db.find(id);
 }
 
-// After measuring and confirming it's the bottleneck:
+// Após medir e confirmar que é o gargalo:
 // const getUser = memoize(db.find.bind(db), { ttl: 60_000, max: 500 });
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Premature Optimization — manual cache without evidence of need
-// TODO: Remove cache; add only if profiling shows real bottleneck
+// FIXME: Premature Optimization — cache manual sem evidência de necessidade
+// TODO: Remover cache; adicionar apenas se profiling mostrar gargalo real
 ```

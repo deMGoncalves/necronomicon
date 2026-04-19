@@ -1,25 +1,25 @@
 # Callback Hell
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 063
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 063
 
-## What It Is
+## O Que É
 
-Excessive nesting of asynchronous callbacks that creates a triangular structure ("pyramid") in code. Each asynchronous operation is passed as a callback of the previous one, making the flow impossible to follow. Asynchronous version of Pyramid of Doom.
+Aninhamento excessivo de callbacks assíncronos que cria uma estrutura triangular ("pirâmide") no código. Cada operação assíncrona é passada como callback da anterior, tornando o fluxo impossível de acompanhar. Versão assíncrona do Pyramid of Doom.
 
-## Symptoms
+## Sintomas
 
-- More than 3 levels of callback nesting
-- Indentation growing with each asynchronous operation
-- Duplicated error handling at each nesting level
-- `}) })` pattern at end of file — callback hell markers
-- Variables captured in closures across multiple levels
-- Impossible to read the flow from top to bottom
+- Mais de 3 níveis de aninhamento de callbacks
+- Indentação crescendo a cada operação assíncrona
+- Tratamento de erros duplicado em cada nível de aninhamento
+- Padrão `}) })` no final do arquivo — marcadores de callback hell
+- Variáveis capturadas em closures em múltiplos níveis
+- Impossível ler o fluxo de cima para baixo
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Pyramid of doom — each level is an asynchronous operation
+// ❌ Pirâmide do destino — cada nível é uma operação assíncrona
 getUser(userId, (err, user) => {
   if (err) return handleError(err);
   getOrders(user.id, (err, orders) => {
@@ -38,10 +38,10 @@ getUser(userId, (err, user) => {
 });
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ async/await — sequential and readable flow
+// ✅ async/await — fluxo sequencial e legível
 async function processInvoice(userId) {
   try {
     const user = await getUser(userId);
@@ -50,14 +50,14 @@ async function processInvoice(userId) {
     const total = await calculateTotal(products);
     await sendInvoice(user, total);
   } catch (err) {
-    handleError(err); // centralized handling
+    handleError(err); // tratamento centralizado
   }
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Callback Hell — 5 levels of callback nesting
-// TODO: Migrate to async/await with try/catch
+// FIXME: Callback Hell — 5 níveis de aninhamento de callbacks
+// TODO: Migrar para async/await com try/catch
 ```

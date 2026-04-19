@@ -1,6 +1,6 @@
 ---
 name: enum
-description: Convention for creating enums eliminating magic strings/numbers — when identifying repeated strings or numbers more than once, creating domain constants, or reviewing code with hardcoded literals in conditionals
+description: Convenção para criação de enums eliminando magic strings/numbers — ao identificar strings ou números repetidos mais de uma vez, criar constantes de domínio, ou revisar código com literais hardcoded em condicionais
 model: haiku
 allowed-tools: Write, Read, Edit, Glob, Grep
 metadata:
@@ -10,39 +10,50 @@ metadata:
 
 # Enum
 
-Convention for creating enums eliminating magic strings/numbers.
+Convenção para criação de enums eliminando magic strings/numbers.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when identifying literal values (strings or numbers) repeated more than 1x.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao identificar strings ou números literais repetidos 2+ vezes no mesmo módulo ou entre módulos; ao criar constantes de domínio (status, tipos, roles, atributos, eventos) |
+| **Prerequisites** | Identificação do módulo proprietário do conceito; rule 024 (Proibição de Constantes Mágicas) como critério de ativação |
+| **Constraints** | Enum deve ser congelado com `Object.freeze()`; valor literal único (1 ocorrência) não justifica enum; o módulo proprietário do conceito é o dono do enum |
+| **Scope** | Estrutura `Object.freeze({KEY: 'value'})` com nomenclatura `UPPER_SNAKE_CASE`; categorias (Status, Element, Property, Event, Type, Attribute); localização no módulo proprietário |
 
-## Conditions
+---
 
-| Condition | Action |
-|-----------|--------|
-| Value repeats 2+ times in same module | Create local enum |
-| Value used by multiple modules | Create enum in owner module and export |
+## Quando Usar
 
-## Nomenclature
+Use ao identificar valores literais (strings ou numbers) repetidos mais de 1x.
 
-| Type | File | Enum | Keys |
-|------|------|------|------|
-| DOM selectors | `element.js` | `Element` | `UPPER_SNAKE_CASE` |
-| CSS properties | `property.js` | `Property` | `UPPER_SNAKE_CASE` |
-| Events | `event.js` | `Event` | `UPPER_SNAKE_CASE` |
-| Status/States | `status.js` | `Status` | `UPPER_SNAKE_CASE` |
-| Types/Roles | `type.js` | `Type` | `UPPER_SNAKE_CASE` |
-| Attributes | `attribute.js` | `Attribute` | `UPPER_SNAKE_CASE` |
+## Condições
 
-## Rule
+| Condição | Ação |
+|----------|------|
+| Valor repetido 2+ vezes no mesmo módulo | Criar enum local |
+| Valor usado por múltiplos módulos | Criar enum no módulo proprietário e exportar |
 
-| Principle | Description |
+## Nomenclatura
+
+| Tipo | Arquivo | Enum | Keys |
+|------|---------|------|------|
+| Seletores DOM | `element.js` | `Element` | `UPPER_SNAKE_CASE` |
+| Propriedades CSS | `property.js` | `Property` | `UPPER_SNAKE_CASE` |
+| Eventos | `event.js` | `Event` | `UPPER_SNAKE_CASE` |
+| Status/Estados | `status.js` | `Status` | `UPPER_SNAKE_CASE` |
+| Tipos/Roles | `type.js` | `Type` | `UPPER_SNAKE_CASE` |
+| Atributos | `attribute.js` | `Attribute` | `UPPER_SNAKE_CASE` |
+
+## Regra
+
+| Princípio | Descrição |
 |-----------|-------------|
-| Ownership | Module that defines the concept owns the enum |
+| Propriedade | Módulo que define o conceito é dono do enum |
 
-## Enum Structure
+## Estrutura do Enum
 
 ```javascript
 export const Status = Object.freeze({
@@ -52,15 +63,15 @@ export const Status = Object.freeze({
 })
 ```
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — magic strings and numbers
+// ❌ Bad — magic strings e numbers
 if (order.status === 'pending') { /* ... */ }
 if (user.role === 'admin') { /* ... */ }
-const timeout = 3000  // what does this number mean?
+const timeout = 3000  // o que esse número significa?
 
-// ✅ Good — enums eliminate ambiguity
+// ✅ Good — enums eliminam ambiguidade
 enum OrderStatus { Pending = 'pending', Active = 'active', Cancelled = 'cancelled' }
 enum UserRole { Admin = 'admin', Editor = 'editor', Viewer = 'viewer' }
 const REQUEST_TIMEOUT_MS = 3000
@@ -68,18 +79,18 @@ const REQUEST_TIMEOUT_MS = 3000
 if (order.status === OrderStatus.Pending) { /* ... */ }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Repeated literal values | Create enum when value appears 2+ times (rule 024) |
-| Enum without Object.freeze | Violates rule 029, enum must be immutable |
-| Enum with non-descriptive values | Use values that reveal intention (rule 006) |
-| Magic numbers or magic strings | Replace with named enum (rule 024) |
-| Enum in wrong file | Owner module of concept defines the enum |
+| O que evitar | Razão |
+|--------------|-------|
+| Valores literais repetidos | Criar enum quando valor aparece 2+ vezes (rule 024) |
+| Enum sem Object.freeze | Viola rule 029, enum deve ser imutável |
+| Enum com valores não-descritivos | Usar valores que revelam intenção (rule 006) |
+| Magic numbers ou magic strings | Substituir por enum nomeado (rule 024) |
+| Enum no arquivo errado | Módulo proprietário do conceito define o enum |
 
-## Rationale
+## Justificativa
 
-- [024 - Prohibition of Magic Constants](../../rules/024_proibicao-constantes-magicas.md): literal values should be named constants for traceability and maintenance
-- [029 - Object Immutability](../../rules/029_imutabilidade-objetos-freeze.md): enums should be frozen with Object.freeze() to prevent accidental runtime modifications
-- [021 - Prohibition of Logic Duplication](../../rules/021_proibicao-duplicacao-logica.md): values should not be duplicated, centralize in enum
+- [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): valores literais devem ser constantes nomeadas para rastreabilidade e manutenção
+- [029 - Imutabilidade de Objetos](../../rules/029_imutabilidade-objetos-freeze.md): enums devem ser congelados com Object.freeze() para prevenir modificações acidentais em runtime
+- [021 - Proibição da Duplicação de Lógica](../../rules/021_proibicao-duplicacao-logica.md): valores não devem ser duplicados, centralizar em enum

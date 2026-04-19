@@ -1,28 +1,28 @@
-# Mapping @reviewer → Codetags
+# Mapeamento @architect → Codetags
 
-## Violation Severity → Tag
+## Severidade da Violação → Tag
 
-| Severity | Tag to use | Blocks PR? |
-|----------|------------|------------|
-| 🔴 Critical (rules 001-003, 007, 010...) | `FIXME` | Yes |
-| 🟠 High (rules 004-006, 011-020...) | `TODO` | No — should fix |
-| 🟡 Medium (rules 023, 026, 039...) | `XXX` | No — improvement expected |
-| 🔐 Critical security (CWE Injection, Auth) | `FIXME` | Yes |
-| 🔐 High security (CWE Crypto, SSRF) | `TODO` | No |
-| 🔐 Medium security (CWE Exposure) | `XXX` | No |
-| ⚡ Performance (ICP, Big-O) | `OPTIMIZE` | No |
-| ❓ Non-obvious decision | `NOTE` | No |
-| 🔄 Needs verification | `REVIEW` | No |
+| Severidade | Tag a usar | Bloqueia PR? |
+|------------|------------|--------------|
+| 🔴 Crítica (rules 001-003, 007, 010...) | `FIXME` | Sim |
+| 🟠 Alta (rules 004-006, 011-020...) | `TODO` | Não — deve corrigir |
+| 🟡 Média (rules 023, 026, 039...) | `XXX` | Não — melhoria esperada |
+| 🔐 Segurança crítica (CWE Injection, Auth) | `FIXME` | Sim |
+| 🔐 Segurança alta (CWE Crypto, SSRF) | `TODO` | Não |
+| 🔐 Segurança média (CWE Exposure) | `XXX` | Não |
+| ⚡ Performance (ICP, Big-O) | `OPTIMIZE` | Não |
+| ❓ Decisão não óbvia | `NOTE` | Não |
+| 🔄 Precisa verificação | `REVIEW` | Não |
 
-## @reviewer Flow
+## Fluxo do @architect
 
 ```
-@reviewer analyzes file
+@architect analisa o arquivo
     ↓
-Violation found → selects tag per table above
+Violação encontrada → seleciona tag conforme tabela acima
     ↓
-Inserts on line ABOVE violated section:
-// TAG: violation description — suggested correction
+Insere na linha ACIMA da seção violada:
+// TAG: descrição da violação — correção sugerida
     ↓
-Reports verdict: Approved / Attention / Rejected
+Reporta veredicto: Aprovado / Atenção / Rejeitado
 ```

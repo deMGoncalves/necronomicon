@@ -1,6 +1,6 @@
 ---
 name: story
-description: Convention for Storybook story structure — when creating or updating Storybook stories — when structuring component stories with variants, states and documentation
+description: Convenção para estrutura de stories no Storybook — ao criar ou atualizar stories no Storybook — ao estruturar stories de componentes com variantes, estados e documentação
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,78 +10,89 @@ metadata:
 
 # Story
 
-Convention for Storybook story structure.
+Convenção para estrutura de stories no Storybook.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating or updating component stories.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar ou atualizar stories no Storybook; ao estruturar stories de componentes com variantes, estados e documentação |
+| **Prerequisites** | Storybook instalado e configurado no projeto; componente Web Component ou framework implementado; skill `anatomy` |
+| **Constraints** | Arquivos de story devem ser JavaScript, não TypeScript; uma única story `Default` por arquivo; sem `play` functions ou testes de interação em stories (regra do projeto) |
+| **Scope** | Estrutura de export default (configuração), argTypes (documentação), controles de UI e função `render` para stories de Web Components |
 
-## Structure
+---
 
-| Element | Purpose |
-|---------|---------|
-| Import | Import component at top |
-| Export default | Storybook configuration |
-| Export Default | Default story with basic args |
+## Quando Usar
 
-## Configuration
+Use ao criar ou atualizar stories de componentes.
 
-| Property | Description |
-|----------|-------------|
-| title | Path in navigation menu |
-| tags | Tags for documentation generation |
-| parameters | Presentation settings |
-| argTypes | Control definitions and documentation |
-| render | Component rendering function |
+## Estrutura
+
+| Elemento | Propósito |
+|----------|-----------|
+| Import | Importar componente no topo |
+| Export default | Configuração do Storybook |
+| Export Default | Story default com args básicos |
+
+## Configuração
+
+| Propriedade | Descrição |
+|-------------|-----------|
+| title | Caminho no menu de navegação |
+| tags | Tags para geração de documentação |
+| parameters | Configurações de apresentação |
+| argTypes | Definições de controles e documentação |
+| render | Função de renderização do componente |
 
 ## ArgTypes
 
-| Field | Purpose |
-|-------|---------|
-| control | UI control type |
-| options | Available options for selection |
-| description | Attribute documentation |
-| table | Metadata and default values |
+| Campo | Propósito |
+|-------|-----------|
+| control | Tipo de controle de UI |
+| options | Opções disponíveis para seleção |
+| description | Documentação do atributo |
+| table | Metadados e valores default |
 
-## Control Types
+## Tipos de Controle
 
-| Type | Usage |
-|------|-------|
-| select | Selection between predefined options |
-| text | Free text input |
-| boolean | True/false toggle |
-| number | Numeric input |
-| color | Color picker |
+| Tipo | Uso |
+|------|-----|
+| select | Seleção entre opções predefinidas |
+| text | Entrada de texto livre |
+| boolean | Toggle true/false |
+| number | Entrada numérica |
+| color | Seletor de cor |
 
-## Rules
+## Regras
 
-| Rule | Description |
-|------|-------------|
-| File format | Use JavaScript, not TypeScript |
-| Exports | Single Default story per file |
-| Tests | No play functions or interaction tests |
-| Controls | Disable global controls |
-| Imports | Always import component at start |
-| Rendering | Create element via DOM API |
+| Regra | Descrição |
+|-------|-----------|
+| Formato de arquivo | Usar JavaScript, não TypeScript |
+| Exports | Uma única story Default por arquivo |
+| Testes | Sem play functions ou testes de interação |
+| Controles | Desabilitar controles globais |
+| Imports | Sempre importar componente no início |
+| Renderização | Criar elemento via API DOM |
 
-## Principles
+## Princípios
 
-| Principle | Application |
-|-----------|-------------|
-| Simplicity | Story should show basic component usage |
-| Isolation | Each story is independent |
-| Documentation | ArgTypes document behavior |
+| Princípio | Aplicação |
+|-----------|-----------|
+| Simplicidade | Story deve mostrar uso básico do componente |
+| Isolamento | Cada story é independente |
+| Documentação | ArgTypes documentam comportamento |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — story without metadata or variants
+// ❌ Ruim — story sem metadados ou variantes
 export default { component: Button }
 export const Default = {}
 
-// ✅ Good — structured story with metadata and variants
+// ✅ Bom — story estruturado com metadados e variantes
 import type { Meta, StoryObj } from '@storybook/web-components'
 
 const meta: Meta = {
@@ -99,18 +110,18 @@ export const Disabled: StoryObj = {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Multiple stories in same file | Single Default story per file (rule 010) |
-| Play functions or tests | Stories are for visualization, not tests |
-| Complex logic in render | Keep render simple and direct (rule 022) |
-| Undocumented controls | All argTypes should have description |
-| Stories without real example | Show real component use cases |
+| O que evitar | Razão |
+|--------------|-------|
+| Múltiplas stories no mesmo arquivo | Uma única story Default por arquivo (rule 010) |
+| Play functions ou testes | Stories são para visualização, não para testes |
+| Lógica complexa no render | Manter render simples e direto (rule 022) |
+| Controles sem documentação | Todos os argTypes devem ter description |
+| Stories sem exemplo real | Mostrar casos de uso reais do componente |
 
-## Rationale
+## Justificativa
 
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): simple stories focus on essentials, reducing cognitive complexity
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each story has single responsibility to demonstrate one component use case
-- [026 - Comment Quality](../../rules/026_qualidade-comentarios-porque.md): documentation via argTypes is allowed as it explains "what" the argument does, not code
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): stories simples focam no essencial, reduzindo complexidade cognitiva
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada story tem responsabilidade única de demonstrar um caso de uso do componente
+- [026 - Qualidade de Comentários](../../rules/026_qualidade-comentarios-porque.md): documentação via argTypes é permitida pois explica "o que" o argumento faz, não código

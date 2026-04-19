@@ -1,33 +1,33 @@
-# Rule 3 — Primitive Encapsulation
+# Regra 3 — Wrap Primitives (Encapsulamento de Primitivos)
 
-**deMGoncalves Rule:** CRIACIONAL-003
-**Question:** Does this primitive represent a domain concept?
+**Regra deMGoncalves:** CRIACIONAL-003
+**Questão:** Este primitivo representa um conceito de domínio?
 
-## What It Is
+## O que é
 
-Requires that primitive types (such as `number`, `boolean`) and the `String` class that represent domain concepts (e.g., Email, CPF, Currency) be encapsulated in their own immutable Value Objects.
+Exige que tipos primitivos (como `number`, `boolean`) e a classe `String` que representam conceitos de domínio (ex.: Email, CPF, Moeda) sejam encapsulados em seus próprios Value Objects imutáveis.
 
-## When to Apply
+## Quando Aplicar
 
-- Method receives `string` for Email, CPF, URL
-- Method receives `number` for Currency, Percentage, ID
-- Method receives `string` repeatedly in same contexts
-- Primitive validation is duplicated in multiple locations
+- Método recebe `string` para Email, CPF, URL
+- Método recebe `number` para Moeda, Percentual, ID
+- Método recebe `string` repetidamente nos mesmos contextos
+- Validação de primitivo está duplicada em múltiplos locais
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class UserService {
   createUser(email: string, cpf: string): User {
-    // Validation duplicated in multiple locations
-    if (!email.includes('@')) throw new Error('Invalid email');
-    if (cpf.length !== 11) throw new Error('Invalid CPF');
+    // Validação duplicada em múltiplos locais
+    if (!email.includes('@')) throw new Error('E-mail inválido');
+    if (cpf.length !== 11) throw new Error('CPF inválido');
     // ...
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class Email {
@@ -35,7 +35,7 @@ class Email {
 
   constructor(email: string) {
     if (!email.includes('@')) {
-      throw new Error('Invalid email');
+      throw new Error('E-mail inválido');
     }
     this.value = email;
     Object.freeze(this);
@@ -51,7 +51,7 @@ class CPF {
 
   constructor(cpf: string) {
     if (cpf.length !== 11) {
-      throw new Error('Invalid CPF');
+      throw new Error('CPF inválido');
     }
     this.value = cpf;
     Object.freeze(this);
@@ -64,17 +64,17 @@ class CPF {
 
 class UserService {
   createUser(email: Email, cpf: CPF): User {
-    // Validation already done in Value Objects constructor
+    // Validação já feita no construtor dos Value Objects
   }
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Generic Primitives**: Counters (`i`, `index`), control booleans (`isValid`), temporal deltas
+- **Primitivos Genéricos**: Contadores (`i`, `index`), booleanos de controle (`isValid`), deltas temporais
 
-## Related Rules
+## Regras Relacionadas
 
-- [008 - No Getters/Setters Prohibition](rule-08-no-getters-setters.md): reinforces
-- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reinforces
-- [024 - No Magic Constants Prohibition](../../rules/024_proibicao-constantes-magicas.md): reinforces
+- [008 - Proibição de Getters/Setters](rule-08-no-getters-setters.md): reforça
+- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reforça
+- [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): reforça

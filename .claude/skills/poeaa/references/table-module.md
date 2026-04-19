@@ -1,28 +1,28 @@
 # Table Module
 
-**Layer:** Domain Logic
-**Complexity:** Moderate
-**Intent:** A single instance handles the business logic for all rows in a database table or view.
+**Camada:** Domain Logic
+**Complexidade:** Moderada
+**Intenção:** Uma única instância trata a lógica de negócio de todas as linhas de uma tabela ou view do banco de dados.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Moderate business logic strongly tied to table structure
-- Applications with Record Set (DataSet) as central data abstraction
-- Legacy or reporting systems where operations are per data set
-- When logic is more about set manipulation than individual objects
+- Lógica de negócio moderada fortemente ligada à estrutura da tabela
+- Aplicações com Record Set (DataSet) como abstração central de dados
+- Sistemas legados ou de relatórios onde as operações são por conjunto de dados
+- Quando a lógica trata mais de manipulação de conjuntos do que de objetos individuais
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When domain has objects with rich behavior and their own identity (use Domain Model)
-- When logic goes beyond simple set operations
-- In modern systems without Record Set infrastructure
+- Quando o domínio tem objetos com comportamento rico e identidade própria (use Domain Model)
+- Quando a lógica vai além de operações simples de conjunto
+- Em sistemas modernos sem infraestrutura de Record Set
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// One class per table, operates on record sets
+// Uma classe por tabela, opera em conjuntos de registros
 class OrderTable {
   constructor(private readonly db: Database) {}
 
@@ -50,13 +50,13 @@ class OrderTable {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [table-data-gateway.md](table-data-gateway.md): depends — Table Data Gateway is the natural data access pattern for Table Module
-- [domain-model.md](domain-model.md): substitutes when rich behavior of individual objects is needed
-- [rule 022 - Prioritization of Simplicity and Clarity](../../../rules/022_priorizacao-simplicidade-clareza.md): complements — suitable for moderately complex domains
+- [table-data-gateway.md](table-data-gateway.md): depende — Table Data Gateway é o padrão natural de acesso a dados para Table Module
+- [domain-model.md](domain-model.md): substitui quando é necessário comportamento rico de objetos individuais
+- [regra 022 - Priorização da Simplicidade e Clareza](../../../rules/022_priorizacao-simplicidade-clareza.md): complementa — adequado para domínios moderadamente complexos
 
 ---
 
-**PoEAA Layer:** Domain Logic
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Domain Logic
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

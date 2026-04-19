@@ -1,45 +1,45 @@
 # Shared Mutable State
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 070
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 070
 
-## What It Is
+## O Que É
 
-Multiple modules, functions or threads read and modify the same object without explicit coordination. Any part of the system can change state at any time, making program behavior unpredictable and difficult to trace.
+Múltiplos módulos, funções ou threads leem e modificam o mesmo objeto sem coordenação explícita. Qualquer parte do sistema pode alterar estado a qualquer momento, tornando o comportamento do programa imprevisível e difícil de rastrear.
 
-## Symptoms
+## Sintomas
 
-- Domain object passed by reference and modified in two or more distinct modules
-- Module or global variable changed by multiple functions without explicit coordination
-- Domain objects passed by reference and modified at various points
-- Global or module variables changed by multiple functions
-- Bugs that emerge far from modification point
-- Tests that fail depending on execution order (sign of shared state)
-- Array or object used as "communication buffer" between system parts without copying
-- Different behavior between first and second call of same function
+- Objeto de domínio passado por referência e modificado em dois ou mais módulos distintos
+- Variável de módulo ou global alterada por múltiplas funções sem coordenação explícita
+- Objetos de domínio passados por referência e modificados em vários pontos
+- Variáveis globais ou de módulo alteradas por múltiplas funções
+- Bugs que surgem longe do ponto de modificação
+- Testes que falham dependendo da ordem de execução (sinal de estado compartilhado)
+- Array ou objeto usado como "buffer de comunicação" entre partes do sistema sem cópia
+- Comportamento diferente entre a primeira e a segunda chamada da mesma função
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Shared and mutable cart state
+// ❌ Estado de carrinho compartilhado e mutável
 const cart = { items: [], total: 0 };
 
 function addItem(item) {
-  cart.items.push(item);        // mutates global array
-  cart.total += item.price;     // mutates global property
+  cart.items.push(item);        // muta array global
+  cart.total += item.price;     // muta propriedade global
 }
 
 function applyDiscount(percent) {
-  cart.total = cart.total * (1 - percent); // mutates again
+  cart.total = cart.total * (1 - percent); // muta novamente
 }
 
-// Who is responsible for cart.total now? Nobody knows for sure.
+// Quem é responsável por cart.total agora? Ninguém sabe com certeza.
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Immutable state — each transformation returns new object
+// ✅ Estado imutável — cada transformação retorna novo objeto
 function addItem(cart, item) {
   return Object.freeze({
     items: [...cart.items, item],
@@ -54,14 +54,14 @@ function applyDiscount(cart, percent) {
   });
 }
 
-// Each module receives and returns immutable versions — traceable and testable
+// Cada módulo recebe e retorna versões imutáveis — rastreável e testável
 const cart1 = addItem(emptyCart, item);
 const cart2 = applyDiscount(cart1, 0.1);
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Shared Mutable State — cart mutated by multiple functions
-// TODO: Make immutable: each function returns new object with Object.freeze()
+// FIXME: Shared Mutable State — cart mutado por múltiplas funções
+// TODO: Tornar imutável: cada função retorna novo objeto com Object.freeze()
 ```

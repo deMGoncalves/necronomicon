@@ -1,24 +1,24 @@
 # Visitor
 
-**Category:** Behavioral
-**Intent:** Represent an operation to be performed on elements of an object structure, allowing to define new operation without changing the classes of the elements.
+**Categoria:** Comportamental
+**Intenção:** Representar uma operação a ser executada nos elementos de uma estrutura de objetos, permitindo definir novas operações sem alterar as classes dos elementos.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Execute operations on complex object structures (ASTs, document trees)
-- Add operations to classes without modifying them (respects OCP)
-- When there are distinct operations over a stable object hierarchy
-- Reports, validations and transformations over heterogeneous structures
+- Executar operações em estruturas de objetos complexas (ASTs, árvores de documentos)
+- Adicionar operações às classes sem modificá-las (respeita OCP)
+- Quando há operações distintas sobre uma hierarquia estável de objetos
+- Relatórios, validações e transformações sobre estruturas heterogêneas
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When the element hierarchy changes frequently — adding new type requires changing all Visitors
-- For simple structures where direct polymorphism is sufficient
-- When there's only one operation to execute over the structure
+- Quando a hierarquia de elementos muda com frequência — adicionar novo tipo exige alterar todos os Visitors
+- Para estruturas simples onde polimorfismo direto é suficiente
+- Quando há apenas uma operação a executar sobre a estrutura
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Visitor {
@@ -46,22 +46,22 @@ class HtmlExporter implements Visitor {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const exporter = new HtmlExporter()
 elements.map(el => el.accept(exporter)).join('')
 ```
 
-## Related to
+## Relacionado a
 
-- [composite.md](composite.md): complements — Visitor frequently applied over Composite structures to execute distinct operations
-- [iterator.md](iterator.md): complements — Iterator traverses structure; Visitor executes operation on each element
-- [interpreter.md](interpreter.md): complements — Visitor can traverse the Interpreter's expression tree
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new operation via new Visitor without changing element classes
-- [rule 010 - Single Responsibility Principle](../../../rules/010_principio-responsabilidade-unica.md): reinforces — each Visitor has a single operation responsibility
+- [composite.md](composite.md): complementa — Visitor frequentemente aplicado sobre estruturas Composite para executar operações distintas
+- [iterator.md](iterator.md): complementa — Iterator percorre a estrutura; Visitor executa operação em cada elemento
+- [interpreter.md](interpreter.md): complementa — Visitor pode percorrer a árvore de expressões do Interpreter
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione nova operação via novo Visitor sem alterar as classes de elemento
+- [rule 010 - Princípio da Responsabilidade Única](../../../rules/010_principio-responsabilidade-unica.md): reforça — cada Visitor tem responsabilidade de uma única operação
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

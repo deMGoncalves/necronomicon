@@ -1,25 +1,25 @@
 # Overengineering
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 064
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 064
 
-## What It Is
+## O Que É
 
-Designing or implementing a solution much more complex than the problem requires. Adding abstractions, layers, design patterns, plugin systems, or configurability before there's evidence of real need.
+Projetar ou implementar uma solução muito mais complexa do que o problema requer. Adicionar abstrações, camadas, design patterns, sistemas de plugins ou configurabilidade antes de haver evidência de necessidade real.
 
-## Symptoms
+## Sintomas
 
-- Introducing pattern without clear problem being solved (e.g., Strategy pattern without algorithm variation)
-- Interfaces with a single implementer "to facilitate future testing"
-- Configuration systems for something that will never change
-- 5-layer abstractions for a CRUD operation
-- Design Patterns applied where direct code would work
-- "I made it generic to reuse later"
+- Introduzir padrão sem problema claro sendo resolvido (ex: padrão Strategy sem variação de algoritmos)
+- Interfaces com um único implementador "para facilitar testes futuros"
+- Sistemas de configuração para algo que nunca vai mudar
+- 5 camadas de abstração para uma operação CRUD
+- Design Patterns aplicados onde código direto funcionaria
+- "Deixei genérico para reutilizar depois"
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Plugin system to save a user in database
+// ❌ Sistema de plugins para salvar um usuário no banco
 class UserRepository {
   constructor(storageStrategy) { this.strategy = storageStrategy; }
   save(user) { return this.strategy.persist(user); }
@@ -30,23 +30,23 @@ class DatabaseStorageStrategy {
   persist(user) { return this.adapter.execute('INSERT', user); }
 }
 
-// There never was another storage. There never will be.
+// Nunca houve outro storage. Nunca haverá.
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Straight to the point — refactor when need is real (YAGNI + KISS)
+// ✅ Direto ao ponto — refatorar quando a necessidade for real (YAGNI + KISS)
 async function saveUser(user) {
   return db.users.create(user);
 }
 
-// Only add abstraction when there are REAL multiple storages
+// Adicionar abstração apenas quando houver MÚLTIPLOS storages REAIS
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Overengineering — 4 layers of abstraction for simple db.create()
-// TODO: Simplify: use db.users.create() directly until 2nd storage exists
+// FIXME: Overengineering — 4 camadas de abstração para simples db.create()
+// TODO: Simplificar: usar db.users.create() diretamente até existir 2º storage
 ```

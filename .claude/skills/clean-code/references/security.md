@@ -1,36 +1,36 @@
-# Security (Rules 030, 031, 042)
+# Segurança (Regras 030, 031, 042)
 
-## Rules
+## Regras
 
-- **030**: Prohibition of `eval()`, `new Function()` and hardcoded secrets
-- **031**: Prohibition of relative imports (require path aliases)
-- **042**: Secrets via environment variables
+- **030**: Proibição de `eval()`, `new Function()` e secrets hardcoded
+- **031**: Proibição de imports relativos (exigir path aliases)
+- **042**: Secrets via variáveis de ambiente
 
 ## Checklist
 
-- [ ] No `eval()` or `new Function()` (except isolated build tooling)
-- [ ] No user input concatenation in queries/shell commands
-- [ ] No imports with `../` (use path aliases like `@utils/`)
-- [ ] API keys via `process.env` or secret manager
-- [ ] No secrets in code or versioned
+- [ ] Sem `eval()` ou `new Function()` (exceto build tooling isolado)
+- [ ] Sem concatenação de entrada do usuário em queries/comandos shell
+- [ ] Sem imports com `../` (usar path aliases como `@utils/`)
+- [ ] Chaves de API via `process.env` ou gerenciador de secrets
+- [ ] Sem secrets no código ou versionados
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
+// ❌ Violações
 // eval (030)
 function calculate(expression) {
-  return eval(expression); // RCE if expression from user
+  return eval(expression); // RCE se expression vier do usuário
 }
 
-// Hardcoded secret (030, 042)
+// Secret hardcoded (030, 042)
 const client = new ApiClient({ apiKey: 'sk-prod-abc123xyz' });
 
-// Relative import (031)
-import { helper } from '../../../utils/helper'; // breakable
+// Import relativo (031)
+import { helper } from '../../../utils/helper'; // quebrável
 
-// ✅ Compliance
-// No eval
+// ✅ Conformidade
+// Sem eval
 function calculate(a: number, operator: string, b: number) {
   const ops = {
     '+': (x, y) => x + y,
@@ -41,15 +41,15 @@ function calculate(a: number, operator: string, b: number) {
   return ops[operator]?.(a, b) ?? null;
 }
 
-// Secrets via env
+// Secrets via variável de ambiente
 const client = new ApiClient({
-  apiKey: process.env.API_KEY // injected via .env
+  apiKey: process.env.API_KEY // injetado via .env
 });
 
 // Path alias
 import { helper } from '@utils/helper';
 
-// tsconfig.json or vite.config.js
+// tsconfig.json ou vite.config.js
 {
   "compilerOptions": {
     "paths": {
@@ -59,7 +59,7 @@ import { helper } from '@utils/helper';
 }
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-- `eval` creates dynamic coupling impossible to analyze statically
-- Path aliases facilitate refactorings (imports don't break when moving files)
+- `eval` cria acoplamento dinâmico impossível de analisar estaticamente
+- Path aliases facilitam refatorações (imports não quebram ao mover arquivos)

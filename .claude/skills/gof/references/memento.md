@@ -1,24 +1,24 @@
 # Memento
 
-**Category:** Behavioral
-**Intent:** Without violating encapsulation, capture and externalize an object's internal state so it can be restored to that state later.
+**Categoria:** Comportamental
+**Intenção:** Sem violar o encapsulamento, capturar e externalizar o estado interno de um objeto para que ele possa ser restaurado para esse estado posteriormente.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Implement undo/redo with encapsulation preservation
-- State snapshots for rollback
-- Save and restore game state
-- Checkpoints in long processes
+- Implementar undo/redo com preservação do encapsulamento
+- Snapshots de estado para rollback
+- Salvar e restaurar estado de jogo
+- Checkpoints em processos longos
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When saving mementos too frequently consumes excessive memory without control (rule 069)
-- When internal state is already immutable — no need for snapshot
-- When the object has external references that cannot be captured in snapshot
+- Quando salvar mementos com muita frequência consome memória excessiva sem controle (rule 069)
+- Quando o estado interno já é imutável — snapshot não é necessário
+- Quando o objeto tem referências externas que não podem ser capturadas no snapshot
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class EditorMemento {
@@ -49,7 +49,7 @@ class History {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const history = new History()
@@ -58,14 +58,14 @@ editor.type('X')
 editor.restore(history.pop()!)
 ```
 
-## Related to
+## Relacionado a
 
-- [command.md](command.md): complements — Command records operations for undo; Memento saves state snapshots for rollback
-- [state.md](state.md): complements — State defines transitions; Memento can save and restore object states
-- [rule 029 - Object Immutability](../../../rules/029_imutabilidade-objetos-freeze.md): reinforces — EditorMemento should be immutable after creation to ensure snapshot integrity
-- [rule 069 - Prohibition of Premature Optimization](../../../rules/069_proibicao-otimizacao-prematura.md): reinforces — saving mementos excessively can consume memory without real need
+- [command.md](command.md): complementa — Command registra operações para undo; Memento salva snapshots de estado para rollback
+- [state.md](state.md): complementa — State define transições; Memento pode salvar e restaurar estados de objetos
+- [rule 029 - Imutabilidade de Objetos](../../../rules/029_imutabilidade-objetos-freeze.md): reforça — EditorMemento deve ser imutável após criação para garantir integridade do snapshot
+- [rule 069 - Proibição de Otimização Prematura](../../../rules/069_proibicao-otimizacao-prematura.md): reforça — salvar mementos excessivamente pode consumir memória sem necessidade real
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

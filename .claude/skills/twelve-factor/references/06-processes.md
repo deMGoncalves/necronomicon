@@ -1,46 +1,46 @@
-# Factor 06 — Processes
+# Fator 06 — Processes
 
-**deMGoncalves Rule:** [045 - Stateless Processes](../../../rules/045_processos-stateless.md)
-**Question:** Stateless processes + share-nothing (state in backing service)?
+**Regra deMGoncalves:** [045 - Processos Stateless](../../../rules/045_processos-stateless.md)
+**Questão:** Processos stateless + share-nothing (estado em backing service)?
 
-## What It Is
+## O que é
 
-Application processes must be **stateless** (no state) and **share-nothing**. Any data that needs to persist must be stored in a stateful backing service (database, distributed cache, object storage).
+Os processos da aplicação devem ser **stateless** (sem estado) e **share-nothing**. Qualquer dado que precise persistir deve ser armazenado em um serviço de apoio com estado (banco de dados, cache distribuído, object storage).
 
-**State in memory/local filesystem prevents horizontal scalability.**
+**Estado em memória/filesystem local impede escalabilidade horizontal.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] Zero session state storage in local memory (use Redis, database)
-- [ ] Zero dependency on local filesystem files between requests
-- [ ] Process can restart at any time without user data loss
+- [ ] Zero armazenamento de estado de sessão em memória local (usar Redis, banco de dados)
+- [ ] Zero dependência de arquivos do filesystem local entre requisições
+- [ ] Processo pode reiniciar a qualquer momento sem perda de dados do usuário
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Session in local memory ❌
-const sessions = new Map();  // lost on restart
+// Sessão em memória local ❌
+const sessions = new Map();  // perdida no restart
 app.post('/login', (req, res) => {
   sessions.set(req.body.userId, { token: '...' });
 });
 
-// Local filesystem as storage ❌
+// Filesystem local como storage ❌
 app.post('/upload', (req, res) => {
   fs.writeFileSync('/tmp/uploads/' + req.file.name, req.file.data);
-  // ❌ file won't be available in another process
+  // ❌ arquivo não estará disponível em outro processo
 });
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Session in backing service ✅
+// Sessão em backing service ✅
 const redis = new RedisClient(process.env.REDIS_URL);
 app.post('/login', async (req, res) => {
   await redis.set(`session:${userId}`, JSON.stringify({ token: '...' }));
 });
 
-// Upload to object storage ✅
+// Upload para object storage ✅
 const s3 = new S3Client({ endpoint: process.env.S3_ENDPOINT });
 app.post('/upload', async (req, res) => {
   await s3.putObject({
@@ -51,9 +51,9 @@ app.post('/upload', async (req, res) => {
 });
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Session storage in local memory — move to Redis
+// FIXME: Armazenamento de sessão em memória local — mover para Redis
 const userSessions = new Map<string, Session>();
 ```

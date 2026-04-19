@@ -1,39 +1,39 @@
-# Testing (Rule 032)
+# Testes (Regra 032)
 
-## Rule
+## Regra
 
-- **032**: Coverage ≥85% for domain/business modules (AAA pattern)
+- **032**: Cobertura ≥85% para módulos de domínio/negócio (padrão AAA)
 
 ## Checklist
 
-- [ ] Line Coverage ≥85% in domain/business (Use Cases, Entities)
-- [ ] No control logic (`if`, `for`, `while`) inside tests
-- [ ] Each test focuses on 1-2 assertions (maximum)
-- [ ] AAA structure (Arrange, Act, Assert)
+- [ ] Cobertura de linha ≥85% em domínio/negócio (Use Cases, Entidades)
+- [ ] Sem lógica de controle (`if`, `for`, `while`) dentro dos testes
+- [ ] Cada teste foca em 1-2 assertivas (máximo)
+- [ ] Estrutura AAA (Arrange, Act, Assert)
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
-test('user operations', () => {
+// ❌ Violações
+test('operações de usuário', () => {
   const user = createUser({ name: 'Alice' });
 
-  // Control logic in test
+  // Lógica de controle no teste
   if (user.isAdmin) {
     expect(user.permissions).toContain('admin');
   } else {
     expect(user.permissions).toContain('user');
   }
 
-  // Multiple unrelated assertions
+  // Múltiplas assertivas não relacionadas
   expect(user.name).toBe('Alice');
   expect(user.email).toContain('@');
   expect(user.age).toBeGreaterThan(0);
 });
 
-// ✅ Compliance
+// ✅ Conformidade
 describe('User', () => {
-  test('should create user with provided name', () => {
+  test('deve criar usuário com o nome fornecido', () => {
     // Arrange
     const input = { name: 'Alice', email: 'alice@example.com' };
 
@@ -44,15 +44,15 @@ describe('User', () => {
     expect(user.name).toBe('Alice');
   });
 
-  test('should validate email during creation', () => {
+  test('deve validar e-mail durante a criação', () => {
     // Arrange
-    const input = { name: 'Bob', email: 'invalid' };
+    const input = { name: 'Bob', email: 'invalido' };
 
     // Act & Assert
     expect(() => createUser(input)).toThrow(EmailInvalidError);
   });
 
-  test('admin should have administrator permission', () => {
+  test('admin deve ter permissão de administrador', () => {
     // Arrange
     const admin = createUser({ name: 'Admin', role: 'admin' });
 
@@ -64,8 +64,8 @@ describe('User', () => {
   });
 });
 
-// Explicit AAA structure
-test('should calculate discount for premium user', () => {
+// Estrutura AAA explícita
+test('deve calcular desconto para usuário premium', () => {
   // Arrange
   const user = { premium: true, purchases: 15 };
 
@@ -77,8 +77,8 @@ test('should calculate discount for premium user', () => {
 });
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-- Tests without control logic are easier to understand
-- AAA makes purpose and expectation explicit
-- High coverage ensures CC_base was exercised
+- Testes sem lógica de controle são mais fáceis de entender
+- AAA torna o propósito e a expectativa explícitos
+- Alta cobertura garante que CC_base foi exercido

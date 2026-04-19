@@ -1,25 +1,25 @@
 # Lava Flow (Dead Code / Zombie Code)
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 056
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 056
 
-## What It Is
+## O Que É
 
-Code that is no longer used but remains in the system because no one is sure if it can be safely removed. Like lava that solidifies and hardens, this code becomes a permanent obstacle to maintenance. Abandoned, commented or never-called code.
+Código que não é mais utilizado mas permanece no sistema porque ninguém tem certeza se pode ser removido com segurança. Como lava que solidifica e endurece, este código se torna um obstáculo permanente à manutenção. Código abandonado, comentado ou nunca chamado.
 
-## Symptoms
+## Sintomas
 
-- Functions, classes or modules never called/executed
-- Commented code with markers (`// old version`, `// deprecated`, `// TODO remove`)
-- Imports of modules/packages that are never referenced
-- `if` or `switch` branches that are never executed (test coverage = 0%)
-- Variables declared and never read
-- Entire files that no one knows what they're for
+- Funções, classes ou módulos nunca chamados/executados
+- Código comentado com marcadores (`// versão antiga`, `// deprecated`, `// TODO remover`)
+- Imports de módulos/pacotes que nunca são referenciados
+- Branches de `if` ou `switch` que nunca são executados (cobertura de teste = 0%)
+- Variáveis declaradas e nunca lidas
+- Arquivos inteiros que ninguém sabe para que servem
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Functions no one calls, accumulated commented code
+// ❌ Funções que ninguém chama, código comentado acumulado
 function calculateOldDiscount(price) { // deprecated - use calculateDiscount
   return price * 0.1;
 }
@@ -29,25 +29,25 @@ function calculateOldDiscount(price) { // deprecated - use calculateDiscount
 // }
 
 function getUser(id) {
-  // const cache = loadCache(); // removed in 2023 but kept for safety
+  // const cache = loadCache(); // removido em 2023 mas mantido por segurança
   return db.find(id);
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Only what is used exists in code
+// ✅ Só existe o que é usado no código
 function getUser(id) {
   return db.find(id);
 }
 
-// Dead code eliminated — version control keeps history
+// Código morto eliminado — o controle de versão guarda o histórico
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Lava Flow — calculateOldDiscount never called, accumulated commented code
-// TODO: Remove dead code; git keeps history
+// FIXME: Lava Flow — calculateOldDiscount nunca chamado, código comentado acumulado
+// TODO: Remover código morto; o git guarda o histórico
 ```

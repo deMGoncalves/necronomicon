@@ -1,78 +1,78 @@
-# DEPRECATED — Obsolete Code to be Removed
+# DEPRECATED — Código Obsoleto a Ser Removido
 
-**Severity:** 🟠 High
-**Blocks PR:** No (but must follow timeline)
+**Severidade:** 🟠 Alta
+**Bloqueia PR:** Não (mas deve seguir o cronograma)
 
-## What It Is
+## O Que É
 
-Marks obsolete code or functionality that will be removed in future version. Indicates better alternative exists and current usage should be migrated.
+Marca código ou funcionalidade obsoleta que será removida em versão futura. Indica que existe uma alternativa melhor e o uso atual deve ser migrado.
 
-## When to Use
+## Quando Usar
 
-- API being discontinued (v1 endpoint being replaced by v2)
-- Function with better replacement (old helper with new implementation)
-- Abandoned pattern (approach no longer maintained)
-- Dependency to be removed (library being changed)
+- API sendo descontinuada (endpoint v1 sendo substituído por v2)
+- Função com substituto melhor (helper antigo com nova implementação)
+- Padrão abandonado (abordagem que não é mais mantida)
+- Dependência a ser removida (biblioteca sendo trocada)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Code with bug → use FIXME or BUG
-- Temporary code → use HACK
-- Code to improve → use REFACTOR
-- Removed code → delete, don't mark
+- Código com bug → usar FIXME ou BUG
+- Código temporário → usar HACK
+- Código a melhorar → usar REFACTOR
+- Código removido → deletar, não marcar
 
-## Format
+## Formato
 
 ```typescript
-// DEPRECATED: use X instead - remove in vY.Z
-// @deprecated since v1.2 - use newFunction()
-// DEPRECATED: [timeline] migration description
+// DEPRECATED: usar X em vez disso - remover na vY.Z
+// @deprecated desde v1.2 - usar novaFuncao()
+// DEPRECATED: [cronograma] descrição da migração
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// DEPRECATED: use calculateTotalV2() - remove in v3.0
-// This function doesn't consider regional taxes
+// DEPRECATED: usar calculateTotalV2() - remover na v3.0
+// Esta função não considera impostos regionais
 function calculateTotal(items: Item[]): number {
   return items.reduce((sum, item) => sum + item.price, 0);
 }
 
-// New recommended function
+// Nova função recomendada
 function calculateTotalV2(items: Item[], region: string): number {
   const subtotal = items.reduce((sum, item) => sum + item.price, 0);
   return applyRegionalTax(subtotal, region);
 }
 
 /**
- * @deprecated since v2.0 - use newFunction() instead
+ * @deprecated desde v2.0 - usar newFunction() em vez disso
  * @see newFunction
  */
 function oldFunction(): void {
   if (process.env.NODE_ENV === 'development') {
-    console.warn('oldFunction() is deprecated. Use newFunction() instead.');
+    console.warn('oldFunction() está obsoleto. Use newFunction().');
   }
   // ...
 }
 
-// DEPRECATED: JSON configuration - migrate to environment variables
-// JSON config will be removed in v4.0 (twelve-factor compliance)
+// DEPRECATED: configuração JSON - migrar para variáveis de ambiente
+// Configuração JSON será removida na v4.0 (conformidade twelve-factor)
 const config = require('./config.json');
 
-// New pattern
+// Novo padrão
 const config = {
   apiUrl: process.env.API_URL,
   apiKey: process.env.API_KEY,
 };
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Announcement → Grace period (dev warnings) → Warning (optional prod warnings) → Removal
-- **Action:** Document alternative → Define timeline → Communicate consumers → Add runtime warning (dev) → Migrate internal uses → Remove after period
-- **Converted to:** Code removed after deprecation period
+- **Prazo:** Anúncio → Período de carência (avisos em dev) → Aviso (avisos opcionais em prod) → Remoção
+- **Ação:** Documentar alternativa → Definir cronograma → Comunicar consumidores → Adicionar aviso em runtime (dev) → Migrar usos internos → Remover após período
+- **Convertido em:** Código removido após período de deprecação
 
-## Related to
+## Relacionado a
 
 - Rules: [023](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md), [015](../../../.claude/rules/015_principio-equivalencia-lancamento-reuso.md)
-- Similar tags: DEPRECATED has timeline and alternative, dead code is deleted immediately
+- Tags similares: DEPRECATED tem cronograma e alternativa, código morto é deletado imediatamente

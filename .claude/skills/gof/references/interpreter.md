@@ -1,24 +1,24 @@
 # Interpreter
 
-**Category:** Behavioral
-**Intent:** Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences.
+**Categoria:** Comportamental
+**Intenção:** Dada uma linguagem, definir uma representação para sua gramática junto com um interpretador que usa essa representação para interpretar sentenças da linguagem.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Implement simple DSLs (Domain Specific Languages)
-- Expression parsers (calculators, search filters)
-- Configurable business rule systems
-- Simple template processing
+- Implementar DSLs simples (Domain Specific Languages)
+- Parsers de expressões (calculadoras, filtros de busca)
+- Sistemas de regras de negócio configuráveis
+- Processamento simples de templates
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- For complex grammars — use dedicated parser generators like ANTLR (rule 068 — Golden Hammer)
-- When performance is critical — interpreters are inherently slow
-- For languages with many rules — Expression class explosion
+- Para gramáticas complexas — use geradores de parser dedicados como ANTLR (rule 068 — Golden Hammer)
+- Quando a performance é crítica — interpretadores são inerentemente lentos
+- Para linguagens com muitas regras — explosão de classes Expression
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Expression {
@@ -48,7 +48,7 @@ class AddExpression implements Expression {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 new AddExpression(
@@ -57,14 +57,14 @@ new AddExpression(
 ).interpret(new Map([['x', 10]]))
 ```
 
-## Related to
+## Relacionado a
 
-- [composite.md](composite.md): complements — composed grammars form trees; Composite is the natural structure for Interpreter
-- [visitor.md](visitor.md): complements — Visitor can traverse the Interpreter's expression tree for distinct operations
-- [rule 068 - Prohibition of Golden Hammer](../../../rules/068_proibicao-martelo-de-ouro.md): reinforces — for complex grammars, use specialized tool instead of manual Interpreter
-- [rule 022 - Prioritization of Simplicity and Clarity](../../../rules/022_priorizacao-simplicidade-clareza.md): reinforces — prefer Interpreter only when the DSL is genuinely simple
+- [composite.md](composite.md): complementa — gramáticas compostas formam árvores; Composite é a estrutura natural para o Interpreter
+- [visitor.md](visitor.md): complementa — Visitor pode percorrer a árvore de expressões do Interpreter para operações distintas
+- [rule 068 - Proibição do Martelo de Ouro](../../../rules/068_proibicao-martelo-de-ouro.md): reforça — para gramáticas complexas, use ferramenta especializada em vez de Interpreter manual
+- [rule 022 - Priorização da Simplicidade e Clareza](../../../rules/022_priorizacao-simplicidade-clareza.md): reforça — prefira Interpreter apenas quando a DSL é genuinamente simples
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

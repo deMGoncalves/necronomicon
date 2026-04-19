@@ -1,45 +1,45 @@
 # Cut-and-Paste Programming
 
-**Severity:** 🔴 Critical
-**Associated Rule:** Rule 021
+**Severidade:** 🔴 Crítica
+**Regra Associada:** Regra 021
 
-## What It Is
+## O Que É
 
-Reusing code by copying and pasting blocks between files or functions instead of creating reusable abstractions. Logic exists in multiple places without a single source of truth. Direct violation of DRY (Don't Repeat Yourself).
+Reutilização de código por cópia e colagem de blocos entre arquivos ou funções em vez de criar abstrações reutilizáveis. A lógica existe em múltiplos lugares sem uma única fonte de verdade. Violação direta do princípio DRY (Don't Repeat Yourself).
 
-## Symptoms
+## Sintomas
 
-- Direct copying of code blocks with more than 5 lines between classes or methods is prohibited
-- Complex logic used in more than 2 locations without extraction
-- Identical or nearly identical code blocks in different files
-- Bug fixed in one place but present in clones
-- `// copied from UserService` as a comment
-- Functions with names like `processOrderV2`, `processOrderFinal`, `processOrderFixed`
+- Cópia direta de blocos de código com mais de 5 linhas entre classes ou métodos é proibida
+- Lógica complexa usada em mais de 2 locais sem extração
+- Blocos de código idênticos ou quase idênticos em arquivos diferentes
+- Bug corrigido em um lugar mas presente nos clones
+- `// copiado de UserService` como comentário
+- Funções com nomes como `processOrderV2`, `processOrderFinal`, `processOrderFixed`
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Same validation copied in three places
+// ❌ Mesma validação copiada em três lugares
 function createUser(data) {
-  if (!data.email || !data.email.includes('@')) throw new Error('Invalid email');
-  if (!data.name || data.name.length < 2) throw new Error('Invalid name');
+  if (!data.email || !data.email.includes('@')) throw new Error('Email inválido');
+  if (!data.name || data.name.length < 2) throw new Error('Nome inválido');
   return db.users.create(data);
 }
 
 function updateUser(id, data) {
-  if (!data.email || !data.email.includes('@')) throw new Error('Invalid email');
-  if (!data.name || data.name.length < 2) throw new Error('Invalid name');
+  if (!data.email || !data.email.includes('@')) throw new Error('Email inválido');
+  if (!data.name || data.name.length < 2) throw new Error('Nome inválido');
   return db.users.update(id, data);
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Validation extracted to single source of truth (Extract Function)
+// ✅ Validação extraída para única fonte de verdade (Extract Function)
 function validateUserData(data) {
-  if (!data.email || !data.email.includes('@')) throw new Error('Invalid email');
-  if (!data.name || data.name.length < 2) throw new Error('Invalid name');
+  if (!data.email || !data.email.includes('@')) throw new Error('Email inválido');
+  if (!data.name || data.name.length < 2) throw new Error('Nome inválido');
 }
 
 function createUser(data) {
@@ -53,9 +53,9 @@ function updateUser(id, data) {
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Cut-and-Paste Programming — validation duplicated in create/update/patch
-// TODO: Extract Function — create reusable validateUserData()
+// FIXME: Cut-and-Paste Programming — validação duplicada em create/update/patch
+// TODO: Extract Function — criar validateUserData() reutilizável
 ```

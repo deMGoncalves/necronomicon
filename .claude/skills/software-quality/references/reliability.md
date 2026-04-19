@@ -1,32 +1,32 @@
 # Reliability — Confiabilidade
 
-**Dimension:** Operation
-**Default Severity:** 🔴 Critical
-**Key Question:** Is it accurate?
+**Dimensão:** Operação
+**Severidade Padrão:** 🔴 Crítica
+**Questão-Chave:** É preciso?
 
-## What It Is
+## O que é
 
-The degree to which software produces consistent and accurate results under different conditions. Reliable software works correctly even in adverse situations, fails gracefully, and recovers from errors.
+O grau em que o software produz resultados consistentes e precisos sob diferentes condições. Um software confiável funciona corretamente mesmo em situações adversas, falha de forma controlada e se recupera de erros.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Error can cause data loss | 🔴 Blocker |
-| Error can crash the service | 🔴 Blocker |
-| Error affects user experience | 🟠 Important |
-| Error in secondary flow | 🟡 Suggestion |
+| Erro pode causar perda de dados | 🔴 Blocker |
+| Erro pode derrubar o serviço | 🔴 Blocker |
+| Erro afeta a experiência do usuário | 🟠 Importante |
+| Erro em fluxo secundário | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not reliable - can fail silently
+// ❌ Não confiável - pode falhar silenciosamente
 async function fetchUser(id) {
   const response = await api.get(`/users/${id}`);
-  return response.data.user; // What if response.data is undefined?
+  return response.data.user; // E se response.data for undefined?
 }
 
-// ✅ Reliable - handles errors and validates data
+// ✅ Confiável - trata erros e valida dados
 async function fetchUser(id) {
   if (!id) throw new UserIdRequiredError();
 
@@ -40,24 +40,24 @@ async function fetchUser(id) {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// FIXME: Promise without error handling
-// FIXME: Add retry for external call
+// FIXME: Promise sem tratamento de erro
+// FIXME: Adicionar retry para chamada externa
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Error can cause data loss | 🔴 Blocker |
-| Error can crash the service | 🔴 Blocker |
-| Error affects user experience | 🟠 Important |
-| Error in secondary flow | 🟡 Suggestion |
+| Erro pode causar perda de dados | 🔴 Blocker |
+| Erro pode derrubar o serviço | 🔴 Blocker |
+| Erro afeta a experiência do usuário | 🟠 Importante |
+| Erro em fluxo secundário | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 027 - Domain Error Handling Quality
-- 028 - Asynchronous Exception Handling
-- 036 - Side Effects Function Restriction
+- 027 - Qualidade no Tratamento de Erros de Domínio
+- 028 - Tratamento de Exceção Assíncrona
+- 036 - Restrição de Funções com Efeitos Colaterais

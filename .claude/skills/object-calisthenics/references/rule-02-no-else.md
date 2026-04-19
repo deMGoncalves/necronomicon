@@ -1,19 +1,19 @@
-# Rule 2 — No ELSE Clause Prohibition
+# Regra 2 — Proibição da Cláusula No ELSE
 
-**deMGoncalves Rule:** COMPORTAMENTAL-002
-**Question:** Does this method use `else` or `else if`?
+**Regra deMGoncalves:** COMPORTAMENTAL-002
+**Questão:** Este método usa `else` ou `else if`?
 
-## What It Is
+## O que é
 
-Restricts the use of `else` and `else if` clauses, promoting replacement with guard clauses (early return) or polymorphism patterns to handle different execution paths.
+Restringe o uso das cláusulas `else` e `else if`, promovendo a substituição por guard clauses (retorno antecipado) ou padrões de polimorfismo para lidar com diferentes caminhos de execução.
 
-## When to Apply
+## Quando Aplicar
 
-- Method contains `else` keyword
-- Method contains `else if` keyword
-- Type branching logic (if type === 'A')
+- Método contém a palavra-chave `else`
+- Método contém a palavra-chave `else if`
+- Lógica de ramificação por tipo (if type === 'A')
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class PaymentProcessor {
@@ -21,27 +21,27 @@ class PaymentProcessor {
     if (payment.isValid()) {
       this.charge(payment);
     } else {
-      this.logError(payment);  // ELSE - VIOLATES
+      this.logError(payment);  // ELSE - VIOLA
     }
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class PaymentProcessor {
   processPayment(payment: Payment): void {
     if (!payment.isValid()) {
       this.logError(payment);
-      return;  // Early return
+      return;  // Retorno antecipado
     }
     this.charge(payment);
   }
 }
 ```
 
-## ✅ Correct (Polymorphism)
+## ✅ Correto (Polimorfismo)
 
 ```typescript
 interface PaymentStrategy {
@@ -57,12 +57,12 @@ class PayPalPayment implements PaymentStrategy {
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Switch statements**: As long as each `case` returns or terminates execution
+- **Estruturas switch**: Desde que cada `case` retorne ou encerre a execução
 
-## Related Rules
+## Regras Relacionadas
 
-- [001 - Single Indentation Level](rule-01-single-indentation.md): reinforces
-- [008 - No Getters/Setters Prohibition](rule-08-no-getters-setters.md): reinforces
-- [011 - Open/Closed Principle](../../rules/011_principio-aberto-fechado.md): reinforces
+- [001 - Single Indentation Level](rule-01-single-indentation.md): reforça
+- [008 - Proibição de Getters/Setters](rule-08-no-getters-setters.md): reforça
+- [011 - Princípio Aberto/Fechado](../../rules/011_principio-aberto-fechado.md): reforça

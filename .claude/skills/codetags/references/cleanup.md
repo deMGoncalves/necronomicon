@@ -1,75 +1,75 @@
-# CLEANUP — Disorganized Code or Unnecessary Elements
+# CLEANUP — Código Desorganizado ou Elementos Desnecessários
 
-**Severity:** 🟠 High
-**Blocks PR:** No (but should be addressed)
+**Severidade:** 🟠 Alta
+**Bloqueia PR:** Não (mas deve ser tratado)
 
-## What It Is
+## O Que É
 
-Marks disorganized code or unnecessary elements that need to be cleaned. Unlike REFACTOR (which changes structure), CLEANUP removes noise and organizes without altering behavior.
+Marca código desorganizado ou elementos desnecessários que precisam ser limpos. Diferente de REFACTOR (que muda a estrutura), CLEANUP remove ruído e organiza sem alterar comportamento.
 
-## When to Use
+## Quando Usar
 
-- Dead code (never-called functions)
-- Unused imports (orphan dependencies)
-- Obsolete comments (outdated documentation)
-- Forgotten console.logs (debug left behind)
-- Unused variables (orphan declarations)
+- Código morto (funções nunca chamadas)
+- Imports não utilizados (dependências órfãs)
+- Comentários obsoletos (documentação desatualizada)
+- console.logs esquecidos (debug deixado para trás)
+- Variáveis não utilizadas (declarações órfãs)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Code to be restructured → use REFACTOR
-- Bug to be fixed → use FIXME
-- Feature to implement → use TODO
-- Official obsolete code → use DEPRECATED
+- Código a ser reestruturado → usar REFACTOR
+- Bug a ser corrigido → usar FIXME
+- Feature a implementar → usar TODO
+- Código oficialmente obsoleto → usar DEPRECATED
 
-## Format
+## Formato
 
 ```typescript
-// CLEANUP: type of cleanup needed
-// CLEANUP: remove dead code after confirming non-use
-// CLEANUP: organize imports/remove unused
+// CLEANUP: tipo de limpeza necessária
+// CLEANUP: remover código morto após confirmar não uso
+// CLEANUP: organizar imports/remover não utilizados
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// CLEANUP: unused function - verify and remove
+// CLEANUP: função não utilizada - verificar e remover
 function oldCalculation(value: number): number {
-  // This function was used in v1, no longer called
+  // Esta função era usada na v1, não é mais chamada
   return value * 1.5;
 }
 
-// CLEANUP: remove debug logs before merge
+// CLEANUP: remover logs de debug antes do merge
 function processOrder(order: Order): Result {
-  console.log('DEBUG: order received', order);
-  console.log('DEBUG: processing...', { timestamp: Date.now() });
+  console.log('DEBUG: pedido recebido', order);
+  console.log('DEBUG: processando...', { timestamp: Date.now() });
 
   const result = calculate(order);
 
-  console.log('DEBUG: result', result);
+  console.log('DEBUG: resultado', result);
   return result;
 }
 
-// CLEANUP: unused imports - remove
+// CLEANUP: imports não utilizados - remover
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { format, parse, addDays } from 'date-fns';
 import _ from 'lodash';
 
-// Only useState is used
+// Apenas useState é usado
 function SimpleComponent(): JSX.Element {
   const [value, setValue] = useState(0);
   return <div>{value}</div>;
 }
 
-// CLEANUP: outdated comments - update or remove
+// CLEANUP: comentários desatualizados - atualizar ou remover
 function calculateDiscount(order: Order): number {
-  // Returns 10% discount for orders above R$100
-  // NOTE: now returns 15% (changed in 2023)
-  // TODO: verify with marketing (already verified, keep 15%)
+  // Retorna 10% de desconto para pedidos acima de R$100
+  // NOTA: agora retorna 15% (alterado em 2023)
+  // TODO: verificar com marketing (já verificado, manter 15%)
   return order.total > 100 ? order.total * 0.15 : 0;
 }
 
-// CLEANUP: commented code - remove (it's in git history)
+// CLEANUP: código comentado - remover (está no histórico do git)
 function getCurrentPrice(product: Product): number {
   // const oldPrice = product.basePrice * 1.1;
   // const discount = calculateOldDiscount(product);
@@ -79,13 +79,13 @@ function getCurrentPrice(product: Product): number {
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Before commit (console.logs) or before PR (imports) or next sprint (dead code)
-- **Action:** Identify cleanup type → Verify removal is safe → Remove code/imports/comments → Test nothing broke → Commit
-- **Converted to:** N/A (removed after cleanup)
+- **Prazo:** Antes do commit (console.logs) ou antes do PR (imports) ou próxima sprint (código morto)
+- **Ação:** Identificar tipo de limpeza → Verificar se remoção é segura → Remover código/imports/comentários → Testar que nada quebrou → Commitar
+- **Convertido em:** N/A (removido após limpeza)
 
-## Related to
+## Relacionado a
 
 - Rules: [023](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md), [039](../../../.claude/rules/039_regra-escoteiro-refatoracao-continua.md)
-- Similar tags: CLEANUP removes noise, REFACTOR changes structure
+- Tags similares: CLEANUP remove ruído, REFACTOR muda estrutura

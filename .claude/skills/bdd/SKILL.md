@@ -1,6 +1,6 @@
 ---
 name: bdd
-description: BDD template with Gherkin in pt-BR for behavioral specification. Use when @architect needs to create Gherkin features in docs/bdd/, when @tester needs to understand test scenarios, or when defining acceptance criteria in business language.
+description: Template BDD com Gherkin em pt-BR para especificação comportamental. Use quando @architect precisar criar features Gherkin em docs/bdd/, quando @tester precisar entender cenários de teste, ou ao definir critérios de aceitação em linguagem de negócio.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -11,69 +11,80 @@ metadata:
 
 # BDD (Behavior-Driven Development)
 
-Gherkin template in Brazilian Portuguese to specify expected system behavior.
+Template Gherkin em português brasileiro para especificar comportamento esperado do sistema.
 
 ---
 
-## When to Use
+## Manifest
 
-- Phase 2 (Spec): @architect creates .feature files in docs/bdd/ for each behavior
-- Phase 3 (Code): @tester uses .feature files as reference to create tests
-- When specifying complex business rules in executable form
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Fase 2 (Spec) para cada comportamento de negócio; sempre que @tester precisar de referência para criar testes; ao definir critérios de aceitação com stakeholders |
+| **Prerequisites** | Requisitos de negócio compreendidos; personas de usuário identificadas; regras de negócio mapeadas |
+| **Constraints** | Idioma obrigatório pt-BR com `# language: pt`; proibido mencionar detalhes de implementação (status HTTP, SQL, IDs internos); um arquivo `.feature` por comportamento |
+| **Scope** | Arquivos `.feature` em `docs/bdd/`; estrutura Gherkin com Funcionalidade/Cenário/Dado/Quando/Então; convenções de nomenclatura e organização |
 
-## Feature Template
+---
 
-→ See [`references/feature-template.md`](references/feature-template.md) for the complete template.
+## Quando Usar
 
-## Project Conventions
+- Fase 2 (Spec): @architect cria arquivos .feature em docs/bdd/ para cada comportamento
+- Fase 3 (Code): @tester usa arquivos .feature como referência para criar testes
+- Ao especificar regras de negócio complexas em forma executável
 
-- **Language:** pt-BR mandatory (`# language: pt`)
-- **Verbs:** Always present tense ("user sees", "system sends")
-- **Personas:** Use real names (João, Maria) instead of abstractions (user1, user2)
-- **File name:** `NNN_kebab-case-name.feature`
-- **One file per behavior/business rule**
-- **Happy scenario always first**, error scenarios after
-- **Maintain README.md** in docs/bdd/ with feature index
+## Template de Feature
 
-## Keywords in pt-BR
+→ Veja [`references/feature-template.md`](references/feature-template.md) para o template completo.
 
-| Word | Usage |
-|------|-------|
-| Funcionalidade: | File/feature title |
-| Cenário: | Individual test case |
-| Esquema do Cenário: | Parameterized scenario with multiple examples |
-| Contexto: | Setup shared by all scenarios |
-| Dado | Precondition (initial state) |
-| Quando | Action executed |
-| Então | Expected result (assertion) |
-| E | Continuation of Dado/Quando/Então |
-| Mas | Negation/exception in Dado/Quando/Então |
-| Exemplos: | Data table for Esquema do Cenário |
+## Convenções do Projeto
 
-## BDD Relation with Tests
+- **Idioma:** pt-BR obrigatório (`# language: pt`)
+- **Verbos:** Sempre tempo presente ("usuário vê", "sistema envia")
+- **Personas:** Use nomes reais (João, Maria) em vez de abstrações (user1, user2)
+- **Nome do arquivo:** `NNN_kebab-case-name.feature`
+- **Um arquivo por comportamento/regra de negócio**
+- **Cenário feliz sempre primeiro**, cenários de erro depois
+- **Manter README.md** em docs/bdd/ com índice de features
 
-- Each Cenário → 1 unit/integration test
-- Esquema do Cenário → parameterized tests
-- @tester implements tests following exactly the Dado/Quando/Então structure
+## Palavras-chave em pt-BR
 
-## Examples
+| Palavra | Uso |
+|---------|-----|
+| Funcionalidade: | Título do arquivo/feature |
+| Cenário: | Caso de teste individual |
+| Esquema do Cenário: | Cenário parametrizado com múltiplos exemplos |
+| Contexto: | Setup compartilhado por todos os cenários |
+| Dado | Pré-condição (estado inicial) |
+| Quando | Ação executada |
+| Então | Resultado esperado (asserção) |
+| E | Continuação de Dado/Quando/Então |
+| Mas | Negação/exceção em Dado/Quando/Então |
+| Exemplos: | Tabela de dados para Esquema do Cenário |
+
+## Relação BDD com Testes
+
+- Cada Cenário → 1 teste unitário/integração
+- Esquema do Cenário → testes parametrizados
+- @tester implementa testes seguindo exatamente a estrutura Dado/Quando/Então
+
+## Exemplos
 
 ```gherkin
-# ❌ Bad — technical scenario, no business language
-Scenario: POST /users returns 201
-  Given a request with body { "name": "Alice", "email": "alice@example.com" }
-  When POST /users is called
-  Then response status is 201
-  And response body contains user id
+# ❌ Bad — cenário técnico, sem linguagem de negócio
+Scenario: POST /users retorna 201
+  Given uma requisição com body { "name": "Alice", "email": "alice@example.com" }
+  When POST /users é chamado
+  Then o status da resposta é 201
+  And o body da resposta contém o id do usuário
 
-// Problems:
-// - Focuses on HTTP/API (implementation) instead of business behavior
-// - Doesn't describe the "why" — what value does this deliver to the user?
-// - Not readable by non-technical people (PO, business)
+// Problemas:
+// - Foca em HTTP/API (implementação) em vez de comportamento de negócio
+// - Não descreve o "porquê" — qual valor isso entrega ao usuário?
+// - Não legível por pessoas não técnicas (PO, negócio)
 
 ---
 
-# ✅ Good — scenario in business language (pt-BR)
+# ✅ Good — cenário em linguagem de negócio (pt-BR)
 # language: pt
 
 Funcionalidade: Cadastro de usuário — RN-03
@@ -114,14 +125,14 @@ Funcionalidade: Cadastro de usuário — RN-03
       |        | Senha é obrigatória                       |
       | abc    | Senha deve ter no mínimo 8 caracteres    |
 
-// Benefits:
-// ✅ Business language: PO and stakeholders understand without knowing code
-// ✅ Focuses on "what" and "why", not technical "how"
-// ✅ Esquema do Cenário parameterizes validations without duplicating structure
+// Benefícios:
+// ✅ Linguagem de negócio: PO e stakeholders entendem sem saber código
+// ✅ Foca no "o quê" e "por quê", não no "como" técnico
+// ✅ Esquema do Cenário parametriza validações sem duplicar estrutura
 ```
 
 ```gherkin
-# ❌ Bad — scenario mixing abstraction levels
+# ❌ Bad — cenário misturando níveis de abstração
 Scenario: Transferência entre contas
   Given que a conta 123 tem saldo de 1000
   And que a conta 456 existe no banco de dados
@@ -130,14 +141,14 @@ Scenario: Transferência entre contas
   And o saldo da conta 456 deve ser 500
   And a tabela transactions deve ter novo registro
 
-// Problems:
-// - Mixes "conta 123" (abstract) with "POST /transfer" (implementation)
-// - Mentions "tabela transactions" (persistence detail)
-// - Doesn't describe expected behavior from user's point of view
+// Problemas:
+// - Mistura "conta 123" (abstrato) com "POST /transfer" (implementação)
+// - Menciona "tabela transactions" (detalhe de persistência)
+// - Não descreve comportamento esperado do ponto de vista do usuário
 
 ---
 
-# ✅ Good — scenario focused on business behavior
+# ✅ Good — cenário focado em comportamento de negócio
 # language: pt
 
 Funcionalidade: Transferência entre contas — RN-12
@@ -177,21 +188,21 @@ Funcionalidade: Transferência entre contas — RN-12
       | R$ 0,00  | Valor deve ser maior que zero             |
       | R$ -50   | Valor não pode ser negativo               |
 
-// Benefits:
-// ✅ Correct abstraction: "João", "Maria" (personas) instead of IDs
-// ✅ Focuses on behavior: "transferência concluída" instead of API details
-// ✅ Transaction receipt = user expectation (not persistence detail)
+// Benefícios:
+// ✅ Abstração correta: "João", "Maria" (personas) em vez de IDs
+// ✅ Foca no comportamento: "transferência concluída" em vez de detalhes da API
+// ✅ Comprovante da transação = expectativa do usuário (não detalhe de persistência)
 ```
 
-## Prohibitions
+## Proibições
 
-- ❌ Features in English — pt-BR mandatory
-- ❌ Technical scenarios (HTTP status, SQL, numeric IDs)
-- ❌ Generic abstractions ("user1", "account A") — use personas (João, Maria)
-- ❌ Mixing abstraction levels (business + implementation)
-- ❌ Scenarios without "Como/Quero/Para" in Funcionalidade header
+- ❌ Features em inglês — pt-BR obrigatório
+- ❌ Cenários técnicos (status HTTP, SQL, IDs numéricos)
+- ❌ Abstrações genéricas ("user1", "conta A") — usar personas (João, Maria)
+- ❌ Mistura de níveis de abstração (negócio + implementação)
+- ❌ Cenários sem "Como/Quero/Para" no cabeçalho da Funcionalidade
 
-## Rationale
+## Justificativa
 
-- [032 - Minimum Test Coverage](../../rules/032_cobertura-teste-minima-qualidade.md): BDD features define scenarios that @tester must cover
-- Source: Dan North - Introducing BDD (2006)
+- [032 - Cobertura Mínima de Teste](../../rules/032_cobertura-teste-minima-qualidade.md): features BDD definem cenários que @tester deve cobrir
+- Fonte: Dan North - Introducing BDD (2006)

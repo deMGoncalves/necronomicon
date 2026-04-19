@@ -1,60 +1,60 @@
-# Factor 08 — Concurrency
+# Fator 08 — Concurrency
 
-**deMGoncalves Rule:** [047 - Concurrency via Processes](../../../rules/047_concorrencia-via-processos.md)
-**Question:** Application scales via multiple processes (not threads or single process)?
+**Regra deMGoncalves:** [047 - Escalabilidade via Modelo de Processos](../../../rules/047_concorrencia-via-processos.md)
+**Questão:** Aplicação escala via múltiplos processos (não threads ou processo único)?
 
-## What It Is
+## O que é
 
-The application should scale horizontally through execution of **multiple independent processes**, not through internal threads or a single monolithic process. Different types of work (web, worker, scheduler) should be separated into distinct process types.
+A aplicação deve escalar horizontalmente através da execução de **múltiplos processos independentes**, não através de threads internas ou um único processo monolítico. Diferentes tipos de trabalho (web, worker, scheduler) devem ser separados em tipos de processos distintos.
 
-**Elastic scalability = add processes according to demand.**
+**Escalabilidade elástica = adicionar processos conforme a demanda.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] Application supports execution of **multiple instances** of the same process without conflict
-- [ ] Different workloads (HTTP, background jobs, scheduled tasks) separated into distinct processes
-- [ ] Process doesn't *daemonize* nor write PID files (management is environment's responsibility)
+- [ ] Aplicação suporta execução de **múltiplas instâncias** do mesmo processo sem conflito
+- [ ] Diferentes cargas de trabalho (HTTP, background jobs, tarefas agendadas) separadas em processos distintos
+- [ ] Processo não faz *daemonize* nem escreve arquivos PID (gerenciamento é responsabilidade do ambiente)
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Single process that does everything ❌
+// Processo único que faz tudo ❌
 const app = express();
 app.listen(3000);
 
-// Background jobs in same process
+// Jobs de background no mesmo processo
 setInterval(() => {
-  processQueue();  // violates concurrency
+  processQueue();  // viola a concorrência
 }, 5000);
 
-// Doesn't scale horizontally
-// If duplicating process, processQueue() runs 2x
+// Não escala horizontalmente
+// Se duplicar o processo, processQueue() roda 2x
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Separate web process (web.ts) ✅
+// Processo web separado (web.ts) ✅
 const app = express();
 app.listen(process.env.PORT);
 
-// Separate worker process (worker.ts) ✅
+// Processo worker separado (worker.ts) ✅
 const queue = new Queue(process.env.REDIS_URL);
 queue.process('email', sendEmail);
 
-// Procfile defines process types
+// Procfile define tipos de processo
 # Procfile
 web: bun run src/web.ts
 worker: bun run src/worker.ts
 scheduler: bun run src/scheduler.ts
 
-# Independent scaling
+# Escalonamento independente
 heroku ps:scale web=4 worker=2 scheduler=1
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Background job in web process — extract to worker process
+// FIXME: Job de background no processo web — extrair para processo worker
 setInterval(cleanupDatabase, 3600000);
 ```

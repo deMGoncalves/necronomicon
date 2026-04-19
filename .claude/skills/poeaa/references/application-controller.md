@@ -1,30 +1,30 @@
 # Application Controller
 
-**Layer:** Web Presentation
-**Complexity:** Complex
-**Intent:** Centralized point to handle screen navigation and application flow.
+**Camada:** Web Presentation
+**Complexidade:** Complexa
+**Intenção:** Ponto centralizado para tratar navegação entre telas e fluxo da aplicação.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Applications with complex navigation flow between multiple screens/steps
-- Wizards and multi-step forms with transition rules
-- When different users should see different flows based on context
-- Applications with complex "which screen to show next" logic
+- Aplicações com fluxo de navegação complexo entre múltiplas telas/etapas
+- Wizards e formulários multi-etapas com regras de transição
+- Quando usuários diferentes devem ver fluxos diferentes com base no contexto
+- Aplicações com lógica complexa de "qual tela mostrar a seguir"
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple applications with linear flow without conditionals (use Page Controller)
-- Stateless REST APIs without navigation state (Front Controller is enough)
-- When navigation logic can be expressed with simple routing
+- Aplicações simples com fluxo linear sem condicionais (use Page Controller)
+- APIs REST sem estado sem estado de navegação (Front Controller é suficiente)
+- Quando a lógica de navegação pode ser expressa com roteamento simples
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Application Controller: controls flow between screens
+// Application Controller: controla o fluxo entre telas
 class OnboardingController {
-  // Determines next screen based on user's current state
+  // Determina a próxima tela com base no estado atual do usuário
   nextStep(user: User, currentStep: OnboardingStep): OnboardingStep {
     if (currentStep === OnboardingStep.WELCOME) {
       return OnboardingStep.PROFILE_SETUP
@@ -43,7 +43,7 @@ class OnboardingController {
     return OnboardingStep.COMPLETED
   }
 
-  // Checks if user can access a given screen
+  // Verifica se o usuário pode acessar uma determinada tela
   canAccess(user: User, step: OnboardingStep): boolean {
     if (step === OnboardingStep.EMAIL_VERIFICATION) {
       return user.hasCompletedProfileSetup()
@@ -51,7 +51,7 @@ class OnboardingController {
     return true
   }
 
-  // Returns correct view for current step
+  // Retorna a view correta para o passo atual
   getView(step: OnboardingStep): string {
     const views: Record<OnboardingStep, string> = {
       [OnboardingStep.WELCOME]: 'onboarding/welcome',
@@ -64,12 +64,12 @@ class OnboardingController {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [front-controller.md](front-controller.md): depends — Application Controller determines destination; Front Controller executes dispatch
-- [page-controller.md](page-controller.md): complements — Application Controller decides which Page Controller to activate at each flow step
+- [front-controller.md](front-controller.md): depende — Application Controller determina o destino; Front Controller executa o dispatch
+- [page-controller.md](page-controller.md): complementa — Application Controller decide qual Page Controller ativar em cada passo do fluxo
 
 ---
 
-**PoEAA Layer:** Web Presentation
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Web Presentation
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

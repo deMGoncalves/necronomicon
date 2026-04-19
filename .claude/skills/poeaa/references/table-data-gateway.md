@@ -1,27 +1,27 @@
 # Table Data Gateway
 
-**Layer:** Data Source
-**Complexity:** Simple
-**Intent:** An object that acts as a gateway to a database table, with one object per table and all accesses going through it.
+**Camada:** Data Source
+**Complexidade:** Simples
+**Intenção:** Um objeto que age como gateway para uma tabela de banco de dados, com um objeto por tabela e todos os acessos passando por ele.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- With Table Module as domain pattern
-- Centralize all queries for a table in a single place
-- When you want SQL abstraction but without complex object-domain mapping
-- In data-oriented systems rather than domain object-oriented
+- Com Table Module como padrão de domínio
+- Centralizar todas as queries de uma tabela em um único lugar
+- Quando se quer abstração de SQL sem mapeamento complexo objeto-domínio
+- Em sistemas orientados a dados em vez de orientados a objetos de domínio
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- With complex Domain Model (use Data Mapper + Repository)
-- When business logic goes beyond simple table operations
+- Com Domain Model complexo (use Data Mapper + Repository)
+- Quando a lógica de negócio vai além de operações simples de tabela
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// One gateway per table — all accesses go through here
+// Um gateway por tabela — todos os acessos passam por aqui
 class PersonGateway {
   async findAll(): Promise<PersonRecord[]> {
     return this.db.query('SELECT * FROM person')
@@ -48,12 +48,12 @@ class PersonGateway {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [row-data-gateway.md](row-data-gateway.md): complements — Row Data Gateway operates per row while Table Data Gateway operates on entire table
-- [table-module.md](table-module.md): complements — Table Module uses Table Data Gateway as its data access layer
+- [row-data-gateway.md](row-data-gateway.md): complementa — Row Data Gateway opera por linha enquanto Table Data Gateway opera na tabela inteira
+- [table-module.md](table-module.md): complementa — Table Module usa Table Data Gateway como sua camada de acesso a dados
 
 ---
 
-**PoEAA Layer:** Data Source
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Data Source
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

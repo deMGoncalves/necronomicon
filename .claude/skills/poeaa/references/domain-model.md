@@ -1,25 +1,25 @@
 # Domain Model
 
-**Layer:** Domain Logic
-**Complexity:** Complex
-**Intent:** An object model of the domain that incorporates both behavior and data, where each business entity encapsulates its own logic.
+**Camada:** Domain Logic
+**Complexidade:** Complexa
+**Intenção:** Um modelo de objetos do domínio que incorpora tanto comportamento quanto dados, onde cada entidade de negócio encapsula sua própria lógica.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Rich domain with many interdependent business rules
-- Entities with their own behavior (not just data)
-- Business rules that need to be tested in isolation
-- Systems that must evolve with new business requirements frequently
+- Domínio rico com muitas regras de negócio interdependentes
+- Entidades com comportamento próprio (não apenas dados)
+- Regras de negócio que precisam ser testadas isoladamente
+- Sistemas que devem evoluir com novos requisitos de negócio com frequência
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple domains where Transaction Script would suffice (overengineering — rule 064)
-- When team is not familiar with DDD and advanced OOP
-- When delivery time is critical and domain is genuinely simple
+- Domínios simples onde Transaction Script seria suficiente (overengineering — regra 064)
+- Quando o time não está familiarizado com DDD e OOP avançado
+- Quando o tempo de entrega é crítico e o domínio é genuinamente simples
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class Order {
@@ -51,16 +51,16 @@ class Order {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [transaction-script.md](transaction-script.md): substitutes when domain is simple
-- [data-mapper.md](data-mapper.md): depends — Domain Model needs Data Mapper for persistence without database coupling
-- [repository.md](repository.md): depends — Repository abstracts access to domain entities
-- [unit-of-work.md](unit-of-work.md): complements — Unit of Work coordinates persistence of multiple domain entities
-- [rule 010 - Single Responsibility Principle](../../../rules/010_principio-responsabilidade-unica.md): reinforces — each entity encapsulates exactly its business responsibility
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — domain doesn't depend on infrastructure
+- [transaction-script.md](transaction-script.md): substitui quando o domínio é simples
+- [data-mapper.md](data-mapper.md): depende — Domain Model precisa de Data Mapper para persistência sem acoplamento ao banco
+- [repository.md](repository.md): depende — Repository abstrai o acesso às entidades de domínio
+- [unit-of-work.md](unit-of-work.md): complementa — Unit of Work coordena a persistência de múltiplas entidades de domínio
+- [regra 010 - Princípio da Responsabilidade Única](../../../rules/010_principio-responsabilidade-unica.md): reforça — cada entidade encapsula exatamente sua responsabilidade de negócio
+- [regra 014 - Princípio de Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — domínio não depende de infraestrutura
 
 ---
 
-**PoEAA Layer:** Domain Logic
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Domain Logic
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

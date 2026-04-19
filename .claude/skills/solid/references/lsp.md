@@ -3,7 +3,7 @@
 **Rule deMGoncalves:** COMPORTAMENTAL-012
 **Pergunta:** Posso substituir a classe base pela derivada sem quebrar o comportamento?
 
-## What It Is
+## O que é
 
 Exige que classes derivadas (subclasses) sejam substituíveis por suas classes base (superclasses) sem alterar o comportamento esperado do programa. Se S é subtipo de T, então objetos do tipo T podem ser substituídos por objetos do tipo S.
 

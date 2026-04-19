@@ -1,60 +1,60 @@
-# BUG — Known Documented and Tracked Defect
+# BUG — Defeito Conhecido, Documentado e Rastreado
 
-**Severity:** 🔴 Critical
-**Blocks PR:** No (but should be prioritized)
+**Severidade:** 🔴 Crítica
+**Bloqueia PR:** Não (mas deve ser priorizado)
 
-## What It Is
+## O Que É
 
-Documents a known defect that causes failure or unexpected behavior, but is being tracked and will be fixed in planned moment. Unlike FIXME (immediate correction), BUG indicates a documented problem with associated ticket/issue.
+Documenta um defeito conhecido que causa falha ou comportamento inesperado, mas está sendo rastreado e será corrigido em momento planejado. Diferente de FIXME (correção imediata), BUG indica um problema documentado com ticket/issue associado.
 
-## When to Use
+## Quando Usar
 
-- Defect with open ticket (reported and prioritized bug in backlog)
-- Known problem with workaround (users temporarily work around it)
-- Third-party bug awaiting fix (dependency with open issue)
-- Intermittent problem under investigation (race condition hard to reproduce)
+- Defeito com ticket aberto (bug reportado e priorizado no backlog)
+- Problema conhecido com contorno (usuários trabalham ao redor temporariamente)
+- Bug de terceiro aguardando correção (dependência com issue aberta)
+- Problema intermitente em investigação (race condition difícil de reproduzir)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Bug needing immediate fix → use FIXME
-- Code works but is bad → use REFACTOR
-- Security problem → use SECURITY
-- Temporary code → use HACK
+- Bug precisando de correção imediata → usar FIXME
+- Código funciona mas é ruim → usar REFACTOR
+- Problema de segurança → usar SECURITY
+- Código temporário → usar HACK
 
-## Format
+## Formato
 
 ```typescript
-// BUG: problem description - ticket/issue
-// BUG: [JIRA-123] incorrect behavior description
-// BUG: description - workaround: how to work around
+// BUG: descrição do problema - ticket/issue
+// BUG: [JIRA-123] descrição do comportamento incorreto
+// BUG: descrição - contorno: como contornar
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// BUG: [PROJ-456] toast notification doesn't appear on Safari iOS
-// Workaround: users can see notifications on history page
+// BUG: [PROJ-456] notificação toast não aparece no Safari iOS
+// Contorno: usuários podem ver notificações na página de histórico
 function showNotification(message: string): void {
-  toast.show(message); // Doesn't work on Safari iOS < 15
+  toast.show(message); // Não funciona no Safari iOS < 15
 }
 
-// BUG: race condition when multiple requests arrive simultaneously
-// Occurs in ~2% of high traffic cases
-// Investigation in progress - ticket PERF-789
+// BUG: race condition quando múltiplas requisições chegam simultaneamente
+// Ocorre em ~2% dos casos de alto tráfego
+// Investigação em andamento - ticket PERF-789
 async function processOrder(order: Order): Promise<void> {
   const inventory = await getInventory();
-  // Inventory can change between get and update
+  // Inventário pode mudar entre get e update
   await updateInventory(order);
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Current sprint (critical) or next 2 sprints (with workaround)
-- **Action:** Document → Create ticket → Add reference → Document workaround → Prioritize → Remove after correction
-- **Converted to:** N/A (removed after correction)
+- **Prazo:** Sprint atual (crítico) ou próximas 2 sprints (com contorno)
+- **Ação:** Documentar → Criar ticket → Adicionar referência → Documentar contorno → Priorizar → Remover após correção
+- **Convertido em:** N/A (removido após correção)
 
-## Related to
+## Relacionado a
 
 - Rules: [027](../../../.claude/rules/027_qualidade-tratamento-erros-dominio.md), [032](../../../.claude/rules/032_cobertura-teste-minima-qualidade.md)
-- Similar tags: BUG is planned, FIXME is immediate
+- Tags similares: BUG é planejado, FIXME é imediato

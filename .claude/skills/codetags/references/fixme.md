@@ -1,44 +1,44 @@
-# FIXME — Confirmed Bug Requiring Immediate Correction
+# FIXME — Bug Confirmado que Requer Correção Imediata
 
-**Severity:** 🔴 Critical
-**Blocks PR:** Yes
+**Severidade:** 🔴 Crítica
+**Bloqueia PR:** Sim
 
-## What It Is
+## O Que É
 
-Marks code with confirmed bug that produces incorrect behavior and must be fixed immediately. Unlike BUG (which documents known defect), FIXME indicates code needs to be corrected now.
+Marca código com bug confirmado que produz comportamento incorreto e deve ser corrigido imediatamente. Diferente de BUG (que documenta defeito conhecido), FIXME indica que o código precisa ser corrigido agora.
 
-## When to Use
+## Quando Usar
 
-- Incorrect logic discovered (calculation returning wrong value)
-- Untreated edge case (division by zero, empty array)
-- Unexpected behavior (function returns undefined when it shouldn't)
-- Identified regression (code that worked and stopped)
+- Lógica incorreta descoberta (cálculo retornando valor errado)
+- Caso extremo não tratado (divisão por zero, array vazio)
+- Comportamento inesperado (função retorna undefined quando não deveria)
+- Regressão identificada (código que funcionava e parou)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Known but not urgent bug → use BUG
-- Code works but is ugly → use REFACTOR
-- Performance improvement → use OPTIMIZE
-- Security vulnerability → use SECURITY
+- Bug conhecido mas não urgente → usar BUG
+- Código funciona mas é feio → usar REFACTOR
+- Melhoria de performance → usar OPTIMIZE
+- Vulnerabilidade de segurança → usar SECURITY
 
-## Format
+## Formato
 
 ```typescript
-// FIXME: problem description - identified cause
-// FIXME: [ticket-123] problem description
-// FIXME: problem description
+// FIXME: descrição do problema - causa identificada
+// FIXME: [ticket-123] descrição do problema
+// FIXME: descrição do problema
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// FIXME: division by zero when items is empty
+// FIXME: divisão por zero quando items está vazio
 function calculateAverage(items: number[]): number {
   const sum = items.reduce((a, b) => a + b, 0);
-  return sum / items.length; // 💥 NaN if items = []
+  return sum / items.length; // 💥 NaN se items = []
 }
 
-// ✅ Fixed
+// ✅ Corrigido
 function calculateAverage(items: number[]): number {
   if (items.length === 0) return 0;
   const sum = items.reduce((a, b) => a + b, 0);
@@ -46,13 +46,13 @@ function calculateAverage(items: number[]): number {
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Before commit/merge
-- **Action:** Identify root cause → Fix → Test with edge cases → Remove comment
-- **Converted to:** N/A (removed after correction)
+- **Prazo:** Antes do commit/merge
+- **Ação:** Identificar causa raiz → Corrigir → Testar com casos extremos → Remover comentário
+- **Convertido em:** N/A (removido após correção)
 
-## Related to
+## Relacionado a
 
 - Rules: [027](../../../.claude/rules/027_qualidade-tratamento-erros-dominio.md), [039](../../../.claude/rules/039_regra-escoteiro-refatoracao-continua.md)
-- Similar tags: FIXME is immediate, BUG is planned
+- Tags similares: FIXME é imediato, BUG é planejado

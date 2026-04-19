@@ -1,6 +1,6 @@
 ---
 name: complexity
-description: Convention to maintain cyclomatic complexity within the limit CC ≤ 5. Use when writing or refactoring methods that contain control flow logic, nested conditionals or loops — when measuring or reducing the cyclomatic complexity of a method.
+description: Convenção para manter a complexidade ciclomática dentro do limite CC ≤ 5. Use ao escrever ou refatorar métodos que contenham lógica de controle de fluxo, condicionais aninhados ou loops — ao medir ou reduzir a complexidade ciclomática de um método.
 model: haiku
 allowed-tools: Read, Write, Edit, Glob, Grep
 metadata:
@@ -10,35 +10,46 @@ metadata:
 
 # Complexity
 
-Convention to maintain the cyclomatic complexity (CC) of methods within the maximum limit of 5.
+Convenção para manter a complexidade ciclomática (CC) de métodos dentro do limite máximo de 5.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when writing or refactoring methods that contain control flow structures (`if`, `for`, `while`, `switch`, `catch`, ternary operator `?:`).
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Escrita ou refatoração de métodos com estruturas de controle de fluxo (`if`, `for`, `while`, `switch`, `catch`, operador ternário) |
+| **Prerequisites** | Entendimento das regras de contagem de CC em `references/cc-counting-rules.md`; cada estrutura de controle adiciona +1 ao total base de 1 |
+| **Constraints** | CC > 5 é violação obrigatória da rule 022; não aplicar workarounds que movem complexidade para outros métodos sem reduzir CC real |
+| **Scope** | Medição e redução da complexidade ciclomática de métodos individuais; tabela de limites (1–5 ok, 6–7 aviso, 8–10 refatorar, >10 crítico); técnicas em `references/refactoring-techniques.md` |
 
-## What is Cyclomatic Complexity
+---
 
-CC counts the number of independent paths through the code. Each control structure adds +1 to the total. A method without branches has CC = 1.
+## Quando Usar
 
-→ See [references/cc-counting-rules.md](references/cc-counting-rules.md) for detailed counting rules.
+Use ao escrever ou refatorar métodos que contenham estruturas de controle de fluxo (`if`, `for`, `while`, `switch`, `catch`, operador ternário `?:`).
 
-## Limits
+## O que é Complexidade Ciclomática
 
-| CC | Status | Action |
-|----|--------|--------|
-| 1–5 | ✅ Within limit | OK |
-| 6–7 | ⚠️ Warning | Consider refactoring |
-| 8–10 | 🟠 High — refactor | Mandatory (rule 022) |
-| > 10 | 🔴 Critical | Urgent refactoring |
+CC conta o número de caminhos independentes pelo código. Cada estrutura de controle adiciona +1 ao total. Um método sem ramificações tem CC = 1.
 
-→ See [references/refactoring-techniques.md](references/refactoring-techniques.md) for CC reduction techniques.
+→ Veja [references/cc-counting-rules.md](references/cc-counting-rules.md) para regras detalhadas de contagem.
 
-## Examples
+## Limites
+
+| CC | Status | Ação |
+|----|--------|------|
+| 1–5 | ✅ Dentro do limite | OK |
+| 6–7 | ⚠️ Aviso | Considerar refatoração |
+| 8–10 | 🟠 Alta — refatorar | Obrigatório (rule 022) |
+| > 10 | 🔴 Crítica | Refatoração urgente |
+
+→ Veja [references/refactoring-techniques.md](references/refactoring-techniques.md) para técnicas de redução de CC.
+
+## Exemplos
 
 ```typescript
-// ❌ Bad — CC = 7 (exceeds limit of 5)
+// ❌ Bad — CC = 7 (excede limite de 5)
 function processOrder(order: Order): string {
   if (order.status === 'pending') {         // +1
     if (order.items.length > 0) {           // +1
@@ -56,7 +67,7 @@ function processOrder(order: Order): string {
   return 'invalid'                          // +1
 }
 
-// ✅ Good — CC = 2 per method (guard clauses + extraction)
+// ✅ Good — CC = 2 por método (guard clauses + extração)
 function processOrder(order: Order): string {
   if (!isValidOrder(order)) return 'invalid'
   return order.payment === 'pix' ? processPix(order) : processCardPayment(order)
@@ -67,23 +78,23 @@ function processCardPayment(order: Order): string {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| CC > 5 in any method | Maximum limit of rule 022 |
-| `else` or `else if` | Use guard clauses (rule 002) |
-| Block nesting | Maintain single indentation level (rule 001) |
-| Method with multiple responsibilities | Extract into focused methods (rule 010) |
-| `switch` with more than 3 cases | Replace with function map or polymorphism (rule 011) |
+| O que evitar | Razão |
+|--------------|-------|
+| CC > 5 em qualquer método | Limite máximo da rule 022 |
+| `else` ou `else if` | Usar guard clauses (rule 002) |
+| Aninhamento de blocos | Manter nível único de indentação (rule 001) |
+| Método com múltiplas responsabilidades | Extrair para métodos focados (rule 010) |
+| `switch` com mais de 3 cases | Substituir por function map ou polimorfismo (rule 011) |
 
-## Rationale
+## Justificativa
 
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): maximum cyclomatic complexity of 5 per method — objective simplicity criterion
-- [001 - Single Indentation Level](../../rules/001_nivel-unico-indentacao.md): block nesting directly increases CC, limiting indentation controls complexity
-- [002 - Prohibition of ELSE Clause](../../rules/002_proibicao-clausula-else.md): each `else if` adds +1 to CC, guard clauses maintain linear flow
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): methods with high CC indicate concentrated multiple responsibilities
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): methods with maximum 15 lines naturally limit space for control structures
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): complexidade ciclomática máxima de 5 por método — critério objetivo de simplicidade
+- [001 - Nível Único de Indentação](../../rules/001_nivel-unico-indentacao.md): aninhamento de blocos aumenta diretamente CC, limitar indentação controla complexidade
+- [002 - Proibição da Cláusula ELSE](../../rules/002_proibicao-clausula-else.md): cada `else if` adiciona +1 ao CC, guard clauses mantêm fluxo linear
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): métodos com alto CC indicam múltiplas responsabilidades concentradas
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): métodos com máximo 15 linhas naturalmente limitam espaço para estruturas de controle
 
-**Related skills:**
-- [`cdd`](../cdd/SKILL.md) — depends: CDD uses CC calculated by this skill in the CC_base component of ICP
+**Skills relacionadas:**
+- [`cdd`](../cdd/SKILL.md) — depende: CDD usa CC calculado por esta skill no componente CC_base do ICP

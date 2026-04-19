@@ -71,7 +71,7 @@
 
 ---
 
-## Related to
+## Relacionado a
 
 - [arc42 §3 — Contexto e Escopo](../../arc42/references/03_context_and_scope.md): complementa — §3 mostra sistemas externos; Level 2 mostra o interior do sistema
 - [arc42 §5 — Building Block View](../../arc42/references/05_building_block_view.md): equivalente — Nível 1 de §5 corresponde aos containers aqui

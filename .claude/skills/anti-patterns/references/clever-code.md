@@ -1,39 +1,39 @@
 # Clever Code
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 062
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 062
 
-## What It Is
+## O Que É
 
-Code written to demonstrate the author's skill, not to communicate intent. Uses language tricks, dense expressions, operator abuse, or metaprogramming where direct and readable code would work equally well.
+Código escrito para demonstrar a habilidade do autor, não para comunicar intenção. Usa truques de linguagem, expressões densas, abuso de operadores ou metaprogramação onde código direto e legível funcionaria igualmente bem.
 
-## Symptoms
+## Sintomas
 
-- One-liners that do 5 things at once
-- Operator abuse: `!!value`, `~~n`, `value | 0`, bitwise tricks
-- Long chains of nested `reduce`, `flatMap`, and `map`
-- Single-letter variables outside mathematical contexts
-- Comment `// don't touch this` without explanation of why
-- Code review comments asking "what does this do?" or "can this be clearer?"
+- One-liners que fazem 5 coisas ao mesmo tempo
+- Abuso de operadores: `!!value`, `~~n`, `value | 0`, truques bitwise
+- Longas cadeias de `reduce`, `flatMap` e `map` aninhados
+- Variáveis de uma única letra fora de contextos matemáticos
+- Comentário `// não toque nisto` sem explicação do porquê
+- Comentários de code review perguntando "o que isso faz?" ou "pode ficar mais claro?"
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ "Clever" — what does this do?
+// ❌ "Inteligente" — o que isso faz?
 const getDiscount = (u) =>
   u?.premium && u?.purchases > 10 ? (u?.vip ? 0.3 : 0.2) : u?.purchases > 5 ? 0.1 : 0;
 
-// ❌ Bitwise trick to truncate number
+// ❌ Truque bitwise para truncar número
 const n = value | 0;
 
-// ❌ Implicit coercion as logic
+// ❌ Coerção implícita como lógica
 const display = user.name || user.email || user.id + '';
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Readable — clear intent in each line
+// ✅ Legível — intenção clara em cada linha
 function getDiscount(user) {
   if (!user) return 0;
   if (user.premium && user.vip && user.purchases > 10) return 0.3;
@@ -42,14 +42,14 @@ function getDiscount(user) {
   return 0;
 }
 
-// ✅ Explicit intent
+// ✅ Intenção explícita
 const n = Math.trunc(value);
 const display = user.name ?? user.email ?? String(user.id);
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Clever Code — unreadable nested ternaries
-// TODO: Rewrite with if/else for clarity
+// FIXME: Clever Code — ternários aninhados ilegíveis
+// TODO: Reescrever com if/else para clareza
 ```

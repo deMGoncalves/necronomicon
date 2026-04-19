@@ -4,7 +4,7 @@
 **Rule deMGoncalves:** [017 - Princípio do Reuso Comum](../../../rules/017_principio-reuso-comum.md)
 **Pergunta:** Classes em um pacote são reutilizadas em conjunto? Se você usa uma, usa todas?
 
-## What It Is
+## O Que É
 
 **Classes em um pacote devem ser reutilizadas em conjunto. Se você usa uma, você deve usar todas.**
 

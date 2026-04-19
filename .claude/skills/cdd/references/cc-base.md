@@ -31,7 +31,7 @@ CC = (número de pontos de decisão) + 1
 | 16–20 | 4 |
 | > 20 | 5 |
 
-## Examples
+## Exemplos
 
 ```javascript
 // CC = 1 → ICP CC_base = 1

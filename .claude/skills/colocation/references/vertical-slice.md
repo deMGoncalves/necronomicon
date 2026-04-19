@@ -1,13 +1,13 @@
-# Vertical Slice — Complete Reference
+# Vertical Slice — Referência Completa
 
-## src/ Structure for Real Project
+## Estrutura de src/ para Projeto Real
 
 ```
 src/
 │
-├── user/                         ← Context: "user" domain
-│   ├── auth/                     ← Container: authentication
-│   │   ├── login/                ← Component
+├── user/                         ← Contexto: domínio "user"
+│   ├── auth/                     ← Container: autenticação
+│   │   ├── login/                ← Componente
 │   │   │   ├── controller.ts
 │   │   │   ├── service.ts
 │   │   │   ├── model.ts
@@ -20,22 +20,22 @@ src/
 │   │   │   ├── repository.ts
 │   │   │   └── register.test.ts
 │   │   └── refresh/
-│   │       └── [same files]
+│   │       └── [mesmos arquivos]
 │   │
-│   └── profile/                  ← Container: user profile
+│   └── profile/                  ← Container: perfil de usuário
 │       ├── update/
 │       └── avatar/
 │
-├── order/                        ← Context: "order" domain
-│   ├── cart/                     ← Container: shopping cart
+├── order/                        ← Contexto: domínio "order"
+│   ├── cart/                     ← Container: carrinho de compras
 │   │   ├── add-item/
 │   │   ├── remove-item/
 │   │   └── checkout/
 │   │
-│   └── history/                  ← Container: order history
+│   └── history/                  ← Container: histórico de pedidos
 │       └── list/
 │
-└── notification/                 ← Context: "notification" domain
+└── notification/                 ← Contexto: domínio "notification"
     └── in-app/                   ← Container
         ├── list/
         └── mark-read/
@@ -43,74 +43,74 @@ src/
 
 ---
 
-## Decision Guide
+## Guia de Decisão
 
-### When to Create a New Context?
+### Quando Criar um Novo Contexto?
 
-Create a new Context when it represents an **independent business domain** — something that could be a separate microservice.
+Criar um novo Contexto quando ele representa um **domínio de negócio independente** — algo que poderia ser um microserviço separado.
 
-| Situation | Decision |
-|-----------|----------|
-| Is it a different business domain? | New Context |
-| Does it share entities with another context? | Evaluate: subdomain or separate context |
-| Is it a feature of an existing domain? | Container within existing Context |
+| Situação | Decisão |
+|----------|---------|
+| É um domínio de negócio diferente? | Novo Contexto |
+| Compartilha entidades com outro contexto? | Avaliar: subdomínio ou contexto separado |
+| É uma feature de um domínio existente? | Container dentro do Contexto existente |
 
-### When to Create a New Container?
+### Quando Criar um Novo Container?
 
-Create a Container to **group related operations** within a Context.
+Criar um Container para **agrupar operações relacionadas** dentro de um Contexto.
 
-| Situation | Decision |
-|-----------|----------|
-| Set of CRUD operations for an entity | Container (e.g., `profile/`) |
-| Specific functionality with multiple endpoints | Container (e.g., `auth/`) |
-| Business process with sequential steps | Container (e.g., `checkout/`) |
+| Situação | Decisão |
+|----------|---------|
+| Conjunto de operações CRUD para uma entidade | Container (ex: `profile/`) |
+| Funcionalidade específica com múltiplos endpoints | Container (ex: `auth/`) |
+| Processo de negócio com etapas sequenciais | Container (ex: `checkout/`) |
 
-### When to Create a New Component?
+### Quando Criar um Novo Componente?
 
-Each Component represents **a specific operation** — typically an HTTP endpoint or a use case.
+Cada Componente representa **uma operação específica** — tipicamente um endpoint HTTP ou um caso de uso.
 
-| Operation | Component |
-|-----------|-----------|
+| Operação | Componente |
+|----------|------------|
 | POST /users/auth/login | `user/auth/login/` |
 | GET /orders/cart | `order/cart/list/` |
 | PUT /users/profile/avatar | `user/profile/avatar/` |
 
 ---
 
-## Naming Rules
+## Regras de Nomenclatura
 
-| Level | Format | Examples |
-|-------|--------|----------|
-| Context | `kebab-case` singular | `user`, `order`, `notification` |
-| Container | `kebab-case` singular or verb | `auth`, `cart`, `profile`, `in-app` |
-| Component | `kebab-case` verb or action noun | `login`, `checkout`, `add-item`, `list` |
-| Test file | `[component].test.ts` | `login.test.ts`, `checkout.test.ts` |
+| Nível | Formato | Exemplos |
+|-------|---------|----------|
+| Contexto | `kebab-case` singular | `user`, `order`, `notification` |
+| Container | `kebab-case` singular ou verbo | `auth`, `cart`, `profile`, `in-app` |
+| Componente | `kebab-case` verbo ou substantivo de ação | `login`, `checkout`, `add-item`, `list` |
+| Arquivo de teste | `[componente].test.ts` | `login.test.ts`, `checkout.test.ts` |
 
 ---
 
-## How a Feature Maps to the Path
+## Como uma Feature Mapeia para o Caminho
 
-When receiving a feature request like *"implement JWT login"*:
+Ao receber uma solicitação de feature como *"implementar login com JWT"*:
 
-1. **Context**: `user` — user domain
-2. **Container**: `auth` — authentication
-3. **Component**: `login` — specific login operation
-4. **Path**: `src/user/auth/login/`
-5. **Files**:
+1. **Contexto**: `user` — domínio de usuário
+2. **Container**: `auth` — autenticação
+3. **Componente**: `login` — operação específica de login
+4. **Caminho**: `src/user/auth/login/`
+5. **Arquivos**:
    - `controller.ts` — POST /auth/login
-   - `service.ts` — validation + JWT generation
+   - `service.ts` — validação + geração de JWT
    - `model.ts` — LoginRequest, LoginResponse, JwtPayload
-   - `repository.ts` — user lookup in DB
-   - `login.test.ts` — feature tests
+   - `repository.ts` — busca de usuário no banco
+   - `login.test.ts` — testes da feature
 
 ---
 
-## Benefits for oh my claude Workflow
+## Benefícios para o Workflow do oh my claude
 
-| Benefit | How it Manifests |
-|---------|------------------|
-| **LLM efficiency** | @developer reads only `src/user/auth/login/` — no need to process entire src/ |
-| **Task isolation** | Each Task has a unique path — zero conflict between parallel tasks |
-| **Git hygiene** | One feature = one directory = clean PR without scattered diffs |
-| **Test coverage** | Each component has its co-located `.test.ts` — easy to measure coverage |
-| **Onboarding** | New dev finds everything in one place — no "where is X?" |
+| Benefício | Como se Manifesta |
+|-----------|-------------------|
+| **Eficiência do LLM** | @coder lê apenas `src/user/auth/login/` — sem precisar processar todo o src/ |
+| **Isolamento de tarefas** | Cada Task tem um caminho único — zero conflito entre tasks paralelas |
+| **Higiene de Git** | Uma feature = um diretório = PR limpo sem diffs espalhados |
+| **Cobertura de testes** | Cada componente tem seu `.test.ts` co-localizado — fácil de medir cobertura |
+| **Onboarding** | Novo dev encontra tudo em um lugar — sem "onde está X?" |

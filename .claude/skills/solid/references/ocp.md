@@ -3,7 +3,7 @@
 **Rule deMGoncalves:** COMPORTAMENTAL-011
 **Pergunta:** Posso adicionar comportamento sem modificar código existente?
 
-## What It Is
+## O que é
 
 Módulos, classes ou funções devem ser abertos para extensão e fechados para modificação, permitindo a adição de novos comportamentos sem alterar o código existente da unidade.
 

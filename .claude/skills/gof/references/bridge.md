@@ -1,27 +1,27 @@
 # Bridge
 
-**Category:** Structural
-**Intent:** Decouple an abstraction from its implementation so both can vary independently.
+**Categoria:** Estrutural
+**Intenção:** Desacoplar uma abstração de sua implementação para que ambas possam variar independentemente.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Abstraction and implementation should be extensible by subclassification
-- Changes in implementation should not impact abstraction clients
-- When having class explosion due to inheritance in two independent variation axes
-- To hide implementation details from clients
+- Abstração e implementação devem ser extensíveis por subclassificação
+- Mudanças na implementação não devem impactar os clientes da abstração
+- Quando houver explosão de classes devido à herança em dois eixos de variação independentes
+- Para ocultar detalhes de implementação dos clientes
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When there's only one possible implementation (overengineering — rule 064)
-- When abstraction and implementation don't vary independently
-- For simple problems where direct composition is sufficient
+- Quando há apenas uma implementação possível (overengineering — rule 064)
+- Quando abstração e implementação não variam independentemente
+- Para problemas simples onde composição direta é suficiente
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Implementation (can vary)
+// Implementação (pode variar)
 interface Renderer {
   renderCircle(radius: number): string
 }
@@ -38,7 +38,7 @@ class CanvasRenderer implements Renderer {
   }
 }
 
-// Abstraction (can vary independently from implementation)
+// Abstração (pode variar independentemente da implementação)
 class Shape {
   constructor(protected readonly renderer: Renderer) {}
 }
@@ -54,22 +54,22 @@ class Circle extends Shape {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 new Circle(50, new SVGRenderer()).draw()
 ```
 
-## Related to
+## Relacionado a
 
-- [adapter.md](adapter.md): complements — Adapter reconciles existing interfaces; Bridge separates abstraction from implementation from design
-- [abstract-factory.md](abstract-factory.md): complements — Abstract Factory can create implementation objects for Bridge
-- [strategy.md](strategy.md): complements — Strategy replaces algorithm at runtime; Bridge separates hierarchies permanently
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — abstraction depends on Renderer interface, not on concrete implementations
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new shapes or renderers without modifying existing code
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use when there's only one implementation
+- [adapter.md](adapter.md): complementa — Adapter reconcilia interfaces existentes; Bridge separa abstração de implementação desde o design
+- [abstract-factory.md](abstract-factory.md): complementa — Abstract Factory pode criar objetos de implementação para o Bridge
+- [strategy.md](strategy.md): complementa — Strategy substitui algoritmo em tempo de execução; Bridge separa hierarquias permanentemente
+- [rule 014 - Princípio da Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — abstração depende da interface Renderer, não das implementações concretas
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione novas formas ou renderizadores sem modificar código existente
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use quando há apenas uma implementação
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

@@ -1,6 +1,6 @@
 ---
 name: c4model
-description: C4 Model template with 4 levels of abstraction for architectural visualization (Context, Container, Component, Code). Use when @architect needs to create or update docs/c4/ to communicate architecture to different audiences — when creating context, container, component, or code diagrams.
+description: Template C4 Model com 4 níveis de abstração para visualização arquitetural (Context, Container, Component, Code). Use quando @architect precisar criar ou atualizar docs/c4/ para comunicar arquitetura a diferentes públicos — ao criar diagramas de contexto, container, componente ou código.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -11,98 +11,109 @@ metadata:
 
 # C4 Model
 
-4 levels of progressive abstraction to communicate architecture to different audiences.
+4 níveis de abstração progressiva para comunicar arquitetura a diferentes públicos.
 
 ---
 
-## When to Use
+## Manifest
 
-- **Phase 4 (Docs):** @architect creates/updates docs/c4/ after implementation
-- **Level 1-2:** for stakeholders (business, management)
-- **Level 3-4:** for developers (implementation)
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Fase 4 (Docs) após implementação; ao comunicar arquitetura para públicos diferentes (stakeholders, devs); ao criar ou atualizar arquivos em `docs/c4/` |
+| **Prerequisites** | Sistema ou feature implementado; nomes consistentes de sistema, containers e componentes definidos; familiaridade com o público-alvo de cada nível |
+| **Constraints** | Não misturar níveis num mesmo diagrama; Nível 4 (Code) só quando estritamente necessário; idioma pt-BR obrigatório |
+| **Scope** | 4 níveis de diagramas em `docs/c4/`: System Context (L1), Container (L2), Component (L3), Code (L4) — cada nível com público e pergunta-chave definidos |
 
-## The 4 Levels
+---
 
-| Level | File | Audience | Key Question |
-|-------|------|----------|--------------|
-| 1 — System Context | 01_system_context.md | Everyone | What does the system do and who does it connect with? |
-| 2 — Container | 02_container.md | Technical | What technology composes each part? |
-| 3 — Component | 03_component.md | Dev | How is this service organized internally? |
-| 4 — Code | 04_code.md | Dev | How is this component implemented? |
+## Quando Usar
+
+- **Fase 4 (Docs):** @architect cria/atualiza docs/c4/ após implementação
+- **Nível 1-2:** para stakeholders (negócio, gestão)
+- **Nível 3-4:** para desenvolvedores (implementação)
+
+## Os 4 Níveis
+
+| Nível | Arquivo | Público | Pergunta-chave |
+|-------|---------|---------|----------------|
+| 1 — System Context | 01_system_context.md | Todos | O que o sistema faz e com quem se conecta? |
+| 2 — Container | 02_container.md | Técnico | Que tecnologia compõe cada parte? |
+| 3 — Component | 03_component.md | Dev | Como este serviço está organizado internamente? |
+| 4 — Code | 04_code.md | Dev | Como este componente está implementado? |
 
 ## Templates
 
-See the templates in references/:
-- [references/01_system-context.md](references/01_system-context.md) → Level 1 template
-- [references/02_container.md](references/02_container.md) → Level 2 template
-- [references/03_component.md](references/03_component.md) → Level 3 template
-- [references/04_code.md](references/04_code.md) → Level 4 template
+Veja os templates em references/:
+- [references/01_system-context.md](references/01_system-context.md) → template Nível 1
+- [references/02_container.md](references/02_container.md) → template Nível 2
+- [references/03_component.md](references/03_component.md) → template Nível 3
+- [references/04_code.md](references/04_code.md) → template Nível 4
 
-## Conventions
+## Convenções
 
-- Consistent naming across levels (same name for system/container/component)
-- Level 1-2: simple language, no technical jargon
-- Level 3-4: types, interfaces, specific patterns
-- Language: Brazilian Portuguese
-- Related to: arc42 §5 (Building Block View)
+- Nomenclatura consistente entre níveis (mesmo nome para system/container/component)
+- Nível 1-2: linguagem simples, sem jargão técnico
+- Nível 3-4: tipos, interfaces, patterns específicos
+- Idioma: português brasileiro
+- Relacionado com: arc42 §5 (Building Block View)
 
-## Examples
+## Exemplos
 
 ```markdown
-// ❌ Bad — a single diagram trying to show everything
-[chaotic diagram mixing end users, external systems, internal APIs,
- database, class code — everything at a single level without separation of concerns]
+// ❌ Bad — um único diagrama tentando mostrar tudo
+[diagrama caótico misturando usuários finais, sistemas externos, APIs internas,
+ banco de dados, código de classes — tudo num único nível sem separação de concerns]
 
-Diagram contains:
+Diagrama contém:
 - User → Frontend → AuthService → UserRepository → PostgreSQL
-- Admin → Dashboard → OrderService → PaymentGateway (external)
+- Admin → Dashboard → OrderService → PaymentGateway (externo)
 - Mobile App → API Gateway → Logger → Kafka
-Audience: CTO? Dev? Stakeholder? — nobody understands
+Público: CTO? Dev? Stakeholder? — ninguém entende
 
 ---
 
-// ✅ Good — C4 in 4 progressive abstraction levels
+// ✅ Good — C4 em 4 níveis progressivos de abstração
 
-## Level 1 — System Context (for everyone: CTO, stakeholders, business)
+## Nível 1 — System Context (para todos: CTO, stakeholders, negócio)
 
 ```
-[User] --uses--> [E-commerce System]
-[E-commerce System] --integrates--> [Stripe Payment Gateway]
-[E-commerce System] --integrates--> [SendGrid Email Service]
+[User] --usa--> [Sistema E-commerce]
+[Sistema E-commerce] --integra--> [Stripe Payment Gateway]
+[Sistema E-commerce] --integra--> [SendGrid Email Service]
 ```
 
-Question: "What does the system do?" → Sale of products with online payment.
+Pergunta: "O que o sistema faz?" → Venda de produtos com pagamento online.
 
 ---
 
-## Level 2 — Container (for architects, tech leads)
+## Nível 2 — Container (para arquitetos, tech leads)
 
 ```
-[React SPA Frontend] --HTTP calls--> [Node.js Backend API]
-[Backend API] --reads/writes--> [PostgreSQL Database]
-[Backend API] --publishes events--> [RabbitMQ]
-[Worker Service] --consumes--> [RabbitMQ]
+[React SPA Frontend] --chama HTTP--> [Node.js Backend API]
+[Backend API] --lê/escreve--> [PostgreSQL Database]
+[Backend API] --publica eventos--> [RabbitMQ]
+[Worker Service] --consome--> [RabbitMQ]
 ```
 
-Question: "What technologies compose the system?"
+Pergunta: "Que tecnologias compõem o sistema?"
 → React, Node.js, PostgreSQL, RabbitMQ
 
 ---
 
-## Level 3 — Component (for developers)
+## Nível 3 — Component (para desenvolvedores)
 
-Node.js Backend API contains:
-- AuthController (authenticates users)
-- OrderService (processes orders)
-- PaymentGateway (integrates with Stripe)
-- UserRepository (accesses users table)
+Node.js Backend API contém:
+- AuthController (autentica usuários)
+- OrderService (processa pedidos)
+- PaymentGateway (integra com Stripe)
+- UserRepository (acessa tabela de usuários)
 
-Question: "How is the backend organized internally?"
+Pergunta: "Como o backend está organizado internamente?"
 → Controllers, Services, Repositories
 
 ---
 
-## Level 4 — Code (for developers — only if necessary)
+## Nível 4 — Code (para desenvolvedores — apenas se necessário)
 
 ```typescript
 class OrderService {
@@ -119,11 +130,11 @@ class OrderService {
 }
 ```
 
-Question: "How is OrderService implemented?"
-→ DIP: depends on abstractions (Repository, Gateway)
+Pergunta: "Como OrderService está implementado?"
+→ DIP: depende de abstrações (Repository, Gateway)
 ```
 
-## Rationale
+## Justificativa
 
-- c4model.com: created by Simon Brown
-- Complements arc42 with visualizations per abstraction level
+- c4model.com: criado por Simon Brown
+- Complementa arc42 com visualizações por nível de abstração

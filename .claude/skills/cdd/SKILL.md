@@ -1,6 +1,6 @@
 ---
 name: cdd
-description: "CDD (Cognitive-Driven Development) methodology to measure cognitive load via ICP. Use when @reviewer evaluates complexity, calculates ICP per component, or calibrates violation severity."
+description: "Metodologia CDD (Cognitive-Driven Development) para medir carga cognitiva via ICP. Use quando @architect (modo review) avaliar complexidade, calcular ICP por componente ou calibrar severidade de violações."
 model: sonnet
 allowed-tools: Read
 metadata:
@@ -8,92 +8,103 @@ metadata:
   version: "1.0.0"
 ---
 
-## When to Use
+## Manifest
 
-Use CDD when you need to:
-- **Calculate ICP** of a method/function to quantify cognitive load
-- **Assess severity** of rule violations in code review
-- **Calibrate decisions** for PR approval/rejection with objective context
-- **Identify hot spots** of complexity for priority refactoring
-
-Specific triggers:
-- @reviewer analyzes PR with methods > 10 lines or visible nesting
-- Developer requests complexity evaluation of legacy code
-- Discussion about "this code is complex" without objective metric
-- Need to prioritize refactoring among multiple candidates
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Code review por @architect; avaliação de complexidade em métodos com > 10 linhas ou aninhamento visível; priorização de refatoração entre múltiplos candidatos |
+| **Prerequisites** | Skill `complexity` para calcular CC_base; entendimento das 8 dimensões de responsabilidade e métricas de acoplamento; acesso ao código-fonte do candidato |
+| **Constraints** | Não bloquear PR com ICP 6-7 sem considerar contexto (hotfix, legado); não calcular ICP sem ler código; ICP > 10 nunca pode ser ignorado |
+| **Scope** | Cálculo da métrica ICP via 4 componentes (CC_base + Aninhamento + Responsabilidades + Acoplamento); limiares de ação; processo de revisão em 3 passos |
 
 ---
 
-## The ICP Metric
+## Quando Usar
 
-ICP (Intrinsic Complexity Points) quantifies cognitive load via 4 additive components:
+Use CDD quando você precisar:
+- **Calcular ICP** de um método/função para quantificar carga cognitiva
+- **Avaliar severidade** de violações de regras em revisão de código
+- **Calibrar decisões** para aprovação/rejeição de PR com contexto objetivo
+- **Identificar hot spots** de complexidade para priorizar refatoração
 
-```
-ICP = CC_base + Nesting + Responsibilities + Coupling
-```
-
-**Action thresholds:**
-- ICP ≤ 3: 🟢 Excellent — maintain
-- ICP 4–6: 🟡 Acceptable — consider refactoring
-- ICP 7–10: 🟠 Concerning — refactor before new feature
-- ICP > 10: 🔴 Critical — mandatory refactoring
-
-**Project goal:** Average ICP ≤ 4, 0% of methods with ICP > 10.
+Gatilhos específicos:
+- @architect analisa PR com métodos > 10 linhas ou aninhamento visível
+- Desenvolvedor solicita avaliação de complexidade em código legado
+- Discussão sobre "este código é complexo" sem métrica objetiva
+- Necessidade de priorizar refatoração entre múltiplos candidatos
 
 ---
 
-## CDD Code Review Process (3 Steps)
+## A Métrica ICP
 
-### Step 1 — Quick Scan (2–5min)
+ICP (Intrinsic Complexity Points) quantifica carga cognitiva via 4 componentes aditivos:
 
-Identify high ICP candidates:
-- Files/functions with > 20 lines
-- Visible nesting of 3+ levels
-- Obvious anti-patterns (The Blob, Pyramid of Doom)
+```
+ICP = CC_base + Aninhamento + Responsabilidades + Acoplamento
+```
 
-### Step 2 — Deep Analysis (10–20min)
+**Limiares de ação:**
+- ICP ≤ 3: 🟢 Excelente — manter
+- ICP 4–6: 🟡 Aceitável — considerar refatoração
+- ICP 7–10: 🟠 Preocupante — refatorar antes de nova feature
+- ICP > 10: 🔴 Crítico — refatoração obrigatória
 
-For each candidate:
-1. **Calculate ICP** (see `references/icp-formula.md`)
-2. **Check critical rules** (eval, return null, relative imports)
-3. **Comment objectively** on PR with ICP + violated rule
+**Meta do projeto:** ICP médio ≤ 4, 0% de métodos com ICP > 10.
 
-### Step 3 — Contextual Calibration (5min)
+---
 
-Decide action based on context:
+## Processo de Revisão de Código CDD (3 Passos)
 
-| ICP | Context | Action |
+### Passo 1 — Varredura Rápida (2–5min)
+
+Identificar candidatos de ICP alto:
+- Arquivos/funções com > 20 linhas
+- Aninhamento visível de 3+ níveis
+- Anti-patterns óbvios (The Blob, Pyramid of Doom)
+
+### Passo 2 — Análise Profunda (10–20min)
+
+Para cada candidato:
+1. **Calcular ICP** (ver `references/icp-formula.md`)
+2. **Verificar regras críticas** (eval, return null, imports relativos)
+3. **Comentar objetivamente** no PR com ICP + regra violada
+
+### Passo 3 — Calibração Contextual (5min)
+
+Decidir ação baseada no contexto:
+
+| ICP | Contexto | Ação |
 |-----|---------|--------|
-| ≤ 5 | Any | ✅ Approve |
-| 6–7 | Normal feature | 🔄 Request refactoring |
-| 6–7 | Critical hotfix | ✅ Approve + technical debt |
-| 8–10 | Any | 🔄 Request refactoring |
-| > 10 | Any | 🚫 Block |
+| ≤ 5 | Qualquer | ✅ Aprovar |
+| 6–7 | Feature normal | 🔄 Solicitar refatoração |
+| 6–7 | Hotfix crítico | ✅ Aprovar + débito técnico |
+| 8–10 | Qualquer | 🔄 Solicitar refatoração |
+| > 10 | Qualquer | 🚫 Bloquear |
 
 ---
 
-## ICP Components
+## Componentes do ICP
 
-Complete details in reference files:
+Detalhes completos nos arquivos de referência:
 
-- **[[cc-base.md]]** — Cyclomatic Complexity (execution paths)
-- **[[nesting.md]]** — Nesting depth (guard clauses)
-- **[[responsibilities.md]]** — Number of responsibilities (8 dimensions)
-- **[[coupling.md]]** — Direct external dependencies
-- **[[icp-formula.md]]** — Complete formula + scoring tables
+- **[[cc-base.md]]** — Complexidade Ciclomática (caminhos de execução)
+- **[[nesting.md]]** — Profundidade de aninhamento (guard clauses)
+- **[[responsibilities.md]]** — Número de responsabilidades (8 dimensões)
+- **[[coupling.md]]** — Dependências externas diretas
+- **[[icp-formula.md]]** — Fórmula completa + tabelas de pontuação
 
 ---
 
-## ICP Calculation Example
+## Exemplo de Cálculo de ICP
 
 ```typescript
-// Candidate function
+// Função candidata
 async function processPayment(order) {
   if (!order.isPaid) {                              // +1 CC
-    const result = paymentGateway.charge(order.total);  // +1 dependency
-    if (result.success) {                           // +1 CC, nesting level 2
+    const result = paymentGateway.charge(order.total);  // +1 dependência
+    if (result.success) {                           // +1 CC, nível de aninhamento 2
       order.markAsPaid();
-      emailService.sendReceipt(order.email);        // +1 dependency
+      emailService.sendReceipt(order.email);        // +1 dependência
       return true;
     }
   }
@@ -101,51 +112,51 @@ async function processPayment(order) {
 }
 ```
 
-**Calculation:**
+**Cálculo:**
 - CC = 3 (2 ifs + 1) → CC_base = 1
-- Nesting = 2 levels → +1 point
-- Responsibilities = 3 (validation, payment, notification) → +1 point
-- Coupling = 3 (paymentGateway, order, emailService) → +1 point
-- **Total ICP = 4** 🟡 (acceptable)
+- Aninhamento = 2 níveis → +1 ponto
+- Responsabilidades = 3 (validação, pagamento, notificação) → +1 ponto
+- Acoplamento = 3 (paymentGateway, order, emailService) → +1 ponto
+- **Total ICP = 4** 🟡 (aceitável)
 
 ---
 
-## Prohibitions
+## Proibições
 
-- Don't calculate ICP without reading the code
-- Don't block PR for ICP 6–7 without considering context (hotfix, test coverage)
-- Don't ignore ICP > 10 even in legacy code
-- Don't calculate ICP manually — use formula + reference tables
-- Don't focus on style/formatting while high ICP is ignored
+- Não calcular ICP sem ler o código
+- Não bloquear PR para ICP 6–7 sem considerar contexto (hotfix, cobertura de teste)
+- Não ignorar ICP > 10 mesmo em código legado
+- Não calcular ICP manualmente — usar fórmula + tabelas de referência
+- Não focar em estilo/formatação enquanto ICP alto é ignorado
 
 ---
 
-## Rationale
+## Justificativa
 
-**Related rules:**
-- [Rule 001](../../rules/001_nivel-unico-indentacao.md): CC_base and nesting — reinforces
-- [Rule 010](../../rules/010_principio-responsabilidade-unica.md): responsibilities — reinforces
-- [Rule 014](../../rules/014_principio-inversao-dependencia.md): coupling — reinforces
-- [Rule 018](../../rules/018_principio-dependencias-aciclicas.md): coupling — reinforces
-- [Rule 022](../../rules/022_priorizacao-simplicidade-clareza.md): CC ≤ 5 — reinforces
-- [Rule 066](../../rules/066_proibicao-piramide-do-destino.md): nesting — reinforces
+**Regras relacionadas:**
+- [Rule 001](../../rules/001_nivel-unico-indentacao.md): CC_base e aninhamento — reforça
+- [Rule 010](../../rules/010_principio-responsabilidade-unica.md): responsabilidades — reforça
+- [Rule 014](../../rules/014_principio-inversao-dependencia.md): acoplamento — reforça
+- [Rule 018](../../rules/018_principio-dependencias-aciclicas.md): acoplamento — reforça
+- [Rule 022](../../rules/022_priorizacao-simplicidade-clareza.md): CC ≤ 5 — reforça
+- [Rule 066](../../rules/066_proibicao-piramide-do-destino.md): aninhamento — reforça
 
-**Related skills:**
-- [`complexity`](../complexity/SKILL.md) — reinforces: complexity measures CC_base that CDD uses for ICP
-- [`software-quality`](../software-quality/SKILL.md) — complements: software quality includes testability and maintainability that CDD quantifies
+**Skills relacionadas:**
+- [`complexity`](../complexity/SKILL.md) — reforça: complexity mede CC_base que CDD usa para ICP
+- [`software-quality`](../software-quality/SKILL.md) — complementa: qualidade de software inclui testabilidade e manutenibilidade que CDD quantifica
 
 **Cognitive Load Theory (John Sweller, 1988):**
-- Working memory processes 7±2 chunks (Miller, 1956)
-- In active manipulation: **4±1 elements** (contemporary refinement)
-- Code with ICP > 5 exceeds working memory capacity
-- Consequence: developer constructs incorrect mental model → bugs
+- Memória de trabalho processa 7±2 chunks (Miller, 1956)
+- Em manipulação ativa: **4±1 elementos** (refinamento contemporâneo)
+- Código com ICP > 5 excede capacidade da memória de trabalho
+- Consequência: desenvolvedor constrói modelo mental incorreto → bugs
 
-**Empirical evidence (Zup Innovation, 2020):**
-- Teams with average ICP ≤ 4: 40% fewer regression bugs
-- Code with ICP ≤ 3: modification speed 2.5x higher
-- ICP > 10: debugging time 4x higher than ICP ≤ 5
+**Evidência empírica (Zup Innovation, 2020):**
+- Times com ICP médio ≤ 4: 40% menos bugs de regressão
+- Código com ICP ≤ 3: velocidade de modificação 2.5x maior
+- ICP > 10: tempo de debugging 4x maior que ICP ≤ 5
 
-**References:**
+**Referências:**
 - [Cognitive-Driven Development (CDD)](https://zup.com.br/blog/cognitive-driven-development-cdd/) — Zup Innovation
 - [The Magical Number Seven, Plus or Minus Two](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two) — George Miller (1956)
 - [Cognitive Load Theory](https://en.wikipedia.org/wiki/Cognitive_load) — John Sweller (1988)

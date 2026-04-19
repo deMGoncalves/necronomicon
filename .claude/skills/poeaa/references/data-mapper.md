@@ -1,27 +1,27 @@
 # Data Mapper
 
-**Layer:** Data Source
-**Complexity:** Complex
-**Intent:** A layer of mappers that moves data between objects and database while keeping both independent of each other and the mapper itself.
+**Camada:** Data Source
+**Complexidade:** Complexa
+**Intenção:** Uma camada de mapeadores que transfere dados entre objetos e o banco de dados, mantendo ambos independentes entre si e do próprio mapeador.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Complex domain with Domain Model that should be isolated from infrastructure
-- When database schema differs from domain model
-- When need to test domain without database (unit tests)
-- Systems where database can change without impacting domain
+- Domínio complexo com Domain Model que deve ser isolado da infraestrutura
+- Quando o schema do banco difere do modelo de domínio
+- Quando é necessário testar o domínio sem banco de dados (testes unitários)
+- Sistemas onde o banco pode mudar sem impactar o domínio
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple domains where Active Record would suffice (overengineering — rule 064)
-- When mapping layer doesn't add real value
+- Domínios simples onde Active Record seria suficiente (overengineering — regra 064)
+- Quando a camada de mapeamento não agrega valor real
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Pure domain: knows nothing about database
+// Domínio puro: não sabe nada sobre banco de dados
 class User {
   constructor(
     readonly id: string,
@@ -34,7 +34,7 @@ class User {
   }
 }
 
-// Mapper: responsible for mapping between domain and database
+// Mapper: responsável pelo mapeamento entre domínio e banco
 class UserMapper {
   async findById(id: string): Promise<User | null> {
     const row = await db.query('SELECT * FROM users WHERE id = ?', [id])
@@ -51,14 +51,14 @@ class UserMapper {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [active-record.md](active-record.md): substitutes when domain is simple and coupling to database is acceptable
-- [repository.md](repository.md): complements — Repository uses Data Mapper internally to isolate domain
-- [domain-model.md](domain-model.md): depends — Data Mapper is the natural persistence pattern for Domain Model
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — keeps domain decoupled from data infrastructure
+- [active-record.md](active-record.md): substitui quando o domínio é simples e o acoplamento ao banco é aceitável
+- [repository.md](repository.md): complementa — Repository usa Data Mapper internamente para isolar o domínio
+- [domain-model.md](domain-model.md): depende — Data Mapper é o padrão natural de persistência para Domain Model
+- [regra 014 - Princípio de Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — mantém o domínio desacoplado da infraestrutura de dados
 
 ---
 
-**PoEAA Layer:** Data Source
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Data Source
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

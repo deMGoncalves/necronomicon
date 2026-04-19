@@ -1,55 +1,55 @@
 # Divergent Change
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 054
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 054
 
-## What It Is
+## O Que É
 
-A single class changes for multiple different and unrelated reasons. Each new type of change requires editing the same class for a completely different reason than the previous one. Complementary opposite of Shotgun Surgery: here, one class changes for N reasons.
+Uma única classe muda por múltiplas razões diferentes e não relacionadas. Cada novo tipo de mudança exige editar a mesma classe por uma razão completamente diferente da anterior. Oposto complementar do Shotgun Surgery: aqui, uma classe muda por N razões.
 
-## Symptoms
+## Sintomas
 
-- Class has sections separated by comments (`// database logic`, `// business rules`, `// ui formatting`)
-- Commit history shows commits of completely different features always modifying same file
-- Unit tests need to mock multiple responsibilities to test a single functionality
-- Multiple reasons to change: "I changed it because we switched databases... and because discount rule changed... and because report changed"
+- Classe possui seções separadas por comentários (`// lógica do banco`, `// regras de negócio`, `// formatação ui`)
+- Histórico de commits mostra commits de features completamente diferentes sempre modificando o mesmo arquivo
+- Testes unitários precisam mockar múltiplas responsabilidades para testar uma única funcionalidade
+- Múltiplas razões para mudar: "mudei porque trocamos de banco... e porque a regra de desconto mudou... e porque o relatório mudou"
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ OrderService changes when: database changes, tax rule changes, report format changes
+// ❌ OrderService muda quando: o banco muda, a regra de imposto muda, o formato do relatório muda
 class OrderService {
-  // Data layer
+  // Camada de dados
   async findOrders(filters) { return db.query('SELECT ...', filters); }
 
-  // Business rule
+  // Regra de negócio
   calculateTax(order) { return order.subtotal * TAX_RATES[order.region]; }
 
-  // Formatting
+  // Formatação
   formatForReport(orders) { return orders.map(o => ({ id: o.id, total: formatCurrency(o.total) })); }
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Each class changes for only one reason (Extract Class)
+// ✅ Cada classe muda por apenas uma razão (Extract Class)
 class OrderRepository {
-  async findOrders(filters) { ... }  // changes when database changes
+  async findOrders(filters) { ... }  // muda quando o banco muda
 }
 
 class TaxCalculator {
-  calculateTax(order) { ... }        // changes when law changes
+  calculateTax(order) { ... }        // muda quando a lei muda
 }
 
 class OrderReportFormatter {
-  formatForReport(orders) { ... }    // changes when report changes
+  formatForReport(orders) { ... }    // muda quando o relatório muda
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Divergent Change — OrderService has 3 responsibilities: persistence, calculation, formatting
-// TODO: Extract OrderRepository, TaxCalculator, OrderReportFormatter
+// FIXME: Divergent Change — OrderService tem 3 responsabilidades: persistência, cálculo, formatação
+// TODO: Extrair OrderRepository, TaxCalculator, OrderReportFormatter
 ```

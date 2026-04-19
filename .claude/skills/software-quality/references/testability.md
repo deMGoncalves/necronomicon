@@ -1,34 +1,34 @@
 # Testability — Testabilidade
 
-**Dimension:** Revision
-**Default Severity:** 🔴 Critical
-**Key Question:** Is it easy to test?
+**Dimensão:** Revisão
+**Severidade Padrão:** 🔴 Crítica
+**Questão-Chave:** É fácil de testar?
 
-## What It Is
+## O que é
 
-The effort required to test software and ensure it works correctly. High testability means components can be tested in isolation, with clear inputs and outputs, without depending on external infrastructure.
+O esforço necessário para testar o software e garantir que funciona corretamente. Alta testabilidade significa que os componentes podem ser testados de forma isolada, com entradas e saídas claras, sem depender de infraestrutura externa.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Business code impossible to test | 🔴 Blocker |
-| Singleton used in critical logic | 🔴 Blocker |
-| Concrete dependency in Service | 🟠 Important |
-| Date.now() without injection | 🟡 Suggestion |
+| Código de negócio impossível de testar | 🔴 Blocker |
+| Singleton usado em lógica crítica | 🔴 Blocker |
+| Dependência concreta em Service | 🟠 Importante |
+| Date.now() sem injeção | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not testable - creates dependency internally
+// ❌ Não testável - cria dependência internamente
 class UserService {
   async getUser(id) {
-    const db = new DatabaseConnection(); // Impossible to mock
+    const db = new DatabaseConnection(); // Impossível de mockar
     return db.query(`SELECT * FROM users WHERE id = ${id}`);
   }
 }
 
-// ✅ Testable - dependency injected
+// ✅ Testável - dependência injetada
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
@@ -39,29 +39,29 @@ class UserService {
   }
 }
 
-// In test:
+// No teste:
 const mockRepo = { findById: vi.fn().mockResolvedValue(mockUser) };
 const service = new UserService(mockRepo);
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// TEST(014): Impossible to test - internal concrete dependency
-// TEST: Need to mock time to test
+// TEST(014): Impossível de testar - dependência concreta interna
+// TEST: Necessário mockar o tempo para testar
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Business code impossible to test | 🔴 Blocker |
-| Singleton used in critical logic | 🔴 Blocker |
-| Concrete dependency in Service | 🟠 Important |
-| Date.now() without injection | 🟡 Suggestion |
+| Código de negócio impossível de testar | 🔴 Blocker |
+| Singleton usado em lógica crítica | 🔴 Blocker |
+| Dependência concreta em Service | 🟠 Importante |
+| Date.now() sem injeção | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 014 - Dependency Inversion Principle
-- 032 - Minimum Test Coverage
-- 036 - Side Effects Function Restriction
+- 014 - Princípio de Inversão de Dependência
+- 032 - Cobertura Mínima de Teste
+- 036 - Restrição de Funções com Efeitos Colaterais

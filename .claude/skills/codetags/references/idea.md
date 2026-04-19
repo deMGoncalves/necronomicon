@@ -1,94 +1,94 @@
-# IDEA — Future Improvement Suggestion
+# IDEA — Sugestão de Melhoria Futura
 
-**Severity:** 🟢 Low | Evaluate later
-**Blocks PR:** No
+**Severidade:** 🟢 Baixa | Avaliar depois
+**Bloqueia PR:** Não
 
-## What It Is
+## O Que É
 
-Marks future improvement suggestion or idea that hasn't been validated or prioritized yet. Unlike TODO (confirmed task), IDEA is a proposal to be considered in planning or retrospectives.
+Marca sugestão de melhoria futura ou ideia que ainda não foi validada ou priorizada. Diferente de TODO (tarefa confirmada), IDEA é uma proposta a ser considerada no planejamento ou retrospectivas.
 
-## When to Use
+## Quando Usar
 
-- Unconfirmed improvement ("it would be good if...")
-- Future exploration (technology to evaluate)
-- Potential optimization (may or may not be worth it)
-- Informal feature request (developer's idea)
+- Melhoria não confirmada ("seria bom se...")
+- Exploração futura (tecnologia a avaliar)
+- Otimização potencial (pode ou não valer a pena)
+- Solicitação informal de feature (ideia do desenvolvedor)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Confirmed task → use **TODO**
-- Necessary optimization → use **OPTIMIZE**
-- Identified refactoring → use **REFACTOR**
-- Question about approach → use **QUESTION**
+- Tarefa confirmada → usar **TODO**
+- Otimização necessária → usar **OPTIMIZE**
+- Refatoração identificada → usar **REFACTOR**
+- Dúvida sobre abordagem → usar **QUESTION**
 
-## Format
+## Formato
 
 ```typescript
-// IDEA: improvement suggestion
-// IDEA: explore X to solve Y
-// IDEA: consider for v2 or next iteration
+// IDEA: sugestão de melhoria
+// IDEA: explorar X para resolver Y
+// IDEA: considerar para v2 ou próxima iteração
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// IDEA: add CSV export support in addition to JSON
-// Some users requested it, but not priority now
+// IDEA: adicionar suporte a exportação CSV além de JSON
+// Alguns usuários solicitaram, mas não é prioridade agora
 function exportData(data: any[], format = 'json'): string {
   if (format === 'json') {
     return JSON.stringify(data);
   }
-  throw new Error('Format not supported');
+  throw new Error('Formato não suportado');
 }
 
-// IDEA: evaluate Rust/WASM for this heavy computation
-// Current benchmark: 500ms for 100k items
-// WASM could reduce to ~50ms
+// IDEA: avaliar Rust/WASM para este cálculo pesado
+// Benchmark atual: 500ms para 100k itens
+// WASM poderia reduzir para ~50ms
 function heavyComputation(items: Item[]): number {
   return items.reduce((acc, item) => {
-    // Intensive calculation
+    // Cálculo intensivo
   }, 0);
 }
 
-// IDEA: add skeleton loading instead of spinner
-// Better perceived experience on slow connections
+// IDEA: adicionar skeleton loading em vez de spinner
+// Melhor experiência percebida em conexões lentas
 function LoadingState() {
   return <Spinner />;
 }
 
-// IDEA: migrate to event sourcing when scale requires
-// Current: ~1000 events/day - CRUD sufficient
-// If exceeds 100k/day, reconsider
+// IDEA: migrar para event sourcing quando a escala exigir
+// Atual: ~1000 eventos/dia - CRUD suficiente
+// Se ultrapassar 100k/dia, reconsiderar
 async function saveOrder(order: Order) {
   return db.orders.upsert(order);
 }
 
-// IDEA: accept array of IDs for batch request
-// Today: clients make N requests for N items
-// Future: one request with [id1, id2, ...idN]
+// IDEA: aceitar array de IDs para requisição em lote
+// Hoje: clientes fazem N requisições para N itens
+// Futuro: uma requisição com [id1, id2, ...idN]
 app.get('/api/items/:id', async (req, res) => {
   const item = await getItem(req.params.id);
   res.json(item);
 });
 
-// IDEA: create CLI for scaffolding new modules
-// Today: manually copy template folder
-// Future: `npm run create-module module-name`
+// IDEA: criar CLI para scaffolding de novos módulos
+// Hoje: copiar pasta de template manualmente
+// Futuro: `npm run create-module nome-do-modulo`
 
-// IDEA: add visual regression testing for components
-// Tools to evaluate: Chromatic, Percy, Playwright
+// IDEA: adicionar testes de regressão visual para componentes
+// Ferramentas a avaliar: Chromatic, Percy, Playwright
 function Button({ variant, children }) {
   return <button className={`btn-${variant}`}>{children}</button>;
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Backlog / evaluate in planning or retrospective
-- **Action:** Register with context, evaluate periodically, promote to TODO if approved, remove if doesn't make sense
-- **Converted to:** TODO (if approved) or removed (if discarded)
+- **Prazo:** Backlog / avaliar no planejamento ou retrospectiva
+- **Ação:** Registrar com contexto, avaliar periodicamente, promover para TODO se aprovado, remover se não fizer sentido
+- **Convertido em:** TODO (se aprovado) ou removido (se descartado)
 
-## Related to
+## Relacionado a
 
-- Rules: [023 - YAGNI](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md) (IDEA ≠ implement now)
-- Similar tags: IDEA (not confirmed) vs TODO (confirmed and prioritized)
+- Rules: [023 - YAGNI](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md) (IDEA ≠ implementar agora)
+- Tags similares: IDEA (não confirmado) vs TODO (confirmado e priorizado)

@@ -1,27 +1,27 @@
 # MVC (Model-View-Controller)
 
-**Layer:** Web Presentation
-**Complexity:** Moderate
-**Intent:** Separate application into three components: Model (data and business logic), View (presentation), and Controller (coordination between Model and View).
+**Camada:** Web Presentation
+**Complexidade:** Moderada
+**Intenção:** Separar a aplicação em três componentes: Model (dados e lógica de negócio), View (apresentação) e Controller (coordenação entre Model e View).
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Any application with user interface
-- When presentation logic should be separated from business logic
-- To allow different Views to display the same data (e.g., HTML and JSON)
-- Fundamental pattern in web frameworks (Express, Fastify, NestJS)
+- Qualquer aplicação com interface de usuário
+- Quando a lógica de apresentação deve ser separada da lógica de negócio
+- Para permitir que diferentes Views exibam os mesmos dados (ex: HTML e JSON)
+- Padrão fundamental em frameworks web (Express, Fastify, NestJS)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Never — MVC is suitable for any size web application
-- In very simple applications it can be simplified, but the separation always pays off
+- Nunca — MVC é adequado para aplicações web de qualquer tamanho
+- Em aplicações muito simples pode ser simplificado, mas a separação sempre compensa
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Model: data and business rules
+// Model: dados e regras de negócio
 class UserModel {
   async findById(id: string): Promise<User | null> {
     return userRepository.findById(id)
@@ -34,7 +34,7 @@ class UserModel {
   }
 }
 
-// View: rendering (can be JSON for APIs)
+// View: renderização (pode ser JSON para APIs)
 class UserView {
   renderJSON(user: User): object {
     return { id: user.id, name: user.name, email: user.email }
@@ -45,7 +45,7 @@ class UserView {
   }
 }
 
-// Controller: coordinates Model and View
+// Controller: coordena Model e View
 class UserController {
   constructor(
     private readonly model: UserModel,
@@ -60,13 +60,13 @@ class UserController {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [front-controller.md](front-controller.md): complements — Front Controller is the entry point that dispatches to MVC Controllers
-- [page-controller.md](page-controller.md): complements — Page Controller is a simplified implementation of the Controller role in MVC
-- [rule 010 - Single Responsibility Principle](../../../rules/010_principio-responsabilidade-unica.md): reinforces — clearly separates responsibilities of data, presentation and coordination
+- [front-controller.md](front-controller.md): complementa — Front Controller é o ponto de entrada que despacha para os Controllers do MVC
+- [page-controller.md](page-controller.md): complementa — Page Controller é uma implementação simplificada do papel de Controller no MVC
+- [regra 010 - Princípio da Responsabilidade Única](../../../rules/010_principio-responsabilidade-unica.md): reforça — separa claramente as responsabilidades de dados, apresentação e coordenação
 
 ---
 
-**PoEAA Layer:** Web Presentation
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Web Presentation
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

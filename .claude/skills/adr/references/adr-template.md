@@ -1,38 +1,38 @@
-# ADR-NNN — [Decision Title]
+# ADR-NNN — [Título da Decisão]
 
-**Status:** [Proposed | Accepted | Deprecated | Superseded by ADR-XXX]
-**Date:** YYYY-MM-DD
-
----
-
-## Context
-
-[Describe the context and the problem that led to this decision. What forces are at play? What are the constraints?]
-
-## Decision
-
-[Describe the decision made in active voice. "We decided to use X because Y"]
-
-## Alternatives Considered
-
-| Alternative | Pros | Cons |
-|-------------|------|------|
-| [Chosen option] | | |
-| [Option B] | | |
-
-## Consequences
-
-### Positive
-- [Benefits of this decision]
-
-### Negative / Trade-offs
-- [Costs and limitations accepted with this decision]
-
-## Related to
-
-- [ADR-NNN — Title]: [type of relationship]
-- [arc42 §N — Section]: cross-reference
+**Status:** [Proposto | Aceito | Depreciado | Substituído por ADR-XXX]
+**Data:** YYYY-MM-DD
 
 ---
 
-**Author:** deMGoncalves
+## Contexto
+
+[Descrever o contexto e o problema que levou a esta decisão. Quais forças estão em jogo? Quais são as restrições?]
+
+## Decisão
+
+[Descrever a decisão tomada em voz ativa. "Decidimos usar X porque Y"]
+
+## Alternativas Consideradas
+
+| Alternativa | Prós | Contras |
+|-------------|------|---------|
+| [Opção escolhida] | | |
+| [Opção B] | | |
+
+## Consequências
+
+### Positivas
+- [Benefícios desta decisão]
+
+### Negativas / Trade-offs
+- [Custos e limitações aceitos com esta decisão]
+
+## Relacionado a
+
+- [ADR-NNN — Título]: [tipo de relacionamento]
+- [arc42 §N — Seção]: referência cruzada
+
+---
+
+**Autor:** deMGoncalves

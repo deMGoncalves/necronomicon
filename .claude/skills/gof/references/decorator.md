@@ -1,24 +1,24 @@
 # Decorator
 
-**Category:** Structural
-**Intent:** Attach additional responsibilities to an object dynamically, as an alternative to subclassification for extending functionality.
+**Categoria:** Estrutural
+**Intenção:** Anexar responsabilidades adicionais a um objeto dinamicamente, como alternativa à subclassificação para estender funcionalidades.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Add behaviors to individual objects without affecting other objects of the same class
-- When inheritance would lead to subclass explosion
-- To compose behaviors flexibly at runtime
-- Cross-cutting concerns like logging, caching, validation, authentication
+- Adicionar comportamentos a objetos individuais sem afetar outros objetos da mesma classe
+- Quando a herança levaria à explosão de subclasses
+- Para compor comportamentos flexivelmente em tempo de execução
+- Preocupações transversais como logging, cache, validação, autenticação
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When stacking many Decorators makes debugging difficult (rule 060 — Spaghetti Code)
-- When the order of Decorators is critical and difficult to control
-- For behaviors that apply to the entire class, not individual instances
+- Quando empilhar muitos Decorators torna o debugging difícil (rule 060 — Spaghetti Code)
+- Quando a ordem dos Decorators é crítica e difícil de controlar
+- Para comportamentos que se aplicam à classe inteira, não a instâncias individuais
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface DataSource {
@@ -32,38 +32,38 @@ class FileDataSource implements DataSource {
   read(): string { return this.content }
 }
 
-// Base Decorator
+// Decorator base
 class DataSourceDecorator implements DataSource {
   constructor(protected readonly wrapped: DataSource) {}
   write(data: string): void { this.wrapped.write(data) }
   read(): string { return this.wrapped.read() }
 }
 
-// Concrete Decorator: adds compression
+// Decorator concreto: adiciona compressão
 class CompressionDecorator extends DataSourceDecorator {
   write(data: string): void {
-    const compressed = Buffer.from(data).toString('base64') // simulation
+    const compressed = Buffer.from(data).toString('base64') // simulação
     this.wrapped.write(compressed)
   }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const source = new CompressionDecorator(new FileDataSource())
 source.write('data')
 ```
 
-## Related to
+## Relacionado a
 
-- [composite.md](composite.md): complements — Composite aggregates multiple objects; Decorator wraps a single object with additional behavior
-- [proxy.md](proxy.md): complements — Proxy controls access; Decorator adds behavior; similar structure, different intent
-- [strategy.md](strategy.md): complements — Strategy replaces algorithm via composition; Decorator adds behavior by stacking wrappers
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — adds behavior without modifying existing classes
-- [rule 060 - Prohibition of Spaghetti Code](../../../rules/060_proibicao-codigo-spaghetti.md): reinforces — stacking many Decorators creates complexity difficult to follow
+- [composite.md](composite.md): complementa — Composite agrega múltiplos objetos; Decorator envolve um único objeto com comportamento adicional
+- [proxy.md](proxy.md): complementa — Proxy controla acesso; Decorator adiciona comportamento; estrutura similar, intenção diferente
+- [strategy.md](strategy.md): complementa — Strategy substitui algoritmo por composição; Decorator adiciona comportamento empilhando wrappers
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adiciona comportamento sem modificar classes existentes
+- [rule 060 - Proibição de Spaghetti Code](../../../rules/060_proibicao-codigo-spaghetti.md): reforça — empilhar muitos Decorators cria complexidade difícil de acompanhar
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

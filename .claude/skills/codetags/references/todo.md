@@ -1,61 +1,61 @@
-# TODO — Pending Task
+# TODO — Tarefa Pendente
 
-**Severity:** 🟡 Medium | Resolve in sprint
-**Blocks PR:** No
+**Severidade:** 🟡 Média | Resolver na sprint
+**Bloqueia PR:** Não
 
-## What It Is
+## O Que É
 
-Marks pending task or planned functionality that hasn't been implemented yet. It's the most common codetag and indicates future work that's on the team's radar.
+Marca tarefa pendente ou funcionalidade planejada que ainda não foi implementada. É a codetag mais comum e indica trabalho futuro que está no radar do time.
 
-## When to Use
+## Quando Usar
 
-- Partially implemented feature (missing edge case validation)
-- Placeholder for future implementation (function with stub)
-- Confirmed and planned improvement (add cache)
-- Pending integration with external service
+- Funcionalidade parcialmente implementada (falta validação de caso extremo)
+- Placeholder para implementação futura (função com stub)
+- Melhoria confirmada e planejada (adicionar cache)
+- Integração pendente com serviço externo
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Bug to fix → use **FIXME**
-- Code to restructure → use **REFACTOR**
-- Performance optimization → use **OPTIMIZE**
-- Unconfirmed future idea → use **IDEA**
+- Bug para corrigir → usar **FIXME**
+- Código para reestruturar → usar **REFACTOR**
+- Otimização de performance → usar **OPTIMIZE**
+- Ideia futura não confirmada → usar **IDEA**
 
-## Format
+## Formato
 
 ```typescript
-// TODO: clear task description
-// TODO: [TICKET-123] description with tracking
-// TODO: description - deadline if applicable
+// TODO: descrição clara da tarefa
+// TODO: [TICKET-123] descrição com rastreamento
+// TODO: descrição - prazo se aplicável
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// TODO: [PROJ-456] add email format validation
+// TODO: [PROJ-456] adicionar validação de formato de email
 function createUser(email: string, password: string) {
-  // Email validation pending
+  // Validação de email pendente
   return db.users.create({ email, password });
 }
 
-// TODO: implement pagination - current limit 100 items
+// TODO: implementar paginação - limite atual de 100 itens
 async function listProducts() {
   return db.products.findAll({ limit: 100 });
 }
 
-// TODO: implement retry with exponential backoff
+// TODO: implementar retry com backoff exponencial
 async function fetchWithRetry(url: string) {
   return fetch(url);
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Planned sprint (blocker for feature) or next sprint (improvement)
-- **Action:** Create ticket, prioritize in backlog, implement when prioritized
-- **Converted to:** Removed after complete implementation
+- **Prazo:** Sprint planejada (bloqueador de feature) ou próxima sprint (melhoria)
+- **Ação:** Criar ticket, priorizar no backlog, implementar quando priorizado
+- **Convertido em:** Removido após implementação completa
 
-## Related to
+## Relacionado a
 
-- Rules: [023 - YAGNI](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md) (don't create speculative TODOs)
-- Similar tags: TODO (confirmed) vs IDEA (not confirmed)
+- Rules: [023 - YAGNI](../../../.claude/rules/023_proibicao-funcionalidade-especulativa.md) (não criar TODOs especulativos)
+- Tags similares: TODO (confirmado) vs IDEA (não confirmado)

@@ -3,7 +3,7 @@
 **Rule deMGoncalves:** COMPORTAMENTAL-010
 **Pergunta:** Esta classe tem apenas uma razão para mudar?
 
-## What It Is
+## O que é
 
 Exige que uma classe ou módulo tenha apenas uma razão para mudar, o que implica que deve ter uma única responsabilidade. Uma classe deve fazer uma coisa e fazê-la bem.
 

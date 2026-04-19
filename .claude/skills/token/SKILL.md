@@ -1,6 +1,6 @@
 ---
 name: token
-description: Convention for using Design Tokens in CSS styles — when creating or modifying CSS styles, reviewing code that uses hardcoded values for color, spacing or typography instead of Design System tokens
+description: Convenção para uso de Design Tokens em estilos CSS — ao criar ou modificar estilos CSS, revisar código que usa valores hardcoded para cor, espaçamento ou tipografia ao invés de tokens do Design System
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
 metadata:
@@ -10,30 +10,41 @@ metadata:
 
 # Token
 
-Convention for using CSS Design Tokens when styling components, replacing hardcoded values with Design System tokens from `packages/pixel/tokens/`.
+Convenção para uso de Design Tokens CSS ao estilizar componentes, substituindo valores hardcoded por tokens do Design System de `packages/pixel/tokens/`.
 
 ---
 
-## When to Use
+## Manifest
 
-| Situation | Action |
-|-----------|--------|
-| Creating styles for new component | Consult mapping below for each property |
-| Modifying existing styles with hardcoded values | Replace with corresponding token |
-| Choosing color, size or spacing | Select token by semantic context |
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar ou modificar estilos CSS; ao revisar código com valores hardcoded de cor, espaçamento ou tipografia; ao garantir suporte automático a dark mode via `light-dark()` |
+| **Prerequisites** | Tokens do Design System disponíveis em `packages/pixel/tokens/`; CSS Custom Properties (`var(--token)`); skill `render` (onde os estilos são aplicados via função `style`) |
+| **Constraints** | `--spacing_inset-*` apenas em `padding` (interno); `--spacing-*` em `margin` e `gap` (externo); tokens de cor `*-dark` proibidos em `background`; tokens de cor `*-light` proibidos em `color` de texto |
+| **Scope** | Mapeamento completo de propriedades CSS → categoria de tokens; escala de cores (5 tons por paleta); 9 paletas semânticas; escala de espaçamento interno vs externo |
 
-## Principle
+---
 
-| Aspect | Details |
-|--------|---------|
-| Consistency | Tokens ensure all components share same visual scale |
-| Maintainability | Centralized token changes update entire system |
-| Dark mode | Colors use `light-dark()` internally — using token already guarantees automatic support |
+## Quando Usar
 
-## Mapping: Property → Token Category
+| Situação | Ação |
+|----------|------|
+| Criando estilos para novo componente | Consultar mapeamento abaixo para cada propriedade |
+| Modificando estilos existentes com valores hardcoded | Substituir por token correspondente |
+| Escolhendo cor, tamanho ou espaçamento | Selecionar token por contexto semântico |
 
-| CSS Property | Token Category | Correct Example |
-|--------------|----------------|-----------------|
+## Princípio
+
+| Aspecto | Detalhes |
+|---------|----------|
+| Consistência | Tokens garantem que todos os componentes compartilhem a mesma escala visual |
+| Manutenibilidade | Mudanças centralizadas nos tokens atualizam todo o sistema |
+| Dark mode | Cores usam `light-dark()` internamente — usar token já garante suporte automático |
+
+## Mapeamento: Propriedade → Categoria de Token
+
+| Propriedade CSS | Categoria de Token | Exemplo Correto |
+|-----------------|--------------------|-----------------|
 | `color` | `--color-*` | `color: var(--color-master-dark)` |
 | `background`, `background-color` | `--color-*` | `background: var(--color-master-lightest)` |
 | `border-color` | `--color-*` | `border-color: var(--color-master-light)` |
@@ -50,92 +61,92 @@ Convention for using CSS Design Tokens when styling components, replacing hardco
 | `box-shadow` | `--shadow-level-*` | `box-shadow: var(--shadow-level-1)` |
 | `fill`, `stroke` (SVG) | `--color-*` | `fill: var(--color-primary)` |
 
-## Scale Rules
+## Regras de Escala
 
-### Colors — Tone Scale
+### Cores — Escala de Tom
 
-Each color palette has 5 intensity levels. Intensity defines **where** to use:
+Cada paleta de cores tem 5 níveis de intensidade. A intensidade define **onde** usar:
 
-| Tone | Usage | Example |
-|------|-------|---------|
-| `*-darker` | Headers and strongly highlighted text | `color: var(--color-primary-darker)` |
-| `*-dark` | Main and interactive text | `color: var(--color-primary-dark)` |
-| `*` (base) | Buttons and interactive elements | `background: var(--color-primary)` |
-| `*-light` | Icons and subtle highlights | `color: var(--color-primary-light)` |
-| `*-lighter` | Component backgrounds | `background: var(--color-primary-lighter)` |
+| Tom | Uso | Exemplo |
+|-----|-----|---------|
+| `*-darker` | Títulos e texto fortemente destacado | `color: var(--color-primary-darker)` |
+| `*-dark` | Texto principal e interativo | `color: var(--color-primary-dark)` |
+| `*` (base) | Botões e elementos interativos | `background: var(--color-primary)` |
+| `*-light` | Ícones e destaques sutis | `color: var(--color-primary-light)` |
+| `*-lighter` | Fundos de componentes | `background: var(--color-primary-lighter)` |
 
-**Critical rule:** never use dark tone in `background` nor light tone in text `color`.
+**Regra crítica:** nunca usar tom dark em `background` nem tom light em `color` de texto.
 
-### Available Palettes
+### Paletas Disponíveis
 
-| Palette | Semantic Usage |
-|---------|---------------|
-| `master` | Gray scale — neutral text, borders and backgrounds |
-| `primary` | Brand identity — main actions |
-| `complete` | Progress and completion |
-| `success` | Positive feedback |
-| `warning` | Warnings |
-| `danger` | Errors |
-| `info` | Neutral informative |
-| `menu` | Navigation in dark contexts |
-| `pure-white` / `pure-black` | Absolute contrast only |
+| Paleta | Uso Semântico |
+|--------|---------------|
+| `master` | Escala de cinza — texto neutro, bordas e fundos |
+| `primary` | Identidade da marca — ações principais |
+| `complete` | Progresso e conclusão |
+| `success` | Feedback positivo |
+| `warning` | Avisos |
+| `danger` | Erros |
+| `info` | Informativo neutro |
+| `menu` | Navegação em contextos dark |
+| `pure-white` / `pure-black` | Contraste absoluto apenas |
 
-### Spacing — External vs Internal
+### Espaçamento — Externo vs Interno
 
-| Context | Token | Prohibition |
-|---------|-------|-------------|
-| `padding` | `--spacing_inset-*` | Never use `--spacing-*` in padding |
-| `margin` | `--spacing-*` | Never use `--spacing_inset-*` in margin |
-| `gap` | `--spacing-*` | Never use `--spacing_inset-*` in gap |
+| Contexto | Token | Proibição |
+|----------|-------|-----------|
+| `padding` | `--spacing_inset-*` | Nunca usar `--spacing-*` em padding |
+| `margin` | `--spacing-*` | Nunca usar `--spacing_inset-*` em margin |
+| `gap` | `--spacing-*` | Nunca usar `--spacing_inset-*` em gap |
 
-## Semantic Context
+## Contexto Semântico
 
-Component type determines which tokens are required:
+O tipo de componente determina quais tokens são obrigatórios:
 
-| Component | Property | Required Token |
-|-----------|----------|----------------|
-| Interactive button | `background` | `--color-primary` |
-| Interactive button | `border-radius` | `--border-radius-sm` |
+| Componente | Propriedade | Token Obrigatório |
+|------------|-------------|-------------------|
+| Botão interativo | `background` | `--color-primary` |
+| Botão interativo | `border-radius` | `--border-radius-sm` |
 | Input | `border-width` | `--border-width-thin` |
 | Input | `border-radius` | `--border-radius-xs` |
-| Error text | `color` | `--color-danger-*` |
-| Success text | `color` | `--color-success-*` |
-| Neutral border | `border-color` | `--color-master-light` |
-| Main background | `background` | `--color-master-lightest` |
-| Title / header | `font-family` | `--font-family-highlight` |
-| Title / header | `font-weight` | `--font-weight-bold` |
-| Regular text | `font-family` | `--font-family-base` |
-| Paragraph | `line-height` | `--line-height-md` |
+| Texto de erro | `color` | `--color-danger-*` |
+| Texto de sucesso | `color` | `--color-success-*` |
+| Borda neutra | `border-color` | `--color-master-light` |
+| Fundo principal | `background` | `--color-master-lightest` |
+| Título / header | `font-family` | `--font-family-highlight` |
+| Título / header | `font-weight` | `--font-weight-bold` |
+| Texto regular | `font-family` | `--font-family-base` |
+| Parágrafo | `line-height` | `--line-height-md` |
 
-## Exceptions
+## Exceções
 
-Properties below **have no token** and can use direct values:
+Propriedades abaixo **não têm token** e podem usar valores diretos:
 
-| Property | Allowed Values |
-|----------|---------------|
-| `display`, `position`, `visibility`, `overflow` | Any valid value |
-| `flex`, `flex-grow`, `flex-shrink`, `order` | Numeric values |
-| `z-index` | Numeric values |
+| Propriedade | Valores Permitidos |
+|-------------|-------------------|
+| `display`, `position`, `visibility`, `overflow` | Qualquer valor válido |
+| `flex`, `flex-grow`, `flex-shrink`, `order` | Valores numéricos |
+| `z-index` | Valores numéricos |
 | `width`, `height` | `100%`, `auto`, `min-content`, `max-content` |
 | `min-width`, `max-width` | `0`, `none`, `100%` |
 | `top`, `left`, `right`, `bottom` | `0` |
 | `border-style` | `solid`, `dashed`, `dotted` |
-| `transition`, `animation` | Duration and timing |
-| `transform` | Any transformation function |
+| `transition`, `animation` | Duração e timing |
+| `transform` | Qualquer função de transformação |
 | `cursor` | `pointer`, `default`, `not-allowed` |
-| `pointer-events`, `user-select` | Any valid value |
+| `pointer-events`, `user-select` | Qualquer valor válido |
 
-## Examples
+## Exemplos
 
 ```css
-/* ❌ Bad — hardcoded values */
+/* ❌ Ruim — valores hardcoded */
 .button {
   background: #3B82F6;
   padding: 8px 16px;
   font-size: 14px;
 }
 
-/* ✅ Good — Design Tokens */
+/* ✅ Bom — Design Tokens */
 .button {
   background: var(--color-action-default);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -143,27 +154,27 @@ Properties below **have no token** and can use direct values:
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| `color: #000` or `color: black` | Use `--color-master-darkest` or semantic palette (rule 024) |
-| `background: #fff` or `background: white` | Use `--color-master-lightest` or `--color-pure-white` (rule 024) |
-| `border: 1px solid #ccc` (shorthand with fixed values) | Separate into `border-width`, `border-style` and `border-color` using tokens |
-| `padding: 16px` | Use `--spacing_inset-xs` — padding is internal spacing (rule 024) |
-| `margin: 8px` | Use `--spacing-nano` — margin is external spacing (rule 024) |
-| `gap: 24px` | Use `--spacing-xxs` — gap is external spacing (rule 024) |
-| `font-size: 16px` | Use `--font-size-xs` — typography should use tokens (rule 024) |
-| `font-weight: 700` | Use `--font-weight-bold` — typographic weight should use tokens (rule 024) |
-| `opacity: 0.5` | Use closest `--opacity-level-*` |
-| `--spacing-*` in `padding` | Padding is internal, use `--spacing_inset-*` |
-| `--spacing_inset-*` in `margin` or `gap` | Margin and gap are external, use `--spacing-*` |
-| Dark color token in `background` | Use `*-lighter` or `*-lightest` variation |
-| Light color token in text `color` | Use `*-darker` or `*-dark` variation |
+| O que evitar | Razão |
+|--------------|-------|
+| `color: #000` ou `color: black` | Usar `--color-master-darkest` ou paleta semântica (rule 024) |
+| `background: #fff` ou `background: white` | Usar `--color-master-lightest` ou `--color-pure-white` (rule 024) |
+| `border: 1px solid #ccc` (shorthand com valores fixos) | Separar em `border-width`, `border-style` e `border-color` usando tokens |
+| `padding: 16px` | Usar `--spacing_inset-xs` — padding é espaçamento interno (rule 024) |
+| `margin: 8px` | Usar `--spacing-nano` — margin é espaçamento externo (rule 024) |
+| `gap: 24px` | Usar `--spacing-xxs` — gap é espaçamento externo (rule 024) |
+| `font-size: 16px` | Usar `--font-size-xs` — tipografia deve usar tokens (rule 024) |
+| `font-weight: 700` | Usar `--font-weight-bold` — peso tipográfico deve usar tokens (rule 024) |
+| `opacity: 0.5` | Usar `--opacity-level-*` mais próximo |
+| `--spacing-*` em `padding` | Padding é interno, usar `--spacing_inset-*` |
+| `--spacing_inset-*` em `margin` ou `gap` | Margin e gap são externos, usar `--spacing-*` |
+| Token de cor dark em `background` | Usar variação `*-lighter` ou `*-lightest` |
+| Token de cor light em `color` de texto | Usar variação `*-darker` ou `*-dark` |
 
-## Rationale
+## Justificativa
 
-- [024 - Prohibition of Magic Constants](../../rules/024_proibicao-constantes-magicas.md): literal values in CSS are magic constants, should be replaced by named tokens for traceability and maintenance
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): tokens reduce cognitive complexity by giving explicit semantics to style values
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): tokens centralize visual definition responsibility, avoiding individual components making design decisions
-- [016 - Common Closure Principle](../../rules/016_principio-fechamento-comum.md): theme or visual scale changes are localized in tokens, without altering components
+- [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): valores literais em CSS são constantes mágicas, devem ser substituídos por tokens nomeados para rastreabilidade e manutenção
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): tokens reduzem complexidade cognitiva ao dar semântica explícita aos valores de estilo
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): tokens centralizam responsabilidade de definição visual, evitando que componentes individuais tomem decisões de design
+- [016 - Princípio do Fechamento Comum](../../rules/016_principio-fechamento-comum.md): mudanças de tema ou escala visual são localizadas nos tokens, sem alterar componentes

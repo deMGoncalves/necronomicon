@@ -4,13 +4,13 @@
 **Rule deMGoncalves:** [019 - Princípio de Dependências Estáveis](../../../rules/019_principio-dependencias-estaveis.md)
 **Pergunta:** As dependências apontam na direção da estabilidade (módulos instáveis dependem de estáveis)?
 
-## What It Is
+## O Que É
 
 **As dependências de um módulo devem apontar na direção da estabilidade. Módulos instáveis (que mudam com frequência) devem depender de módulos estáveis.**
 
 Violações do SDP fazem com que módulos de alto nível (mais importantes para o negócio) dependam de módulos de baixo nível e voláteis, propagando mudanças e reduzindo a testabilidade.
 
-## Métrica: Instabilidade (I)
+## Métrica de Instabilidade (I)
 
 ```
 I = Fan-out / (Fan-in + Fan-out)

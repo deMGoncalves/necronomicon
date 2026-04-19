@@ -1,42 +1,42 @@
-# Factor 02 — Dependencies
+# Fator 02 — Dependencies
 
-**deMGoncalves Rule:** [041 - Explicit Dependency Declaration](../../../rules/041_declaracao-explicita-dependencias.md)
-**Question:** 100% of dependencies explicit in manifest (package.json)?
+**Regra deMGoncalves:** [041 - Declaração Explícita de Dependências](../../../rules/041_declaracao-explicita-dependencias.md)
+**Questão:** 100% das dependências explícitas no manifesto (package.json)?
 
-## What It Is
+## O que é
 
-An application must declare **all** its dependencies explicitly and completely through a dependency manifest (e.g., `package.json`, `requirements.txt`). The application should **never** rely on the implicit existence of system-wide packages.
+Uma aplicação deve declarar **todas** as suas dependências de forma explícita e completa através de um manifesto de dependências (ex: `package.json`, `requirements.txt`). A aplicação **nunca** deve depender da existência implícita de pacotes instalados no sistema.
 
-**Implicit dependencies break portability and reproducibility.**
+**Dependências implícitas quebram a portabilidade e a reprodutibilidade.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] **100%** of runtime and build dependencies declared in manifest (`package.json`, `bun.lockb`)
-- [ ] Zero global system dependencies (e.g., `npm install -g`, `apt-get`)
-- [ ] Lockfile versioned and updated for deterministic builds
+- [ ] **100%** das dependências de runtime e build declaradas no manifesto (`package.json`, `bun.lockb`)
+- [ ] Zero dependências globais do sistema (ex: `npm install -g`, `apt-get`)
+- [ ] Lockfile versionado e atualizado para builds determinísticos
 
-## ❌ Violation
+## ❌ Violação
 
 ```bash
-# Untracked global installation
-npm install -g typescript  # violation
+# Instalação global não rastreada
+npm install -g typescript  # violação
 
-# Dependency not declared in package.json
-import express from 'express';  # used but not in dependencies
+# Dependência não declarada no package.json
+import express from 'express';  # usada mas não está em dependencies
 
 # package.json
 {
   "dependencies": {
     "lodash": "^4.17.21"
-    // express not declared ❌
+    // express não declarada ❌
   }
 }
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```bash
-# All dependencies in manifest
+# Todas as dependências no manifesto
 npm install --save-exact typescript express lodash
 
 # package.json
@@ -50,13 +50,13 @@ npm install --save-exact typescript express lodash
   }
 }
 
-# Lockfile versioned
-git add package-lock.json  # or bun.lockb
+# Lockfile versionado
+git add package-lock.json  # ou bun.lockb
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Dependency axios not declared in package.json
+// FIXME: Dependência axios não declarada no package.json
 import axios from 'axios';
 ```

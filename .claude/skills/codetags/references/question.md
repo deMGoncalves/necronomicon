@@ -1,104 +1,104 @@
-# QUESTION — Doubt or Question
+# QUESTION — Dúvida ou Questão
 
-**Severity:** 🟢 Low | Resolve in code review
-**Blocks PR:** Can be 🟡 Medium if blocking correctness
+**Severidade:** 🟢 Baixa | Resolver no code review
+**Bloqueia PR:** Pode ser 🟡 Média se bloquear corretude
 
-## What It Is
+## O Que É
 
-Marks doubt or question about approach, requirement or implementation decision. Indicates author's uncertainty that needs to be clarified through discussion in code review or sync with team.
+Marca dúvida ou questão sobre abordagem, requisito ou decisão de implementação. Indica incerteza do autor que precisa ser esclarecida por discussão no code review ou sincronização com o time.
 
-## When to Use
+## Quando Usar
 
-- Ambiguous requirement (spec isn't clear)
-- Approach choice (which pattern to use?)
-- Expected behavior (what to do in this case?)
-- Understanding validation (is this correct?)
+- Requisito ambíguo (spec não está clara)
+- Escolha de abordagem (qual padrão usar?)
+- Comportamento esperado (o que fazer neste caso?)
+- Validação de entendimento (isto está correto?)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Code to be reviewed → use **REVIEW**
-- Important information → use **NOTE**
-- Identified bug → use **FIXME**
-- Pending task → use **TODO**
+- Código a ser revisado → usar **REVIEW**
+- Informação importante → usar **NOTE**
+- Bug identificado → usar **FIXME**
+- Tarefa pendente → usar **TODO**
 
-## Format
+## Formato
 
 ```typescript
-// QUESTION: the specific question
-// QUESTION: question directed to someone
-// QUESTION: option A vs option B - which to prefer?
+// QUESTION: a questão específica
+// QUESTION: questão direcionada a alguém
+// QUESTION: opção A vs opção B - qual preferir?
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// QUESTION: when user cancels, should we keep data in form?
-// Spec says "cancel operation" but doesn't specify form state
+// QUESTION: ao cancelar, devemos manter os dados no formulário?
+// Spec diz "cancelar operação" mas não especifica estado do formulário
 function handleCancel() {
   closeModal();
   // resetForm() ???
 }
 
-// QUESTION: Strategy vs Factory to create payment processors?
-// Strategy: more flexible, can switch at runtime
-// Factory: simpler, decision at creation time
+// QUESTION: Strategy vs Factory para criar processadores de pagamento?
+// Strategy: mais flexível, pode trocar em runtime
+// Factory: mais simples, decisão no momento de criação
 function createPaymentProcessor(type: string) {
-  // Implementation pending decision
+  // Implementação pendente de decisão
 }
 
-// QUESTION: what to return when list is empty?
-// Options: [], null, throw EmptyListError
-// Impacts API contract
+// QUESTION: o que retornar quando a lista está vazia?
+// Opções: [], null, lançar EmptyListError
+// Impacta contrato da API
 function getActiveUsers(): User[] | null {
   const users = db.users.findAll({ active: true });
   if (users.length === 0) {
-    return []; // Or null? Or throw?
+    return []; // Ou null? Ou lançar?
   }
   return users;
 }
 
-// QUESTION: worth optimizing for O(1) lookup or keep simple array?
-// Array: 100 items max, O(n) lookup = ~100 comparisons
-// Map: creation overhead, O(1) lookup
-// Context: called ~10x per request
+// QUESTION: vale otimizar para lookup O(1) ou manter array simples?
+// Array: máx 100 itens, lookup O(n) = ~100 comparações
+// Map: overhead de criação, lookup O(1)
+// Contexto: chamado ~10x por requisição
 const config = [
   { key: 'theme', value: 'dark' },
-  // ... ~100 items
+  // ... ~100 itens
 ];
 
-// QUESTION: silent failure or throw on log failure?
-// Silent: doesn't interrupt main flow
-// Throw: ensures problems are noticed
+// QUESTION: falha silenciosa ou lançar exceção em falha de log?
+// Silenciosa: não interrompe fluxo principal
+// Lançar: garante que problemas sejam notados
 async function logEvent(event: Event) {
   try {
     await analytics.track(event);
   } catch (error) {
-    console.error('Log failed', error);
+    console.error('Falha no log', error);
     // throw error; ???
   }
 }
 
-// QUESTION: understood correctly that max discount is 50%?
-// Client email said "up to half the value"
-// Confirm before deploy
+// QUESTION: entendi corretamente que o desconto máximo é 50%?
+// Email do cliente disse "até metade do valor"
+// Confirmar antes do deploy
 function applyDiscount(price: number, discountPercent: number): number {
   const maxDiscount = 0.5; // 50%
   const safeDiscount = Math.min(discountPercent, maxDiscount);
   return price * (1 - safeDiscount);
 }
 
-// QUESTION: CPF validation should accept formatted?
+// QUESTION: validação de CPF deve aceitar formatado?
 // Ex: "123.456.789-00" vs "12345678900"
-// Maria defined original requirements
+// Maria definiu os requisitos originais
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Code review or sync with team
-- **Action:** Formulate clear question, offer alternatives, direct to right person, discuss, document answer, remove or convert to NOTE
-- **Converted to:** NOTE (if decision is important) or removed (after answer)
+- **Prazo:** Code review ou sincronização com o time
+- **Ação:** Formular pergunta clara, oferecer alternativas, direcionar para pessoa certa, discutir, documentar resposta, remover ou converter para NOTE
+- **Convertido em:** NOTE (se decisão for importante) ou removido (após resposta)
 
-## Related to
+## Relacionado a
 
-- Rules: [026 - Comments Quality](../../../.claude/rules/026_qualidade-comentarios-porque.md) (QUESTION is temporary communication)
-- Similar tags: QUESTION (author's doubt) vs REVIEW (needs external validation)
+- Rules: [026 - Qualidade de Comentários](../../../.claude/rules/026_qualidade-comentarios-porque.md) (QUESTION é comunicação temporária)
+- Tags similares: QUESTION (dúvida do autor) vs REVIEW (precisa de validação externa)

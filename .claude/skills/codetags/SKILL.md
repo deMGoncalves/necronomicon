@@ -1,6 +1,6 @@
 ---
 name: codetags
-description: Convention for code marking with standardized comment tags. Use when @reviewer identifies violations in code and needs to annotate them with standardized markers, when registering technical debt, bugs or pending optimizations with traceability.
+description: Convenção para marcação de código com tags de comentário padronizadas. Use quando @architect identificar violações no código e precisar anotá-las com marcadores padronizados, ao registrar débito técnico, bugs ou otimizações pendentes com rastreabilidade.
 model: sonnet
 allowed-tools: Read, Edit, Grep, Glob
 metadata:
@@ -10,94 +10,105 @@ metadata:
 
 # Codetags
 
-Convention for code marking with standardized comment tags to manage technical debt, facilitate searches and maintain traceability of problems directly in source code.
+Convenção para marcação de código com tags de comentário padronizadas para gerenciar débito técnico, facilitar buscas e manter rastreabilidade de problemas diretamente no código-fonte.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when the reviewer identifies violations in code and needs to annotate sections with standardized markers, or when you want to manually mark sections that need future attention.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Quando @architect identifica violações de regras durante revisão; ao registrar débito técnico, bugs conhecidos, otimizações pendentes ou problemas de segurança |
+| **Prerequisites** | Identificação da violação específica e da rule correspondente; referência às 16 tags disponíveis em `references/tags-reference.md` |
+| **Constraints** | Uma tag por violação; nunca criar tag sem descrição; FIXME reservado para violações críticas; não usar para substituir correção imediata quando possível |
+| **Scope** | Inserção de comentários padronizados com formato `// TAG(rule-id): descrição` na linha acima da seção problemática em qualquer arquivo de código-fonte |
 
-## Principle
+---
 
-| Principle | Description |
+## Quando Usar
+
+Use quando o revisor identificar violações no código e precisar anotar seções com marcadores padronizados, ou quando quiser marcar manualmente seções que necessitam atenção futura.
+
+## Princípio
+
+| Princípio | Descrição |
 |-----------|-------------|
-| Teach | Each marking explains the why of the problem and the path to improve |
-| Easy search | Standardized tags allow global search by problem type |
-| Clear action | Each tag indicates the type of action needed |
-| Partner tone | Write as a colleague teaching, not as an audit system |
+| Ensinar | Cada marcação explica o porquê do problema e o caminho para melhorar |
+| Busca fácil | Tags padronizadas permitem busca global por tipo de problema |
+| Ação clara | Cada tag indica o tipo de ação necessária |
+| Tom de parceiro | Escrever como um colega ensinando, não como sistema de auditoria |
 
-→ See [references/tags-reference.md](references/tags-reference.md) — index of 16 tags organized by severity (🔴🟠🟡🟢), with link to individual file for each tag.
+→ Veja [references/tags-reference.md](references/tags-reference.md) — índice de 16 tags organizadas por severidade (🔴🟠🟡🟢), com link para arquivo individual de cada tag.
 
-## Marking Format
+## Formato de Marcação
 
 ```typescript
-// TAG(rule-id): description
+// TAG(rule-id): descrição
 ```
 
-→ See [references/reviewer-mapping.md](references/reviewer-mapping.md) for severity to tag mapping.
+→ Veja [references/reviewer-mapping.md](references/reviewer-mapping.md) para mapeamento de severidade para tag.
 
-## Application Rules
+## Regras de Aplicação
 
-| Rule | Description |
+| Regra | Descrição |
 |------|-------------|
-| One tag per violation | Each violation receives exactly one marking |
-| Line above | Tag is inserted on line immediately above violated section |
-| No duplication | If tag already exists on section, update instead of adding new |
-| Explain impact | Describe what can go wrong because of the problem — not just the symptom |
-| Concise description | Maximum one line with problem and suggested fix |
+| Uma tag por violação | Cada violação recebe exatamente uma marcação |
+| Linha acima | Tag é inserida na linha imediatamente acima da seção violada |
+| Sem duplicação | Se tag já existe na seção, atualizar ao invés de adicionar nova |
+| Explicar impacto | Descrever o que pode dar errado por causa do problema — não apenas o sintoma |
+| Descrição concisa | Máximo uma linha com problema e sugestão de correção |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — free comment, vague, teaches nothing
+// ❌ Bad — comentário livre, vago, não ensina nada
 // TODO: fix this later
 // fix: validation doesn't work
 function calculateDiscount(amount: number) {
   return amount * 0.1  // this is wrong
 }
 
-// ✅ Good — codetag that explains why and guides improvement
-// TODO: This function accepts any number, including negatives and zero.
-// This can cause incorrect discounts in edge cases. Adding validation
-// at the start ensures calculation only happens with valid data.
+// ✅ Good — codetag que explica por quê e guia melhoria
+// TODO: Esta função aceita qualquer número, incluindo negativos e zero.
+// Isso pode causar descontos incorretos em casos extremos. Adicionar validação
+// no início garante que o cálculo só acontece com dados válidos.
 //
-// FIXME: The value 0.1 doesn't communicate what it represents. Extract to
-// a named constant (e.g., DEFAULT_DISCOUNT_RATE) makes code more readable
-// and makes it easier to adjust rate in future without hunting for number in code.
+// FIXME: O valor 0.1 não comunica o que representa. Extrair para
+// uma constante nomeada (ex: DEFAULT_DISCOUNT_RATE) torna código mais legível
+// e facilita ajustar taxa no futuro sem caçar número no código.
 function calculateDiscount(amount: number) {
   return amount * 0.1
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
+| O que evitar | Razão |
 |---------------|--------|
-| Tags without description | Empty tag doesn't communicate problem |
-| Multiple tags on same section | Choose most relevant tag for main violation |
-| Codetag without why explanation | A comment that doesn't teach doesn't help dev grow |
-| FIXME for minor problems | Reserve FIXME for real critical violations |
-| TODO without clear action | Description should indicate what needs to be done |
+| Tags sem descrição | Tag vazia não comunica problema |
+| Múltiplas tags na mesma seção | Escolher tag mais relevante para violação principal |
+| Codetag sem explicação do porquê | Comentário que não ensina não ajuda dev a crescer |
+| FIXME para problemas menores | Reservar FIXME para violações críticas reais |
+| TODO sem ação clara | Descrição deve indicar o que precisa ser feito |
 
-## Application Flow
+## Fluxo de Aplicação
 
-| Step | Action |
+| Passo | Ação |
 |------|--------|
-| 1 | Receive reviewer report or identify violation |
-| 2 | Locate exact line of violation in file |
-| 3 | Select appropriate tag according to severity mapping |
-| 4 | Insert comment on line above section with standardized format |
-| 5 | Verify there's no duplicate tag on same section |
+| 1 | Receber relatório do revisor ou identificar violação |
+| 2 | Localizar linha exata da violação no arquivo |
+| 3 | Selecionar tag apropriada segundo mapeamento de severidade |
+| 4 | Inserir comentário na linha acima da seção com formato padronizado |
+| 5 | Verificar que não há tag duplicada na mesma seção |
 
-## Rationale
+## Justificativa
 
-- [026 - Comment Quality](../../rules/026_qualidade-comentarios-porque.md): tags explain why of marking, not what code does
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): clear markings facilitate technical debt identification
-- [039 - Boy Scout Rule](../../rules/039_regra-escoteiro-refatoracao-continua.md): tags guide continuous refactoring indicating where to improve
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each tag has clear communication responsibility
-- [024 - Prohibition of Magic Constants](../../rules/024_proibicao-constantes-magicas.md): standardized tags eliminate ad-hoc markings without pattern
+- [026 - Qualidade de Comentários](../../rules/026_qualidade-comentarios-porque.md): tags explicam porquê da marcação, não o que código faz
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): marcações claras facilitam identificação de débito técnico
+- [039 - Regra do Escoteiro](../../rules/039_regra-escoteiro-refatoracao-continua.md): tags guiam refatoração contínua indicando onde melhorar
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada tag tem responsabilidade clara de comunicação
+- [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): tags padronizadas eliminam marcações ad-hoc sem padrão
 
-**Related skills:**
-- [`software-quality`](../software-quality/SKILL.md) — complements: McCall factors determine codetag severity (Integrity → FIXME, Efficiency → OPTIMIZE)
-- [`anti-patterns`](../anti-patterns/SKILL.md) — reinforces: codetags are the mechanism to annotate anti-pattern violations
+**Skills relacionadas:**
+- [`software-quality`](../software-quality/SKILL.md) — complementa: fatores McCall determinam severidade de codetag (Integrity → FIXME, Efficiency → OPTIMIZE)
+- [`anti-patterns`](../anti-patterns/SKILL.md) — reforça: codetags são o mecanismo para anotar violações de anti-patterns

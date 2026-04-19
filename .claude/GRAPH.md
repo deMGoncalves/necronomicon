@@ -1,22 +1,22 @@
-# oh my claude — Dependency Graph
+# oh my claude — Grafo de Dependências
 
-Dependency map between rules, skills and agents.
+Mapa de dependências entre regras, skills e agentes.
 
 ---
 
-## Rule Layers
+## Camadas de Regras
 
 ```mermaid
 graph TD
   subgraph OC["Object Calisthenics (001–009)"]
-    r001["001 Indentation"]
-    r002["002 No ELSE"]
-    r003["003 Primitives"]
-    r004["004 Collections"]
-    r005["005 1 call/line"]
-    r006["006 No abbreviations"]
-    r007["007 Max lines"]
-    r008["008 No get/set"]
+    r001["001 Indentação"]
+    r002["002 Sem ELSE"]
+    r003["003 Primitivos"]
+    r004["004 Coleções"]
+    r005["005 1 chamada/linha"]
+    r006["006 Sem abreviações"]
+    r007["007 Máx linhas"]
+    r008["008 Sem get/set"]
     r009["009 Tell Don't Ask"]
   end
 
@@ -40,17 +40,17 @@ graph TD
   subgraph CC["Clean Code (021–039)"]
     r022["022 KISS"]
     r021["021 DRY"]
-    r024["024 No Magic"]
-    r032["032 Coverage"]
-    r033["033 Max Params"]
-    r036["036 Side Effects"]
+    r024["024 Sem Magic"]
+    r032["032 Cobertura"]
+    r033["033 Máx Params"]
+    r036["036 Efeitos Colaterais"]
     r038["038 CQS"]
     r039["039 Boy Scout"]
   end
 
   subgraph TF["Twelve-Factor (040–051)"]
     r040["040 Codebase"]
-    r041["041 Dependencies"]
+    r041["041 Dependências"]
     r042["042 Config"]
     r045["045 Stateless"]
     r050["050 Logs"]
@@ -60,8 +60,8 @@ graph TD
     r055["055 Long Method"]
     r060["060 Spaghetti"]
     r066["066 Pyramid"]
-    r069["069 Premature Opt"]
-    r070["070 Shared State"]
+    r069["069 Otim. Prematura"]
+    r070["070 Estado Compartilhado"]
   end
 
   OC --> SOLID
@@ -75,7 +75,7 @@ graph TD
 
 ---
 
-## Skills → Rules
+## Skills → Regras
 
 ```mermaid
 graph LR
@@ -115,43 +115,94 @@ graph LR
 
 ---
 
-## Agents → Skills → Rules
+## Agentes → Skills → Regras
 
 ```mermaid
 graph TD
-  leader["@leader"] --> s_cdd["skill: cdd"]
+  tech_lead["Tech Lead (Claude Code)"] --> planner["@planner"]
+  tech_lead --> deepdive["@deepdive"]
+
+  planner["@planner"] --> s_cdd["skill: cdd"]
+  planner --> s_col["colocation"]
 
   architect["@architect"] --> s_gof["gof"] & s_poeaa["poeaa"] & s_solid["solid"] & s_pp["package-principles"]
   architect --> s_arc42["arc42"] & s_c4["c4model"] & s_adr["adr"] & s_bdd["bdd"]
-  architect --> s_sq["software-quality"]
+  architect --> s_sq["software-quality"] & s_cdd & s_ct["codetags"]
 
-  developer["@developer"] --> s_oc["object-calisthenics"] & s_solid & s_pp
-  developer --> s_cc["clean-code"] & s_tf["twelve-factor"] & s_ap["anti-patterns"]
-  developer --> s_col["colocation"] & s_rev["revelation"]
+  designer["@designer"] --> s_tok["token"] & s_an["anatomy"] & s_ev["event"] & s_st["state"]
+  designer --> s_ren["render"] & s_sto["story"] & s_react["react"]
+
+  coder["@coder"] --> s_oc["object-calisthenics"] & s_solid & s_pp
+  coder --> s_cc["clean-code"] & s_tf["twelve-factor"] & s_ap["anti-patterns"]
+  coder --> s_col & s_rev["revelation"]
 
   tester["@tester"] --> s_comp["complexity"] & s_sq & s_cc & s_col
 
-  reviewer["@reviewer"] --> s_cdd & s_ap & s_sq & s_ct["codetags"]
+  deepdive["@deepdive"] --> s_bigo["big-o"] & s_comp["complexity"] & s_cdd
+  deepdive --> s_gof["gof"] & s_poeaa["poeaa"] & s_ap["anti-patterns"]
+  deepdive --> s_sq
 
-  s_oc --> r001_009["Rules 001–009"]
-  s_solid --> r010_014["Rules 010–014"]
-  s_pp --> r015_020["Rules 015–020"]
-  s_cc --> r021_039["Rules 021–039"]
-  s_tf --> r040_051["Rules 040–051"]
-  s_ap --> r052_070["Rules 052–070"]
+  s_oc --> r001_009["Regras 001–009"]
+  s_solid --> r010_014["Regras 010–014"]
+  s_pp --> r015_020["Regras 015–020"]
+  s_cc --> r021_039["Regras 021–039"]
+  s_tf --> r040_051["Regras 040–051"]
+  s_ap --> r052_070["Regras 052–070"]
 ```
 
 ---
 
-## Legend
+## Hooks → Eventos
 
-| Symbol | Meaning |
-|---------|-------------|
-| `→` | uses / references |
-| `↔` | bidirectional |
-| `skill: X` | file in `.claude/skills/X/SKILL.md` |
-| `Rule NNN` | file in `.claude/rules/NNN_*.md` |
+```mermaid
+graph LR
+  subgraph UPS["UserPromptSubmit"]
+    h_prompt["prompt.sh"]
+  end
+
+  subgraph PTU["PostToolUse (Write|Edit|NotebookEdit)"]
+    h_lint["lint.sh"]
+    h_security["security.sh"]
+    h_guard["guard.sh"]
+  end
+
+  subgraph STOP["Stop"]
+    h_loop["loop.sh"]
+    h_telemetry["telemetry.sh"]
+  end
+
+  h_prompt --> t_intent[".claude/telemetry/intent.jsonl"]
+  h_telemetry --> t_sessions[".claude/telemetry/sessions.jsonl"]
+  h_loop --> t_sessions
+```
+
+`loop.sh` e `telemetry.sh` são acionados em sequência no evento `Stop`: `loop.sh` decide se a resposta pode encerrar (bloqueia se existir `- [ ]` pendente em `changes/*/tasks.md`), `telemetry.sh` registra trace JSON da sessão com `session_id`, `mode`, `feature`, `tasks` (pending/done), `attempts` (coder/tester) e `violations`.
 
 ---
 
-**Updated on:** 2026-04-01
+## Progressive Disclosure (Skills)
+
+Skills seguem o padrão de carregamento em 3 níveis — o runtime carrega apenas o necessário:
+
+| Nível | Conteúdo | Quando carrega |
+|-------|----------|----------------|
+| 1 | Frontmatter YAML (`name`, `description`) | Discovery — runtime varre todos os skills |
+| 2 | `## Manifest` (applicability, prerequisites, constraints, scope) | Candidato — skill foi selecionado como potencialmente relevante |
+| 3 | `references/*.md` | Ativo — skill está em uso efetivo durante execução |
+
+A seção `## Manifest` em `SKILL.md` (ex: `skills/clean-code/SKILL.md`, `skills/colocation/SKILL.md`) expõe metadados estruturados para que o runtime decida carregar detalhes de `references/` apenas quando o skill entra em execução.
+
+---
+
+## Legenda
+
+| Símbolo | Significado |
+|---------|-------------|
+| `→` | usa / referencia |
+| `↔` | bidirecional |
+| `skill: X` | arquivo em `.claude/skills/X/SKILL.md` |
+| `Rule NNN` | arquivo em `.claude/rules/NNN_*.md` |
+
+---
+
+**Atualizado em:** 2026-04-19

@@ -4,7 +4,7 @@
 **Rule deMGoncalves:** [015 - Princípio de Equivalência de Lançamento e Reuso](../../../rules/015_principio-equivalencia-lancamento-reuso.md)
 **Pergunta:** A granularidade de reuso é a mesma da granularidade de release?
 
-## What It Is
+## O Que É
 
 O módulo/pacote destinado à reutilização deve ter o mesmo escopo de release que seu consumidor. **A granularidade de reutilização é a granularidade de release.**
 

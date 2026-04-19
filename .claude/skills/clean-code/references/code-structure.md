@@ -1,70 +1,70 @@
-# Code Structure (Rules 021, 022, 023, 024, 026)
+# Estrutura de Código (Regras 021, 022, 023, 024, 026)
 
-## Rules
+## Regras
 
-- **021**: DRY — no logic duplication
-- **022**: KISS — Cyclomatic Complexity ≤5
-- **023**: YAGNI — no speculative functionality
-- **024**: No magic constants
-- **026**: Comments explain WHY, not WHAT
+- **021**: DRY — sem duplicação de lógica
+- **022**: KISS — Complexidade Ciclomática ≤5
+- **023**: YAGNI — sem funcionalidade especulativa
+- **024**: Sem constantes mágicas
+- **026**: Comentários explicam o POR QUE, não o O QUÊ
 
 ## Checklist
 
-- [ ] No copy-paste of blocks >5 lines
-- [ ] Logic used >2x → extract to reusable function
-- [ ] CC of each method ≤5
-- [ ] No empty classes/methods "for the future"
-- [ ] No unused parameters
-- [ ] Numeric values (except 0/1) in named constants
-- [ ] Domain strings in Enums or constants
-- [ ] Comments justify non-obvious decisions
+- [ ] Sem copy-paste de blocos >5 linhas
+- [ ] Lógica usada >2x → extrair para função reutilizável
+- [ ] CC de cada método ≤5
+- [ ] Sem classes/métodos vazios "para o futuro"
+- [ ] Sem parâmetros não utilizados
+- [ ] Valores numéricos (exceto 0/1) em constantes nomeadas
+- [ ] Strings de domínio em Enums ou constantes
+- [ ] Comentários justificam decisões não-óbvias
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
-// Duplication (021)
+// ❌ Violações
+// Duplicação (021)
 function validateEmailInService(email) {
-  if (!email || !email.includes('@')) throw new Error('Invalid');
+  if (!email || !email.includes('@')) throw new Error('Inválido');
 }
 function validateEmailInController(email) {
-  if (!email || !email.includes('@')) throw new Error('Invalid'); // duplicated!
+  if (!email || !email.includes('@')) throw new Error('Inválido'); // duplicado!
 }
 
-// Magic constant (024)
-if (user.age >= 18 && user.score > 100) { } // 18 and 100 are magic
+// Constante mágica (024)
+if (user.age >= 18 && user.score > 100) { } // 18 e 100 são mágicos
 
 // YAGNI (023)
 class UserService {
-  exportToCsv() { /* TODO: implement later */ } // speculative
+  exportToCsv() { /* TODO: implementar depois */ } // especulativo
 }
 
-// Redundant comment (026)
+// Comentário redundante (026)
 function getUser(id) {
-  // fetches user by id
-  return db.find(id); // obvious!
+  // busca usuário pelo id
+  return db.find(id); // óbvio!
 }
 
-// ✅ Compliance
+// ✅ Conformidade
 // DRY
 function validateEmail(email: string) {
   if (!email || !email.includes('@')) throw new EmailInvalidError();
 }
 
-// No magic constants
+// Sem constantes mágicas
 const LEGAL_AGE = 18;
 const MIN_PREMIUM_SCORE = 100;
 if (user.age >= LEGAL_AGE && user.score > MIN_PREMIUM_SCORE) { }
 
-// Useful comment (WHY)
+// Comentário útil (POR QUÊ)
 function getUser(id: string) {
-  // Search by string ID for compatibility with legacy API v1
+  // Busca por ID em string para compatibilidade com API legada v1
   return db.find(String(id));
 }
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-- DRY reduces Responsibilities (logic in one place)
-- KISS keeps CC_base low
-- Named constants are self-documented (less cognitive load)
+- DRY reduz Responsabilidades (lógica em um único lugar)
+- KISS mantém CC_base baixo
+- Constantes nomeadas são autodocumentadas (menor carga cognitiva)

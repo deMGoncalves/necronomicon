@@ -1,38 +1,38 @@
-# OPTIMIZE — Optimization Opportunity
+# OPTIMIZE — Oportunidade de Otimização
 
-**Severity:** 🟡 Medium | Resolve when performance is problem
-**Blocks PR:** No
+**Severidade:** 🟡 Média | Resolver quando performance for problema
+**Bloqueia PR:** Não
 
-## What It Is
+## O Que É
 
-Marks code that could have improved performance but works correctly. Indicates identified optimization opportunity, not an urgent problem affecting users.
+Marca código que poderia ter performance melhorada mas funciona corretamente. Indica oportunidade de otimização identificada, não um problema urgente afetando usuários.
 
-## When to Use
+## Quando Usar
 
-- Inefficient algorithm (O(n²) when could be O(n))
-- Non-optimized query (identified N+1 queries)
-- Repeated calculation without memoization
-- Unnecessary loading (excessive eager loading)
+- Algoritmo ineficiente (O(n²) quando poderia ser O(n))
+- Query não otimizada (N+1 queries identificadas)
+- Cálculo repetido sem memoização
+- Carregamento desnecessário (eager loading excessivo)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Critical bottleneck affecting users → use **PERF** (more urgent)
-- Incorrect code → use **FIXME**
-- Code to restructure → use **REFACTOR**
-- Premature optimization without measurement → don't mark
+- Gargalo crítico afetando usuários → usar **PERF** (mais urgente)
+- Código incorreto → usar **FIXME**
+- Código a reestruturar → usar **REFACTOR**
+- Otimização prematura sem medição → não marcar
 
-## Format
+## Formato
 
 ```typescript
-// OPTIMIZE: description - current vs ideal complexity
-// OPTIMIZE: [O(n²) → O(n)] optimization description
-// OPTIMIZE: description - estimated impact in milliseconds
+// OPTIMIZE: descrição - complexidade atual vs ideal
+// OPTIMIZE: [O(n²) → O(n)] descrição da otimização
+// OPTIMIZE: descrição - impacto estimado em milissegundos
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// OPTIMIZE: [O(n²) → O(n)] use Set for search instead of Array.includes
+// OPTIMIZE: [O(n²) → O(n)] usar Set para busca em vez de Array.includes
 function findDuplicates(items: string[]): string[] {
   const duplicates: string[] = [];
   for (let i = 0; i < items.length; i++) {
@@ -45,31 +45,31 @@ function findDuplicates(items: string[]): string[] {
   return duplicates;
 }
 
-// OPTIMIZE: N+1 queries - use batch loading
+// OPTIMIZE: N+1 queries - usar carregamento em lote
 async function getUsersWithPosts(userIds: string[]) {
   const users = [];
   for (const id of userIds) {
     const user = await db.users.findById(id);
-    user.posts = await db.posts.findByUserId(id); // N extra queries
+    user.posts = await db.posts.findByUserId(id); // N queries extras
     users.push(user);
   }
   return users;
 }
 
-// OPTIMIZE: recalculates on each render - add useMemo
+// OPTIMIZE: recalcula a cada render - adicionar useMemo
 function ExpensiveComponent({ data }: { data: Item[] }) {
   const processed = data.map(item => heavyComputation(item));
   return <List items={processed} />;
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Current sprint (if affecting users) or technical backlog
-- **Action:** Measure baseline, implement optimization, measure again
-- **Converted to:** Removed after optimization or discarded if micro-optimization
+- **Prazo:** Sprint atual (se afetando usuários) ou backlog técnico
+- **Ação:** Medir baseline, implementar otimização, medir novamente
+- **Convertido em:** Removido após otimização ou descartado se micro-otimização
 
-## Related to
+## Relacionado a
 
-- Rules: [022 - KISS](../../../.claude/rules/022_priorizacao-simplicidade-clareza.md) (don't complicate for micro-optimization)
-- Similar tags: OPTIMIZE (opportunity) vs PERF (measured real problem)
+- Rules: [022 - KISS](../../../.claude/rules/022_priorizacao-simplicidade-clareza.md) (não complicar para micro-otimização)
+- Tags similares: OPTIMIZE (oportunidade) vs PERF (problema real medido)

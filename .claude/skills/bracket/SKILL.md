@@ -1,6 +1,6 @@
 ---
 name: bracket
-description: Convention for Symbol for private methods and contracts. Use when defining private methods in Web Components, when creating interface contracts via Symbol, or when reviewing code that uses string-based naming for privacy.
+description: Convenção para Symbol para métodos privados e contratos. Use ao definir métodos privados em Web Components, ao criar contratos de interface via Symbol, ou ao revisar código que usa nomenclatura baseada em string para privacidade.
 model: sonnet
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,81 +10,92 @@ metadata:
 
 # Bracket
 
-Convention for Symbol for private methods and interface contracts.
+Convenção para Symbol para métodos privados e contratos de interface.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating methods that need decorators or defining interfaces for mixins.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Definição de métodos privados em Web Components; criação de contratos de interface via Symbol para mixins; ao substituir convenções frágeis de privacidade por string (`_method`) |
+| **Prerequisites** | Entendimento de JavaScript Symbol (local vs `Symbol.for()` global); estrutura do módulo dono do conceito; skill `anatomy` para posicionamento correto |
+| **Constraints** | Não exportar Symbols privados internos; não usar `Symbol.for()` sem necessidade de compartilhamento cross-módulo; Symbol sem descrição é proibido |
+| **Scope** | Criação e uso de Symbols para encapsulamento de métodos privados e definição de contratos públicos de interface em Web Components |
 
-## Principle
+---
 
-| Principle | Description |
+## Quando Usar
+
+Use ao criar métodos que necessitam decoradores ou ao definir interfaces para mixins.
+
+## Princípio
+
+| Princípio | Descrição |
 |-----------|-----------|
-| Encapsulation | Symbol creates unique and private keys for methods and contracts |
-| Extensibility | Allows defining interface contracts without name conflicts |
+| Encapsulamento | Symbol cria chaves únicas e privadas para métodos e contratos |
+| Extensibilidade | Permite definir contratos de interface sem conflito de nomes |
 
-## Rules
+## Regras
 
-| Rule | Description |
+| Regra | Descrição |
 |-------|-----------|
-| Ownership | The module owning the concept defines the Symbol |
-| Locality | Prefer local `Symbol()` over global `Symbol.for()` |
-| Export | Export only Symbols that are public contracts |
+| Propriedade | O módulo dono do conceito define o Symbol |
+| Localidade | Preferir `Symbol()` local sobre `Symbol.for()` global |
+| Exportação | Exportar apenas Symbols que sejam contratos públicos |
 
-## Structure
+## Estrutura
 
-| File | Purpose |
+| Arquivo | Finalidade |
 |---------|-----------|
-| `interfaces.js` | Exports module's Symbols |
+| `interfaces.js` | Exporta Symbols do módulo |
 
-## Types
+## Tipos
 
-| Type | Syntax | Usage |
+| Tipo | Sintaxe | Uso |
 |------|---------|-----|
-| Local | `Symbol('name')` | Private to module |
-| Global | `Symbol.for('name')` | Shared via registry |
+| Local | `Symbol('name')` | Privado ao módulo |
+| Global | `Symbol.for('name')` | Compartilhado via registro |
 
-## Naming
+## Nomenclatura
 
-| Type | Convention | Example |
+| Tipo | Convenção | Exemplo |
 |------|-----------|---------|
 | Callback | `verbCallback` | `didPaintCallback` |
-| Action | `verbNoun` | `connectArc` |
-| Capability | `adjective` | `hideable` |
-| Resource | `noun` | `controller` |
+| Ação | `verbNoun` | `connectArc` |
+| Capacidade | `adjective` | `hideable` |
+| Recurso | `noun` | `controller` |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — privacy by weak convention
+// ❌ Bad — privacidade por convenção fraca
 class MyComponent extends HTMLElement {
-  _privateMethod() { /* not really private */ }
-  __init() { /* fragile convention */ }
+  _privateMethod() { /* não é realmente privado */ }
+  __init() { /* convenção frágil */ }
 }
 
-// ✅ Good — privacy via Symbol
+// ✅ Good — privacidade via Symbol
 const render = Symbol('render')
 const init = Symbol('init')
 
 class MyComponent extends HTMLElement {
-  [render]() { /* true private method via Symbol */ }
-  [init]() { /* controlled access */ }
+  [render]() { /* método privado verdadeiro via Symbol */ }
+  [init]() { /* acesso controlado */ }
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
+| O que evitar | Razão |
 |--------------|-------|
-| Using Symbol.for() unnecessarily | Local Symbol is safer, use global only for cross-module contracts |
-| Symbol without description | Makes debugging difficult, always pass descriptive string |
-| Exporting private Symbols | Expose only public interface contracts (rule 013) |
-| Generic names in Symbols | Use descriptive names that reveal intent (rule 006) |
+| Usar Symbol.for() desnecessariamente | Symbol local é mais seguro, usar global apenas para contratos cross-módulo |
+| Symbol sem descrição | Dificulta debug, sempre passar string descritiva |
+| Exportar Symbols privados | Expor apenas contratos de interface pública (rule 013) |
+| Nomes genéricos em Symbols | Usar nomes descritivos que revelam intenção (rule 006) |
 
-## Rationale
+## Justificativa
 
-- [008 - Prohibition of Pure Getters/Setters](../../rules/008_proibicao-getters-setters-puros.md): Symbol allows true encapsulation instead of getters/setters for access to internal methods
-- [013 - Interface Segregation Principle](../../rules/013_principio-segregacao-interfaces.md): specific contracts via Symbol allow granular and decoupled interfaces
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each Symbol represents a single contract or behavior
+- [008 - Proibição de Getters/Setters Puros](../../rules/008_proibicao-getters-setters.md): Symbol permite encapsulamento verdadeiro em vez de getters/setters para acesso a métodos internos
+- [013 - Princípio de Segregação de Interfaces](../../rules/013_principio-segregacao-interface.md): contratos específicos via Symbol permitem interfaces granulares e desacopladas
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada Symbol representa um único contrato ou comportamento

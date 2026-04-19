@@ -1,49 +1,49 @@
 # Primitive Obsession
 
-**Severity:** 🔴 Critical
-**Associated Rule:** Rule 003
+**Severidade:** 🔴 Crítica
+**Regra Associada:** Regra 003
 
-## What It Is
+## O Que É
 
-Using primitive types (`string`, `number`, `boolean`) to represent domain concepts that should be objects with their own behavior. ZIP code as `string`, money as `number`, status as `boolean`.
+Usar tipos primitivos (`string`, `number`, `boolean`) para representar conceitos de domínio que deveriam ser objetos com comportamento próprio. CEP como `string`, dinheiro como `number`, status como `boolean`.
 
-## Symptoms
+## Sintomas
 
-- Parameters like `(string email, string phone, string zipCode)` instead of objects
-- Validation of same format scattered in various places (`/\d{8}/` for ZIP code)
-- Magic Numbers representing states: `status === 1`, `type === 'A'`
-- Arrays of primitives where objects would be more descriptive
+- Parâmetros como `(string email, string phone, string zipCode)` em vez de objetos
+- Validação do mesmo formato espalhada em vários lugares (`/\d{8}/` para CEP)
+- Magic Numbers representando estados: `status === 1`, `type === 'A'`
+- Arrays de primitivos onde objetos seriam mais descritivos
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ CPF as loose string — duplicated validation in N places
+// ❌ CPF como string solta — validação duplicada em N lugares
 function createUser(name, cpf, email) {
-  if (!/^\d{11}$/.test(cpf)) throw new Error('Invalid CPF');
-  // ... same validation in updateUser, validateDocument, etc.
+  if (!/^\d{11}$/.test(cpf)) throw new Error('CPF inválido');
+  // ... mesma validação em updateUser, validateDocument, etc.
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ CPF as Value Object — validation encapsulated once
+// ✅ CPF como Value Object — validação encapsulada uma única vez
 class CPF {
   constructor(value) {
-    if (!/^\d{11}$/.test(value)) throw new Error('Invalid CPF');
+    if (!/^\d{11}$/.test(value)) throw new Error('CPF inválido');
     this.value = value;
   }
   format() { return `${this.value.slice(0,3)}.${this.value.slice(3,6)}.${this.value.slice(6,9)}-${this.value.slice(9)}`; }
 }
 
 function createUser(name, cpf, email) {
-  // CPF already validated — whoever instantiates CPF ensures validity
+  // CPF já validado — quem instancia CPF garante a validade
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Primitive Obsession — CPF as string without encapsulation
-// TODO: Create CPF Value Object with validation in constructor
+// FIXME: Primitive Obsession — CPF como string sem encapsulamento
+// TODO: Criar CPF Value Object com validação no construtor
 ```

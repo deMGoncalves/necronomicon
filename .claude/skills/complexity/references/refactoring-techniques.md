@@ -1,20 +1,20 @@
-# Refactoring Techniques to Reduce CC
+# Técnicas de Refatoração para Reduzir CC
 
-## Techniques by Problem
+## Técnicas por Problema
 
-| High CC Due To | Technique | How to Apply |
-|----------------|-----------|--------------|
-| Nested conditionals | Guard clauses | Invert condition and return early |
-| Switch/if-else of types | Polymorphism | Create subclasses or Strategy pattern |
-| Complex logic in long method | Method extraction | Name subproblems as methods |
-| Loops with internal logic | Higher-order functions | Use `.filter()`, `.map()`, `.reduce()` |
-| Multiple boolean conditions | Encapsulation | Create `isX()` method that encapsulates the condition |
-| Complex recursion | Iteration with stack | Replace with explicit loop |
+| CC Alto Causado Por | Técnica | Como Aplicar |
+|---------------------|---------|--------------|
+| Condicionais aninhados | Guard clauses | Inverter condição e retornar antecipadamente |
+| Switch/if-else de tipos | Polimorfismo | Criar subclasses ou padrão Strategy |
+| Lógica complexa em método longo | Extração de método | Nomear subproblemas como métodos |
+| Loops com lógica interna | Funções de ordem superior | Usar `.filter()`, `.map()`, `.reduce()` |
+| Múltiplas condições booleanas | Encapsulamento | Criar método `isX()` que encapsula a condição |
+| Recursão complexa | Iteração com pilha | Substituir por loop explícito |
 
-## Example: Guard Clauses
+## Exemplo: Guard Clauses
 
 ```typescript
-// ❌ Before — CC = 6 (deep nesting)
+// ❌ Antes — CC = 6 (aninhamento profundo)
 function process(order: Order): string {
   if (order !== null) {
     if (order.status === 'active') {
@@ -28,7 +28,7 @@ function process(order: Order): string {
   return 'invalid'
 }
 
-// ✅ After — CC = 4 (guard clauses)
+// ✅ Depois — CC = 4 (guard clauses)
 function process(order: Order): string {
   if (order === null) return 'invalid'
   if (order.status !== 'active') return 'invalid'
@@ -38,18 +38,18 @@ function process(order: Order): string {
 }
 ```
 
-## Example: Method Extraction
+## Exemplo: Extração de Método
 
 ```typescript
-// ❌ Before — CC = 7 in a single method
+// ❌ Antes — CC = 7 em um único método
 function validate(user: User): boolean {
   if (!user.name || user.name.length < 2) return false
   if (!user.email || !user.email.includes('@')) return false
   if (!user.age || user.age < 18 || user.age > 120) return false
-  // ... more conditions
+  // ... mais condições
 }
 
-// ✅ After — CC ≤ 3 per method
+// ✅ Depois — CC ≤ 3 por método
 function validate(user: User): boolean {
   return hasValidName(user) && hasValidEmail(user) && hasValidAge(user)
 }

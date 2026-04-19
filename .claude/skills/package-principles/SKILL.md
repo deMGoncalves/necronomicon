@@ -1,6 +1,6 @@
 ---
 name: package-principles
-description: "6 package design principles (Robert C. Martin). Use when @architect organizes modules/packages, or @reviewer checks compliance with rules 015-020 in imports and dependencies."
+description: "6 princípios de design de pacotes (Robert C. Martin). Use quando @architect organiza módulos/pacotes ou verifica conformidade com rules 015-020 em imports e dependências."
 model: haiku
 allowed-tools: Read
 metadata:
@@ -10,51 +10,64 @@ metadata:
 
 # Package Principles (Robert C. Martin)
 
-## What It Is
+---
 
-The **6 Package Principles** by Robert C. Martin are metrics and guidelines for organizing classes into cohesive packages/modules with healthy dependencies. Divided into two complementary groups:
+## Manifest
 
-### Group 1: Package Cohesion (Principles of Package Cohesion)
-Answer: **"What to put inside a package?"**
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar novo módulo/pacote; ao organizar estrutura de pastas; ao detectar imports circulares; ao avaliar estabilidade de módulo; ao versionar biblioteca compartilhada |
+| **Prerequisites** | Princípios SOLID (especialmente SRP e DIP — rules 010, 014); conceito de grafo direcionado acíclico (DAG) |
+| **Constraints** | Triângulo de tensão REP/CCP/CRP: equilibrar conforme fase do projeto (inicial = CCP; maduro = REP + CRP); não calcular métricas de abstração em pacotes de dados puros (DTOs/Value Objects) |
+| **Scope** | Os 6 princípios de pacote (REP, CCP, CRP, ADP, SDP, SAP) mapeados para rules 015–020, incluindo métricas de Instabilidade (I), Abstração (A) e Distância (D) |
 
-- **REP** (Release Reuse Equivalency): Reuse granularity = release granularity
-- **CCP** (Common Closure): Classes that change together should be together
-- **CRP** (Common Reuse): Classes reused together should be together
+---
 
-### Group 2: Package Coupling (Principles of Package Coupling)
-Answer: **"How to organize dependencies between packages?"**
+## O que é
 
-- **ADP** (Acyclic Dependencies): Dependency graph must be acyclic (DAG)
-- **SDP** (Stable Dependencies): Depend on stable packages
-- **SAP** (Stable Abstractions): Stable packages should be abstract
+Os **6 Princípios de Pacote** de Robert C. Martin são métricas e diretrizes para organizar classes em pacotes/módulos coesos com dependências saudáveis. Divididos em dois grupos complementares:
 
-## When to Use
+### Grupo 1: Coesão de Pacotes (Principles of Package Cohesion)
+Responde: **"O que colocar dentro de um pacote?"**
 
-| Scenario | Relevant Principle(s) |
-|----------|-----------------------|
-| Create new module/package | REP, CCP, CRP (Cohesion) |
-| Organize folder structure | CCP, CRP |
-| Decide where to place a class | CCP (changes with which others?) |
-| Version shared library | REP |
-| Detect circular import | ADP |
-| Assess module stability | SDP, SAP |
-| Refactor to reduce coupling | ADP, SDP |
-| Define module public interface | SAP, CRP |
+- **REP** (Release Reuse Equivalency): Granularidade de reuso = granularidade de release
+- **CCP** (Common Closure): Classes que mudam juntas devem estar juntas
+- **CRP** (Common Reuse): Classes reutilizadas juntas devem estar juntas
 
-## The 6 Principles
+### Grupo 2: Acoplamento de Pacotes (Principles of Package Coupling)
+Responde: **"Como organizar dependências entre pacotes?"**
 
-| Principle | Group | deMGoncalves Rule | Key Question | Reference File |
-|-----------|-------|-------------------|--------------|----------------|
-| **REP** - Release Reuse Equivalency | Cohesion | [015](../../rules/015_principio-equivalencia-lancamento-reuso.md) | Do reuse and release have same granularity? | [rep.md](references/rep.md) |
-| **CCP** - Common Closure | Cohesion | [016](../../rules/016_principio-fechamento-comum.md) | Are classes that change together together? | [ccp.md](references/ccp.md) |
-| **CRP** - Common Reuse | Cohesion | [017](../../rules/017_principio-reuso-comum.md) | If you use one class, do you use all in package? | [crp.md](references/crp.md) |
-| **ADP** - Acyclic Dependencies | Coupling | [018](../../rules/018_principio-dependencias-aciclicas.md) | Is dependency graph DAG? | [adp.md](references/adp.md) |
-| **SDP** - Stable Dependencies | Coupling | [019](../../rules/019_principio-dependencias-estaveis.md) | Instability I < 0.5 for critical modules? | [sdp.md](references/sdp.md) |
-| **SAP** - Stable Abstractions | Coupling | [020](../../rules/020_principio-abstracoes-estaveis.md) | High Abstraction A if low Instability I? | [sap.md](references/sap.md) |
+- **ADP** (Acyclic Dependencies): Grafo de dependência deve ser acíclico (DAG)
+- **SDP** (Stable Dependencies): Depender de pacotes estáveis
+- **SAP** (Stable Abstractions): Pacotes estáveis devem ser abstratos
 
-## Architectural Tension: Cohesion Triangle
+## Quando Usar
 
-The three cohesion principles create **architectural tension**:
+| Cenário | Princípio(s) Relevante(s) |
+|---------|---------------------------|
+| Criar novo módulo/pacote | REP, CCP, CRP (Coesão) |
+| Organizar estrutura de pastas | CCP, CRP |
+| Decidir onde colocar uma classe | CCP (muda com quais outras?) |
+| Versionar biblioteca compartilhada | REP |
+| Detectar import circular | ADP |
+| Avaliar estabilidade de módulo | SDP, SAP |
+| Refatorar para reduzir acoplamento | ADP, SDP |
+| Definir interface pública de módulo | SAP, CRP |
+
+## Os 6 Princípios
+
+| Princípio | Grupo | Rule deMGoncalves | Pergunta-Chave | Arquivo de Referência |
+|-----------|-------|-------------------|----------------|----------------------|
+| **REP** - Release Reuse Equivalency | Coesão | [015](../../rules/015_principio-equivalencia-lancamento-reuso.md) | Reuso e release têm mesma granularidade? | [rep.md](references/rep.md) |
+| **CCP** - Common Closure | Coesão | [016](../../rules/016_principio-fechamento-comum.md) | Classes que mudam juntas estão juntas? | [ccp.md](references/ccp.md) |
+| **CRP** - Common Reuse | Coesão | [017](../../rules/017_principio-reuso-comum.md) | Se usa uma classe, usa todas no pacote? | [crp.md](references/crp.md) |
+| **ADP** - Acyclic Dependencies | Acoplamento | [018](../../rules/018_principio-dependencias-aciclicas.md) | Grafo de dependência é DAG? | [adp.md](references/adp.md) |
+| **SDP** - Stable Dependencies | Acoplamento | [019](../../rules/019_principio-dependencias-estaveis.md) | Instabilidade I < 0.5 para módulos críticos? | [sdp.md](references/sdp.md) |
+| **SAP** - Stable Abstractions | Acoplamento | [020](../../rules/020_principio-abstracoes-estaveis.md) | Abstração A alta se Instabilidade I baixa? | [sap.md](references/sap.md) |
+
+## Tensão Arquitetural: Triângulo de Coesão
+
+Os três princípios de coesão criam **tensão arquitetural**:
 
 ```
           REP
@@ -66,133 +79,133 @@ The three cohesion principles create **architectural tension**:
     CCP --------- CRP
 ```
 
-- **REP ↔ CCP**: CCP favors cohesion by change (large classes). REP favors granular reuse (small packages).
-- **CCP ↔ CRP**: CCP wants everything together that changes together. CRP wants to separate what's not reused together.
-- **REP ↔ CRP**: REP wants cohesive releases. CRP wants independently reusable packages.
+- **REP ↔ CCP**: CCP favorece coesão por mudança (classes grandes). REP favorece reuso granular (pacotes pequenos).
+- **CCP ↔ CRP**: CCP quer tudo junto que muda junto. CRP quer separar o que não é reutilizado junto.
+- **REP ↔ CRP**: REP quer releases coesas. CRP quer pacotes independentemente reutilizáveis.
 
-**Balance**: Architect must find equilibrium according to project phase (early stage = CCP; mature = REP + CRP).
+**Equilíbrio**: Arquiteto deve encontrar equilíbrio conforme fase do projeto (estágio inicial = CCP; maduro = REP + CRP).
 
-## Quick Selection by Symptom
+## Seleção Rápida por Sintoma
 
-### "Small commit affects 10+ files in different packages"
-→ **CCP violation** — classes that change together should be together
+### "Commit pequeno afeta 10+ arquivos em pacotes diferentes"
+→ **Violação CCP** — classes que mudam juntas devem estar juntas
 
-### "Updating library requires accepting 50 unused classes"
-→ **CRP violation** — package has classes not reused together
+### "Atualizar biblioteca exige aceitar 50 classes não usadas"
+→ **Violação CRP** — pacote tem classes não reutilizadas juntas
 
-### "Circular import between modules breaks build"
-→ **ADP violation** — break cycle via DIP (extract interface)
+### "Import circular entre módulos quebra build"
+→ **Violação ADP** — quebrar ciclo via DIP (extrair interface)
 
-### "Domain module depends on volatile infra module"
-→ **SDP violation** — dependencies should point to stability
+### "Módulo de domínio depende de módulo infra volátil"
+→ **Violação SDP** — dependências devem apontar para estabilidade
 
-### "Stable module but 100% concrete (zero interfaces)"
-→ **SAP violation** — stable packages should be abstract
+### "Módulo estável mas 100% concreto (zero interfaces)"
+→ **Violação SAP** — pacotes estáveis devem ser abstratos
 
-### "Don't know where to place new class"
-→ **Apply CCP** — place with classes that will change for same reason
+### "Não sei onde colocar nova classe"
+→ **Aplicar CCP** — colocar com classes que mudarão pela mesma razão
 
-## Prohibitions
+## Proibições
 
-This skill detects and prevents:
+Esta skill detecta e previne:
 
-- **❌ Circular dependencies** (violates ADP)
-- **❌ Packages with heterogeneous classes** (violates CCP, CRP)
-- **❌ Stable module depending on unstable** (violates SDP)
-- **❌ Stable module 100% concrete** (violates SAP)
-- **❌ Releases with different granularity than reuse** (violates REP)
-- **❌ Commit touching multiple unrelated packages** (violates CCP)
+- **❌ Dependências circulares** (viola ADP)
+- **❌ Pacotes com classes heterogêneas** (viola CCP, CRP)
+- **❌ Módulo estável dependendo de instável** (viola SDP)
+- **❌ Módulo estável 100% concreto** (viola SAP)
+- **❌ Releases com granularidade diferente do reuso** (viola REP)
+- **❌ Commit tocando múltiplos pacotes não relacionados** (viola CCP)
 
-## Objective Metrics
+## Métricas Objetivas
 
-### Instability (I)
+### Instabilidade (I)
 ```
-I = Outgoing Dependencies / Total Dependencies
+I = Dependências de Saída / Total de Dependências
 I ∈ [0, 1]
 
-I = 0 → Maximum stability (nobody depends on it, it depends on many)
-I = 1 → Maximum instability (many depend on it, it depends on none)
+I = 0 → Estabilidade máxima (ninguém depende dele, ele depende de muitos)
+I = 1 → Instabilidade máxima (muitos dependem dele, ele não depende de ninguém)
 ```
 
-### Abstraction (A)
+### Abstração (A)
 ```
-A = Total Abstractions / Total Classes
+A = Total de Abstrações / Total de Classes
 A ∈ [0, 1]
 
-A = 0 → 100% concrete
-A = 1 → 100% abstract
+A = 0 → 100% concreto
+A = 1 → 100% abstrato
 ```
 
-### Distance from Main Sequence (D)
+### Distância da Main Sequence (D)
 ```
 D = |A + I - 1|
 D ∈ [0, 1]
 
-D ≈ 0 → On Main Sequence (ideal)
-D ≈ 1 → Zone of Pain or Zone of Uselessness
+D ≈ 0 → Na Main Sequence (ideal)
+D ≈ 1 → Zona da Dor ou Zona da Inutilidade
 ```
 
-**Zones**:
-- **Zone of Pain** (A=0, I=0): Concrete and stable package — hard to change
-- **Zone of Uselessness** (A=1, I=1): Abstract and unstable package — no value
-- **Main Sequence** (A + I = 1): Ideal balance
+**Zonas**:
+- **Zona da Dor** (A=0, I=0): Pacote concreto e estável — difícil mudar
+- **Zona da Inutilidade** (A=1, I=1): Pacote abstrato e instável — sem valor
+- **Main Sequence** (A + I = 1): Equilíbrio ideal
 
-## Rationale
+## Justificativa
 
-**deMGoncalves Rules 015–020** implement the 6 principles:
+**Rules deMGoncalves 015–020** implementam os 6 princípios:
 
-- **Critical severity (🔴)**: ADP (018), SAP (020) — break architecture
-- **High severity (🟠)**: REP (015), CCP (016), SDP (019) — require justification
-- **Medium severity (🟡)**: CRP (017) — expected improvement
+- **Severidade crítica (🔴)**: ADP (018), SAP (020) — quebram arquitetura
+- **Severidade alta (🟠)**: REP (015), CCP (016), SDP (019) — requerem justificativa
+- **Severidade média (🟡)**: CRP (017) — melhoria esperada
 
-**Related skills:**
-- [`solid`](../solid/SKILL.md) — depends: REP/CCP/CRP depend on SRP and OCP
-- [`object-calisthenics`](../object-calisthenics/SKILL.md) — complements: OC complements at class level
+**Skills relacionadas:**
+- [`solid`](../solid/SKILL.md) — depende: REP/CCP/CRP dependem de SRP e OCP
+- [`object-calisthenics`](../object-calisthenics/SKILL.md) — complementa: OC complementa em nível de classe
 
-## Usage Examples
+## Exemplos de Uso
 
-### @architect: Organize new module
+### @architect: Organizar novo módulo
 ```typescript
-// Apply CCP: group classes that change together
+// Aplicar CCP: agrupar classes que mudam juntas
 src/
-├── user/                  // Domain entity
+├── user/                  // Entidade de domínio
 │   ├── User.ts
 │   ├── UserService.ts
 │   ├── UserRepository.ts
 │   └── UserFactory.ts
-└── billing/               // Other context
+└── billing/               // Outro contexto
     ├── Invoice.ts
     ├── Payment.ts
     └── BillingService.ts
 ```
 
-### @reviewer: Detect ADP violation (cycle)
+### @architect: Detectar violação ADP (ciclo)
 ```typescript
-// FIXME: Cycle detected — Order → Payment → Order
+// FIXME: Ciclo detectado — Order → Payment → Order
 // Order.ts
 import { Payment } from './Payment';
 
 // Payment.ts
-import { Order } from './Order';  // violation
+import { Order } from './Order';  // violação
 
-// Solution: extract interface
+// Solução: extrair interface
 interface PaymentProcessor {
   process(amount: number): Promise<void>;
 }
 ```
 
-### @reviewer: Calculate SDP/SAP metrics
+### @architect: Calcular métricas SDP/SAP
 ```bash
-# domain/ module
-# Fan-in: 15 (15 modules depend on it)
-# Fan-out: 3 (it depends on 3 modules)
+# módulo domain/
+# Fan-in: 15 (15 módulos dependem dele)
+# Fan-out: 3 (ele depende de 3 módulos)
 
-I = 3 / (15 + 3) = 0.167  # Stable ✅
-A = 8 / 12 = 0.667        # 67% abstract ✅
-D = |0.667 + 0.167 - 1| = 0.166  # On Main Sequence ✅
+I = 3 / (15 + 3) = 0.167  # Estável ✅
+A = 8 / 12 = 0.667        # 67% abstrato ✅
+D = |0.667 + 0.167 - 1| = 0.166  # Na Main Sequence ✅
 ```
 
 ---
 
-**Created on**: 2026-04-01
-**Version**: 1.0.0
+**Criada em**: 2026-04-01
+**Versão**: 1.0.0

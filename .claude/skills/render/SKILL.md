@@ -1,6 +1,6 @@
 ---
 name: render
-description: Convention for component rendering and re-rendering — when implementing component rendering, optimizing re-renders, or reviewing code that updates the DOM inefficiently
+description: Convenção para renderização e re-renderização de componentes — ao implementar renderização de componentes, otimizar re-renders ou revisar código que atualiza o DOM de forma ineficiente
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,178 +10,189 @@ metadata:
 
 # Render
 
-Convention for component rendering and re-rendering focused on performance and optimization.
+Convenção para renderização e re-renderização de componentes focada em performance e otimização.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating visual components that need to render HTML and CSS, or when needing to re-render components after state changes.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar componentes visuais que precisam renderizar HTML e CSS; ao otimizar re-renders; ao revisar código que atualiza o DOM de forma ineficiente |
+| **Prerequisites** | Skill `anatomy` (estrutura de Web Component); skill `constructor`; conhecimento de Shadow DOM e Custom Elements API |
+| **Constraints** | Não usar `repaint` quando `retouch` é suficiente (apenas CSS muda); não re-renderizar no constructor (componente ainda não conectado); funções `component` e `style` devem ser puras (rule 036) |
+| **Scope** | Decorators `paint`, `repaint` e `retouch`; ciclo de vida de renderização (willPaint, htmlCallback, cssCallback, didPaint); otimização de performance e batching |
 
-## Principle
+---
 
-| Principle | Description |
-|-----------|-------------|
-| Performance | Minimize DOM operations by choosing adequate strategy |
-| Reactivity | Re-render only when necessary and optimized |
+## Quando Usar
 
-## Rendering Decorators
+Use ao criar componentes visuais que precisam renderizar HTML e CSS, ou ao precisar re-renderizar componentes após mudanças de estado.
 
-| Decorator | Scope | What it renders | Performance | Usage |
-|-----------|-------|-----------------|-------------|-------|
-| paint | Class | Initial HTML + CSS | N/A | Initial rendering on connected |
-| repaint | Setter/Method | Complete HTML + CSS | Expensive | Changes affecting HTML template |
-| retouch | Setter/Method | CSS only | Optimized | Changes affecting only styles |
+## Princípio
 
-## Paint (Initial Rendering)
+| Princípio | Descrição |
+|-----------|-----------|
+| Performance | Minimizar operações no DOM escolhendo estratégia adequada |
+| Reatividade | Re-renderizar apenas quando necessário e de forma otimizada |
 
-| Aspect | Description |
-|--------|-------------|
-| Application | Class decorator |
-| Parameters | component function and style function |
-| Execution | When component is connected to DOM |
-| Frequency | Once in lifecycle |
-| Lifecycle | Executes in connected callback |
+## Decoradores de Renderização
 
-## Repaint (Complete Re-rendering)
+| Decorator | Escopo | O que renderiza | Performance | Uso |
+|-----------|--------|-----------------|-------------|-----|
+| paint | Classe | HTML + CSS inicial | N/A | Renderização inicial no connected |
+| repaint | Setter/Método | HTML + CSS completo | Caro | Mudanças que afetam template HTML |
+| retouch | Setter/Método | CSS apenas | Otimizado | Mudanças que afetam apenas estilos |
 
-| Aspect | Description |
-|--------|-------------|
-| Application | Setter or method decorator |
-| What it does | Re-renders HTML and CSS |
+## Paint (Renderização Inicial)
+
+| Aspecto | Descrição |
+|---------|-----------|
+| Aplicação | Decorator de classe |
+| Parâmetros | função component e função style |
+| Execução | Quando componente é conectado ao DOM |
+| Frequência | Uma vez no ciclo de vida |
+| Lifecycle | Executa no callback connected |
+
+## Repaint (Re-renderização Completa)
+
+| Aspecto | Descrição |
+|---------|-----------|
+| Aplicação | Decorator de setter ou método |
+| O que faz | Re-renderiza HTML e CSS |
 | Callbacks | willPaint → html + css → didPaint |
-| Async | Uses setImmediate to not block |
-| Guard | Checks isPainted before executing |
-| Cost | High - reprocesses template and styles |
+| Async | Usa setImmediate para não bloquear |
+| Guard | Verifica isPainted antes de executar |
+| Custo | Alto - reprocessa template e estilos |
 
-## Retouch (Partial Re-rendering)
+## Retouch (Re-renderização Parcial)
 
-| Aspect | Description |
-|--------|-------------|
-| Application | Setter or method decorator |
-| What it does | Re-renders CSS only |
-| Callbacks | Only cssCallback |
-| Async | Uses setImmediate to not block |
-| Guard | Checks isPainted before executing |
-| Cost | Low - only recalculates styles |
+| Aspecto | Descrição |
+|---------|-----------|
+| Aplicação | Decorator de setter ou método |
+| O que faz | Re-renderiza CSS apenas |
+| Callbacks | Apenas cssCallback |
+| Async | Usa setImmediate para não bloquear |
+| Guard | Verifica isPainted antes de executar |
+| Custo | Baixo - apenas recalcula estilos |
 
-## When to Use Each Decorator
+## Quando Usar Cada Decorator
 
-| Situation | Decorator | Justification |
-|-----------|-----------|---------------|
-| Change of src, use, fallback | repaint | HTML content changes |
-| Change of color, size, variant | retouch | Only styles change |
-| Change of internal text | repaint | HTML template changes |
-| Change of CSS class | retouch | Only styles change |
-| Change of visibility | retouch | Only display/opacity changes |
-| Add/remove elements | repaint | DOM structure changes |
-| Method that clears form | repaint | Inputs need to be re-rendered |
-| Method that changes theme | retouch | Only CSS variables change |
+| Situação | Decorator | Justificativa |
+|----------|-----------|---------------|
+| Mudança de src, use, fallback | repaint | Conteúdo HTML muda |
+| Mudança de color, size, variant | retouch | Apenas estilos mudam |
+| Mudança de texto interno | repaint | Template HTML muda |
+| Mudança de classe CSS | retouch | Apenas estilos mudam |
+| Mudança de visibilidade | retouch | Apenas display/opacity muda |
+| Adicionar/remover elementos | repaint | Estrutura DOM muda |
+| Método que limpa formulário | repaint | Inputs precisam ser re-renderizados |
+| Método que muda tema | retouch | Apenas variáveis CSS mudam |
 
-## Performance Optimization
+## Otimização de Performance
 
-| Strategy | Description |
-|----------|-------------|
-| Prefer retouch | Use retouch whenever change is style-only |
-| Avoid unnecessary repaint | Don't use repaint when retouch suffices |
-| Automatic batching | setImmediate groups multiple updates |
-| State guard | isPainted prevents rendering before connected |
-| Async | Doesn't block main thread |
+| Estratégia | Descrição |
+|------------|-----------|
+| Preferir retouch | Use retouch sempre que mudança for apenas de estilo |
+| Evitar repaint desnecessário | Não use repaint quando retouch basta |
+| Batching automático | setImmediate agrupa múltiplas atualizações |
+| Guard de estado | isPainted previne renderização antes do connected |
+| Async | Não bloqueia thread principal |
 
-## Rendering Lifecycle
+## Ciclo de Vida de Renderização
 
-| Phase | Callback | Function |
-|-------|----------|----------|
-| Before | willPaintCallback | Preparation before rendering |
-| HTML | htmlCallback | Re-renders HTML template |
-| CSS | cssCallback | Re-renders CSS styles |
-| After | didPaintCallback | Finalization after rendering |
+| Fase | Callback | Função |
+|------|----------|--------|
+| Antes | willPaintCallback | Preparação antes de renderizar |
+| HTML | htmlCallback | Re-renderiza template HTML |
+| CSS | cssCallback | Re-renderiza estilos CSS |
+| Depois | didPaintCallback | Finalização após renderizar |
 
-## Usage in Setters
+## Uso em Setters
 
-| Pattern | Description |
-|---------|-------------|
-| Decorator order | attributeChanged first, then repaint or retouch |
-| Setter with repaint | When value affects HTML template |
-| Setter with retouch | When value affects only styles |
-| Multiple decorators | Allowed to stack decorators |
+| Padrão | Descrição |
+|--------|-----------|
+| Ordem de decorators | attributeChanged primeiro, depois repaint ou retouch |
+| Setter com repaint | Quando valor afeta template HTML |
+| Setter com retouch | Quando valor afeta apenas estilos |
+| Múltiplos decorators | Permitido empilhar decorators |
 
-## Usage in Methods
+## Uso em Métodos
 
-| Pattern | Description |
-|---------|-------------|
-| Public methods | Can have repaint or retouch |
-| Methods with Symbol | Private methods can have render decorators |
-| Event handlers | Can trigger re-rendering |
-| Async methods | Compatible with repaint and retouch |
+| Padrão | Descrição |
+|--------|-----------|
+| Métodos públicos | Podem ter repaint ou retouch |
+| Métodos com Symbol | Métodos privados podem ter decorators de render |
+| Event handlers | Podem acionar re-renderização |
+| Métodos async | Compatíveis com repaint e retouch |
 
-## Component and Style
+## Component e Style
 
-| Function | Return | Parameter | Description |
-|----------|--------|-----------|-------------|
-| component | html Template | Component instance | Returns HTML structure of component |
-| style | css Template | Component instance | Returns CSS styles of component |
+| Função | Retorno | Parâmetro | Descrição |
+|--------|---------|-----------|-----------|
+| component | html Template | Instância do componente | Retorna estrutura HTML do componente |
+| style | css Template | Instância do componente | Retorna estilos CSS do componente |
 
-## Reactivity
+## Reatividade
 
-| Aspect | Description |
-|--------|-------------|
-| Dynamic values | Component and style access instance properties |
-| Conditional | Rendering can use simple conditional logic |
-| Interpolation | Interpolated values are recalculated on each render |
-| Closure | Functions capture instance context |
+| Aspecto | Descrição |
+|---------|-----------|
+| Valores dinâmicos | Component e style acessam propriedades da instância |
+| Condicional | Renderização pode usar lógica condicional simples |
+| Interpolação | Valores interpolados são recalculados a cada render |
+| Closure | Funções capturam contexto da instância |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — unnecessary complete re-render
+// ❌ Ruim — re-render completo desnecessário
 render() {
   this.shadowRoot.innerHTML = `<div>${this.data}</div>`
-  // clears and rebuilds everything
+  // limpa e reconstrói tudo
 }
 
-// ✅ Good — surgical DOM update
+// ✅ Bom — atualização cirúrgica do DOM
 render() {
   const el = this.shadowRoot.querySelector('.data')
   if (el) el.textContent = this.data
-  // updates only what changed
+  // atualiza apenas o que mudou
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Use repaint when retouch suffices | Performance waste |
-| Re-render in constructor | Component not yet connected |
-| Complex logic in component/style | Keep functions simple (rule 010) |
-| Side effects in component/style | Functions should be pure |
-| Blocking synchronous rendering | Use async decorators |
-| Multiple repaints in sequence | Let automatic batching group |
+| O que evitar | Razão |
+|--------------|-------|
+| Usar repaint quando retouch basta | Desperdício de performance |
+| Re-renderizar no constructor | Componente ainda não conectado |
+| Lógica complexa em component/style | Manter funções simples (rule 010) |
+| Efeitos colaterais em component/style | Funções devem ser puras |
+| Renderização síncrona bloqueante | Usar decorators async |
+| Múltiplos repaints em sequência | Deixar batching automático agrupar |
 
-## Best Practices
+## Boas Práticas
 
-| Practice | Description |
-|----------|-------------|
-| Impact analysis | Assess if change affects HTML or only CSS |
-| Prefer retouch | Default to retouch, use repaint only if necessary |
-| Pure functions | component and style should be pure functions |
-| Minimal logic | Keep rendering logic simple |
-| Single responsibility | Each render has single purpose |
-| Lazy rendering | Component renders only when connected |
+| Prática | Descrição |
+|---------|-----------|
+| Análise de impacto | Avaliar se mudança afeta HTML ou apenas CSS |
+| Preferir retouch | Default para retouch, usar repaint só se necessário |
+| Funções puras | component e style devem ser funções puras |
+| Lógica mínima | Manter lógica de renderização simples |
+| Responsabilidade única | Cada render tem propósito único |
+| Renderização lazy | Componente renderiza apenas quando conectado |
 
-## Special Cases
+## Casos Especiais
 
-| Case | Treatment |
-|------|-----------|
-| Headless component | Don't use paint (no visual rendering) |
-| Logic only | Behavioral components don't need render |
-| Lazy rendering | Component renders only when connected |
-| Conditional rendering | Use conditional logic in component |
+| Caso | Tratamento |
+|------|------------|
+| Componente headless | Não usar paint (sem renderização visual) |
+| Apenas lógica | Componentes comportamentais não precisam de render |
+| Renderização lazy | Componente renderiza apenas quando conectado |
+| Renderização condicional | Usar lógica condicional em component |
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each render has specific and clear responsibility, paint for initial, repaint for HTML+CSS, retouch only for CSS
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): choosing adequate decorator (paint/repaint/retouch) makes intention clear and maintains performance
-- [069 - Prohibition of Premature Optimization](../../rules/069_proibicao-otimizacao-prematura.md): optimize by choosing retouch vs repaint based on real need, not prematurely
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): component and style functions should have maximum 15 lines
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada render tem responsabilidade específica e clara, paint para inicial, repaint para HTML+CSS, retouch apenas para CSS
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): escolher decorator adequado (paint/repaint/retouch) torna intenção clara e mantém performance
+- [069 - Proibição de Otimização Prematura](../../rules/069_proibicao-otimizacao-prematura.md): otimizar escolhendo retouch vs repaint baseado em necessidade real, não prematuramente
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): funções component e style devem ter máximo 15 linhas

@@ -1,25 +1,25 @@
 # Unit of Work
 
-**Layer:** Object-Relational
-**Complexity:** Moderate
-**Intent:** Maintains a list of objects affected by a business transaction and coordinates writing of changes and resolution of concurrency problems.
+**Camada:** Object-Relational
+**Complexidade:** Moderada
+**Intenção:** Mantém uma lista de objetos afetados por uma transação de negócio e coordena a gravação de mudanças e a resolução de problemas de concorrência.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- When multiple domain operations must be persisted atomically
-- To avoid multiple round-trips to database in a single transaction
-- When need to track changes in domain objects throughout a request
-- In applications with rich Domain Model where persistence is separated from domain
+- Quando múltiplas operações de domínio devem ser persistidas atomicamente
+- Para evitar múltiplas viagens ao banco em uma única transação
+- Quando é necessário rastrear mudanças em objetos de domínio ao longo de uma requisição
+- Em aplicações com Domain Model rico onde a persistência é separada do domínio
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple single-entity CRUD operations (overengineering — rule 064)
-- With Active Record where object already manages its own persistence
-- When ORM already provides Unit of Work automatically (e.g., Hibernate, Entity Framework)
+- Operações CRUD simples de entidade única (overengineering — regra 064)
+- Com Active Record onde o objeto já gerencia sua própria persistência
+- Quando o ORM já fornece Unit of Work automaticamente (ex: Hibernate, Entity Framework)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 type DirtyStatus = 'new' | 'dirty' | 'removed'
@@ -36,7 +36,7 @@ class UnitOfWork {
   registerRemoved(obj: DomainObject): void { this.removedObjects.push(obj) }
 
   async commit(): Promise<void> {
-    // Execute everything in a single transaction
+    // Executa tudo em uma única transação
     await db.transaction(async (tx) => {
       for (const obj of this.newObjects) await obj.insert(tx)
       for (const obj of this.dirtyObjects) await obj.update(tx)
@@ -54,7 +54,7 @@ class UnitOfWork {
   }
 }
 
-// Typical usage in a use case
+// Uso típico em um caso de uso
 async function transferFunds(fromId: string, toId: string, amount: number): Promise<void> {
   const uow = new UnitOfWork()
   const from = await accountRepo.findById(fromId)
@@ -70,13 +70,13 @@ async function transferFunds(fromId: string, toId: string, amount: number): Prom
 }
 ```
 
-## Related
+## Relacionado com
 
-- [repository.md](repository.md): complements — repositories register objects in Unit of Work instead of persisting directly
-- [identity-map.md](identity-map.md): complements — Identity Map ensures Unit of Work tracks unique instances by identity
-- [rule 021 - Prohibition of Logic Duplication](../../../rules/021_proibicao-duplicacao-logica.md): reinforces — centralizes all persistence logic at a single commit point
+- [repository.md](repository.md): complementa — repositórios registram objetos no Unit of Work em vez de persistir diretamente
+- [identity-map.md](identity-map.md): complementa — Identity Map garante que o Unit of Work rastreie instâncias únicas por identidade
+- [regra 021 - Proibição de Duplicação de Lógica](../../../rules/021_proibicao-duplicacao-logica.md): reforça — centraliza toda a lógica de persistência em um único ponto de commit
 
 ---
 
-**PoEAA Layer:** Object-Relational
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Object-Relational
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

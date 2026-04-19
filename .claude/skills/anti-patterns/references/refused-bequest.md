@@ -1,24 +1,24 @@
 # Refused Bequest
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 059
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 059
 
-## What It Is
+## O Que É
 
-Subclass that inherits methods and data from parent class but doesn't use or doesn't want part of them. The subclass "refuses" the inheritance, indicating the inheritance hierarchy is wrong or should use composition instead of inheritance.
+Subclasse que herda métodos e dados da classe pai mas não os usa ou não os quer. A subclasse "recusa" a herança, indicando que a hierarquia de herança está errada ou deveria usar composição em vez de herança.
 
-## Symptoms
+## Sintomas
 
-- Subclass overrides parent methods to throw `throw new Error('Not supported')`
-- Inherited methods that are never called in the subclass (60%+ unused)
-- Need to check `instanceof` to know what the object supports
-- Subclass that inherits to "reuse code" but not because it's the same type
-- Empty implementations (`pass`) or stubs for inherited methods that don't make sense
+- Subclasse sobrescreve métodos do pai para lançar `throw new Error('Not supported')`
+- Métodos herdados que nunca são chamados na subclasse (60%+ não utilizados)
+- Necessidade de verificar `instanceof` para saber o que o objeto suporta
+- Subclasse que herda para "reutilizar código" mas não porque é o mesmo tipo
+- Implementações vazias (`pass`) ou stubs para métodos herdados que não fazem sentido
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ ReadOnlyList inherits from List but refuses write methods
+// ❌ ReadOnlyList herda de List mas recusa os métodos de escrita
 class List {
   add(item) { this.items.push(item); }
   remove(item) { ... }
@@ -26,15 +26,15 @@ class List {
 }
 
 class ReadOnlyList extends List {
-  add() { throw new Error('Read-only list!'); }    // refuses inheritance
-  remove() { throw new Error('Read-only list!'); } // refuses inheritance
+  add() { throw new Error('Lista somente leitura!'); }    // recusa herança
+  remove() { throw new Error('Lista somente leitura!'); } // recusa herança
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Composition: ReadOnlyList doesn't inherit, uses
+// ✅ Composição: ReadOnlyList não herda, usa
 class ReadOnlyList {
   #items;
   constructor(items) { this.#items = [...items]; }
@@ -42,13 +42,13 @@ class ReadOnlyList {
   get length() { return this.#items.length; }
 }
 
-// If you need common behavior: extract to helper/mixin
+// Se precisar de comportamento comum: extrair para helper/mixin
 const listBehavior = { iterate() { ... }, map() { ... } };
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Refused Bequest — ReadOnlyList inherits from List but refuses add/remove
-// TODO: Replace Inheritance with Composition — create independent ReadOnlyList
+// FIXME: Refused Bequest — ReadOnlyList herda de List mas recusa add/remove
+// TODO: Substituir Herança por Composição — criar ReadOnlyList independente
 ```

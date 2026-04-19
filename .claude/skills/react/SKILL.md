@@ -1,6 +1,6 @@
 ---
 name: react
-description: "React design and rendering patterns for 2026. Use when @developer implements React components, when choosing between CSR/SSR/SSG/RSC, or when applying HOC/Hooks/Compound patterns."
+description: "Padrões de design e renderização React para 2026. Use quando @coder implementa componentes React, ao escolher entre CSR/SSR/SSG/RSC, ou ao aplicar padrões HOC/Hooks/Compound."
 model: sonnet
 allowed-tools: Read
 metadata:
@@ -10,150 +10,161 @@ metadata:
 
 # React Patterns
 
-Reference for React design and rendering patterns (2026) based on [patterns.dev/react](https://www.patterns.dev/react/).
+Referência de padrões de design e renderização React (2026) baseada em [patterns.dev/react](https://www.patterns.dev/react/).
 
 ---
 
-## When to Use
+## Manifest
 
-| Agent | Context |
-|-------|---------|
-| @developer | When implementing React components, choosing rendering strategy |
-| @architect | When defining React architecture (CSR vs SSR vs RSC), framework decisions |
-| @reviewer | When verifying compliance with modern React 18+ patterns |
-
----
-
-## Reference Structure
-
-### Design Patterns
-
-| Pattern | When to Use | File |
-|---------|-------------|------|
-| **HOC** | Cross-cutting logic reuse (legacy, prefer Hooks) | `references/hoc.md` |
-| **Hooks** | State and lifecycle management in functional components | `references/hooks-pattern.md` |
-| **Compound** | Components that share state implicitly | `references/compound.md` |
-| **Container/Presentational** | Separate logic from presentation (legacy, Hooks eliminate need) | `references/container-presentational.md` |
-| **Render Props** | Share logic via functional prop (legacy, Hooks are cleaner) | `references/render-props.md` |
-
-### Rendering Strategies
-
-| Strategy | SEO | TTI | Bundle | When to Use | File |
-|----------|-----|-----|--------|-------------|------|
-| **CSR** | ❌ | Slow | Large | Internal dashboards, highly interactive apps | `references/rendering-overview.md` |
-| **SSR** | ✅ | Medium | Large | Dynamic content + critical SEO | `references/rendering-overview.md` |
-| **SSG** | ✅ | Fast | Medium | Static content (blogs, docs) | `references/rendering-overview.md` |
-| **ISR** | ✅ | Fast | Medium | SSG + incremental updates | `references/rendering-overview.md` |
-| **RSC** | ✅ | Very fast | Small | Reduce bundle, server-side data-fetching | `references/rendering-overview.md` |
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao implementar componentes React; ao escolher estratégia de renderização (CSR/SSR/SSG/ISR/RSC); ao aplicar padrões HOC/Hooks/Compound em React 18+ |
+| **Prerequisites** | JavaScript/TypeScript moderno (ES2022+); conceitos fundamentais de React (componentes, estado, ciclo de vida); para RSC: Next.js 13+ App Router |
+| **Constraints** | HOC e Render Props são padrões legados — substituir por Hooks quando possível; não usar CSR para páginas públicas com SEO crítico; não misturar Server/Client Components incorretamente |
+| **Scope** | Padrões de design React (HOC, Hooks, Compound, Container/Presentational, Render Props) e estratégias de renderização (CSR, SSR, SSG, ISR, RSC) |
 
 ---
 
-## Quick Decision Guide
+## Quando Usar
 
-### Choosing Design Pattern
+| Agente | Contexto |
+|--------|----------|
+| @coder | Ao implementar componentes React, escolher estratégia de renderização |
+| @architect | Ao definir arquitetura React (CSR vs SSR vs RSC), decisões de framework |
+| @architect | Ao verificar conformidade com padrões modernos React 18+ |
+
+---
+
+## Estrutura de Referência
+
+### Padrões de Design
+
+| Padrão | Quando Usar | Arquivo |
+|--------|-------------|---------|
+| **HOC** | Reutilização de lógica cross-cutting (legado, preferir Hooks) | `references/hoc.md` |
+| **Hooks** | Gerenciamento de estado e ciclo de vida em componentes funcionais | `references/hooks-pattern.md` |
+| **Compound** | Componentes que compartilham estado implicitamente | `references/compound.md` |
+| **Container/Presentational** | Separar lógica de apresentação (legado, Hooks eliminam necessidade) | `references/container-presentational.md` |
+| **Render Props** | Compartilhar lógica via prop funcional (legado, Hooks são mais limpos) | `references/render-props.md` |
+
+### Estratégias de Renderização
+
+| Estratégia | SEO | TTI | Bundle | Quando Usar | Arquivo |
+|------------|-----|-----|--------|-------------|---------|
+| **CSR** | ❌ | Lento | Grande | Dashboards internos, apps altamente interativos | `references/rendering-overview.md` |
+| **SSR** | ✅ | Médio | Grande | Conteúdo dinâmico + SEO crítico | `references/rendering-overview.md` |
+| **SSG** | ✅ | Rápido | Médio | Conteúdo estático (blogs, docs) | `references/rendering-overview.md` |
+| **ISR** | ✅ | Rápido | Médio | SSG + atualizações incrementais | `references/rendering-overview.md` |
+| **RSC** | ✅ | Muito rápido | Pequeno | Reduzir bundle, data-fetching server-side | `references/rendering-overview.md` |
+
+---
+
+## Guia de Decisão Rápida
+
+### Escolhendo Padrão de Design
 
 ```
-Need to reuse logic between components?
-  ├─ Yes, with state → use Custom Hook
-  ├─ Yes, cross-cutting without state → use HOC (legacy) or Custom Hook
-  └─ No → simple functional component
+Precisa reutilizar lógica entre componentes?
+  ├─ Sim, com estado → use Custom Hook
+  ├─ Sim, cross-cutting sem estado → use HOC (legado) ou Custom Hook
+  └─ Não → componente funcional simples
 
-Components need to share implicit state?
-  ├─ Yes → Compound Pattern
-  └─ No → Simple composition with props
+Componentes precisam compartilhar estado implícito?
+  ├─ Sim → Compound Pattern
+  └─ Não → Composição simples com props
 
-Component needs to render flexible content?
-  ├─ Yes → use children or Render Props
-  └─ No → component with fixed interface
+Componente precisa renderizar conteúdo flexível?
+  ├─ Sim → use children ou Render Props
+  └─ Não → componente com interface fixa
 ```
 
-### Choosing Rendering Strategy
+### Escolhendo Estratégia de Renderização
 
 ```
-SEO critical?
-  ├─ No → CSR (Client-Side Rendering)
-  └─ Yes
-      ├─ Static content? → SSG or ISR
-      ├─ Dynamic content? → SSR or RSC
-      └─ Maximum performance? → SSR + RSC + Streaming
+SEO crítico?
+  ├─ Não → CSR (Client-Side Rendering)
+  └─ Sim
+      ├─ Conteúdo estático? → SSG ou ISR
+      ├─ Conteúdo dinâmico? → SSR ou RSC
+      └─ Performance máxima? → SSR + RSC + Streaming
 
-Bundle size critical?
-  └─ Yes → RSC (React Server Components)
+Tamanho do bundle crítico?
+  └─ Sim → RSC (React Server Components)
 
-Immediate interactivity?
-  └─ Yes → CSR or SSR with Selective Hydration
+Interatividade imediata?
+  └─ Sim → CSR ou SSR com Selective Hydration
 ```
 
 ---
 
-## Modern Patterns (React 18+, 2026)
+## Padrões Modernos (React 18+, 2026)
 
-| Pattern | Status | Recommendation |
-|---------|--------|----------------|
-| **Hooks** | ✅ Modern | Fundamental base — use by default |
-| **RSC** | ✅ Modern | Production-ready (Next.js 13+ App Router) |
-| **Streaming SSR** | ✅ Modern | Use with Suspense for performance |
-| **Selective Hydration** | ✅ Modern | React 18+ automatic with Suspense |
-| **HOC** | ⚠️ Legacy | Replace with Hooks when possible |
-| **Render Props** | ⚠️ Legacy | Hooks offer cleaner alternative |
-| **Container/Presentational** | ⚠️ Legacy | Hooks eliminate need |
+| Padrão | Status | Recomendação |
+|--------|--------|--------------|
+| **Hooks** | ✅ Moderno | Base fundamental — usar por padrão |
+| **RSC** | ✅ Moderno | Production-ready (Next.js 13+ App Router) |
+| **Streaming SSR** | ✅ Moderno | Usar com Suspense para performance |
+| **Selective Hydration** | ✅ Moderno | React 18+ automático com Suspense |
+| **HOC** | ⚠️ Legado | Substituir por Hooks quando possível |
+| **Render Props** | ⚠️ Legado | Hooks oferecem alternativa mais limpa |
+| **Container/Presentational** | ⚠️ Legado | Hooks eliminam necessidade |
 
 ---
 
-## Anti-Patterns (avoid)
+## Anti-Padrões (evitar)
 
 ### Design
-- ❌ Deeply nested HOCs ("wrapper hell")
-- ❌ Excessive props drilling (use Context or state management)
-- ❌ Business logic in presentational components
-- ❌ Excessive use of `useEffect` (React 18+ discourages)
+- ❌ HOCs profundamente aninhados ("wrapper hell")
+- ❌ Props drilling excessivo (use Context ou gerenciamento de estado)
+- ❌ Lógica de negócio em componentes de apresentação
+- ❌ Uso excessivo de `useEffect` (React 18+ desencoraja)
 
-### Rendering
-- ❌ Pure CSR for public pages with SEO
-- ❌ SSR without streaming (slow)
-- ❌ Incorrectly mixing Server/Client Components
-- ❌ Client Components importing Server Components
-
----
-
-## Smell Detector
-
-| I see in code | Violated pattern | Action |
-|---------------|------------------|--------|
-| `withAuth(withLogger(withTheme(Component)))` | HOC hell | Convert to Custom Hooks |
-| Props passed through 5+ levels | Props drilling | Use Context API or Zustand |
-| `useEffect` with complex logic | Effect overuse | Move to event handlers or derive state |
-| Component with 10+ `useState` | State fragmentation | Use `useReducer` or state management library |
-| Server Component imported in Client Component | RSC boundary violation | Pass as children or prop |
-| `'use client'` at top of every file | Over-clienting | Keep Server Components by default |
+### Renderização
+- ❌ CSR puro para páginas públicas com SEO
+- ❌ SSR sem streaming (lento)
+- ❌ Misturar Server/Client Components incorretamente
+- ❌ Client Components importando Server Components
 
 ---
 
-## Rationale
+## Detector de Smell
 
-### Design Patterns
-- `references/hoc.md` — Higher-Order Components (legacy)
-- `references/hooks-pattern.md` — Hooks Pattern (modern)
+| Vejo no código | Padrão violado | Ação |
+|----------------|----------------|------|
+| `withAuth(withLogger(withTheme(Component)))` | HOC hell | Converter para Custom Hooks |
+| Props passadas por 5+ níveis | Props drilling | Usar Context API ou Zustand |
+| `useEffect` com lógica complexa | Overuse de Effect | Mover para event handlers ou derivar estado |
+| Componente com 10+ `useState` | Fragmentação de estado | Usar `useReducer` ou biblioteca de gerenciamento de estado |
+| Server Component importado em Client Component | Violação de fronteira RSC | Passar como children ou prop |
+| `'use client'` no topo de todo arquivo | Over-clienting | Manter Server Components por padrão |
+
+---
+
+## Justificativa
+
+### Padrões de Design
+- `references/hoc.md` — Higher-Order Components (legado)
+- `references/hooks-pattern.md` — Hooks Pattern (moderno)
 - `references/compound.md` — Compound Pattern
-- `references/container-presentational.md` — Container/Presentational (legacy)
-- `references/render-props.md` — Render Props (legacy)
+- `references/container-presentational.md` — Container/Presentational (legado)
+- `references/render-props.md` — Render Props (legado)
 
-### Rendering Strategies
-- `references/rendering-overview.md` — Complete guide CSR/SSR/SSG/ISR/RSC
-
----
-
-## Application Workflow
-
-```
-1. Identify the problem (design or rendering)
-2. Consult the Quick Decision Guide
-3. Read relevant reference
-4. Apply pattern/strategy according to context
-5. Validate compliance with architectural rules (rules 010-014)
-```
+### Estratégias de Renderização
+- `references/rendering-overview.md` — Guia completo CSR/SSR/SSG/ISR/RSC
 
 ---
 
-**Created on**: 2026-04-01
-**Version**: 1.0.0
+## Fluxo de Aplicação
+
+```
+1. Identificar o problema (design ou renderização)
+2. Consultar o Guia de Decisão Rápida
+3. Ler referência relevante
+4. Aplicar padrão/estratégia conforme contexto
+5. Validar conformidade com regras arquiteturais (rules 010-014)
+```
+
+---
+
+**Criada em**: 2026-04-01
+**Versão**: 1.0.0

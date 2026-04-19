@@ -1,6 +1,6 @@
 ---
 name: big-o
-description: Convention for Big-O algorithmic complexity analysis. Use when evaluating performance of methods that iterate over collections, perform searches, combine nested loops, or execute recursive operations — when optimizing algorithms with complexity above O(n).
+description: Convenção para análise de complexidade algorítmica Big-O. Use ao avaliar performance de métodos que iteram sobre coleções, executam buscas, combinam loops aninhados ou executam operações recursivas — ao otimizar algoritmos com complexidade acima de O(n).
 model: haiku
 allowed-tools: Read, Grep, Glob
 metadata:
@@ -10,75 +10,86 @@ metadata:
 
 # Big-O
 
-Convention for algorithmic complexity analysis to identify and classify method performance according to Big-O notation.
+Convenção para análise de complexidade algorítmica para identificar e classificar a performance de métodos segundo notação Big-O.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when evaluating methods that iterate over collections, perform searches, combine nested loops, or execute recursive operations.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Avaliação de métodos com iterações sobre coleções, buscas, loops aninhados ou operações recursivas; otimização de algoritmos com complexidade acima de O(n) |
+| **Prerequisites** | Entendimento de estruturas de controle de fluxo; conhecimento de estruturas de dados nativas (Array, Map, Set) e seus custos de acesso |
+| **Constraints** | Não otimizar prematuramente — aplicar somente quando complexidade O(n²) ou superior é confirmada no código real; não se aplica a funções O(1) ou O(n) já corretas |
+| **Scope** | Classificação de complexidade por notação Big-O, detecção de padrões problemáticos, tabela de limites de ação e técnicas de refatoração algorítmica |
 
-## Classification
+---
 
-| Notation | Name | Severity |
+## Quando Usar
+
+Use ao avaliar métodos que iteram sobre coleções, executam buscas, combinam loops aninhados ou executam operações recursivas.
+
+## Classificação
+
+| Notação | Nome | Severidade |
 |---------|------|------------|
-| O(1) | Constant | Ideal |
-| O(log n) | Logarithmic | Ideal |
-| O(n) | Linear | Acceptable |
-| O(n log n) | Log-linear | Acceptable |
-| O(n^2) | Quadratic | Warning |
-| O(n^3) | Polynomial | Critical |
-| O(2^n) | Exponential | Critical |
-| O(n!) | Factorial | Critical |
+| O(1) | Constante | Ideal |
+| O(log n) | Logarítmica | Ideal |
+| O(n) | Linear | Aceitável |
+| O(n log n) | Log-linear | Aceitável |
+| O(n^2) | Quadrática | Aviso |
+| O(n^3) | Polinomial | Crítica |
+| O(2^n) | Exponencial | Crítica |
+| O(n!) | Fatorial | Crítica |
 
-## Detection by Structure
+## Detecção por Estrutura
 
-| Code Structure | Big-O | Pattern |
+| Estrutura de Código | Big-O | Padrão |
 |---------------------|-------|--------|
-| Direct access by index or key | O(1) | `map.get(key)`, `array[i]`, `object.prop` |
-| Binary search or division by half | O(log n) | `while (low <= high) { mid = ... }` |
-| Simple loop over collection | O(n) | `for`, `for...of`, `forEach`, `map`, `filter`, `reduce` |
-| Native sort or merge sort | O(n log n) | `array.sort()`, `Array.from().sort()` |
-| Loop within loop on same collection | O(n^2) | `for { for }`, `forEach { filter }`, `map { find }` |
-| Triple nesting on same collection | O(n^3) | `for { for { for } }` |
-| Recursion that doubles each call | O(2^n) | `f(n) = f(n-1) + f(n-2)` without memoization |
-| Complete permutations or combinations | O(n!) | Generate all permutations of a set |
+| Acesso direto por índice ou chave | O(1) | `map.get(key)`, `array[i]`, `object.prop` |
+| Busca binária ou divisão por metade | O(log n) | `while (low <= high) { mid = ... }` |
+| Loop simples sobre coleção | O(n) | `for`, `for...of`, `forEach`, `map`, `filter`, `reduce` |
+| Sort nativo ou merge sort | O(n log n) | `array.sort()`, `Array.from().sort()` |
+| Loop dentro de loop sobre mesma coleção | O(n^2) | `for { for }`, `forEach { filter }`, `map { find }` |
+| Aninhamento triplo sobre mesma coleção | O(n^3) | `for { for { for } }` |
+| Recursão que dobra cada chamada | O(2^n) | `f(n) = f(n-1) + f(n-2)` sem memoization |
+| Permutações ou combinações completas | O(n!) | Gerar todas as permutações de um conjunto |
 
-## Limits
+## Limites
 
-| Big-O | Limit | Action |
+| Big-O | Limite | Ação |
 |-------|--------|------|
-| O(1), O(log n) | Ideal | No action necessary |
-| O(n), O(n log n) | Acceptable | No action necessary |
-| O(n^2) | Warning | Evaluate if linear alternative exists — annotate with OPTIMIZE if n can grow |
-| O(n^3) | Critical | Mandatory refactoring — annotate with FIXME |
-| O(2^n) | Critical | Mandatory refactoring — apply memoization or dynamic programming |
-| O(n!) | Critical | Mandatory refactoring — replace with heuristic or limit input |
+| O(1), O(log n) | Ideal | Nenhuma ação necessária |
+| O(n), O(n log n) | Aceitável | Nenhuma ação necessária |
+| O(n^2) | Aviso | Avaliar se existe alternativa linear — anotar com OPTIMIZE se n puder crescer |
+| O(n^3) | Crítica | Refatoração obrigatória — anotar com FIXME |
+| O(2^n) | Crítica | Refatoração obrigatória — aplicar memoization ou programação dinâmica |
+| O(n!) | Crítica | Refatoração obrigatória — substituir por heurística ou limitar entrada |
 
-## Refactoring Techniques
+## Técnicas de Refatoração
 
-| From | To | Technique |
+| De | Para | Técnica |
 |----|------|---------|
-| O(n^2) with internal search | O(n) | Replace inner loop with Map/Set for O(1) lookup |
-| O(n^2) with pair comparison | O(n log n) | Sort first and use binary search |
-| O(n^2) with filter inside loop | O(n) | Pre-compute Set with filtered values |
-| O(2^n) recursion without cache | O(n) | Apply memoization or dynamic programming |
-| O(n) multiple passes | O(n) single pass | Combine operations in single iteration |
+| O(n^2) com busca interna | O(n) | Substituir loop interno por Map/Set para busca O(1) |
+| O(n^2) com comparação de pares | O(n log n) | Ordenar primeiro e usar busca binária |
+| O(n^2) com filter dentro de loop | O(n) | Pré-computar Set com valores filtrados |
+| O(2^n) recursão sem cache | O(n) | Aplicar memoization ou programação dinâmica |
+| O(n) múltiplas passagens | O(n) passagem única | Combinar operações em única iteração |
 
-## Common Combinations
+## Combinações Comuns
 
-| Code | Resulting Big-O |
+| Código | Big-O Resultante |
 |--------|------------------|
-| `array.filter().map()` | O(n) — two linear passes = O(2n) = O(n) |
-| `array.sort().filter()` | O(n log n) — sort dominates |
-| `array.map(x => other.find())` | O(n * m) — quadratic if n ≈ m |
-| `array.map(x => other.includes())` | O(n * m) — quadratic if n ≈ m |
-| `array.forEach(x => set.has())` | O(n) — Set.has is O(1) |
+| `array.filter().map()` | O(n) — duas passagens lineares = O(2n) = O(n) |
+| `array.sort().filter()` | O(n log n) — sort domina |
+| `array.map(x => other.find())` | O(n * m) — quadrático se n ≈ m |
+| `array.map(x => other.includes())` | O(n * m) — quadrático se n ≈ m |
+| `array.forEach(x => set.has())` | O(n) — Set.has é O(1) |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — O(n²) find duplicates with nested loop
+// ❌ Bad — O(n²) encontrar duplicados com loop aninhado
 function findDuplicates(items: string[]): string[] {
   const duplicates: string[] = []
   for (let i = 0; i < items.length; i++) {      // O(n)
@@ -89,7 +100,7 @@ function findDuplicates(items: string[]): string[] {
   return duplicates
 }
 
-// ✅ Good — O(n) using Set
+// ✅ Good — O(n) usando Set
 function findDuplicates(items: string[]): string[] {
   const seen = new Set<string>()
   const duplicates = new Set<string>()
@@ -101,20 +112,20 @@ function findDuplicates(items: string[]): string[] {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
+| O que evitar | Razão |
 |--------------|-------|
-| Nested loop without justification in collections that can grow | O(n^2) or worse degrades quickly |
-| `find`/`includes`/`indexOf` inside `map`/`forEach`/`filter` | Creates hidden O(n^2) |
-| Recursion without memoization in problems with repeated subproblems | O(2^n) when O(n) is possible |
-| Multiple consecutive `sort()` on same collection | Each sort is unnecessary O(n log n) |
-| `Array.from(set).filter()` when `set.has()` solves | Transforms O(1) lookup into O(n) scan |
+| Loop aninhado sem justificativa em coleções que podem crescer | O(n^2) ou pior degrada rapidamente |
+| `find`/`includes`/`indexOf` dentro de `map`/`forEach`/`filter` | Cria O(n^2) oculto |
+| Recursão sem memoization em problemas com subproblemas repetidos | O(2^n) quando O(n) é possível |
+| Múltiplos `sort()` consecutivos sobre mesma coleção | Cada sort é O(n log n) desnecessário |
+| `Array.from(set).filter()` quando `set.has()` resolve | Transforma busca O(1) em scan O(n) |
 
-## Rationale
+## Justificativa
 
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): high algorithmic complexity obscures intent and reduces clarity
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): nested loops indicate multiple responsibilities in same method
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): complex algorithms tend to exceed line limits
-- [001 - Single Level of Indentation](../../rules/001_nivel-unico-indentacao.md): nested loops directly violate indentation restriction
-- [039 - Boy Scout Rule](../../rules/039_regra-escoteiro-refatoracao-continua.md): identifying and improving performance is part of continuous refactoring
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): alta complexidade algorítmica obscurece intenção e reduz clareza
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): loops aninhados indicam múltiplas responsabilidades no mesmo método
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): algoritmos complexos tendem a exceder limites de linhas
+- [001 - Nível Único de Indentação](../../rules/001_nivel-unico-indentacao.md): loops aninhados violam diretamente a restrição de indentação
+- [039 - Regra do Escoteiro](../../rules/039_regra-escoteiro-refatoracao-continua.md): identificar e melhorar performance faz parte da refatoração contínua

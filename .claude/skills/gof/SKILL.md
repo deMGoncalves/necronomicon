@@ -1,6 +1,6 @@
 ---
 name: gof
-description: Complete reference of 23 GoF Design Patterns (Gang of Four) organized into Creational, Structural, and Behavioral. Use when needing to select or implement GoF patterns, upon receiving pattern recommendation from @architect, or when reviewing code with design problems that a pattern would solve.
+description: Referência completa dos 23 Design Patterns GoF (Gang of Four) organizados em Criacionais, Estruturais e Comportamentais. Use ao precisar selecionar ou implementar patterns GoF, ao receber recomendação de pattern do @architect, ou ao revisar código com problemas de design que um pattern resolveria.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -11,73 +11,84 @@ metadata:
 
 # GoF — Gang of Four Design Patterns
 
-23 OO design patterns organized into 3 categories.
+23 design patterns OO organizados em 3 categorias.
 
 ---
 
-## When to Use
+## Manifest
 
-- @architect: Research/Spec phase to recommend patterns for features
-- @developer: Code phase to implement the correct pattern
-- @reviewer: to identify where a pattern should be applied (or was misapplied)
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao selecionar ou implementar um dos 23 patterns GoF; ao receber recomendação de pattern de @architect; ao revisar código com problemas de design que um pattern resolveria |
+| **Prerequisites** | Princípios SOLID (rules 010–014); conceitos OOP (herança, composição, polimorfismo) |
+| **Constraints** | Não aplicar pattern sem identificar claramente o problema que resolve — overengineering (rule 064); Singleton não substitui injeção de dependência (rule 014) |
+| **Scope** | Seleção e implementação dos 23 patterns GoF organizados em Criacionais, Estruturais e Comportamentais |
 
-## The 23 Patterns
+---
 
-| Category | Pattern | Reference |
+## Quando Usar
+
+- @architect: fase Research/Spec para recomendar patterns para features
+- @coder: fase Code para implementar o pattern correto
+- @architect: para identificar onde um pattern deveria ser aplicado (ou foi mal aplicado)
+
+## Os 23 Patterns
+
+| Categoria | Pattern | Referência |
 |-----------|---------|------------|
-| Creational | Singleton | [singleton.md](references/singleton.md) |
-| Creational | Factory Method | [factory-method.md](references/factory-method.md) |
-| Creational | Abstract Factory | [abstract-factory.md](references/abstract-factory.md) |
-| Creational | Builder | [builder.md](references/builder.md) |
-| Creational | Prototype | [prototype.md](references/prototype.md) |
-| Structural | Adapter | [adapter.md](references/adapter.md) |
-| Structural | Bridge | [bridge.md](references/bridge.md) |
-| Structural | Composite | [composite.md](references/composite.md) |
-| Structural | Decorator | [decorator.md](references/decorator.md) |
-| Structural | Facade | [facade.md](references/facade.md) |
-| Structural | Flyweight | [flyweight.md](references/flyweight.md) |
-| Structural | Proxy | [proxy.md](references/proxy.md) |
-| Behavioral | Chain of Responsibility | [chain-of-responsibility.md](references/chain-of-responsibility.md) |
-| Behavioral | Command | [command.md](references/command.md) |
-| Behavioral | Interpreter | [interpreter.md](references/interpreter.md) |
-| Behavioral | Iterator | [iterator.md](references/iterator.md) |
-| Behavioral | Mediator | [mediator.md](references/mediator.md) |
-| Behavioral | Memento | [memento.md](references/memento.md) |
-| Behavioral | Observer | [observer.md](references/observer.md) |
-| Behavioral | State | [state.md](references/state.md) |
-| Behavioral | Strategy | [strategy.md](references/strategy.md) |
-| Behavioral | Template Method | [template-method.md](references/template-method.md) |
-| Behavioral | Visitor | [visitor.md](references/visitor.md) |
+| Criacional | Singleton | [singleton.md](references/singleton.md) |
+| Criacional | Factory Method | [factory-method.md](references/factory-method.md) |
+| Criacional | Abstract Factory | [abstract-factory.md](references/abstract-factory.md) |
+| Criacional | Builder | [builder.md](references/builder.md) |
+| Criacional | Prototype | [prototype.md](references/prototype.md) |
+| Estrutural | Adapter | [adapter.md](references/adapter.md) |
+| Estrutural | Bridge | [bridge.md](references/bridge.md) |
+| Estrutural | Composite | [composite.md](references/composite.md) |
+| Estrutural | Decorator | [decorator.md](references/decorator.md) |
+| Estrutural | Facade | [facade.md](references/facade.md) |
+| Estrutural | Flyweight | [flyweight.md](references/flyweight.md) |
+| Estrutural | Proxy | [proxy.md](references/proxy.md) |
+| Comportamental | Chain of Responsibility | [chain-of-responsibility.md](references/chain-of-responsibility.md) |
+| Comportamental | Command | [command.md](references/command.md) |
+| Comportamental | Interpreter | [interpreter.md](references/interpreter.md) |
+| Comportamental | Iterator | [iterator.md](references/iterator.md) |
+| Comportamental | Mediator | [mediator.md](references/mediator.md) |
+| Comportamental | Memento | [memento.md](references/memento.md) |
+| Comportamental | Observer | [observer.md](references/observer.md) |
+| Comportamental | State | [state.md](references/state.md) |
+| Comportamental | Strategy | [strategy.md](references/strategy.md) |
+| Comportamental | Template Method | [template-method.md](references/template-method.md) |
+| Comportamental | Visitor | [visitor.md](references/visitor.md) |
 
-## Quick Selection by Problem
+## Seleção Rápida por Problema
 
-| Problem | Pattern |
+| Problema | Pattern |
 |----------|---------|
-| Create object without specifying concrete class | Factory Method |
-| Switch algorithm at runtime | Strategy |
-| Notify dependents when state changes | Observer |
-| Single interface for complex subsystem | Facade |
-| Add responsibilities without inheritance | Decorator |
-| Single global instance | Singleton |
-| Control access to another object | Proxy |
-| Build complex object step by step | Builder |
-| Chain of handlers for a request | Chain of Responsibility |
-| Processing pipeline | Chain of Responsibility |
-| State machine | State |
-| Tree structure (UI components) | Composite |
+| Criar objeto sem especificar classe concreta | Factory Method |
+| Trocar algoritmo em runtime | Strategy |
+| Notificar dependentes quando estado muda | Observer |
+| Interface única para subsistema complexo | Facade |
+| Adicionar responsabilidades sem herança | Decorator |
+| Instância global única | Singleton |
+| Controlar acesso a outro objeto | Proxy |
+| Construir objeto complexo passo a passo | Builder |
+| Cadeia de handlers para requisição | Chain of Responsibility |
+| Pipeline de processamento | Chain of Responsibility |
+| Máquina de estados | State |
+| Estrutura de árvore (componentes UI) | Composite |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — conditional logic that grows with each new type
+// ❌ Bad — lógica condicional que cresce a cada novo tipo
 function createNotification(type: string) {
   if (type === 'email') return new EmailNotification()
   if (type === 'sms') return new SmsNotification()
   if (type === 'push') return new PushNotification()
-  // each new type = modify this method (violates OCP)
+  // cada novo tipo = modificar esse método (viola OCP)
 }
 
-// ✅ Good — Factory Method: extensible without modifying existing code
+// ✅ Good — Factory Method: extensível sem modificar código existente
 abstract class NotificationFactory {
   abstract create(): Notification
 }
@@ -87,11 +98,11 @@ class EmailFactory extends NotificationFactory {
 class SmsFactory extends NotificationFactory {
   create() { return new SmsNotification() }
 }
-// adding Push = new class, without changing existing ones
+// adicionar Push = nova classe, sem mudar as existentes
 ```
 
 ```typescript
-// ❌ Bad — validation logic scattered and repeated
+// ❌ Bad — lógica de validação espalhada e repetida
 function processOrder(order: Order) {
   if (order.status === 'pending') {
     order.status = 'processing'
@@ -100,10 +111,10 @@ function processOrder(order: Order) {
   } else if (order.status === 'shipped') {
     order.status = 'delivered'
   }
-  // adding new status = modify entire conditional structure
+  // adicionar novo status = modificar toda estrutura condicional
 }
 
-// ✅ Good — State Pattern: each state encapsulates behavior
+// ✅ Good — State Pattern: cada estado encapsula comportamento
 interface OrderState {
   next(order: Order): void
 }
@@ -113,22 +124,22 @@ class PendingState implements OrderState {
 class ProcessingState implements OrderState {
   next(order: Order) { order.setState(new ShippedState()) }
 }
-// adding new state = new class, without modifying existing ones
+// adicionar novo estado = nova classe, sem modificar as existentes
 ```
 
-## Prohibitions
+## Proibições
 
-- Don't use patterns for simple problems (overengineering — rule 064)
-- Don't implement Singleton to inject dependencies (use DIP — rule 014)
-- Never apply without clearly identifying the problem it solves
+- Não usar patterns para problemas simples (overengineering — rule 064)
+- Não implementar Singleton para injetar dependências (usar DIP — rule 014)
+- Nunca aplicar sem identificar claramente o problema que resolve
 
-## Rationale
+## Justificativa
 
-- rule 010 (SRP): each pattern has clear responsibility
-- rule 011 (OCP): Factory Method and Strategy allow extension without modification
-- rule 014 (DIP): Abstract Factory and Bridge depend on abstractions
-- rule 064 (Overengineering): apply only when the problem justifies it
+- rule 010 (SRP): cada pattern tem responsabilidade clara
+- rule 011 (OCP): Factory Method e Strategy permitem extensão sem modificação
+- rule 014 (DIP): Abstract Factory e Bridge dependem de abstrações
+- rule 064 (Overengineering): aplicar apenas quando o problema justifica
 
-**Related skills:**
-- [`poeaa`](../poeaa/SKILL.md) — complements: PoEAA applies GoF in enterprise architecture
-- [`solid`](../solid/SKILL.md) — depends: many GoF patterns implement SOLID principles
+**Skills relacionadas:**
+- [`poeaa`](../poeaa/SKILL.md) — complementa: PoEAA aplica GoF em arquitetura enterprise
+- [`solid`](../solid/SKILL.md) — depende: muitos patterns GoF implementam princípios SOLID

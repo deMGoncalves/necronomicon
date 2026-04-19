@@ -1,37 +1,37 @@
-# Error Handling (Rules 027, 028)
+# Tratamento de Erros (Regras 027, 028)
 
-## Rules
+## Regras
 
-- **027**: Use domain exceptions (not `return null`)
-- **028**: Handle all Promises with `await` or `.catch()`
+- **027**: Usar exceções de domínio (não `return null`)
+- **028**: Tratar todas as Promises com `await` ou `.catch()`
 
 ## Checklist
 
-- [ ] Business methods return valid types or throw exception
-- [ ] Prohibited `return null` or `return undefined` in business logic
-- [ ] Custom exceptions for domain (`UserNotFoundError`)
-- [ ] All Promises followed by `await` or `.catch()`
-- [ ] No empty `catch` or that only logs
+- [ ] Métodos de negócio retornam tipos válidos ou lançam exceção
+- [ ] Proibido `return null` ou `return undefined` na lógica de negócio
+- [ ] Exceções customizadas para o domínio (`UserNotFoundError`)
+- [ ] Todas as Promises seguidas por `await` ou `.catch()`
+- [ ] Sem `catch` vazio ou que apenas loga
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
+// ❌ Violações
 function findUser(id) {
   const user = db.find(id);
-  return user || null; // client must check null
+  return user || null; // cliente deve verificar null
 }
 
 async function handleRequest(req) {
-  saveToDatabase(req.body); // floating Promise!
+  saveToDatabase(req.body); // Promise flutuante!
 }
 
-try { await operation(); } catch (e) {} // empty catch
+try { await operation(); } catch (e) {} // catch vazio
 
-// ✅ Compliance
+// ✅ Conformidade
 class UserNotFoundError extends BaseDomainError {
   constructor(id: string) {
-    super(`User ${id} not found`);
+    super(`Usuário ${id} não encontrado`);
   }
 }
 
@@ -42,13 +42,13 @@ function findUser(id: string): User {
 }
 
 async function handleRequest(req: Request) {
-  await saveToDatabase(req.body); // explicit await
+  await saveToDatabase(req.body); // await explícito
 }
 
-// or with .catch()
-promise.catch(err => logger.error('Failed', err));
+// ou com .catch()
+promise.catch(err => logger.error('Falhou', err));
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-Exceptions eliminate null-check branches spread throughout code (reduces CC_base).
+Exceções eliminam ramificações de verificação de null espalhadas pelo código (reduz CC_base).

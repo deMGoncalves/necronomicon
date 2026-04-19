@@ -1,38 +1,38 @@
-# Rule 7 — Small Classes
+# Regra 7 — Small Classes (Classes Pequenas)
 
-**deMGoncalves Rule:** ESTRUTURAL-007
-**Question:** Does this class have more than 50 lines or 7 public methods?
+**Regra deMGoncalves:** ESTRUTURAL-007
+**Questão:** Esta classe tem mais de 50 linhas ou 7 métodos públicos?
 
-## What It Is
+## O que é
 
-Imposes a maximum limit on the number of lines of code in a class file (entity, service, controller), forcing the extraction of responsibilities to other classes.
+Impõe um limite máximo no número de linhas de código em um arquivo de classe (entidade, service, controlador), forçando a extração de responsabilidades para outras classes.
 
-## When to Apply
+## Quando Aplicar
 
-- Class with more than 50 lines of code
-- Class with more than 7 public methods
-- Class with more than 15 lines per method
-- Class candidate for SRP violation
+- Classe com mais de 50 linhas de código
+- Classe com mais de 7 métodos públicos
+- Classe com mais de 15 linhas por método
+- Classe candidata a violação do SRP
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-class UserService {  // 150 lines - VIOLATES
-  createUser(data: UserData): User { /* 20 lines */ }
-  updateUser(id: string, data: UserData): User { /* 25 lines */ }
-  deleteUser(id: string): void { /* 15 lines */ }
-  findUserById(id: string): User { /* 10 lines */ }
-  findUserByEmail(email: string): User { /* 10 lines */ }
-  listUsers(filters: Filters): User[] { /* 30 lines */ }
-  exportUsers(format: string): Buffer { /* 40 lines */ }
-  // ... 8 more public methods
+class UserService {  // 150 linhas - VIOLA
+  createUser(data: UserData): User { /* 20 linhas */ }
+  updateUser(id: string, data: UserData): User { /* 25 linhas */ }
+  deleteUser(id: string): void { /* 15 linhas */ }
+  findUserById(id: string): User { /* 10 linhas */ }
+  findUserByEmail(email: string): User { /* 10 linhas */ }
+  listUsers(filters: Filters): User[] { /* 30 linhas */ }
+  exportUsers(format: string): Buffer { /* 40 linhas */ }
+  // ... 8 métodos públicos a mais
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
-// UserService.ts (30 lines)
+// UserService.ts (30 linhas)
 class UserService {
   constructor(
     private readonly repository: UserRepository,
@@ -51,7 +51,7 @@ class UserService {
   }
 }
 
-// UserRepository.ts (25 lines)
+// UserRepository.ts (25 linhas)
 class UserRepository {
   findById(id: string): User { /* ... */ }
   findByEmail(email: string): User { /* ... */ }
@@ -59,19 +59,19 @@ class UserRepository {
   delete(id: string): void { /* ... */ }
 }
 
-// UserExporter.ts (35 lines)
+// UserExporter.ts (35 linhas)
 class UserExporter {
   export(users: User[], format: string): Buffer { /* ... */ }
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Configuration Classes**: Classes that only declare constants or mappings
-- **Test Classes**: Test suites where each test is small
+- **Classes de Configuração**: Classes que apenas declaram constantes ou mapeamentos
+- **Classes de Teste**: Suites de teste onde cada teste é pequeno
 
-## Related Rules
+## Regras Relacionadas
 
-- [001 - Single Indentation Level](rule-01-single-indentation.md): reinforces
-- [004 - First Class Collections](rule-04-first-class-collections.md): reinforces
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): reinforces
+- [001 - Single Indentation Level](rule-01-single-indentation.md): reforça
+- [004 - First Class Collections](rule-04-first-class-collections.md): reforça
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): reforça

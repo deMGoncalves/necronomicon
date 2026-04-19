@@ -1,24 +1,24 @@
 # Chain of Responsibility
 
-**Category:** Behavioral
-**Intent:** Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request, chaining the receiving objects.
+**Categoria:** Comportamental
+**Intenção:** Evitar o acoplamento do remetente de uma requisição ao seu receptor, dando a mais de um objeto a chance de tratar a requisição, encadeando os objetos receptores.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Processing pipelines (middleware, HTTP filters)
-- When more than one object can handle a request and the handler isn't known a priori
-- To implement hierarchical approval systems
-- Event handling with multiple cascading listeners
+- Pipelines de processamento (middleware, filtros HTTP)
+- Quando mais de um objeto pode tratar uma requisição e o handler não é conhecido a priori
+- Para implementar sistemas hierárquicos de aprovação
+- Tratamento de eventos com múltiplos listeners em cascata
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When creating very long chains without real need (overengineering — rule 064)
-- When the request must always be processed by a specific known handler
-- When the order of handlers matters but isn't explicit — makes maintenance difficult
+- Quando criar cadeias muito longas sem necessidade real (overengineering — rule 064)
+- Quando a requisição deve sempre ser processada por um handler específico e conhecido
+- Quando a ordem dos handlers importa mas não é explícita — dificulta manutenção
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 abstract class RequestHandler {
@@ -37,20 +37,20 @@ abstract class RequestHandler {
 
 class AuthHandler extends RequestHandler {
   handle(request: number): string | null {
-    if (request < 0) return 'Denied: invalid request'
+    if (request < 0) return 'Negado: requisição inválida'
     return super.handle(request)
   }
 }
 
 class RateLimitHandler extends RequestHandler {
   handle(request: number): string | null {
-    if (request > 100) return 'Denied: rate limit exceeded'
+    if (request > 100) return 'Negado: limite de taxa excedido'
     return super.handle(request)
   }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const chain = new AuthHandler()
@@ -58,14 +58,14 @@ chain.setNext(new RateLimitHandler())
 chain.handle(50)
 ```
 
-## Related to
+## Relacionado a
 
-- [command.md](command.md): complements — Command encapsulates request; Chain of Responsibility defines who processes it
-- [observer.md](observer.md): complements — Observer notifies all subscribers; Chain stops at first handler that processes
-- [rule 002 - Prohibition of ELSE Clause](../../../rules/002_proibicao-clausula-else.md): reinforces — each handler uses guard clause to decide whether to process or pass forward
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't create long chains without justification
+- [command.md](command.md): complementa — Command encapsula a requisição; Chain of Responsibility define quem a processa
+- [observer.md](observer.md): complementa — Observer notifica todos os assinantes; Chain para no primeiro handler que processa
+- [rule 002 - Proibição da Cláusula ELSE](../../../rules/002_proibicao-clausula-else.md): reforça — cada handler usa guard clause para decidir se processa ou repassa adiante
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não crie cadeias longas sem justificativa
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

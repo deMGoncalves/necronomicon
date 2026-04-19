@@ -1,6 +1,6 @@
 ---
 name: clean-code
-description: "Clean Code practices (Uncle Bob) for clean and maintainable code. Use when @developer applies rules 021-039, or @reviewer verifies code quality beyond objective metrics."
+description: "Práticas Clean Code (Uncle Bob) para código limpo e manutenível. Use quando @coder aplica regras 021-039, ou @architect verifica qualidade de código além de métricas objetivas."
 model: haiku
 allowed-tools: Read
 metadata:
@@ -10,124 +10,135 @@ metadata:
 
 # Clean Code
 
-Reference of Clean Code practices based on Robert C. Martin (*Clean Code: A Handbook of Agile Software Craftsmanship*, 2008) to apply rules 021–039.
+Referência de práticas Clean Code baseadas em Robert C. Martin (*Clean Code: A Handbook of Agile Software Craftsmanship*, 2008) para aplicar regras 021–039.
 
 ---
 
-## When to Use
+## Manifest
 
-| Agent | Context |
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Qualquer implementação em `src/` por @coder; revisão de qualidade por @architect |
+| **Prerequisites** | Regras 021–042 carregadas; entendimento básico de OOP |
+| **Constraints** | Não aplica a arquivos de configuração, DTOs puros ou código legado em isolamento |
+| **Scope** | Nomenclatura, estrutura de funções, tratamento de erros, imutabilidade, segurança, testes |
+
+---
+
+## Quando Usar
+
+| Agente | Contexto |
 |-------|---------|
-| @developer | When implementing rules 021–039 during coding |
-| @reviewer | When verifying quality beyond objective ICP metrics |
-| @architect | When evaluating design decisions that impact maintainability |
+| @coder | Ao implementar regras 021–039 durante codificação |
+| @architect | Ao verificar qualidade além de métricas objetivas ICP |
+| @architect | Ao avaliar decisões de design que impactam manutenibilidade |
 
 ---
 
-## Reference Structure
+## Estrutura de Referência
 
-| Theme | Rules | Key Question | File |
+| Tema | Regras | Pergunta-Chave | Arquivo |
 |-------|-------|--------------|------|
-| **Naming** | 006, 034, 035 | Do names reveal intent without comments? | `references/naming.md` |
-| **Functions** | 033, 037 | Do functions do one thing with ≤3 params? | `references/functions.md` |
-| **Error Handling** | 027, 028 | Domain exceptions instead of null/codes? | `references/error-handling.md` |
-| **Code Structure** | 021, 022, 023, 026 | Simple, DRY, no speculation, self-documenting? | `references/code-structure.md` |
-| **Immutability** | 029, 036, 038 | Immutable objects, no side effects, CQS? | `references/immutability.md` |
-| **Security** | 030, 031, 042 | No eval, path aliases, secrets in env? | `references/security.md` |
-| **Testing** | 032 | Coverage ≥85% domain, AAA pattern? | `references/testing.md` |
-| **Refactoring** | 039 | Code better than found? | `references/boy-scout-rule.md` |
+| **Nomenclatura** | 006, 034, 035 | Nomes revelam intenção sem comentários? | `references/naming.md` |
+| **Funções** | 033, 037 | Funções fazem uma coisa com ≤3 params? | `references/functions.md` |
+| **Tratamento de Erros** | 027, 028 | Exceções de domínio ao invés de null/códigos? | `references/error-handling.md` |
+| **Estrutura de Código** | 021, 022, 023, 026 | Simples, DRY, sem especulação, auto-documentado? | `references/code-structure.md` |
+| **Imutabilidade** | 029, 036, 038 | Objetos imutáveis, sem efeitos colaterais, CQS? | `references/immutability.md` |
+| **Segurança** | 030, 031, 042 | Sem eval, path aliases, secrets em env? | `references/security.md` |
+| **Testes** | 032 | Cobertura ≥85% domínio, padrão AAA? | `references/testing.md` |
+| **Refatoração** | 039 | Código melhor do que encontrado? | `references/boy-scout-rule.md` |
 
 ---
 
-## Quick Smell Detector
+## Detector Rápido de Smell
 
-| I see in code | Violated rule | Immediate action |
+| Vejo no código | Regra violada | Ação imediata |
 |---------------|---------------|------------------|
-| `if (accountList instanceof Set)` | 035 - Misleading names | Rename to `accountSet` |
-| `function process(data, shouldLog)` | 037 - Flag arguments | Extract `processAndLog()` and `process()` |
-| `return null;` in service | 027 - Error handling | Throw `UserNotFoundError` |
-| `eval(userInput)` | 030 - Unsafe functions | Use safe function map |
-| `../../../utils/helper` | 031 - Relative imports | Use `@utils/helper` |
-| `const strName = 'John'` | 035 - Hungarian notation | Remove `str` prefix |
-| Function with 6 parameters | 033 - Long parameter list | Create Parameter Object (DTO) |
-| `try { } catch (e) { }` | 027 - Swallowed exception | Rethrow or handle correctly |
-| Class with 80 lines | 007 - Max lines | Extract responsibilities |
-| `API_KEY = 'sk-123'` hardcoded | 042 - Hardcoded secrets | Move to `process.env.API_KEY` |
+| `if (accountList instanceof Set)` | 035 - Nomes enganosos | Renomear para `accountSet` |
+| `function process(data, shouldLog)` | 037 - Argumentos sinalizadores | Extrair `processAndLog()` e `process()` |
+| `return null;` em service | 027 - Tratamento de erros | Lançar `UserNotFoundError` |
+| `eval(userInput)` | 030 - Funções inseguras | Usar mapa de função seguro |
+| `../../../utils/helper` | 031 - Imports relativos | Usar `@utils/helper` |
+| `const strName = 'John'` | 035 - Notação húngara | Remover prefixo `str` |
+| Função com 6 parâmetros | 033 - Lista longa de parâmetros | Criar Parameter Object (DTO) |
+| `try { } catch (e) { }` | 027 - Exceção engolida | Relançar ou tratar corretamente |
+| Classe com 80 linhas | 007 - Máx linhas | Extrair responsabilidades |
+| `API_KEY = 'sk-123'` hardcoded | 042 - Secrets hardcoded | Mover para `process.env.API_KEY` |
 
 ---
 
-## Prohibitions (always reject)
+## Proibições (sempre rejeitar)
 
-### Naming
-- ❌ Abbreviated names (e.g., `usr`, `calc`, `mngr`)
-- ❌ Hungarian notation (e.g., `strName`, `bIsActive`)
-- ❌ Misleading names (e.g., `accountList` for Set)
-- ❌ Method names as nouns (e.g., `user()` vs `getUser()`)
+### Nomenclatura
+- ❌ Nomes abreviados (ex: `usr`, `calc`, `mngr`)
+- ❌ Notação húngara (ex: `strName`, `bIsActive`)
+- ❌ Nomes enganosos (ex: `accountList` para Set)
+- ❌ Nomes de métodos como substantivos (ex: `user()` vs `getUser()`)
 
-### Structure
-- ❌ Duplicated code (copy-paste >5 lines)
-- ❌ Magic constants (numbers/strings inline without name)
-- ❌ Speculative functionality ("for the future")
-- ❌ Redundant comments (describe WHAT instead of WHY)
+### Estrutura
+- ❌ Código duplicado (copy-paste >5 linhas)
+- ❌ Constantes mágicas (números/strings inline sem nome)
+- ❌ Funcionalidade especulativa ("para o futuro")
+- ❌ Comentários redundantes (descrevem O QUE ao invés de POR QUÊ)
 
-### Functions
-- ❌ More than 3 parameters (create DTO)
-- ❌ Boolean flags in signature
-- ❌ Hybrid Query+Command methods
+### Funções
+- ❌ Mais de 3 parâmetros (criar DTO)
+- ❌ Flags booleanos na assinatura
+- ❌ Métodos híbridos Query+Command
 
-### Security
-- ❌ `eval()` or `new Function()`
-- ❌ Relative imports with `../`
-- ❌ Hardcoded secrets in code
+### Segurança
+- ❌ `eval()` ou `new Function()`
+- ❌ Imports relativos com `../`
+- ❌ Secrets hardcoded no código
 
-### Errors
-- ❌ `return null` for business failures
-- ❌ Empty `catch` or only logs
-- ❌ Unhandled Promises
+### Erros
+- ❌ `return null` para falhas de negócio
+- ❌ `catch` vazio ou apenas loga
+- ❌ Promises não tratadas
 
 ---
 
-## Rationale
+## Justificativa
 
-| Rule | Title | Severity | Quick Ref |
+| Regra | Título | Severidade | Ref Rápida |
 |------|-------|----------|-----------|
-| 021 | Prohibition of Duplication (DRY) | 🔴 | `references/code-structure.md` |
-| 022 | Simplicity and Clarity (KISS) | 🟠 | `references/code-structure.md` |
-| 023 | No Speculative Functionality (YAGNI) | 🟡 | `references/code-structure.md` |
-| 024 | No Magic Constants | 🔴 | `references/code-structure.md` |
-| 026 | Comments: Why, not What | 🟡 | `references/code-structure.md` |
-| 027 | Domain Exceptions | 🟠 | `references/error-handling.md` |
-| 028 | Promise Handling | 🔴 | `references/error-handling.md` |
-| 029 | Immutability (Object.freeze) | 🟠 | `references/immutability.md` |
-| 030 | No Unsafe Functions | 🔴 | `references/security.md` |
-| 031 | No Relative Imports | 🔴 | `references/security.md` |
-| 032 | Test Coverage ≥85% | 🔴 | `references/testing.md` |
-| 033 | Max 3 Parameters | 🟠 | `references/functions.md` |
-| 034 | Consistent Names | 🟠 | `references/naming.md` |
-| 035 | No Misleading Names | 🔴 | `references/naming.md` |
-| 036 | No Side Effects | 🔴 | `references/immutability.md` |
-| 037 | No Flag Arguments | 🟠 | `references/functions.md` |
-| 038 | Command-Query Separation (CQS) | 🟠 | `references/immutability.md` |
-| 039 | Boy Scout Rule | 🟡 | `references/boy-scout-rule.md` |
-| 042 | Secrets in Environment | 🔴 | `references/security.md` |
+| 021 | Proibição de Duplicação (DRY) | 🔴 | `references/code-structure.md` |
+| 022 | Simplicidade e Clareza (KISS) | 🟠 | `references/code-structure.md` |
+| 023 | Sem Funcionalidade Especulativa (YAGNI) | 🟡 | `references/code-structure.md` |
+| 024 | Sem Constantes Mágicas | 🔴 | `references/code-structure.md` |
+| 026 | Comentários: Por Quê, não O Quê | 🟡 | `references/code-structure.md` |
+| 027 | Exceções de Domínio | 🟠 | `references/error-handling.md` |
+| 028 | Tratamento de Promise | 🔴 | `references/error-handling.md` |
+| 029 | Imutabilidade (Object.freeze) | 🟠 | `references/immutability.md` |
+| 030 | Sem Funções Inseguras | 🔴 | `references/security.md` |
+| 031 | Sem Imports Relativos | 🔴 | `references/security.md` |
+| 032 | Cobertura de Teste ≥85% | 🔴 | `references/testing.md` |
+| 033 | Máx 3 Parâmetros | 🟠 | `references/functions.md` |
+| 034 | Nomes Consistentes | 🟠 | `references/naming.md` |
+| 035 | Sem Nomes Enganosos | 🔴 | `references/naming.md` |
+| 036 | Sem Efeitos Colaterais | 🔴 | `references/immutability.md` |
+| 037 | Sem Argumentos Sinalizadores | 🟠 | `references/functions.md` |
+| 038 | Separação Command-Query (CQS) | 🟠 | `references/immutability.md` |
+| 039 | Regra do Escoteiro | 🟡 | `references/boy-scout-rule.md` |
+| 042 | Secrets no Ambiente | 🔴 | `references/security.md` |
 
 ---
 
-## Application Workflow
+## Workflow de Aplicação
 
 ```
-1. Read relevant reference (e.g., functions.md for rule 033)
-2. Identify violations using Quick Smell Detector
-3. Apply correction according to reference examples
-4. Validate compliance (no detectable smell)
+1. Ler referência relevante (ex: functions.md para regra 033)
+2. Identificar violações usando Detector Rápido de Smell
+3. Aplicar correção segundo exemplos da referência
+4. Validar conformidade (nenhum smell detectável)
 ```
 
-**Related skills:**
-- [`object-calisthenics`](../object-calisthenics/SKILL.md) — reinforces: OC are practical Clean Code exercises
-- [`solid`](../solid/SKILL.md) — reinforces: SOLID is theoretical foundation of Clean Code
-- [`anti-patterns`](../anti-patterns/SKILL.md) — complements: anti-patterns are Clean Code violations
+**Skills relacionadas:**
+- [`object-calisthenics`](../object-calisthenics/SKILL.md) — reforça: OC são exercícios práticos de Clean Code
+- [`solid`](../solid/SKILL.md) — reforça: SOLID é fundação teórica do Clean Code
+- [`anti-patterns`](../anti-patterns/SKILL.md) — complementa: anti-patterns são violações do Clean Code
 
 ---
 
-**Created on**: 2026-04-01
-**Version**: 1.0.0
+**Criada em**: 2026-04-01
+**Versão**: 1.0.0

@@ -1,31 +1,31 @@
 # Correctness — Corretude
 
-**Dimension:** Operation
-**Default Severity:** 🔴 Critical
-**Key Question:** Does it do what is requested?
+**Dimensão:** Operação
+**Severidade Padrão:** 🔴 Crítica
+**Questão-Chave:** Faz o que foi pedido?
 
-## What It Is
+## O que é
 
-The degree to which software meets its specifications and fulfills user objectives. Correct software produces expected results for all valid inputs and properly handles edge cases.
+O grau em que o software atende às suas especificações e cumpre os objetivos do usuário. Um software correto produz os resultados esperados para todas as entradas válidas e trata adequadamente os casos extremos.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Bug affects user data | 🔴 Blocker |
-| Bug affects critical calculations (financial) | 🔴 Blocker |
-| Bug in rare edge case | 🟠 Important |
-| Cosmetic UI bug | 🟡 Suggestion |
+| Bug afeta dados do usuário | 🔴 Blocker |
+| Bug afeta cálculos críticos (financeiros) | 🔴 Blocker |
+| Bug em caso extremo raro | 🟠 Importante |
+| Bug cosmético de UI | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Incorrect - doesn't consider edge cases
+// ❌ Incorreto - não considera casos extremos
 function calculateDiscount(price, quantity) {
-  return price * quantity * 0.1; // What if quantity is 0 or negative?
+  return price * quantity * 0.1; // E se quantity for 0 ou negativo?
 }
 
-// ✅ Correct - handles edge cases
+// ✅ Correto - trata casos extremos
 function calculateDiscount(price, quantity) {
   if (quantity <= 0) return 0;
   if (price <= 0) return 0;
@@ -33,24 +33,24 @@ function calculateDiscount(price, quantity) {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// FIXME: Division by zero when items is empty
-// BUG: Incorrect comparison between types — use ===
+// FIXME: Divisão por zero quando items está vazio
+// BUG: Comparação incorreta entre tipos — usar ===
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Bug affects user data | 🔴 Blocker |
-| Bug affects critical calculations | 🔴 Blocker |
-| Bug in rare edge case | 🟠 Important |
-| Cosmetic bug | 🟡 Suggestion |
+| Bug afeta dados do usuário | 🔴 Blocker |
+| Bug afeta cálculos críticos | 🔴 Blocker |
+| Bug em caso extremo raro | 🟠 Importante |
+| Bug cosmético | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 027 - Domain Error Handling Quality
-- 028 - Asynchronous Exception Handling
-- 002 - Prohibition of ELSE Clause
+- 027 - Qualidade no Tratamento de Erros de Domínio
+- 028 - Tratamento de Exceção Assíncrona
+- 002 - Proibição da Cláusula ELSE

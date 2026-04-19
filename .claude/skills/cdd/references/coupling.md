@@ -36,7 +36,7 @@ Cada dependência externa é um **contrato adicional** que o desenvolvedor preci
 
 Com 7 dependências, um bug pode ter 7 fontes diferentes — o desenvolvedor precisa investigar todas.
 
-## Examples
+## Exemplos
 
 ```javascript
 // 0–2 dependências → +0 ICP

@@ -1,6 +1,6 @@
 ---
 name: setter
-description: Convention for using setters for writing value treatment. Use when creating setters that need to validate input, sync internal state or trigger side effects — when reviewing setters that are simple assignments.
+description: Convenção para uso de setters para tratamento de escrita de valores. Use ao criar setters que precisam validar entrada, sincronizar estado interno ou acionar efeitos colaterais — ao revisar setters que são meras atribuições.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,56 +10,67 @@ metadata:
 
 # Setter
 
-Convention for using setters for writing value treatment associated with private members.
+Convenção para uso de setters para tratamento de escrita de valores associados a membros privados.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating setters that need to treat value writing, always associated with private members.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar setters que precisam validar entrada, sincronizar estado interno ou acionar efeitos de re-renderização; ao revisar setters que são meras atribuições sem lógica |
+| **Prerequisites** | Skill `getter` (par obrigatório); skill `render` (decorators `repaint`/`retouch`); rule 008 (proibição de getters/setters puros) |
+| **Constraints** | Setter sem lógica de tratamento viola rule 008; operações assíncronas são proibidas em setters; validações complexas devem estar em métodos de negócio, não no setter |
+| **Scope** | Padrões de implementação de setters com decorators `attributeChanged`, `retouch` e `repaint`; relação obrigatória com membros privados (`#`) |
 
-## Purpose
+---
 
-| Responsibility | Description |
-|----------------|-------------|
-| Simple assignment | Assign value to corresponding private member |
-| Attribute sync | Sync value with HTML attribute using decorator |
-| Re-rendering trigger | Trigger partial or complete component re-rendering |
-| Write validation | Apply transformation or normalization before assigning |
+## Quando Usar
 
-## Implementation Patterns
+Use ao criar setters que precisam tratar a escrita de valor, sempre associados a membros privados.
 
-| Pattern | Usage |
-|---------|-------|
-| Direct assignment | Assign received value directly to private member |
-| With re-rendering | Use decorator to trigger visual update after writing |
-| With sync | Use decorator to keep HTML attribute synced |
-| With transformation | Apply simple transformation before assignment |
+## Propósito
 
-## Associated Decorators
+| Responsabilidade | Descrição |
+|------------------|-----------|
+| Atribuição simples | Atribuir valor ao membro privado correspondente |
+| Sincronização de atributo | Sincronizar valor com atributo HTML usando decorator |
+| Acionamento de re-renderização | Acionar re-renderização parcial ou completa do componente |
+| Validação de escrita | Aplicar transformação ou normalização antes de atribuir |
 
-| Decorator | Function |
-|-----------|----------|
-| attributeChanged | Syncs setter with HTML attribute change |
-| retouch | Triggers partial re-rendering after value change |
-| repaint | Triggers complete re-rendering after value change |
+## Padrões de Implementação
 
-## Relation with Private Members
+| Padrão | Uso |
+|--------|-----|
+| Atribuição direta | Atribuir valor recebido diretamente ao membro privado |
+| Com re-renderização | Usar decorator para acionar atualização visual após escrita |
+| Com sincronização | Usar decorator para manter atributo HTML sincronizado |
+| Com transformação | Aplicar transformação simples antes de atribuir |
 
-| Rule | Description |
-|------|-------------|
-| Always private | Setter must modify private member (prefix `#`) |
-| Never public | Setter should not modify public property |
-| One to one | Each setter modifies single private member |
-| Corresponding name | Setter name corresponds to private member name |
+## Decorators Associados
 
-## Examples
+| Decorator | Função |
+|-----------|--------|
+| attributeChanged | Sincroniza setter com mudança de atributo HTML |
+| retouch | Aciona re-renderização parcial após mudança de valor |
+| repaint | Aciona re-renderização completa após mudança de valor |
+
+## Relação com Membros Privados
+
+| Regra | Descrição |
+|-------|-----------|
+| Sempre privado | Setter deve modificar membro privado (prefixo `#`) |
+| Nunca público | Setter não deve modificar propriedade pública |
+| Um para um | Cada setter modifica um único membro privado |
+| Nome correspondente | Nome do setter corresponde ao nome do membro privado |
+
+## Exemplos
 
 ```typescript
-// ❌ Bad — trivial setter (violates rule 008)
-set email(value: string) { this.#email = value }  // no validation
+// ❌ Ruim — setter trivial (viola rule 008)
+set email(value: string) { this.#email = value }  // sem validação
 
-// ✅ Good — setter with validation and sync
+// ✅ Bom — setter com validação e sincronização
 set email(value: string) {
   if (!value.includes('@')) throw new InvalidEmailError(value)
   this.#email = value
@@ -67,37 +78,37 @@ set email(value: string) {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Pure setter without logic | Violates rule 008: setter must have treatment logic (sync, re-rendering, transformation), not be mere assignment |
-| Complex business logic | Setters should have simple assignment and transformation logic |
-| Unrelated side effects | Setter should not modify other states besides target member (rule 010) |
-| Complex validation | Complex validations should be in business methods |
-| Modify multiple members | Setter should focus on single private member (rule 010) |
-| Async operations | Setters should be synchronous and predictable |
+| O que evitar | Razão |
+|--------------|-------|
+| Setter puro sem lógica | Viola rule 008: setter deve ter lógica de tratamento (sincronização, re-renderização, transformação), não ser mera atribuição |
+| Lógica de negócio complexa | Setters devem ter lógica simples de atribuição e transformação |
+| Efeitos colaterais não relacionados | Setter não deve modificar outros estados além do membro alvo (rule 010) |
+| Validação complexa | Validações complexas devem estar em métodos de negócio |
+| Modificar múltiplos membros | Setter deve focar em um único membro privado (rule 010) |
+| Operações assíncronas | Setters devem ser síncronos e previsíveis |
 
-## Relation with Getter
+## Relação com Getter
 
-| Aspect | Description |
-|--------|-------------|
-| Required pair | Setter should have corresponding getter for same member |
-| Declaration order | Getter always before setter in class anatomy |
-| Consistent type | Getter and setter of same member should have compatible types |
+| Aspecto | Descrição |
+|---------|-----------|
+| Par obrigatório | Setter deve ter getter correspondente para o mesmo membro |
+| Ordem de declaração | Getter sempre antes do setter na anatomia da classe |
+| Tipo consistente | Getter e setter do mesmo membro devem ter tipos compatíveis |
 
-## Best Practices
+## Boas Práticas
 
-| Practice | Description |
-|----------|-------------|
-| Simple assignment | Setter focuses on assigning value and triggering necessary side effects |
-| Decorators | Use @attributeChanged, @retouch or @repaint for sync |
-| Minimal transformation | Apply only simple and direct transformations |
-| Setter with getter | Always have corresponding getter for same private member |
+| Prática | Descrição |
+|---------|-----------|
+| Atribuição simples | Setter foca em atribuir valor e acionar efeitos colaterais necessários |
+| Decorators | Usar @attributeChanged, @retouch ou @repaint para sincronização |
+| Transformação mínima | Aplicar apenas transformações simples e diretas |
+| Setter com getter | Sempre ter getter correspondente para o mesmo membro privado |
 
-## Rationale
+## Justificativa
 
-- [008 - Prohibition of Pure Getters/Setters](../../rules/008_proibicao-getters-setters.md): setters are allowed when they have treatment logic (attribute sync, re-rendering, transformation), prohibited when they are mere direct assignments without logic
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): treatment logic centralized in setter keeps code predictable and easy to maintain
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): setter has single responsibility of treating corresponding private member writing
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): setter should have maximum 15 lines, extract complex logic to methods
+- [008 - Proibição de Getters/Setters Puros](../../rules/008_proibicao-getters-setters.md): setters são permitidos quando têm lógica de tratamento (sincronização de atributo, re-renderização, transformação), proibidos quando são meras atribuições diretas sem lógica
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): lógica de tratamento centralizada no setter mantém código previsível e fácil de manter
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): setter tem responsabilidade única de tratar escrita do membro privado correspondente
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): setter deve ter máximo 15 linhas, extrair lógica complexa para métodos

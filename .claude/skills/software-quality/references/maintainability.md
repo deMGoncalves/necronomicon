@@ -1,35 +1,35 @@
 # Maintainability — Manutenibilidade
 
-**Dimension:** Revision
-**Default Severity:** 🟠 Important
-**Key Question:** Is it easy to fix?
+**Dimensão:** Revisão
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** É fácil de corrigir?
 
-## What It Is
+## O que é
 
-The effort required to locate and fix a defect in software. High maintainability means bugs can be found quickly, causes are obvious, and fixes can be made without side effects.
+O esforço necessário para localizar e corrigir um defeito no software. Alta manutenibilidade significa que bugs podem ser encontrados rapidamente, as causas são óbvias e as correções podem ser feitas sem efeitos colaterais.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| God class (> 500 lines) | 🔴 Blocker |
-| Method with CC > 10 | 🟠 Important |
-| Significant duplicated code | 🟠 Important |
-| Insufficient logs | 🟡 Suggestion |
+| God class (> 500 linhas) | 🔴 Blocker |
+| Método com CC > 10 | 🟠 Importante |
+| Código duplicado significativo | 🟠 Importante |
+| Logs insuficientes | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not maintainable - class does everything
+// ❌ Não manutenível - classe faz tudo
 class OrderManager {
   createOrder() { /* ... */ }
   validateOrder() { /* ... */ }
   calculateTax() { /* ... */ }
   sendEmail() { /* ... */ }
-  // ... 500 lines of code
+  // ... 500 linhas de código
 }
 
-// ✅ Maintainable - separated responsibilities
+// ✅ Manutenível - responsabilidades separadas
 class OrderService {
   constructor(validator, calculator, notifier) {
     this.validator = validator;
@@ -46,24 +46,24 @@ class OrderService {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// REFACTOR: This class violates SRP - separate into smaller services
-// REFACTOR: Method too complex - extract submethods
+// REFACTOR: Esta classe viola o SRP - separar em serviços menores
+// REFACTOR: Método muito complexo - extrair submétodos
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| God class (> 500 lines) | 🔴 Blocker |
-| Method with CC > 10 | 🟠 Important |
-| Significant duplicated code | 🟠 Important |
-| Insufficient logs | 🟡 Suggestion |
+| God class (> 500 linhas) | 🔴 Blocker |
+| Método com CC > 10 | 🟠 Importante |
+| Código duplicado significativo | 🟠 Importante |
+| Logs insuficientes | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 010 - Single Responsibility Principle
-- 007 - Maximum Lines per Class
-- 025 - Prohibition of The Blob Anti-Pattern
+- 010 - Princípio da Responsabilidade Única
+- 007 - Limite Máximo de Linhas por Classe
+- 025 - Proibição do Anti-Pattern The Blob

@@ -1,69 +1,69 @@
-# Rule 5 — One Dot per Line
+# Regra 5 — One Dot per Line
 
-**deMGoncalves Rule:** ESTRUTURAL-005
-**Question:** Does this line have multiple chained accesses (dots)?
+**Regra deMGoncalves:** ESTRUTURAL-005
+**Questão:** Esta linha tem múltiplos acessos encadeados (pontos)?
 
-## What It Is
+## O que é
 
-Limits the chaining of method calls and chained property access (train wrecks), allowing at most one method call or property access per line.
+Limita o encadeamento de chamadas de métodos e o acesso a propriedades encadeadas (train wrecks), permitindo no máximo uma chamada de método ou acesso a propriedade por linha.
 
-## When to Apply
+## Quando Aplicar
 
-- Line contains `a.b().c()`
-- Line contains `object.getA().getB()`
-- Code violates Law of Demeter
+- Linha contém `a.b().c()`
+- Linha contém `objeto.getA().getB()`
+- Código viola a Lei de Demeter
 - Train wreck: `user.getAddress().getCity().getName()`
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class OrderProcessor {
   process(order: Order): void {
-    // Three dots on same line - VIOLATES
+    // Três pontos na mesma linha - VIOLA
     const cityName = order.getCustomer().getAddress().getCity();
 
-    // Violates Law of Demeter
+    // Viola a Lei de Demeter
     order.getPayment().getCard().charge();
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class OrderProcessor {
   process(order: Order): void {
-    // Tell, Don't Ask: tell the object what to do
+    // Tell, Don't Ask: diga ao objeto o que fazer
     order.processPayment();
 
-    // Or break into separate lines with clear intent
+    // Ou quebrar em linhas separadas com intenção clara
     const customer = order.getCustomer();
     const cityName = customer.getCityName();
   }
 }
 ```
 
-## ✅ Correct (Better Approach)
+## ✅ Correto (Melhor Abordagem)
 
 ```typescript
 class Order {
   processPayment(): void {
-    this.payment.charge();  // Encapsulates internal access
+    this.payment.charge();  // Encapsula acesso interno
   }
 
   getCustomerCityName(): string {
-    return this.customer.getCityName();  // Delegates responsibility
+    return this.customer.getCityName();  // Delega responsabilidade
   }
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Fluent Interfaces/Builders**: `new Query().where().limit()` where each method returns `this`
-- **Static Constants**: `Math.PI`, `Config.MAX_VALUE`
+- **Fluent Interfaces/Builders**: `new Query().where().limit()` onde cada método retorna `this`
+- **Constantes Estáticas**: `Math.PI`, `Config.MAX_VALUE`
 
-## Related Rules
+## Regras Relacionadas
 
-- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reinforces
-- [008 - No Getters/Setters Prohibition](rule-08-no-getters-setters.md): reinforces
-- [022 - Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): complements
+- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reforça
+- [008 - Proibição de Getters/Setters](rule-08-no-getters-setters.md): reforça
+- [022 - Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): complementa

@@ -1,43 +1,43 @@
-# Factor 04 — Backing Services
+# Fator 04 — Backing Services
 
-**deMGoncalves Rule:** [043 - Backing Services as Resources](../../../rules/043_servicos-apoio-recursos.md)
-**Question:** External services attachable via URL/config (no code change)?
+**Regra deMGoncalves:** [043 - Serviços de Apoio como Recursos](../../../rules/043_servicos-apoio-recursos.md)
+**Questão:** Serviços externos anexáveis via URL/config (sem alteração de código)?
 
-## What It Is
+## O que é
 
-Backing services (databases, queues, caches, email services, external APIs) must be treated as **attachable resources**, accessed via URL or resource locator stored in configuration. The application **should not distinguish** between local and third-party services.
+Serviços de apoio (bancos de dados, filas, caches, serviços de email, APIs externas) devem ser tratados como **recursos anexáveis**, acessados via URL ou localizador de recurso armazenado em configuração. A aplicação **não deve distinguir** entre serviços locais e de terceiros.
 
-**Backing service = configurable resource, not hardcoded.**
+**Backing service = recurso configurável, não hardcoded.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] All external services accessed via **URL or connection string** configurable by environment variable
-- [ ] Zero conditional logic differentiating local from remote services (e.g., `if (isLocal) useLocalDB()`)
-- [ ] Service swap requires **only** config change, not code change
+- [ ] Todos os serviços externos acessados via **URL ou string de conexão** configurável por variável de ambiente
+- [ ] Zero lógica condicional diferenciando serviços locais de remotos (ex: `if (isLocal) useLocalDB()`)
+- [ ] A troca de serviço exige **apenas** alteração de config, não de código
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Hardcoded local vs prod differentiation ❌
+// Diferenciação hardcoded entre local e prod ❌
 const db = process.env.NODE_ENV === 'production'
   ? new PostgresClient('prod-url')
   : new SQLiteClient('local.db');
 
-// Hardcoded URL ❌
+// URL hardcoded ❌
 const redis = new Redis({ host: 'localhost', port: 6379 });
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Service as attachable resource ✅
+// Serviço como recurso anexável ✅
 const dbUrl = process.env.DATABASE_URL;
 const redisUrl = process.env.REDIS_URL;
 
 const db = new DatabaseClient(dbUrl);  // PostgreSQL, MySQL, etc
-const cache = new RedisClient(redisUrl);  // local or ElastiCache
+const cache = new RedisClient(redisUrl);  // local ou ElastiCache
 
-// Swap SQLite → PostgreSQL = just change env var
+// Trocar SQLite → PostgreSQL = apenas mudar variável de ambiente
 # .env (dev)
 DATABASE_URL=sqlite://local.db
 
@@ -45,9 +45,9 @@ DATABASE_URL=sqlite://local.db
 DATABASE_URL=postgresql://user:pass@db.prod.com/mydb
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Redis host hardcoded — use process.env.REDIS_URL
+// FIXME: Host do Redis hardcoded — usar process.env.REDIS_URL
 const redis = new Redis({ host: '10.0.1.50', port: 6379 });
 ```

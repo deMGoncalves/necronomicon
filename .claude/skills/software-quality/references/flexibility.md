@@ -1,35 +1,35 @@
 # Flexibility — Flexibilidade
 
-**Dimension:** Revision
-**Default Severity:** 🟠 Important
-**Key Question:** Is it easy to change?
+**Dimensão:** Revisão
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** É fácil de alterar?
 
-## What It Is
+## O que é
 
-The effort required to modify software to meet new requirements or business changes. High flexibility means new features can be added without altering existing code (Open/Closed Principle).
+O esforço necessário para modificar o software a fim de atender novos requisitos ou mudanças de negócio. Alta flexibilidade significa que novas funcionalidades podem ser adicionadas sem alterar o código existente (Princípio Aberto/Fechado).
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Circular dependency between modules | 🔴 Blocker |
-| Switch with > 5 growing cases | 🟠 Important |
-| new Concrete() in business class | 🟠 Important |
-| Inheritance > 3 levels | 🟡 Suggestion |
+| Dependência circular entre módulos | 🔴 Blocker |
+| Switch com > 5 cases em crescimento | 🟠 Importante |
+| new Concreto() em classe de negócio | 🟠 Importante |
+| Herança com > 3 níveis | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not flexible - needs modification for each new type
+// ❌ Não flexível - precisa de modificação para cada novo tipo
 function calculateShipping(order) {
   switch (order.type) {
     case 'standard': return order.weight * 5;
     case 'express': return order.weight * 10;
-    // Each new type requires modifying this function
+    // Cada novo tipo exige modificar esta função
   }
 }
 
-// ✅ Flexible - extensible without modification
+// ✅ Flexível - extensível sem modificação
 class ShippingCalculator {
   constructor(strategies) {
     this.strategies = strategies;
@@ -42,24 +42,24 @@ class ShippingCalculator {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// OCP(011): This switch violates Open/Closed - consider Strategy
-// DIP(014): Concrete dependency - inject via constructor
+// OCP(011): Este switch viola o Aberto/Fechado - considerar Strategy
+// DIP(014): Dependência concreta - injetar via construtor
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Circular dependency between modules | 🔴 Blocker |
-| Switch with > 5 growing cases | 🟠 Important |
-| new Concrete() in business class | 🟠 Important |
-| Inheritance > 3 levels | 🟡 Suggestion |
+| Dependência circular entre módulos | 🔴 Blocker |
+| Switch com > 5 cases em crescimento | 🟠 Importante |
+| new Concreto() em classe de negócio | 🟠 Importante |
+| Herança com > 3 níveis | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 011 - Open/Closed Principle
-- 014 - Dependency Inversion Principle
-- 018 - Acyclic Dependencies Principle
+- 011 - Princípio Aberto/Fechado
+- 014 - Princípio de Inversão de Dependência
+- 018 - Princípio de Dependências Acíclicas

@@ -1,38 +1,38 @@
-# INFO — Additional Technical Information
+# INFO — Informação Técnica Adicional
 
-**Severity:** 🟢 Low | Informative
-**Blocks PR:** No
+**Severidade:** 🟢 Baixa | Informativa
+**Bloqueia PR:** Não
 
-## What It Is
+## O Que É
 
-Marks additional technical information or explanation that helps understand code. Less critical than NOTE - it's useful context but not essential for modifying code.
+Marca informação técnica adicional ou explicação que ajuda a entender o código. Menos crítico que NOTE — é contexto útil mas não essencial para modificar o código.
 
-## When to Use
+## Quando Usar
 
-- Reference to external documentation (link to spec or RFC)
-- Algorithm explanation (how it works internally)
-- Technical context (library limitation)
-- Usage example (how function is called)
+- Referência a documentação externa (link para spec ou RFC)
+- Explicação de algoritmo (como funciona internamente)
+- Contexto técnico (limitação de biblioteca)
+- Exemplo de uso (como a função é chamada)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Important decision → use **NOTE**
-- Pending task → use **TODO**
-- Dangerous code → use **XXX**
-- API documentation → use JSDoc/TSDoc
+- Decisão importante → usar **NOTE**
+- Tarefa pendente → usar **TODO**
+- Código perigoso → usar **XXX**
+- Documentação de API → usar JSDoc/TSDoc
 
-## Format
+## Formato
 
 ```typescript
-// INFO: additional technical detail
-// INFO: documentation reference
-// INFO: algorithm or pattern explanation
+// INFO: detalhe técnico adicional
+// INFO: referência à documentação
+// INFO: explicação de algoritmo ou padrão
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// INFO: implementation based on Web Crypto API
+// INFO: implementação baseada na Web Crypto API
 // Spec: https://www.w3.org/TR/WebCryptoAPI/
 async function generateKey() {
   return crypto.subtle.generateKey(
@@ -42,8 +42,8 @@ async function generateKey() {
   );
 }
 
-// INFO: Fisher-Yates shuffle - O(n) with uniform distribution
-// Each element has equal probability of being in any position
+// INFO: embaralhamento Fisher-Yates - O(n) com distribuição uniforme
+// Cada elemento tem probabilidade igual de estar em qualquer posição
 function shuffle<T>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -52,41 +52,41 @@ function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
-// INFO: date-fns doesn't support native timezone
-// For timezone operations, use date-fns-tz
+// INFO: date-fns não suporta timezone nativo
+// Para operações com timezone, usar date-fns-tz
 import { format } from 'date-fns';
 
-// INFO: typical usage:
+// INFO: uso típico:
 // const result = pipe(double, addOne, square)(5); // ((5 * 2) + 1)² = 121
 function pipe<T>(...fns: Array<(arg: T) => T>) {
   return (value: T) => fns.reduce((acc, fn) => fn(acc), value);
 }
 
-// INFO: expected response format:
-// { "data": { "user": { "id": "123", "name": "John" } } }
+// INFO: formato de resposta esperado:
+// { "data": { "user": { "id": "123", "name": "João" } } }
 async function fetchUser(id: string) {
   const response = await api.get(`/users/${id}`);
   return response.data.user;
 }
 
-// INFO: useEffect with empty array executes only on mount
-// Equivalent to componentDidMount in class components
+// INFO: useEffect com array vazio executa apenas na montagem
+// Equivalente a componentDidMount em componentes de classe
 useEffect(() => {
   initializeAnalytics();
 }, []);
 
 // INFO: 86400000 = 24h * 60min * 60s * 1000ms
-// Represents one full day in milliseconds
+// Representa um dia completo em milissegundos
 const ONE_DAY_MS = 86400000;
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** N/A (informative, optional reading)
-- **Action:** Read if need to understand details, ignore if already know, update if links break, remove if trivial
-- **Converted to:** Removed if information is common or updated if link breaks
+- **Prazo:** N/A (informativo, leitura opcional)
+- **Ação:** Ler se precisar entender detalhes, ignorar se já souber, atualizar se links quebrarem, remover se for trivial
+- **Convertido em:** Removido se informação for comum ou atualizado se link quebrar
 
-## Related to
+## Relacionado a
 
-- Rules: [026 - Comments Quality](../../../.claude/rules/026_qualidade-comentarios-porque.md) (INFO complements, doesn't replace good code)
-- Similar tags: INFO (extra context) vs NOTE (critical decision)
+- Rules: [026 - Qualidade de Comentários](../../../.claude/rules/026_qualidade-comentarios-porque.md) (INFO complementa, não substitui código bom)
+- Tags similares: INFO (contexto extra) vs NOTE (decisão crítica)

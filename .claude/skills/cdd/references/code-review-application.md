@@ -77,7 +77,7 @@ Para cada método identificado na varredura:
 
 ---
 
-## Examples de Comentários CDD em PRs
+## Exemplos de Comentários CDD em PRs
 
 ### Comentário Objetivo (❌ → ✅)
 

@@ -1,6 +1,6 @@
 ---
 name: adr
-description: Template for Architecture Decision Records (ADR). Use when @architect needs to document an important architectural decision — when choosing between technologies, patterns or approaches that impact the project long-term.
+description: Template para Architecture Decision Records (ADR). Use quando @architect precisar documentar uma decisão arquitetural importante — ao escolher entre tecnologias, patterns ou abordagens que impactam o projeto a longo prazo.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -11,159 +11,170 @@ metadata:
 
 # ADR (Architecture Decision Records)
 
-Template to document important architectural decisions in a traceable way.
+Template para documentar decisões arquiteturais importantes de forma rastreável.
 
 ---
 
-## When to Use
+## Manifest
 
-- When making a significant technical decision (technology choice, architectural pattern, design approach)
-- In phase 4 (Docs): @architect creates ADR for each important decision of the implemented feature
-- When a previous decision is reviewed or replaced
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Toda decisão técnica significativa: escolha de tecnologia, pattern arquitetural, abordagem de design com impacto a longo prazo |
+| **Prerequisites** | Contexto claro do problema; pelo menos duas alternativas consideradas; entendimento dos trade-offs |
+| **Constraints** | Não aplica a decisões reversíveis de baixo impacto; não substituir ADR existente — criar novo com status Superseded |
+| **Scope** | Criação e manutenção de arquivos em `docs/adr/`; numeração sequencial; ciclo de vida de decisões arquiteturais |
 
-## ADR Template
+---
 
-→ See [`references/adr-template.md`](references/adr-template.md) for the complete template.
+## Quando Usar
 
-## Numbering
+- Ao tomar uma decisão técnica significativa (escolha de tecnologia, pattern arquitetural, abordagem de design)
+- Na fase 4 (Docs): @architect cria ADR para cada decisão importante da feature implementada
+- Quando uma decisão anterior é revisada ou substituída
 
-- ADRs numbered sequentially: ADR-001, ADR-002, ...
-- File name: `NNN_title-kebab-case.md`
-- Never delete ADRs — mark as Deprecated or Superseded
-- Maintain index in docs/adr/README.md
+## Template ADR
 
-## Common ADR Categories
+→ Veja [`references/adr-template.md`](references/adr-template.md) para o template completo.
 
-| Category | Examples |
+## Numeração
+
+- ADRs numeradas sequencialmente: ADR-001, ADR-002, ...
+- Nome de arquivo: `NNN_titulo-kebab-case.md`
+- Nunca deletar ADRs — marcar como Deprecated ou Superseded
+- Manter índice em docs/adr/README.md
+
+## Categorias Comuns de ADR
+
+| Categoria | Exemplos |
 |----------|----------|
-| Technology choice | DB, framework, runtime, library |
-| Architectural pattern | Pipeline, MVC, Event Sourcing, CQRS |
-| Code design pattern | Value Objects, Repository, DIP |
-| Infrastructure | Deploy, CI/CD, monitoring |
-| Integration | External API, protocol, authentication |
+| Escolha de tecnologia | DB, framework, runtime, biblioteca |
+| Pattern arquitetural | Pipeline, MVC, Event Sourcing, CQRS |
+| Pattern de design de código | Value Objects, Repository, DIP |
+| Infraestrutura | Deploy, CI/CD, monitoramento |
+| Integração | API externa, protocolo, autenticação |
 
-## Examples
+## Exemplos
 
 ```markdown
-// ❌ Bad — decision documented as code comment
-// we use JWT because it's simpler (author: John, 2024-01)
-// don't know why we don't use sessions, but it stayed like this
+// ❌ Ruim — decisão documentada como comentário de código
+// usamos JWT porque é mais simples (autor: João, 2024-01)
+// não sei por que não usamos sessions, mas ficou assim
 
 ---
 
-// ✅ Good — ADR with context, decision and consequences
-# ADR-019: JWT Authentication
+// ✅ Bom — ADR com contexto, decisão e consequências
+# ADR-019: Autenticação JWT
 
 **Status:** Accepted
 **Date:** 2024-01-15
 
-## Context
+## Contexto
 
-System needs stateless authentication to scale horizontally.
-Users access from multiple devices.
-Forecast of 100k simultaneous users in first year.
+Sistema necessita autenticação stateless para escalar horizontalmente.
+Usuários acessam de múltiplos dispositivos.
+Previsão de 100k usuários simultâneos no primeiro ano.
 
-## Decision
+## Decisão
 
-Use JWT (JSON Web Tokens) with refresh tokens stored in Redis.
-Do not use server in-memory sessions.
+Usar JWT (JSON Web Tokens) com refresh tokens armazenados em Redis.
+Não usar sessions em memória do servidor.
 
-## Alternatives Considered
+## Alternativas Consideradas
 
-| Alternative | Pros | Cons |
+| Alternativa | Prós | Contras |
 |-------------|------|------|
-| JWT (chosen) | Stateless, horizontal scale, no DB lookup per request | Token revocation requires blacklist/Redis |
-| In-memory sessions | Simple, immediate revocation | Doesn't scale horizontally, requires sticky sessions |
-| Full OAuth 2.0 | Industry standard, SSO support | High complexity for current use case |
+| JWT (escolhido) | Stateless, escala horizontal, sem lookup DB por request | Revogação de token requer blacklist/Redis |
+| Sessions em memória | Simples, revogação imediata | Não escala horizontalmente, exige sticky sessions |
+| OAuth 2.0 completo | Padrão da indústria, suporte a SSO | Alta complexidade para caso de uso atual |
 
-## Consequences
+## Consequências
 
-### Positive
-✅ Horizontal scalability without sticky sessions
-✅ Low latency: no DB query on each request
-✅ Multi-platform support (web, mobile) without extra configuration
+### Positivas
+✅ Escalabilidade horizontal sem sticky sessions
+✅ Baixa latência: sem query em DB a cada request
+✅ Suporte multi-plataforma (web, mobile) sem configuração extra
 
-### Negative / Trade-offs
-❌ Token revocation requires blacklist in Redis (adds dependency)
-❌ JWT tokens can grow large if we include many claims
-❌ No real-time active session control without additional infrastructure
+### Negativas / Trade-offs
+❌ Revogação de token requer blacklist em Redis (adiciona dependência)
+❌ Tokens JWT podem crescer se incluirmos muitos claims
+❌ Sem controle de sessão ativa em tempo real sem infraestrutura adicional
 
-## Related to
+## Relacionado a
 
-- ADR-003: Choice of Redis as distributed cache (depends)
+- ADR-003: Escolha de Redis como cache distribuído (depende)
 - arc42 §8: Crosscutting Concepts — Authentication and Authorization
 
 ---
 
-**Author:** @architect · deMGoncalves
+**Autor:** @architect · deMGoncalves
 ```
 
 ```markdown
-// ❌ Bad — decision without alternatives or consequences
-# ADR-025: Use PostgreSQL
+// ❌ Ruim — decisão sem alternativas ou consequências
+# ADR-025: Usar PostgreSQL
 
-We decided to use PostgreSQL.
+Decidimos usar PostgreSQL.
 
 ---
 
-// ✅ Good — complete ADR with reasoning and trade-offs
-# ADR-025: PostgreSQL Relational Database
+// ✅ Bom — ADR completo com justificativa e trade-offs
+# ADR-025: Banco de Dados Relacional PostgreSQL
 
 **Status:** Accepted
 **Date:** 2024-02-10
 
-## Context
+## Contexto
 
-E-commerce system needs:
-- ACID transactions for orders and payments
-- Complex queries with JOINs (products, categories, users)
-- Guaranteed referential integrity
-- Support for 50k orders/day
+Sistema de e-commerce precisa de:
+- Transações ACID para pedidos e pagamentos
+- Queries complexas com JOINs (produtos, categorias, usuários)
+- Garantia de integridade referencial
+- Suporte a 50k pedidos/dia
 
-## Decision
+## Decisão
 
-Use PostgreSQL 15 as main database.
-Use extensions: pgvector (future semantic search), pg_stat_statements (monitoring).
+Usar PostgreSQL 15 como banco de dados principal.
+Usar extensions: pgvector (busca semântica futura), pg_stat_statements (monitoramento).
 
-## Alternatives Considered
+## Alternativas Consideradas
 
-| Alternative | Pros | Cons |
+| Alternativa | Prós | Contras |
 |-------------|------|------|
-| PostgreSQL (chosen) | ACID, efficient JOINs, JSON support, maturity | Limited horizontal scalability |
-| MongoDB | Simple horizontal scalability, flexible schema | Unreliable multi-document transactions, difficult complex queries |
-| MySQL | Maturity, many tools | Inferior JOIN performance to Postgres, limited JSON support |
+| PostgreSQL (escolhido) | ACID, JOINs eficientes, suporte a JSON, maturidade | Escalabilidade horizontal limitada |
+| MongoDB | Escalabilidade horizontal simples, schema flexível | Transações multi-documento pouco confiáveis, queries complexas difíceis |
+| MySQL | Maturidade, muitas ferramentas | Performance de JOINs inferior ao Postgres, suporte a JSON limitado |
 
-## Consequences
+## Consequências
 
-### Positive
-✅ ACID guarantees for financial transactions
-✅ Complex queries with optimized B-tree indexes
-✅ Native JSON support (JSONB) for semi-structured data
+### Positivas
+✅ Garantias ACID para transações financeiras
+✅ Queries complexas com índices B-tree otimizados
+✅ Suporte nativo a JSON (JSONB) para dados semi-estruturados
 
-### Negative / Trade-offs
-❌ Horizontal scalability requires manual sharding (future complexity)
-❌ Asynchronous read replicas may have lag in reads
+### Negativas / Trade-offs
+❌ Escalabilidade horizontal requer sharding manual (complexidade futura)
+❌ Réplicas de leitura assíncronas podem ter lag em reads
 
-## Related to
+## Relacionado a
 
-- ADR-019: JWT Authentication (both depend on consistent transactions)
-- arc42 §7: Deployment View — database infrastructure
+- ADR-019: Autenticação JWT (ambos dependem de transações consistentes)
+- arc42 §7: Deployment View — infraestrutura de banco de dados
 
 ---
 
-**Author:** @architect · deMGoncalves
+**Autor:** @architect · deMGoncalves
 ```
 
-## Prohibitions
+## Proibições
 
-- ❌ Decisions without context or described problem
-- ❌ ADRs without considered alternatives
-- ❌ Missing consequences (positive and negative)
-- ❌ Undocumented status or status changes without new ADR
-- ❌ Deleted ADRs — use Deprecated or Superseded
+- ❌ Decisões sem contexto ou problema descrito
+- ❌ ADRs sem alternativas consideradas
+- ❌ Consequências faltando (positivas e negativas)
+- ❌ Status não documentado ou mudanças de status sem novo ADR
+- ❌ ADRs deletadas — usar Deprecated ou Superseded
 
-## Rationale
+## Justificativa
 
-- ADRs ensure traceability of "why we got here"
-- Avoids repeating already resolved debates
-- Source: Michael Nygard - Documenting Architecture Decisions (2011)
+- ADRs garantem rastreabilidade do "por que chegamos aqui"
+- Evita repetir debates já resolvidos
+- Fonte: Michael Nygard - Documenting Architecture Decisions (2011)

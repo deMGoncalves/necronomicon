@@ -1,6 +1,6 @@
 ---
 name: software-quality
-description: "McCall Quality Model with 12 factors organized in Operation, Revision and Transition. Use when @reviewer calibrates violation severity, @architect defines acceptance criteria, or @tester plans test coverage."
+description: "Modelo de Qualidade McCall com 12 fatores organizados em Operação, Revisão e Transição. Use quando @architect calibra severidade de violações, define critérios de aceitação, ou @tester planeja cobertura de testes."
 model: sonnet
 allowed-tools: Read
 metadata:
@@ -8,87 +8,100 @@ metadata:
   version: "1.0.0"
 ---
 
-# Software Quality (McCall Model)
+# Qualidade de Software (Modelo McCall)
 
-The McCall quality model organizes 12 factors in 3 dimensions to assess software excellence: **Operation** (day-to-day use), **Revision** (ease of modification) and **Transition** (movement between environments).
+O modelo de qualidade McCall organiza 12 fatores em 3 dimensões para avaliar excelência de software: **Operação** (uso diário), **Revisão** (facilidade de modificação) e **Transição** (movimentação entre ambientes).
 
-## When to Use
+---
 
-| Agent | Situation | Action |
-|-------|-----------|--------|
-| @reviewer | Found rule violation | Calibrate severity based on impacted quality factor |
-| @architect | Defining acceptance criteria | Specify expected quality scores per factor |
-| @tester | Planning tests | Prioritize coverage in critical factors (Correctness, Reliability, Integrity, Testability) |
-| @developer | Refactoring code | Improve factors with score < 3.0 |
-| @leader | Evaluating PR | Reject PRs that degrade critical factors |
+## Manifest
 
-## 12 Factors by Dimension
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao calibrar severidade de violações de rules; ao definir critérios de aceitação de features; ao planejar cobertura de testes; ao avaliar PRs que degradam qualidade |
+| **Prerequisites** | Familiaridade com as 70 rules deMGoncalves; conceitos básicos de métricas de qualidade de software |
+| **Constraints** | Integrity é SEMPRE 🔴 Blocker — nunca ignorar; Testability < 2 impede merge; não usar como substituto das 70 rules — é uma camada de calibração de severidade sobre elas |
+| **Scope** | 12 fatores McCall (Correctness, Reliability, Efficiency, Integrity, Usability, Adaptability, Maintainability, Flexibility, Testability, Portability, Reusability, Interoperability) com sistema de pontuação 1–5 |
 
-| Factor | Dimension | Key Question | Severity | File |
-|--------|-----------|--------------|----------|------|
-| **Correctness** | Operation | Does it do what's expected? | 🔴 Critical | [correctness.md](references/correctness.md) |
-| **Reliability** | Operation | Is it accurate? | 🔴 Critical | [reliability.md](references/reliability.md) |
-| **Efficiency** | Operation | Is it performant? | 🟠 Important | [efficiency.md](references/efficiency.md) |
-| **Integrity** | Operation | Is it secure? | 🔴 Critical | [integrity.md](references/integrity.md) |
-| **Usability** | Operation | Is it easy to use? | 🟡 Suggestion | [usability.md](references/usability.md) |
-| **Adaptability** | Operation | Is it configurable? | 🟠 Important | [adaptability.md](references/adaptability.md) |
-| **Maintainability** | Revision | Is it easy to fix? | 🟠 Important | [maintainability.md](references/maintainability.md) |
-| **Flexibility** | Revision | Is it easy to change? | 🟠 Important | [flexibility.md](references/flexibility.md) |
-| **Testability** | Revision | Is it testable? | 🔴 Critical | [testability.md](references/testability.md) |
-| **Portability** | Transition | Is it portable? | 🟡 Suggestion | [portability.md](references/portability.md) |
-| **Reusability** | Transition | Is it reusable? | 🟠 Important | [reusability.md](references/reusability.md) |
-| **Interoperability** | Transition | Does it integrate well? | 🟠 Important | [interoperability.md](references/interoperability.md) |
+---
 
-## Which Factor to Evaluate?
+## Quando Usar
 
-| Situation in Code Review | Relevant Factor |
-|--------------------------|-----------------|
-| Logic bug or untreated edge case | Correctness |
-| Promise without `.catch()`, untreated error | Reliability |
-| Unnecessary O(n²) loop, N+1 queries | Efficiency |
-| SQL injection, XSS, password without hash | **Integrity (ALWAYS 🔴)** |
-| Generic error message, no feedback | Usability |
-| Hardcoded timeout, text without i18n | Adaptability |
-| God class, function > 20 lines, no logs | Maintainability |
-| Growing switch, `new Concrete()` in service | Flexibility |
-| Internal concrete dependency, singleton | Testability |
-| Absolute path, specific shell command | Portability |
-| Duplicated code, too specific component | Reusability |
-| Proprietary format, API without version | Interoperability |
+| Agente | Situação | Ação |
+|--------|----------|------|
+| @architect | Encontrou violação de rule | Calibrar severidade baseado no fator de qualidade impactado |
+| @architect | Definindo critérios de aceitação | Especificar pontuações esperadas de qualidade por fator |
+| @tester | Planejando testes | Priorizar cobertura em fatores críticos (Correctness, Reliability, Integrity, Testability) |
+| @coder | Refatorando código | Melhorar fatores com pontuação < 3.0 |
+| Tech Lead | Avaliando PR | Rejeitar PRs que degradam fatores críticos |
 
-## Scoring System
+## 12 Fatores por Dimensão
 
-**Evaluate each factor from 1 to 5:**
+| Fator | Dimensão | Pergunta-Chave | Severidade | Arquivo |
+|-------|----------|----------------|------------|---------|
+| **Correctness** | Operação | Faz o que é esperado? | 🔴 Crítica | [correctness.md](references/correctness.md) |
+| **Reliability** | Operação | É preciso? | 🔴 Crítica | [reliability.md](references/reliability.md) |
+| **Efficiency** | Operação | É performático? | 🟠 Importante | [efficiency.md](references/efficiency.md) |
+| **Integrity** | Operação | É seguro? | 🔴 Crítica | [integrity.md](references/integrity.md) |
+| **Usability** | Operação | É fácil de usar? | 🟡 Sugestão | [usability.md](references/usability.md) |
+| **Adaptability** | Operação | É configurável? | 🟠 Importante | [adaptability.md](references/adaptability.md) |
+| **Maintainability** | Revisão | É fácil de corrigir? | 🟠 Importante | [maintainability.md](references/maintainability.md) |
+| **Flexibility** | Revisão | É fácil de mudar? | 🟠 Importante | [flexibility.md](references/flexibility.md) |
+| **Testability** | Revisão | É testável? | 🔴 Crítica | [testability.md](references/testability.md) |
+| **Portability** | Transição | É portável? | 🟡 Sugestão | [portability.md](references/portability.md) |
+| **Reusability** | Transição | É reutilizável? | 🟠 Importante | [reusability.md](references/reusability.md) |
+| **Interoperability** | Transição | Integra bem? | 🟠 Importante | [interoperability.md](references/interoperability.md) |
 
-| Score | Meaning | Action |
-|-------|---------|--------|
-| 5 | Excellent | Maintain |
-| 4 | Good | Optional improvements |
-| 3 | Adequate | Consider refactoring |
-| 2 | Problematic | Refactoring recommended |
-| 1 | Critical | Refactoring mandatory |
+## Qual Fator Avaliar?
 
-**Overall Quality Score:**
+| Situação no Code Review | Fator Relevante |
+|-------------------------|-----------------|
+| Bug de lógica ou caso edge não tratado | Correctness |
+| Promise sem `.catch()`, erro não tratado | Reliability |
+| Loop O(n²) desnecessário, N+1 queries | Efficiency |
+| SQL injection, XSS, senha sem hash | **Integrity (SEMPRE 🔴)** |
+| Mensagem de erro genérica, sem feedback | Usability |
+| Timeout hardcoded, texto sem i18n | Adaptability |
+| Classe god, função > 20 linhas, sem logs | Maintainability |
+| Switch crescente, `new Concrete()` em service | Flexibility |
+| Dependência concreta interna, singleton | Testability |
+| Path absoluto, comando shell específico | Portability |
+| Código duplicado, componente muito específico | Reusability |
+| Formato proprietário, API sem versão | Interoperability |
+
+## Sistema de Pontuação
+
+**Avalie cada fator de 1 a 5:**
+
+| Pontuação | Significado | Ação |
+|-----------|-------------|------|
+| 5 | Excelente | Manter |
+| 4 | Bom | Melhorias opcionais |
+| 3 | Adequado | Considerar refatoração |
+| 2 | Problemático | Refatoração recomendada |
+| 1 | Crítico | Refatoração obrigatória |
+
+**Pontuação Geral de Qualidade:**
 ```
-Quality Score = (Σ scores of all 12 factors) / 12
+Pontuação de Qualidade = (Σ pontuações dos 12 fatores) / 12
 
-≥ 4.0: 🟢 High Quality
-3.0-3.9: 🟡 Acceptable Quality
-2.0-2.9: 🟠 Low Quality
-< 2.0: 🔴 Critical Quality (urgent refactoring)
+≥ 4.0: 🟢 Alta Qualidade
+3.0-3.9: 🟡 Qualidade Aceitável
+2.0-2.9: 🟠 Baixa Qualidade
+< 2.0: 🔴 Qualidade Crítica (refatoração urgente)
 ```
 
-## Prohibitions
+## Proibições
 
-- **NEVER** accept code that violates **Integrity** — ALWAYS 🔴 Blocker
-- **NEVER** accept impossible-to-test code (Testability < 2)
-- **NEVER** accept code that doesn't do what's expected (Correctness < 3)
-- **NEVER** ignore untreated errors (Reliability < 3)
+- **NUNCA** aceitar código que viola **Integrity** — SEMPRE 🔴 Blocker
+- **NUNCA** aceitar código impossível de testar (Testability < 2)
+- **NUNCA** aceitar código que não faz o que é esperado (Correctness < 3)
+- **NUNCA** ignorar erros não tratados (Reliability < 3)
 
-## Rationale
+## Justificativa
 
-| Quality Factor | Related Rules (main) |
-|----------------|---------------------|
+| Fator de Qualidade | Rules Relacionadas (principais) |
+|--------------------|--------------------------------|
 | Correctness | 027 (Error Handling), 028 (Async Exceptions), 002 (No Else) |
 | Reliability | 027, 028, 036 (Side Effects) |
 | Efficiency | 022 (KISS), 001 (Indentation), 055 (Long Method) |
@@ -102,15 +115,15 @@ Quality Score = (Σ scores of all 12 factors) / 12
 | Reusability | 021 (DRY), 003 (Encapsulation), 010 (SRP) |
 | Interoperability | 043 (Backing Services), 014 (DIP) |
 
-**Related skills:**
-- [`codetags`](../codetags/SKILL.md) — depends: McCall severity (Integrity→FIXME, Efficiency→OPTIMIZE) maps to codetags
-- [`cdd`](../cdd/SKILL.md) — complements: CDD quantifies McCall Model's Maintainability and Testability
+**Skills relacionadas:**
+- [`codetags`](../codetags/SKILL.md) — depende: severidade McCall (Integrity→FIXME, Efficiency→OPTIMIZE) mapeia para codetags
+- [`cdd`](../cdd/SKILL.md) — complementa: CDD quantifica Maintainability e Testability do Modelo McCall
 
 ---
 
-**References:**
+**Referências:**
 - McCall, J.A., Richards, P.K., & Walters, G.F. (1977). "Factors in Software Quality"
 - ISO/IEC 25010:2011 - Systems and software Quality Requirements and Evaluation (SQuaRE)
 
-**Created on**: 2026-04-01
-**Version**: 1.0
+**Criada em**: 2026-04-01
+**Versão**: 1.0

@@ -1,24 +1,24 @@
 # Composite
 
-**Category:** Structural
-**Intent:** Compose objects into tree structures to represent part-whole hierarchies, allowing clients to treat individual objects and compositions uniformly.
+**Categoria:** Estrutural
+**Intenção:** Compor objetos em estruturas de árvore para representar hierarquias parte-todo, permitindo que clientes tratem objetos individuais e composições de forma uniforme.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Hierarchical structures like UI component trees, file systems, menus
-- When clients need to ignore the difference between compositions and individual objects
-- To represent recursive structures naturally
-- In parsers and ASTs (Abstract Syntax Trees)
+- Estruturas hierárquicas como árvores de componentes UI, sistemas de arquivos, menus
+- Quando clientes precisam ignorar a diferença entre composições e objetos individuais
+- Para representar estruturas recursivas naturalmente
+- Em parsers e ASTs (Árvores de Sintaxe Abstrata)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- For structures that are not naturally hierarchical (overengineering — rule 064)
-- When the distinction between leaf and composition is important to the client
-- When operations differ significantly between leaves and composite nodes
+- Para estruturas que não são naturalmente hierárquicas (overengineering — rule 064)
+- Quando a distinção entre folha e composição é importante para o cliente
+- Quando as operações diferem significativamente entre folhas e nós compostos
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface MenuComponent {
@@ -54,22 +54,22 @@ class MenuCategory implements MenuComponent {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
-const menu = new MenuCategory('Sandwiches')
-menu.add(new MenuItem('Hamburger', 25))
+const menu = new MenuCategory('Sanduíches')
+menu.add(new MenuItem('Hambúrguer', 25))
 ```
 
-## Related to
+## Relacionado a
 
-- [decorator.md](decorator.md): complements — Decorator adds responsibilities to a single object; Composite aggregates objects in tree
-- [iterator.md](iterator.md): complements — Iterator frequently used to traverse Composite structures
-- [visitor.md](visitor.md): complements — Visitor frequently applied over Composite structures to execute operations
-- [rule 004 - First Class Collections](../../../rules/004_colecoes-primeira-classe.md): complements — MenuCategory encapsulates collection with domain behavior
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use for non-hierarchical structures
+- [decorator.md](decorator.md): complementa — Decorator adiciona responsabilidades a um único objeto; Composite agrega objetos em árvore
+- [iterator.md](iterator.md): complementa — Iterator frequentemente usado para percorrer estruturas Composite
+- [visitor.md](visitor.md): complementa — Visitor frequentemente aplicado sobre estruturas Composite para executar operações
+- [rule 004 - Coleções de Primeira Classe](../../../rules/004_colecoes-primeira-classe.md): complementa — MenuCategory encapsula coleção com comportamento de domínio
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use para estruturas não hierárquicas
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

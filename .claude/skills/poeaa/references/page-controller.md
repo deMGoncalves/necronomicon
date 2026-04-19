@@ -1,31 +1,31 @@
 # Page Controller
 
-**Layer:** Web Presentation
-**Complexity:** Simple
-**Intent:** An object that handles a request for a specific page or action on a website.
+**Camada:** Web Presentation
+**Complexidade:** Simples
+**Intenção:** Um objeto que trata uma requisição para uma página ou ação específica em um site.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Simple applications with few well-defined endpoints
-- When each page/endpoint has sufficiently distinct logic
-- Prototypes and MVPs where speed matters more than architecture
-- Complement to Front Controller for specific page handlers
+- Aplicações simples com poucos endpoints bem definidos
+- Quando cada página/endpoint tem lógica suficientemente distinta
+- Protótipos e MVPs onde a velocidade importa mais que a arquitetura
+- Complemento ao Front Controller para handlers de páginas específicas
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When cross-cutting logic (auth, logging) needs to be centralized (use Front Controller)
-- When endpoints have a lot of common logic that would cause duplication (rule 021)
+- Quando lógica transversal (autenticação, logging) precisa ser centralizada (use Front Controller)
+- Quando endpoints têm muita lógica comum que causaria duplicação (regra 021)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Page Controller: handles a single page or resource
+// Page Controller: trata uma única página ou recurso
 class UserListPageController {
   constructor(private readonly userRepository: UserRepository) {}
 
-  // Each method corresponds to an HTTP verb for this resource
+  // Cada método corresponde a um verbo HTTP para este recurso
   async handleGet(request: Request, response: Response): Promise<void> {
     const users = await this.userRepository.findAll()
     response.json(users.map(u => ({ id: u.id, name: u.name })))
@@ -49,12 +49,12 @@ class UserDetailPageController {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [front-controller.md](front-controller.md): complements — Front Controller dispatches to specific Page Controllers
-- [mvc.md](mvc.md): depends — Page Controller implements the Controller role within MVC architecture
+- [front-controller.md](front-controller.md): complementa — Front Controller despacha para Page Controllers específicos
+- [mvc.md](mvc.md): depende — Page Controller implementa o papel de Controller dentro da arquitetura MVC
 
 ---
 
-**PoEAA Layer:** Web Presentation
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Web Presentation
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

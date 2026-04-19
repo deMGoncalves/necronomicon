@@ -139,7 +139,7 @@ export function registerRoutes(app: Hono, service: I[NomeDoService]): void {
 
 ---
 
-## Related to
+## Relacionado a
 
 - [c4model Level 3 — Component](03_component.md): depende — Level 4 detalha a implementação de um componente de Level 3
 - [gof patterns](../../gof/SKILL.md): complementa — patterns aplicados nas classes aqui diagramadas

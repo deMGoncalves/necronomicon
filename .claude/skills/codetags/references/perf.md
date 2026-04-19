@@ -1,39 +1,39 @@
-# PERF — Performance Bottleneck
+# PERF — Gargalo de Performance
 
-**Severity:** 🟡 Medium | Resolve in current sprint if affecting users
-**Blocks PR:** No (but should be prioritized)
+**Severidade:** 🟡 Média | Resolver na sprint atual se afetando usuários
+**Bloqueia PR:** Não (mas deve ser priorizado)
 
-## What It Is
+## O Que É
 
-Marks identified performance bottleneck that is causing or may cause real problems. More urgent than OPTIMIZE - indicates problem already measured or observed in production.
+Marca gargalo de performance identificado que está causando ou pode causar problemas reais. Mais urgente que OPTIMIZE — indica problema já medido ou observado em produção.
 
-## When to Use
+## Quando Usar
 
-- Bottleneck measured with metrics (query taking > 1s)
-- Problem observed by users (UI freezing)
-- Resource limit reached (identified memory leak)
-- Frequent timeout (API expiring in > 10% of requests)
+- Gargalo medido com métricas (query levando > 1s)
+- Problema observado por usuários (UI congelando)
+- Limite de recurso atingido (vazamento de memória identificado)
+- Timeout frequente (API expirando em > 10% das requisições)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Theoretical optimization without measurement → use **OPTIMIZE**
-- Incorrect code → use **FIXME**
-- Structure improvement → use **REFACTOR**
-- Suspicion without measurement → measure first
+- Otimização teórica sem medição → usar **OPTIMIZE**
+- Código incorreto → usar **FIXME**
+- Melhoria de estrutura → usar **REFACTOR**
+- Suspeita sem medição → medir primeiro
 
-## Format
+## Formato
 
 ```typescript
-// PERF: bottleneck description - measured metric
-// PERF: [p95: 2.5s] description - target: 500ms
-// PERF: description - impact: X affected users
+// PERF: descrição do gargalo - métrica medida
+// PERF: [p95: 2.5s] descrição - alvo: 500ms
+// PERF: descrição - impacto: X usuários afetados
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// PERF: [p95: 3.2s] query without index - add index on user_id
-// Target: < 100ms | Affects: orders page
+// PERF: [p95: 3.2s] query sem índice - adicionar índice em user_id
+// Alvo: < 100ms | Afeta: página de pedidos
 async function getOrderHistory(userId: string) {
   return db.query(`
     SELECT * FROM orders
@@ -42,37 +42,37 @@ async function getOrderHistory(userId: string) {
   `, [userId]);
 }
 
-// PERF: memory leak - event listeners not removed
-// Memory grows 50MB/hour in continuous use
+// PERF: vazamento de memória - event listeners não removidos
+// Memória cresce 50MB/hora em uso contínuo
 function setupListeners(element: HTMLElement) {
   window.addEventListener('resize', handleResize);
   window.addEventListener('scroll', handleScroll);
-  // Missing: cleanup function to remove listeners
+  // Faltando: função de cleanup para remover listeners
 }
 
-// PERF: [+250KB] full lodash import
-// Impact: +1.5s in mobile LCP
+// PERF: [+250KB] import completo do lodash
+// Impacto: +1.5s no LCP mobile
 import _ from 'lodash';
 const result = _.pick(data, ['id', 'name']);
 
-// PERF: re-render on each keystroke - debounce needed
-// CPU: 100% during fast typing
+// PERF: re-render a cada tecla pressionada - necessita debounce
+// CPU: 100% durante digitação rápida
 function SearchComponent() {
   const [query, setQuery] = useState('');
   useEffect(() => {
-    fetchResults(query); // Called on each character
+    fetchResults(query); // Chamado a cada caractere
   }, [query]);
   return <input onChange={e => setQuery(e.target.value)} />;
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Immediately (users complaining) or current sprint (measurable degradation)
-- **Action:** Measure current metric, define target, identify root cause, implement correction, measure again, monitor
-- **Converted to:** Removed after correction confirmed by metrics
+- **Prazo:** Imediatamente (usuários reclamando) ou sprint atual (degradação mensurável)
+- **Ação:** Medir métrica atual, definir alvo, identificar causa raiz, implementar correção, medir novamente, monitorar
+- **Convertido em:** Removido após correção confirmada por métricas
 
-## Related to
+## Relacionado a
 
-- Rules: [022 - KISS](../../../.claude/rules/022_priorizacao-simplicidade-clareza.md) (simple code is more performant)
-- Similar tags: PERF (real problem) vs OPTIMIZE (theoretical opportunity)
+- Rules: [022 - KISS](../../../.claude/rules/022_priorizacao-simplicidade-clareza.md) (código simples é mais performático)
+- Tags similares: PERF (problema real) vs OPTIMIZE (oportunidade teórica)

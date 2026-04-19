@@ -1,20 +1,20 @@
-# Rule 1 — Single Indentation Level
+# Regra 1 — Single Indentation Level
 
-**deMGoncalves Rule:** ESTRUTURAL-001
-**Question:** Does this method have more than one indentation level after the initial scope?
+**Regra deMGoncalves:** ESTRUTURAL-001
+**Questão:** Este método tem mais de um nível de indentação após o escopo inicial?
 
-## What It Is
+## O que é
 
-Limits the complexity of a method or function by imposing a single indentation level for code blocks (conditionals, loops or try-catch), forcing the extraction of logic into separate methods.
+Limita a complexidade de um método ou função ao impor um único nível de indentação para blocos de código (condicionais, loops ou try-catch), forçando a extração de lógica em métodos separados.
 
-## When to Apply
+## Quando Aplicar
 
-- Method has `if` inside `for`
-- Method has `for` inside `if`
-- Method has nested callbacks
-- Cyclomatic Complexity > 5
+- Método tem `if` dentro de `for`
+- Método tem `for` dentro de `if`
+- Método tem callbacks aninhados
+- Complexidade Ciclomática > 5
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class OrderProcessor {
@@ -22,7 +22,7 @@ class OrderProcessor {
     for (const order of orders) {
       if (order.isValid()) {
         if (order.isPaid()) {
-          // Three indentation levels - VIOLATES
+          // Três níveis de indentação - VIOLA
           this.shipOrder(order);
         }
       }
@@ -31,13 +31,13 @@ class OrderProcessor {
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class OrderProcessor {
   processOrders(orders: Order[]): void {
     for (const order of orders) {
-      this.processOrder(order);  // One indentation level
+      this.processOrder(order);  // Um nível de indentação
     }
   }
 
@@ -49,13 +49,13 @@ class OrderProcessor {
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Try/Catch/Finally**: Error handling that cannot be delegated
-- **Guard Clauses**: Early returns don't count as new level
+- **Try/Catch/Finally**: Tratamento de erro que não pode ser delegado
+- **Guard Clauses**: Retornos antecipados não contam como novo nível
 
-## Related Rules
+## Regras Relacionadas
 
-- [002 - No ELSE Prohibition](rule-02-no-else.md): reinforces
-- [007 - Small Classes](rule-07-small-classes.md): complements
-- [022 - Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): reinforces
+- [002 - Proibição da Cláusula ELSE](rule-02-no-else.md): reforça
+- [007 - Classes Pequenas](rule-07-small-classes.md): complementa
+- [022 - Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): reforça

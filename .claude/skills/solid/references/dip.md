@@ -3,7 +3,7 @@
 **Rule deMGoncalves:** COMPORTAMENTAL-014
 **Pergunta:** Módulos de alto nível dependem de abstrações, não de classes concretas?
 
-## What It Is
+## O que é
 
 Módulos de alto nível não devem depender de módulos de baixo nível. Ambos devem depender de abstrações (interfaces). Abstrações não devem depender de detalhes. Detalhes devem depender de abstrações.
 

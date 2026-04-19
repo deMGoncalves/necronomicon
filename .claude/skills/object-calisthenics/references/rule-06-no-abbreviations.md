@@ -1,35 +1,35 @@
-# Rule 6 — No Abbreviations Prohibition
+# Regra 6 — Proibição de No Abbreviations (Nomes Abreviados)
 
-**deMGoncalves Rule:** ESTRUTURAL-006
-**Question:** Is this name an incomprehensible abbreviation?
+**Regra deMGoncalves:** ESTRUTURAL-006
+**Questão:** Este nome é uma abreviação incompreensível?
 
-## What It Is
+## O que é
 
-Requires that names of variables, methods, classes and parameters be complete, self-explanatory and not use abbreviations or acronyms that are not widely recognized in the problem domain.
+Exige que nomes de variáveis, métodos, classes e parâmetros sejam completos, autoexplicativos e não utilizem abreviações ou acrônimos que não sejam amplamente reconhecidos no domínio do problema.
 
-## When to Apply
+## Quando Aplicar
 
-- Name with less than 3 characters (except loops)
-- Name with abbreviation (`usr`, `calc`, `mngr`)
-- Name with ambiguous acronym (`Proc`, `Svc`, `Mgr`)
-- Name requiring comment to explain
+- Nome com menos de 3 caracteres (exceto loops)
+- Nome com abreviação (`usr`, `calc`, `mngr`)
+- Nome com acrônimo ambíguo (`Proc`, `Svc`, `Mgr`)
+- Nome que exige comentário para explicar
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-class UsrMngr {  // VIOLATES: abbreviations
-  calcTot(ord: Order): number {  // VIOLATES: calc, tot, ord
-    const itms = ord.getItms();  // VIOLATES: itms
-    let t = 0;  // VIOLATES: t is ambiguous
-    for (const i of itms) {  // OK: i in loop is exception
-      t += i.prc;  // VIOLATES: prc
+class UsrMngr {  // VIOLA: abreviações
+  calcTot(ord: Order): number {  // VIOLA: calc, tot, ord
+    const itms = ord.getItms();  // VIOLA: itms
+    let t = 0;  // VIOLA: t é ambíguo
+    for (const i of itms) {  // OK: i em loop é exceção
+      t += i.prc;  // VIOLA: prc
     }
     return t;
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class UserManager {
@@ -44,7 +44,7 @@ class UserManager {
 }
 ```
 
-## ✅ Correct (Better Approach)
+## ✅ Correto (Melhor Abordagem)
 
 ```typescript
 class OrderTotalCalculator {
@@ -57,13 +57,13 @@ class OrderTotalCalculator {
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Loop Conventions**: `i`, `j`, `k` for iterators
-- **Ubiquitous Acronyms**: `ID`, `URL`, `API`, `HTTP`, `CPF`
+- **Convenções de Loop**: `i`, `j`, `k` para iteradores
+- **Acrônimos Ubíquos**: `ID`, `URL`, `API`, `HTTP`, `CPF`
 
-## Related Rules
+## Regras Relacionadas
 
-- [003 - Primitive Encapsulation](rule-03-wrap-primitives.md): reinforces
-- [024 - No Magic Constants Prohibition](../../rules/024_proibicao-constantes-magicas.md): complements
-- [034 - Consistent Names](../../rules/034_nomes-classes-metodos-consistentes.md): reinforces
+- [003 - Wrap Primitives](rule-03-wrap-primitives.md): reforça
+- [024 - Proibição de Constantes Mágicas](../../rules/024_proibicao-constantes-magicas.md): complementa
+- [034 - Nomes Consistentes](../../rules/034_nomes-classes-metodos-consistentes.md): reforça

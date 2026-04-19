@@ -1,88 +1,88 @@
-# REFACTOR — Code Violating Design Principles
+# REFACTOR — Código Violando Princípios de Design
 
-**Severity:** 🟠 High
-**Blocks PR:** No (but should be prioritized)
+**Severidade:** 🟠 Alta
+**Bloqueia PR:** Não (mas deve ser priorizado)
 
-## What It Is
+## O Que É
 
-Marks code that violates design principles or best practices and needs to be restructured. Code works correctly but its structure hinders maintenance, testing or evolution.
+Marca código que viola princípios de design ou boas práticas e precisa ser reestruturado. O código funciona corretamente mas sua estrutura dificulta manutenção, testes ou evolução.
 
-## When to Use
+## Quando Usar
 
-- SOLID violation (class with multiple responsibilities)
-- God Class/Function (file with 500+ lines)
-- High coupling (circular dependencies)
-- Duplicated code (same logic in several places)
-- Excessive complexity (CC > 10)
+- Violação SOLID (classe com múltiplas responsabilidades)
+- God Class/Function (arquivo com 500+ linhas)
+- Alto acoplamento (dependências circulares)
+- Código duplicado (mesma lógica em vários lugares)
+- Complexidade excessiva (CC > 10)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Code with bug → use FIXME
-- Temporary solution → use HACK
-- Performance optimization → use OPTIMIZE
-- Code to be removed → use DEPRECATED
+- Código com bug → usar FIXME
+- Solução temporária → usar HACK
+- Otimização de performance → usar OPTIMIZE
+- Código a ser removido → usar DEPRECATED
 
-## Format
+## Formato
 
 ```typescript
-// REFACTOR: violated principle - suggested action
-// REFACTOR: [SRP] description - extract to class X
-// REFACTOR: CC=15 - split into smaller functions
+// REFACTOR: princípio violado - ação sugerida
+// REFACTOR: [SRP] descrição - extrair para classe X
+// REFACTOR: CC=15 - dividir em funções menores
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// REFACTOR: [SRP] class does validation + persistence + notification
-// Extract: OrderValidator, OrderRepository, OrderNotifier
+// REFACTOR: [SRP] classe faz validação + persistência + notificação
+// Extrair: OrderValidator, OrderRepository, OrderNotifier
 class OrderService {
   createOrder(data: OrderData): Order {
-    // Validation (should be in OrderValidator)
-    if (!data.items) throw new Error('Items required');
-    if (!data.customer) throw new Error('Customer required');
+    // Validação (deveria estar em OrderValidator)
+    if (!data.items) throw new Error('Items obrigatórios');
+    if (!data.customer) throw new Error('Cliente obrigatório');
 
-    // Persistence (should be in OrderRepository)
+    // Persistência (deveria estar em OrderRepository)
     const order = db.orders.create(data);
 
-    // Notification (should be in OrderNotifier)
-    emailService.send(order.customer.email, 'Order created');
+    // Notificação (deveria estar em OrderNotifier)
+    emailService.send(order.customer.email, 'Pedido criado');
 
     return order;
   }
 }
 
-// REFACTOR: [DRY] formatting logic duplicated in 5 files
-// Extract to utils/formatters.ts
+// REFACTOR: [DRY] lógica de formatação duplicada em 5 arquivos
+// Extrair para utils/formatters.ts
 function formatUserName(user: User): string {
   return `${user.firstName} ${user.lastName}`.trim().toUpperCase();
 }
 
-// Same code in another file...
+// Mesmo código em outro arquivo...
 function formatCustomerName(customer: Customer): string {
   return `${customer.firstName} ${customer.lastName}`.trim().toUpperCase();
 }
 
-// REFACTOR: [DIP] depends on concrete implementation
-// Inject IEmailService interface instead of SendGridService
+// REFACTOR: [DIP] depende de implementação concreta
+// Injetar interface IEmailService em vez de SendGridService
 class NotificationService {
   constructor() {
-    this.emailService = new SendGridService(); // ❌ Tight coupling
+    this.emailService = new SendGridService(); // ❌ Acoplamento forte
   }
 }
 
-// ✅ After refactoring
+// ✅ Após refatoração
 class NotificationService {
   constructor(private emailService: IEmailService) {}
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Current sprint (critical God class) or next sprint (duplication) or backlog (incremental improvement)
-- **Action:** Identify violated principle → Document refactoring → Estimate effort → Prioritize technical backlog → Execute with tests → Remove comment
-- **Converted to:** Removed after complete refactoring
+- **Prazo:** Sprint atual (God class crítica) ou próxima sprint (duplicação) ou backlog (melhoria incremental)
+- **Ação:** Identificar princípio violado → Documentar refatoração → Estimar esforço → Priorizar backlog técnico → Executar com testes → Remover comentário
+- **Convertido em:** Removido após refatoração completa
 
-## Related to
+## Relacionado a
 
 - Rules: [010](../../../.claude/rules/010_principio-responsabilidade-unica.md), [011](../../../.claude/rules/011_principio-aberto-fechado.md), [021](../../../.claude/rules/021_proibicao-duplicacao-logica.md), [025](../../../.claude/rules/025_proibicao-anti-pattern-the-blob.md)
-- Similar tags: REFACTOR changes structure, CLEANUP removes noise, HACK is temporary
+- Tags similares: REFACTOR muda estrutura, CLEANUP remove ruído, HACK é temporário

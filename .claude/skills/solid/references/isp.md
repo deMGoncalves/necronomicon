@@ -3,7 +3,7 @@
 **Rule deMGoncalves:** ESTRUTURAL-013
 **Pergunta:** Clientes dependem apenas das interfaces que realmente usam?
 
-## What It Is
+## O que é
 
 Exige que clientes não sejam forçados a depender de interfaces que não utilizam. Múltiplas interfaces específicas para clientes são preferíveis a uma única interface geral. Nenhuma classe deve ser forçada a implementar métodos que não usa.
 

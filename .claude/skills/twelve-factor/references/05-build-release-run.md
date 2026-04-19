@@ -1,63 +1,63 @@
-# Factor 05 — Build, Release, Run
+# Fator 05 — Build, Release, Run
 
-**deMGoncalves Rule:** [044 - Separation of Build, Release, Run](../../../rules/044_separacao-build-release-run.md)
-**Question:** Three separate and immutable stages (Build → Release → Run)?
+**Regra deMGoncalves:** [044 - Separação de Build, Release, Run](../../../rules/044_separacao-build-release-run.md)
+**Questão:** Três estágios separados e imutáveis (Build → Release → Run)?
 
-## What It Is
+## O que é
 
-The deployment process must be separated into three distinct and immutable stages:
+O processo de deploy deve ser separado em três estágios distintos e imutáveis:
 
-- **Build**: compiles code + dependencies → executable artifact
-- **Release**: Build + Config → immutable release with unique ID
-- **Run**: executes the release in runtime environment
+- **Build**: compila código + dependências → artefato executável
+- **Release**: Build + Config → release imutável com ID único
+- **Run**: executa a release no ambiente de runtime
 
-**Each release is immutable — fixes require new release.**
+**Cada release é imutável — correções exigem nova release.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] **Build** stage produces executable artifact without environment configuration dependencies
-- [ ] **Release** stage is immutable — fixes require new release with new ID
-- [ ] Every release has **unique identifier** (timestamp, hash, sequential number)
+- [ ] Estágio **Build** produz artefato executável sem dependências de configuração de ambiente
+- [ ] Estágio **Release** é imutável — correções exigem nova release com novo ID
+- [ ] Toda release possui **identificador único** (timestamp, hash, número sequencial)
 
-## ❌ Violation
+## ❌ Violação
 
 ```bash
-# Build + Run mixed ❌
+# Build + Run misturados ❌
 ssh prod-server
 cd /app
-git pull origin main  # direct change in prod
+git pull origin main  # alteração direta em prod
 npm install
 npm start
 
-# Mutable release ❌
-# Modify code in already deployed release
-vim /app/src/config.js  # violation
+# Release mutável ❌
+# Modificar código em release já deployada
+vim /app/src/config.js  # violação
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```bash
-# CI/CD Pipeline with 3 separate stages ✅
+# Pipeline CI/CD com 3 estágios separados ✅
 
 # 1. Build (CI)
 npm run build
-# → Output: dist/bundle.js
+# → Saída: dist/bundle.js
 
 # 2. Release (CI + Deploy)
 docker build -t myapp:v1.2.3 .  # Build
-docker tag myapp:v1.2.3 myapp:release-456  # Release ID
+docker tag myapp:v1.2.3 myapp:release-456  # ID da Release
 docker push myapp:release-456
 
 # 3. Run (Prod)
 kubectl set image deployment/myapp app=myapp:release-456
-# Immutable release — rollback = deploy previous release
+# Release imutável — rollback = deploy da release anterior
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Config being changed at runtime — should be in release stage
+// FIXME: Config sendo alterada em runtime — deve estar no estágio de release
 if (process.env.NODE_ENV === 'production') {
-  config.apiUrl = 'https://api.prod.com';  # violation
+  config.apiUrl = 'https://api.prod.com';  # violação
 }
 ```

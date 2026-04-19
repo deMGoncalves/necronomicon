@@ -1,32 +1,32 @@
 # Interoperability — Interoperabilidade
 
-**Dimension:** Transition
-**Default Severity:** 🟠 Important
-**Key Question:** Does it integrate well with other systems?
+**Dimensão:** Transição
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** Integra bem com outros sistemas?
 
-## What It Is
+## O que é
 
-The effort required to couple software to other systems. High interoperability means the system uses open standards, common protocols, and well-defined data formats for communication with external systems.
+O esforço necessário para acoplar o software a outros sistemas. Alta interoperabilidade significa que o sistema usa padrões abertos, protocolos comuns e formatos de dados bem definidos para comunicação com sistemas externos.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Public API without versioning | 🔴 Blocker |
-| Webhook without idempotence | 🟠 Important |
-| Inconsistent error format | 🟠 Important |
-| Undocumented contract | 🟡 Suggestion |
+| API pública sem versionamento | 🔴 Blocker |
+| Webhook sem idempotência | 🟠 Importante |
+| Formato de erro inconsistente | 🟠 Importante |
+| Contrato não documentado | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not interoperable - proprietary format
+// ❌ Não interoperável - formato proprietário
 function exportData() {
   return `USER|${user.id}|${user.name}|${user.email}|END`;
-  // Custom format that only this system understands
+  // Formato customizado que apenas este sistema entende
 }
 
-// ✅ Interoperable - standard format
+// ✅ Interoperável - formato padrão
 function exportData() {
   return JSON.stringify({
     type: 'user',
@@ -39,24 +39,24 @@ function exportData() {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// API: Endpoint needs versioning
-// CONTRACT: Document response format
+// API: Endpoint precisa de versionamento
+// CONTRACT: Documentar formato de resposta
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Public API without versioning | 🔴 Blocker |
-| Webhook without idempotence | 🟠 Important |
-| Inconsistent error format | 🟠 Important |
-| Undocumented contract | 🟡 Suggestion |
+| API pública sem versionamento | 🔴 Blocker |
+| Webhook sem idempotência | 🟠 Importante |
+| Formato de erro inconsistente | 🟠 Importante |
+| Contrato não documentado | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 043 - Backing Services as Resources
-- 014 - Dependency Inversion Principle
-- 042 - Configurations via Environment
+- 043 - Serviços de Apoio como Recursos
+- 014 - Princípio de Inversão de Dependência
+- 042 - Configurações via Ambiente

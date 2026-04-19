@@ -1,35 +1,35 @@
 # Large Class
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 007
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 007
 
-## What It Is
+## O Que É
 
-Class with too many attributes and methods, indicating it's trying to do too much. Fowler: when a class has too many responsibilities, code smells like duplication and lack of cohesion naturally emerge. Initial stage of a The Blob.
+Classe com atributos e métodos em excesso, indicando que está tentando fazer coisas demais. Fowler: quando uma classe tem responsabilidades demais, code smells de duplicação e falta de coesão surgem naturalmente. Estágio inicial de um The Blob.
 
-## Symptoms
+## Sintomas
 
-- Class files with more than 50 lines of code (excluding blank lines and comments)
-- Classes reaching 40 lines should be refactoring candidates
-- More than 300–500 lines
-- Prefixes/suffixes on attributes to distinguish groups (`userEmail`, `orderEmail`, `shippingEmail`)
-- Subsets of attributes used only by subsets of methods
-- Tests that need extensive mocks to test a single behavior
-- A class should not contain more than 10 public methods
+- Arquivos de classe com mais de 50 linhas de código (excluindo linhas em branco e comentários)
+- Classes que chegam a 40 linhas devem ser candidatas à refatoração
+- Mais de 300–500 linhas
+- Prefixos/sufixos em atributos para distinguir grupos (`userEmail`, `orderEmail`, `shippingEmail`)
+- Subconjuntos de atributos usados apenas por subconjuntos de métodos
+- Testes que precisam de mocks extensos para testar um único comportamento
+- Uma classe não deve conter mais de 10 métodos públicos
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Class mixing profile, address and payment (> 50 lines)
+// ❌ Classe misturando perfil, endereço e pagamento (> 50 linhas)
 class User {
   constructor() {
     this.name = '';
     this.email = '';
-    this.street = '';       // address
-    this.city = '';         // address
-    this.zipCode = '';      // address
-    this.cardNumber = '';   // payment
-    this.cardExpiry = '';   // payment
+    this.street = '';       // endereço
+    this.city = '';         // endereço
+    this.zipCode = '';      // endereço
+    this.cardNumber = '';   // pagamento
+    this.cardExpiry = '';   // pagamento
   }
   formatAddress() { ... }
   validateCard() { ... }
@@ -37,15 +37,15 @@ class User {
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Each concept in its own class (Extract Class)
+// ✅ Cada conceito em sua própria classe (Extract Class)
 class User { constructor({ name, email }) { ... } }
 class Address { constructor({ street, city, zipCode }) { ... } }
 class PaymentMethod { constructor({ cardNumber, cardExpiry }) { ... } }
 
-// Composition instead of monolithic class
+// Composição em vez de classe monolítica
 class UserAccount {
   constructor(user, address, paymentMethod) {
     this.user = user;
@@ -55,9 +55,9 @@ class UserAccount {
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Large Class — User has 87 lines, mixes profile + address + payment
-// TODO: Extract Class — create separate Address, PaymentMethod
+// FIXME: Large Class — User tem 87 linhas, mistura perfil + endereço + pagamento
+// TODO: Extract Class — criar Address, PaymentMethod separados
 ```

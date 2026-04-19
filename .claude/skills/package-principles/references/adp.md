@@ -4,7 +4,7 @@
 **Rule deMGoncalves:** [018 - Princípio de Dependências Acíclicas](../../../rules/018_principio-dependencias-aciclicas.md)
 **Pergunta:** O grafo de dependências entre pacotes é acíclico (DAG)?
 
-## What It Is
+## O Que É
 
 **O grafo de dependências entre pacotes deve ser acíclico, ou seja, não deve haver dependências circulares entre módulos.**
 

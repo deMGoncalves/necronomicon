@@ -1,68 +1,68 @@
-# XXX — Alert for Dangerous or Fragile Code
+# XXX — Alerta para Código Perigoso ou Frágil
 
-**Severity:** 🔴 Critical
-**Blocks PR:** Yes (or strong justification)
+**Severidade:** 🔴 Crítica
+**Bloqueia PR:** Sim (ou justificativa forte)
 
-## What It Is
+## O Que É
 
-Marks code requiring immediate critical attention — indicates something dangerous, problematic or that may cause severe issues. It's a "warning cry" in code that must not be ignored.
+Marca código que requer atenção crítica imediata — indica algo perigoso, problemático ou que pode causar problemas graves. É um "grito de alerta" no código que não deve ser ignorado.
 
-## When to Use
+## Quando Usar
 
-- Extremely fragile code (can break with any change)
-- Dangerous non-obvious logic (counter-intuitive behavior)
-- Critical order dependency (sequence that cannot be altered)
-- Trap for developers (code that looks OK but isn't)
+- Código extremamente frágil (pode quebrar com qualquer mudança)
+- Lógica perigosa não óbvia (comportamento contra-intuitivo)
+- Dependência crítica de ordem (sequência que não pode ser alterada)
+- Armadilha para desenvolvedores (código que parece OK mas não é)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Confirmed bug → use FIXME or BUG
-- Security vulnerability → use SECURITY
-- Temporary code → use HACK
-- Code to be refactored → use REFACTOR
+- Bug confirmado → usar FIXME ou BUG
+- Vulnerabilidade de segurança → usar SECURITY
+- Código temporário → usar HACK
+- Código a ser refatorado → usar REFACTOR
 
-## Format
+## Formato
 
 ```typescript
-// XXX: ALERT - danger description
-// XXX: DO NOT ALTER - critical reason
-// XXX: CAUTION - risk explanation
+// XXX: ALERTA - descrição do perigo
+// XXX: NÃO ALTERAR - razão crítica
+// XXX: CUIDADO - explicação do risco
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// XXX: CRITICAL ORDER - these lines MUST execute in this sequence
-// Reversing causes race condition that corrupts user data
+// XXX: ORDEM CRÍTICA - estas linhas DEVEM executar nesta sequência
+// Inverter causa race condition que corrompe dados do usuário
 await lockAccount(userId);
 await processPayment(userId, amount);
 await unlockAccount(userId);
-// If unlockAccount executes before processPayment, double-charge occurs
+// Se unlockAccount executar antes de processPayment, ocorre cobrança dupla
 
-// XXX: CAUTION - this function MODIFIES original array
-// Looks like returning new array but mutates in-place for performance
-// DO NOT pass array that needs to be preserved
+// XXX: CUIDADO - esta função MODIFICA o array original
+// Parece retornar novo array mas muta in-place por performance
+// NÃO passar array que precisa ser preservado
 function processItems<T>(items: T[]): T[] {
   items.sort((a, b) => a.priority - b.priority);
   items.splice(0, Math.floor(items.length / 2));
-  return items; // Same array, modified!
+  return items; // Mesmo array, modificado!
 }
 
-// XXX: FRAGILE - depends on specific browser timing
-// Works because DOM updates in ~16ms
-// Any change can break silently
+// XXX: FRÁGIL - depende de timing específico do browser
+// Funciona porque o DOM atualiza em ~16ms
+// Qualquer mudança pode quebrar silenciosamente
 setTimeout(() => {
   element.classList.add('visible');
-}, 20); // DO NOT ALTER this value
+}, 20); // NÃO ALTERAR este valor
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Before merge (new code) or plan refactoring (legacy code)
-- **Action:** Read warning carefully → Understand risk completely → Consult author → Test exhaustively → Document → Remove XXX only when rewritten safely
-- **Converted to:** Removed or converted to REFACTOR if migration planned
+- **Prazo:** Antes do merge (código novo) ou planejar refatoração (código legado)
+- **Ação:** Ler aviso com atenção → Entender o risco completamente → Consultar autor → Testar exaustivamente → Documentar → Remover XXX somente quando reescrito com segurança
+- **Convertido em:** Removido ou convertido para REFACTOR se migração planejada
 
-## Related to
+## Relacionado a
 
 - Rules: [022](../../../.claude/rules/022_priorizacao-simplicidade-clareza.md), [026](../../../.claude/rules/026_qualidade-comentarios-porque.md)
-- Similar tags: XXX is danger alert, FIXME is bug to fix, SECURITY is vulnerability, HACK is temporary
+- Tags similares: XXX é alerta de perigo, FIXME é bug para corrigir, SECURITY é vulnerabilidade, HACK é temporário

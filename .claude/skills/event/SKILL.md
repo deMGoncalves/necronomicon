@@ -1,6 +1,6 @@
 ---
 name: event
-description: Convention for using DOM events and custom events — when creating event handlers, dispatching custom events, or communicating between components via DOM events
+description: Convenção para uso de eventos DOM e eventos customizados — ao criar event handlers, despachar eventos customizados, ou comunicar entre componentes via eventos DOM
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,111 +10,122 @@ metadata:
 
 # Event
 
-Convention for using DOM events and custom events for interactivity and component communication.
+Convenção para uso de eventos DOM e eventos customizados para interatividade e comunicação entre componentes.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating event handlers that respond to user interactions or when components need to communicate state changes.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Criação de event handlers em Web Components; despacho de eventos customizados; comunicação de mudanças de estado entre componentes via eventos DOM |
+| **Prerequisites** | Skill `constructor` (event listeners proibidos no constructor); skill `bracket` para encapsulamento de handlers via Symbol; skill `enum` para nomes de eventos customizados como constantes |
+| **Constraints** | Proibido adicionar listeners no constructor; handler deve ter responsabilidade única; modificadores devem ser funções puras sem efeitos colaterais; `bubbles: true` e `composed: true` obrigatórios em eventos customizados |
+| **Scope** | Decorator `@on.{eventType}`, modificadores disponíveis (prevent, stop, value, formData, enter, detail), criação de `CustomEvent`, nomenclatura e boas práticas de dispatch |
 
-## Principle
+---
 
-| Principle | Description |
+## Quando Usar
+
+Use ao criar event handlers que respondem a interações do usuário ou quando componentes precisam comunicar mudanças de estado.
+
+## Princípio
+
+| Princípio | Descrição |
 |-----------|-------------|
-| Decoupled communication | Components communicate via events without direct dependency |
-| Reactivity | Components react to changes through listeners |
+| Comunicação desacoplada | Componentes se comunicam via eventos sem dependência direta |
+| Reatividade | Componentes reagem a mudanças através de listeners |
 
-## Event Decorator
+## Decorator de Evento
 
-| Aspect | Description |
+| Aspecto | Descrição |
 |--------|-------------|
-| Syntax | `@on.{eventType}` |
-| Common types | click, submit, input, keydown, change |
-| Selector | Optional first parameter to filter target element |
-| Modifiers | Additional parameters to alter event behavior |
-| Target method | Decorated method receives event or transformed data |
+| Sintaxe | `@on.{eventType}` |
+| Tipos comuns | click, submit, input, keydown, change |
+| Seletor | Parâmetro opcional para filtrar elemento alvo |
+| Modificadores | Parâmetros adicionais para alterar comportamento do evento |
+| Método alvo | Método decorado recebe evento ou dados transformados |
 
-## Decorator Structure
+## Estrutura do Decorator
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| Selector | String | No | CSS selector to filter target element within Shadow DOM |
-| Modifiers | Function | No | Functions that modify event before passing to handler |
+| Parâmetro | Tipo | Obrigatório | Descrição |
+|-----------|------|-------------|-----------|
+| Seletor | String | Não | Seletor CSS para filtrar elemento alvo dentro do Shadow DOM |
+| Modificadores | Function | Não | Funções que modificam evento antes de passar ao handler |
 
-## Available Modifiers
+## Modificadores Disponíveis
 
-| Modifier | Function | Usage |
-|----------|----------|-------|
-| prevent | Prevents default behavior | Avoid form submit, link navigation |
-| stop | Stops event propagation | Prevent event from bubbling up DOM tree |
-| enter | Filters only Enter key | Execute action on Enter press |
-| formData | Extracts form data | Transforms FormData into object |
-| value | Extracts target value | Pass only element value |
-| detail | Extracts CustomEvent detail | Access custom event data |
+| Modificador | Função | Uso |
+|-------------|--------|-----|
+| prevent | Previne comportamento padrão | Evitar submit de form, navegação de link |
+| stop | Para propagação do evento | Prevenir evento de borbulhar pela árvore DOM |
+| enter | Filtra apenas tecla Enter | Executar ação ao pressionar Enter |
+| formData | Extrai dados de formulário | Transforma FormData em objeto |
+| value | Extrai valor do target | Passar apenas valor do elemento |
+| detail | Extrai detail de CustomEvent | Acessar dados de evento customizado |
 
-## Application Order
+## Ordem de Aplicação
 
-| Order | Element |
+| Ordem | Elemento |
 |-------|---------|
-| 1 | Event type |
-| 2 | Selector (optional) |
-| 3 | Modifiers (optional, multiple allowed) |
+| 1 | Tipo de evento |
+| 2 | Seletor (opcional) |
+| 3 | Modificadores (opcional, múltiplos permitidos) |
 
-## Custom Events
+## Eventos Customizados
 
-| Aspect | Description |
+| Aspecto | Descrição |
 |--------|-------------|
-| Creation | Use customEvent function from @event package |
-| Type | String identifying the event |
-| Detail | Data associated with event |
-| Bubbles | Always true to allow propagation |
-| Cancelable | Always true to allow prevention |
+| Criação | Usar função customEvent do pacote @event |
+| Type | String identificando o evento |
+| Detail | Dados associados ao evento |
+| Bubbles | Sempre true para permitir propagação |
+| Cancelable | Sempre true para permitir prevenção |
 
-## Event Dispatch
+## Dispatch de Evento
 
-| Aspect | Description |
+| Aspecto | Descrição |
 |--------|-------------|
-| Method | `this.dispatchEvent()` |
-| Context | Called on component that emits event |
-| Propagation | Event bubbles up DOM tree until captured |
-| Timing | Dispatch is synchronous, handlers execute immediately |
+| Método | `this.dispatchEvent()` |
+| Contexto | Chamado no componente que emite o evento |
+| Propagação | Evento borbulha pela árvore DOM até ser capturado |
+| Timing | Dispatch é síncrono, handlers executam imediatamente |
 
-## Event Types
+## Tipos de Evento
 
-| Category | Events | Usage |
-|----------|--------|-------|
-| Mouse | click, dblclick, mousedown, mouseup | Mouse interactions |
-| Keyboard | keydown, keyup, keypress | Keyboard interactions |
-| Form | submit, change, input, reset | Form manipulation |
-| Focus | focus, blur, focusin, focusout | Focus management |
-| Custom | Custom names | Component communication |
+| Categoria | Eventos | Uso |
+|----------|--------|-----|
+| Mouse | click, dblclick, mousedown, mouseup | Interações de mouse |
+| Teclado | keydown, keyup, keypress | Interações de teclado |
+| Formulário | submit, change, input, reset | Manipulação de formulários |
+| Foco | focus, blur, focusin, focusout | Gerenciamento de foco |
+| Customizados | Nomes customizados | Comunicação entre componentes |
 
-## Custom Event Naming
+## Nomenclatura de Eventos Customizados
 
-| Rule | Description |
+| Regra | Descrição |
 |------|-------------|
-| Lowercase | Use only lowercase letters |
-| Descriptive | Name should describe what happened |
-| Past tense verbs | Indicates completed action (sent, clicked, changed) |
-| Namespace | Use prefix for domain-specific events |
+| Minúsculas | Usar apenas letras minúsculas |
+| Descritivo | Nome deve descrever o que aconteceu |
+| Verbos no passado | Indica ação concluída (sent, clicked, changed) |
+| Namespace | Usar prefixo para eventos específicos de domínio |
 
 ## Event Handlers
 
-| Aspect | Description |
+| Aspecto | Descrição |
 |--------|-------------|
-| Return | Return this to maintain fluent interface |
-| Async | Can be async if necessary |
-| Parameter | Receives event or data transformed by modifier |
-| Name | Use Symbol via bracket notation for encapsulation |
+| Retorno | Retornar this para manter interface fluente |
+| Async | Pode ser async se necessário |
+| Parâmetro | Recebe evento ou dados transformados pelo modificador |
+| Nome | Usar Symbol via bracket notation para encapsulamento |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — ad-hoc event without typing or bubbling
+// ❌ Bad — evento ad-hoc sem tipagem ou bubbling
 element.dispatchEvent(new Event('change'))
 
-// ✅ Good — custom event with detail, bubbles and composed
+// ✅ Good — evento customizado com detail, bubbles e composed
 element.dispatchEvent(new CustomEvent('user:updated', {
   detail: { userId: '123', name: 'Alice' },
   bubbles: true,
@@ -122,40 +133,40 @@ element.dispatchEvent(new CustomEvent('user:updated', {
 }))
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Event listeners in constructor | Constructor should not access DOM (rule constructor) |
-| Direct external DOM manipulation | Violates Shadow DOM encapsulation |
-| Complex logic in handler | Extract to helper methods (rule 010) |
-| Non-explicit side effects | Handler should have clear responsibility |
-| Modifying original event | Modifiers should return new value, not mutate |
-| Multiple responsibilities | One handler per action (rule 010) |
+| O que evitar | Razão |
+|--------------|-------|
+| Event listeners no constructor | Constructor não deve acessar DOM (rule constructor) |
+| Manipulação direta de DOM externo | Viola encapsulamento do Shadow DOM |
+| Lógica complexa no handler | Extrair para métodos auxiliares (rule 010) |
+| Efeitos colaterais não-explícitos | Handler deve ter responsabilidade clara |
+| Modificar evento original | Modificadores devem retornar novo valor, não mutar |
+| Múltiplas responsabilidades | Um handler por ação (rule 010) |
 
-## Selectors
+## Seletores
 
-| Type | Description |
+| Tipo | Descrição |
 |------|-------------|
-| Tag | HTML element name |
-| Class | CSS class selector |
-| ID | ID selector |
-| Attribute | Attribute selector |
-| Wildcard | Asterisk for any element |
+| Tag | Nome do elemento HTML |
+| Classe | Seletor de classe CSS |
+| ID | Seletor de ID |
+| Atributo | Seletor de atributo |
+| Wildcard | Asterisco para qualquer elemento |
 
-## Best Practices
+## Melhores Práticas
 
-| Practice | Description |
-|----------|-------------|
-| Use Symbol for handlers | Encapsulate event methods with bracket notation |
-| Combine decorators | Stack multiple decorators when necessary |
-| Modifiers first | Apply modifiers before business logic |
-| Named events | Create constants/enum for custom event names |
-| Structured detail | Use objects with named properties in detail |
+| Prática | Descrição |
+|---------|-------------|
+| Usar Symbol para handlers | Encapsular métodos de evento com bracket notation |
+| Combinar decorators | Empilhar múltiplos decorators quando necessário |
+| Modificadores primeiro | Aplicar modificadores antes da lógica de negócio |
+| Eventos nomeados | Criar constantes/enum para nomes de eventos customizados |
+| Detail estruturado | Usar objetos com propriedades nomeadas em detail |
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each handler has single responsibility, don't mix multiple actions in one handler
-- [013 - Interface Segregation Principle](../../rules/013_principio-segregacao-interfaces.md): events allow communication without direct coupling, components interact via event contracts
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): simple handlers and composable modifiers keep code predictable
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): event handlers should have maximum 15 lines
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada handler tem responsabilidade única, não misturar múltiplas ações em um handler
+- [013 - Princípio de Segregação de Interface](../../rules/013_principio-segregacao-interface.md): eventos permitem comunicação sem acoplamento direto, componentes interagem via contratos de eventos
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): handlers simples e modificadores componíveis mantêm código previsível
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): event handlers devem ter máximo 15 linhas

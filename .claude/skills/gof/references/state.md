@@ -1,24 +1,24 @@
 # State
 
-**Category:** Behavioral
-**Intent:** Allow an object to alter its behavior when its internal state changes, appearing to change its class.
+**Categoria:** Comportamental
+**Intenção:** Permitir que um objeto altere seu comportamento quando seu estado interno muda, parecendo mudar de classe.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- State machines with well-defined transitions
-- Workflows with distinct states (pending, active, completed, cancelled)
-- Objects whose behavior strongly depends on current state
-- To eliminate large blocks of `if/switch` based on state
+- Máquinas de estado com transições bem definidas
+- Workflows com estados distintos (pendente, ativo, concluído, cancelado)
+- Objetos cujo comportamento depende fortemente do estado atual
+- Para eliminar grandes blocos de `if/switch` baseados em estado
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When there are only 2-3 simple states — `if/switch` may be clearer (rule 022 — KISS)
-- When state transitions are rare and class overhead isn't justified
-- When preferring Strategy — State is better for automatic state transitions; Strategy for manual algorithm switching
+- Quando há apenas 2-3 estados simples — `if/switch` pode ser mais claro (rule 022 — KISS)
+- Quando as transições de estado são raras e a sobrecarga de classes não se justifica
+- Quando Strategy é preferível — State é melhor para transições automáticas de estado; Strategy para troca manual de algoritmo
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface OrderState {
@@ -29,12 +29,12 @@ interface OrderState {
 
 class PendingState implements OrderState {
   confirm(order: Order): void { order.setState(new ConfirmedState()) }
-  ship(_: Order): void { throw new Error('Confirm before shipping') }
+  ship(_: Order): void { throw new Error('Confirme antes de enviar') }
   cancel(order: Order): void { order.setState(new CancelledState()) }
 }
 
 class ConfirmedState implements OrderState {
-  confirm(_: Order): void { throw new Error('Order already confirmed') }
+  confirm(_: Order): void { throw new Error('Pedido já confirmado') }
   ship(order: Order): void { order.setState(new ShippedState()) }
   cancel(order: Order): void { order.setState(new CancelledState()) }
 }
@@ -48,19 +48,19 @@ class Order {
 }
 
 class ShippedState implements OrderState {
-  confirm(_: Order): void { throw new Error('Order already shipped') }
-  ship(_: Order): void { throw new Error('Order already shipped') }
-  cancel(_: Order): void { throw new Error('Cannot cancel shipped order') }
+  confirm(_: Order): void { throw new Error('Pedido já enviado') }
+  ship(_: Order): void { throw new Error('Pedido já enviado') }
+  cancel(_: Order): void { throw new Error('Não é possível cancelar pedido enviado') }
 }
 
 class CancelledState implements OrderState {
-  confirm(_: Order): void { throw new Error('Order cancelled') }
-  ship(_: Order): void { throw new Error('Order cancelled') }
-  cancel(_: Order): void { throw new Error('Order already cancelled') }
+  confirm(_: Order): void { throw new Error('Pedido cancelado') }
+  ship(_: Order): void { throw new Error('Pedido cancelado') }
+  cancel(_: Order): void { throw new Error('Pedido já cancelado') }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const order = new Order()
@@ -68,15 +68,15 @@ order.confirm()
 order.ship()
 ```
 
-## Related to
+## Relacionado a
 
-- [strategy.md](strategy.md): complements — State transitions automatically between behaviors; Strategy allows manual algorithm switching
-- [memento.md](memento.md): complements — Memento can save and restore State machine states
-- [rule 002 - Prohibition of ELSE Clause](../../../rules/002_proibicao-clausula-else.md): reinforces — State eliminates if/else based on current state
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new state without modifying existing logic
-- [rule 022 - Prioritization of Simplicity and Clarity](../../../rules/022_priorizacao-simplicidade-clareza.md): reinforces — don't use State for 2-3 simple states where if is clearer
+- [strategy.md](strategy.md): complementa — State realiza transições automaticamente entre comportamentos; Strategy permite troca manual de algoritmo
+- [memento.md](memento.md): complementa — Memento pode salvar e restaurar estados de máquinas State
+- [rule 002 - Proibição da Cláusula ELSE](../../../rules/002_proibicao-clausula-else.md): reforça — State elimina if/else baseados no estado atual
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione novo estado sem modificar a lógica existente
+- [rule 022 - Priorização da Simplicidade e Clareza](../../../rules/022_priorizacao-simplicidade-clareza.md): reforça — não use State para 2-3 estados simples onde if é mais claro
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

@@ -1,51 +1,51 @@
 # Poltergeists
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 065
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 065
 
-## What It Is
+## O Que É
 
-Classes with ephemeral and transitory role: they exist only to pass data between other classes or initialize something, with no real state or significant behavior. They disappear shortly after fulfilling their minimal role, like a poltergeist. Short-lived Middle Men.
+Classes com papel efêmero e transitório: existem apenas para passar dados entre outras classes ou inicializar algo, sem estado real ou comportamento significativo. Desaparecem logo após cumprir seu papel mínimo, como um poltergeist. Middle Men de vida curta.
 
-## Symptoms
+## Sintomas
 
-- Classes/services created only to adapt parameters or format calls and discarded
-- Classes with a single public method, usually called `execute()`, `run()`, or `process()`
-- Classes without attributes (stateless) that only call methods of other classes
-- Controllers that only delegate to a service that only delegates to a repository
-- "Orchestrators" that don't orchestrate anything — just pass calls
-- Constructed objects never stored, never tested, never referenced beyond immediate call
+- Classes/serviços criados apenas para adaptar parâmetros ou formatar chamadas e descartados
+- Classes com um único método público, geralmente chamado `execute()`, `run()` ou `process()`
+- Classes sem atributos (stateless) que apenas chamam métodos de outras classes
+- Controllers que apenas delegam para um service que apenas delega para um repository
+- "Orquestradores" que não orquestram nada — apenas repassam chamadas
+- Objetos construídos nunca armazenados, nunca testados, nunca referenciados além da chamada imediata
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Class that exists only to call another
+// ❌ Classe que existe apenas para chamar outra
 class UserInitializer {
   constructor(userService) {
     this.userService = userService;
   }
   initialize(data) {
-    return this.userService.create(data); // just this
+    return this.userService.create(data); // apenas isso
   }
 }
 
-// Caller needs to instantiate UserInitializer just to reach UserService
+// O chamador precisa instanciar UserInitializer apenas para chegar ao UserService
 const initializer = new UserInitializer(userService);
 initializer.initialize(data);
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Call UserService directly (Inline Class)
+// ✅ Chamar UserService diretamente (Inline Class)
 userService.create(data);
 
-// If the class adds real transformation or validation, then it makes sense to exist
+// Se a classe adicionar transformação ou validação real, então faz sentido existir
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Poltergeist — UserInitializer only delegates to userService.create()
-// TODO: Inline Class — call userService.create() directly
+// FIXME: Poltergeist — UserInitializer apenas delega para userService.create()
+// TODO: Inline Class — chamar userService.create() diretamente
 ```

@@ -1,24 +1,24 @@
 # Abstract Factory
 
-**Category:** Creational
-**Intent:** Provide an interface for creating families of related objects without specifying concrete classes.
+**Categoria:** Criacional
+**Intenção:** Fornecer uma interface para criar famílias de objetos relacionados sem especificar as classes concretas.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- System needs to be independent of how its products are created
-- System should work with multiple families of objects
-- When building UI that needs themes (light/dark) or different platforms
-- When products in a family should be used together
+- O sistema precisa ser independente de como seus produtos são criados
+- O sistema deve funcionar com múltiplas famílias de objetos
+- Ao construir UI que precisa de temas (claro/escuro) ou plataformas diferentes
+- Quando os produtos de uma família devem ser usados em conjunto
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When there's only one product family — Factory Method is sufficient
-- When adding new product types requires changing the entire interface (high cost)
-- For unrelated objects (overengineering — rule 064)
+- Quando há apenas uma família de produtos — Factory Method é suficiente
+- Quando adicionar novos tipos de produto exige mudar toda a interface (alto custo)
+- Para objetos não relacionados (overengineering — rule 064)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Button { render(): string }
@@ -48,22 +48,22 @@ class BootstrapUIFactory implements UIFactory {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const factory: UIFactory = new MaterialUIFactory()
 factory.createButton().render()
 ```
 
-## Related to
+## Relacionado a
 
-- [factory-method.md](factory-method.md): depends — Abstract Factory is composed of Factory Methods
-- [builder.md](builder.md): complements — Builder builds a complex product; Abstract Factory creates families
-- [prototype.md](prototype.md): complements — Prototype can be used within Abstract Factory to create products by cloning
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — clients depend on UIFactory interface, not on concrete classes
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new family without modifying existing clients
+- [factory-method.md](factory-method.md): depende — Abstract Factory é composto de Factory Methods
+- [builder.md](builder.md): complementa — Builder constrói um produto complexo; Abstract Factory cria famílias
+- [prototype.md](prototype.md): complementa — Prototype pode ser usado dentro do Abstract Factory para criar produtos por clonagem
+- [rule 014 - Princípio da Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — clientes dependem da interface UIFactory, não das classes concretas
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione nova família sem modificar clientes existentes
 
 ---
 
-**GoF Category:** Creational
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Criacional
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

@@ -1,6 +1,6 @@
 ---
 name: mixin
-description: Convention for using mixins for behavior composition in Web Components. Use when creating or modifying components that need reusable functionalities, composing behaviors without multiple inheritance, or reviewing code with bloated base classes.
+description: Convenção para uso de mixins para composição de comportamento em Web Components. Use ao criar ou modificar componentes que precisam de funcionalidades reutilizáveis, compor comportamentos sem herança múltipla, ou revisar código com classes base inchadas.
 model: sonnet
 allowed-tools: Read, Write, Edit, Grep, Glob
 metadata:
@@ -10,109 +10,120 @@ metadata:
 
 # Mixin
 
-Convention for using mixins for behavior composition.
+Convenção para uso de mixins para composição de comportamento.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating or modifying components that need reusable functionalities.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar ou modificar Web Components que precisam de funcionalidades reutilizáveis; ao compor comportamentos sem herança múltipla; ao revisar classes base com responsabilidades inchadas |
+| **Prerequisites** | Conhecimento de Web Components (HTMLElement, Shadow DOM); skill `anatomy`; skill `constructor` |
+| **Constraints** | Echo deve estar sempre na cadeia de mixins para o sistema de eventos funcionar; ordem de aplicação importa (direita para esquerda); cada mixin deve ter responsabilidade única (rule 010) |
+| **Scope** | Catálogo de mixins disponíveis (Align, Color, Disabled, Headless, Height, Hidden, Reaval, Width), regras de composição e combinações comuns |
 
-## Principle
+---
 
-| Principle | Description |
+## Quando Usar
+
+Use ao criar ou modificar componentes que precisam de funcionalidades reutilizáveis.
+
+## Princípio
+
+| Princípio | Descrição |
 |-----------|-------------|
-| Composition | Add behaviors through composition, not inheritance |
-| Reuse | Share functionalities between different components |
+| Composição | Adicionar comportamentos através de composição, não herança |
+| Reuso | Compartilhar funcionalidades entre diferentes componentes |
 
-## Available Mixins
+## Mixins Disponíveis
 
-| Mixin | Purpose | Functionality |
-|-------|---------|---------------|
-| Align | Alignment | Controls content alignment |
-| Color | Coloring | Manages component color scheme |
-| Disabled | Disabling | Adds disabled state |
-| Headless | Invisibility | Removes component visualization |
-| Height | Height | Controls vertical dimension |
-| Hidden | Visibility | Manages component visibility |
-| Reaval | Revelation | Auto-scroll behavior |
-| Width | Width | Controls horizontal dimension |
+| Mixin | Propósito | Funcionalidade |
+|-------|---------|----------------|
+| Align | Alinhamento | Controla alinhamento de conteúdo |
+| Color | Coloração | Gerencia esquema de cores do componente |
+| Disabled | Desabilitação | Adiciona estado desabilitado |
+| Headless | Invisibilidade | Remove visualização do componente |
+| Height | Altura | Controla dimensão vertical |
+| Hidden | Visibilidade | Gerencia visibilidade do componente |
+| Reaval | Revelação | Comportamento de auto-scroll |
+| Width | Largura | Controla dimensão horizontal |
 
-## Application
+## Aplicação
 
-| Aspect | Description |
+| Aspecto | Descrição |
 |--------|-------------|
-| Order | Applied from right to left |
-| Base | Always start with base class (HTMLElement or Echo) |
-| Chaining | Wrap classes in logical sequence |
-| Inheritance | Mixin receives class and returns extended class |
+| Ordem | Aplicados da direita para esquerda |
+| Base | Sempre iniciar com classe base (HTMLElement ou Echo) |
+| Encadeamento | Encapsular classes em sequência lógica |
+| Herança | Mixin recebe classe e retorna classe estendida |
 
-## Mixin Categories
+## Categorias de Mixin
 
-| Category | Mixins | Usage |
-|----------|--------|-------|
-| Layout | Width, Height, Align | Dimensioning and positioning |
-| State | Disabled, Hidden | Component state control |
-| Appearance | Color | Visual styling |
-| Behavior | Headless, Reaval | Special functionalities |
+| Categoria | Mixins | Uso |
+|----------|--------|-----|
+| Layout | Width, Height, Align | Dimensionamento e posicionamento |
+| Estado | Disabled, Hidden | Controle de estado do componente |
+| Aparência | Color | Estilização visual |
+| Comportamento | Headless, Reaval | Funcionalidades especiais |
 
-## Mixin Selection
+## Seleção de Mixin
 
-| Need | Recommended Mixin |
-|------|-------------------|
-| Responsive width control | Width |
-| Responsive height control | Height |
-| Disable interaction | Disabled |
-| Hide component | Hidden |
-| Remove rendering | Headless |
-| Apply color theme | Color |
-| Align content | Align |
-| Auto-scroll on reveal | Reaval |
+| Necessidade | Mixin Recomendado |
+|-------------|-------------------|
+| Controle responsivo de largura | Width |
+| Controle responsivo de altura | Height |
+| Desabilitar interação | Disabled |
+| Esconder componente | Hidden |
+| Remover renderização | Headless |
+| Aplicar tema de cor | Color |
+| Alinhar conteúdo | Align |
+| Auto-scroll ao revelar | Reaval |
 
-## Rules
+## Regras
 
-| Rule | Description |
-|------|-------------|
-| Echo required | Echo must be in chain for events to work |
-| Order matters | Application follows right-to-left order |
-| Private fields | Mixins use private fields for internal state |
-| Getters/Setters | Properties exposed via getter/setter |
-| AttributeChanged | Sync with HTML attributes |
-| Internals | Mixins can use Custom Element internals |
+| Regra | Descrição |
+|-------|-------------|
+| Echo obrigatório | Echo deve estar na cadeia para eventos funcionarem |
+| Ordem importa | Aplicação segue ordem direita-para-esquerda |
+| Campos privados | Mixins usam campos privados para estado interno |
+| Getters/Setters | Propriedades expostas via getter/setter |
+| AttributeChanged | Sincronização com atributos HTML |
+| Internals | Mixins podem usar Custom Element internals |
 
-## Common Combinations
+## Combinações Comuns
 
-| Component Type | Suggested Combination |
-|----------------|----------------------|
-| Interactive button | Disabled, Width, Hidden, Echo |
-| Styled text | Color, Align, Hidden, Echo |
-| Layout container | Width, Height, Hidden, Echo |
-| Invisible component | Headless, Echo |
-| Responsive card | Width, Hidden, Echo |
+| Tipo de Componente | Combinação Sugerida |
+|--------------------|---------------------|
+| Botão interativo | Disabled, Width, Hidden, Echo |
+| Texto estilizado | Color, Align, Hidden, Echo |
+| Container de layout | Width, Height, Hidden, Echo |
+| Componente invisível | Headless, Echo |
+| Card responsivo | Width, Hidden, Echo |
 
-## Mixin Characteristics
+## Características de Mixin
 
-| Characteristic | Description |
+| Característica | Descrição |
 |----------------|-------------|
-| Non-invasive | Don't modify existing behavior |
-| Composable | Can be freely combined |
-| Isolated | Each mixin has single responsibility |
-| Reactive | Respond to attribute changes |
-| Testable | Can be tested in isolation |
+| Não-invasivo | Não modifica comportamento existente |
+| Componível | Podem ser livremente combinados |
+| Isolado | Cada mixin tem responsabilidade única |
+| Reativo | Respondem a mudanças de atributos |
+| Testável | Podem ser testados isoladamente |
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Bad — inheritance for reuse (coupling)
+// ❌ Bad — herança para reuso (acoplamento)
 class LoggingBase {
   log(msg: string) { console.log(msg) }
 }
 class ValidationBase extends LoggingBase {
   validate(v: unknown) { /* ... */ }
 }
-class UserComponent extends ValidationBase { /* inherits everything */ }
+class UserComponent extends ValidationBase { /* herda tudo */ }
 
-// ✅ Good — Mixin for composition without inheritance
+// ✅ Good — Mixin para composição sem herança
 const WithLogging = (Base: typeof HTMLElement) => class extends Base {
   log(msg: string) { console.log(`[${this.tagName}]`, msg) }
 }
@@ -121,22 +132,22 @@ const WithValidation = (Base: typeof HTMLElement) => class extends Base {
 }
 
 class UserComponent extends WithValidation(WithLogging(HTMLElement)) {
-  // composes only what it needs
+  // compõe apenas o que precisa
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Mixin without Echo in chain | Echo is required for event system to work |
-| Incorrect application order | Order matters, remember it applies right-to-left |
-| Mixin with multiple responsibilities | Each mixin should have single responsibility (rule 010) |
-| Duplicate mixin logic | Use existing mixins instead of recreating behavior (rule 021) |
-| Mixins with coupling | Mixins should be independent and composable |
+| O que evitar | Razão |
+|--------------|-------|
+| Mixin sem Echo na cadeia | Echo é necessário para sistema de eventos funcionar |
+| Ordem incorreta de aplicação | Ordem importa, lembrar que aplica direita-para-esquerda |
+| Mixin com múltiplas responsabilidades | Cada mixin deve ter responsabilidade única (rule 010) |
+| Duplicar lógica de mixin | Usar mixins existentes ao invés de recriar comportamento (rule 021) |
+| Mixins com acoplamento | Mixins devem ser independentes e componíveis |
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each mixin has single responsibility
-- [016 - Common Closure Principle](../../rules/016_principio-fechamento-comum.md): related behaviors encapsulated together
-- [021 - Prohibition of Logic Duplication](../../rules/021_proibicao-duplicacao-logica.md): mixins eliminate behavior duplication
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada mixin tem responsabilidade única
+- [016 - Princípio do Fechamento Comum](../../rules/016_principio-fechamento-comum.md): comportamentos relacionados encapsulados juntos
+- [021 - Proibição da Duplicação de Lógica](../../rules/021_proibicao-duplicacao-logica.md): mixins eliminam duplicação de comportamento

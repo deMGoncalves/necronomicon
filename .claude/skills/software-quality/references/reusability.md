@@ -1,26 +1,26 @@
 # Reusability — Reusabilidade
 
-**Dimension:** Transition
-**Default Severity:** 🟠 Important
-**Key Question:** Can it be used in another context?
+**Dimensão:** Transição
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** Pode ser usado em outro contexto?
 
-## What It Is
+## O que é
 
-The degree to which a module or component can be reused in other systems or contexts beyond the one for which it was originally developed. High reusability means components are generic, well documented, and have clear interfaces.
+O grau em que um módulo ou componente pode ser reutilizado em outros sistemas ou contextos além daquele para o qual foi originalmente desenvolvido. Alta reusabilidade significa que os componentes são genéricos, bem documentados e possuem interfaces claras.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Duplicated business logic | 🟠 Important |
-| Utility coupled to domain | 🟠 Important |
-| Too specific UI component | 🟡 Suggestion |
-| Context-specific naming | 🟡 Suggestion |
+| Lógica de negócio duplicada | 🟠 Importante |
+| Utilitário acoplado ao domínio | 🟠 Importante |
+| Componente de UI muito específico | 🟡 Sugestão |
+| Nomenclatura específica de contexto | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not reusable - duplicated logic
+// ❌ Não reutilizável - lógica duplicada
 // file1.js
 function validateUserEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,7 +33,7 @@ function checkEmailFormat(email) {
   return emailRegex.test(email);
 }
 
-// ✅ Reusable - single shared function
+// ✅ Reutilizável - função única compartilhada
 // shared/validators.js
 export function isValidEmail(email) {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,24 +41,24 @@ export function isValidEmail(email) {
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// DRY(021): This logic is duplicated in another file
-// REUSE: Component too specific - generalize
+// DRY(021): Esta lógica está duplicada em outro arquivo
+// REUSE: Componente muito específico - generalizar
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Duplicated business logic | 🟠 Important |
-| Utility coupled to domain | 🟠 Important |
-| Too specific UI component | 🟡 Suggestion |
-| Context-specific naming | 🟡 Suggestion |
+| Lógica de negócio duplicada | 🟠 Importante |
+| Utilitário acoplado ao domínio | 🟠 Importante |
+| Componente de UI muito específico | 🟡 Sugestão |
+| Nomenclatura específica de contexto | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 021 - Prohibition of Logic Duplication
-- 003 - Primitive Encapsulation
-- 010 - Single Responsibility Principle
+- 021 - Proibição da Duplicação de Lógica
+- 003 - Encapsulamento de Primitivos
+- 010 - Princípio da Responsabilidade Única

@@ -1,45 +1,45 @@
-# Factor 03 — Config
+# Fator 03 — Config
 
-**deMGoncalves Rule:** [042 - Config via Environment](../../../rules/042_configuracoes-via-ambiente.md)
-**Question:** Configurations in env vars (not hardcoded)?
+**Regra deMGoncalves:** [042 - Configurações via Ambiente](../../../rules/042_configuracoes-via-ambiente.md)
+**Questão:** Configurações em variáveis de ambiente (não hardcoded)?
 
-## What It Is
+## O que é
 
-All configurations that vary between environments (*deploy*) must be stored in **environment variables**, not in versioned configuration files or hardcoded in code. This includes credentials, service URLs, and feature flags.
+Todas as configurações que variam entre ambientes (*deploy*) devem ser armazenadas em **variáveis de ambiente**, não em arquivos de configuração versionados ou hardcoded no código. Isso inclui credenciais, URLs de serviços e feature flags.
 
-**Hardcoded config = leak risk + inflexible deploys.**
+**Config hardcoded = risco de vazamento + deploys inflexíveis.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] Credentials (API keys, passwords, tokens) accessed **exclusively** via `process.env`
-- [ ] Zero `.env` files with real values versioned (only `.env.example`)
-- [ ] Code works with zero environment-specific config files in repository
+- [ ] Credenciais (API keys, senhas, tokens) acessadas **exclusivamente** via `process.env`
+- [ ] Zero arquivos `.env` com valores reais versionados (apenas `.env.example`)
+- [ ] Código funciona com zero arquivos de configuração específicos de ambiente no repositório
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Hardcoded credential ❌
+// Credencial hardcoded ❌
 const stripeKey = "sk_live_REDACTED_EXAMPLE";
 
-// Hardcoded URL ❌
+// URL hardcoded ❌
 const apiUrl = "https://api.production.com";
 
-// Versioned .env with secrets ❌
-git add .env  # contains API_KEY=sk_live_...
+// .env com secrets versionado ❌
+git add .env  # contém API_KEY=sk_live_...
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Config via env vars ✅
+// Config via variáveis de ambiente ✅
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const apiUrl = process.env.API_BASE_URL;
 
 if (!stripeKey) {
-  throw new Error('STRIPE_SECRET_KEY not configured');
+  throw new Error('STRIPE_SECRET_KEY não configurada');
 }
 
-// Versioned .env.example (template only)
+// .env.example versionado (apenas template)
 # .env.example
 STRIPE_SECRET_KEY=sk_test_your_key_here
 API_BASE_URL=https://api.staging.com
@@ -49,9 +49,9 @@ API_BASE_URL=https://api.staging.com
 .env.local
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: API key hardcoded — move to process.env.SENDGRID_API_KEY
+// FIXME: API key hardcoded — mover para process.env.SENDGRID_API_KEY
 const sendgridKey = "SG.abc123...";
 ```

@@ -1,41 +1,44 @@
-# oh my claude — Workflow Reference
+# Referência de Workflow
 
-Personal AI-assisted development workflow encoded into agents, rules and skills for [Claude Code](https://code.claude.com). This file documents how `.claude/` works.
+Fluxo de trabalho pessoal de desenvolvimento assistido por IA codificado em agentes, regras e skills para [Claude Code](https://code.claude.com). Este arquivo documenta como `.claude/` funciona.
 
 ---
 
-## Structure
+## Estrutura
 
 ```
 .claude/
-├── CLAUDE.md          ← central hub (loaded automatically by Claude Code)
-├── GRAPH.md           ← dependency map between rules, skills and agents (Mermaid)
-├── agents/            ← 5 specialized agents
-├── skills/            ← 35 skills (code + architecture + quality)
-├── rules/             ← 70 architectural rules (001–070)
-├── commands/          ← 6 workflow commands
-├── hooks/             ← 3 automatic hooks
-└── settings.json      ← permissions + hooks configuration
+├── CLAUDE.md          ← hub central (carregado automaticamente pelo Claude Code)
+├── GRAPH.md           ← mapa de dependências entre regras, skills e agentes (Mermaid)
+├── agents/            ← 6 agentes especializados
+├── skills/            ← 35 skills (código + arquitetura + qualidade)
+├── rules/             ← 70 regras arquiteturais (001–070)
+├── commands/          ← 6 comandos de workflow
+├── hooks/             ← hooks automáticos (prompt, lint, security, guard, loop, telemetry)
+├── telemetry/         ← traces JSON (sessions.jsonl, intent.jsonl)
+└── settings.json      ← permissões + configuração de hooks
 
-changes/               ← persistent feature context (created per feature/task)
+changes/               ← contexto persistente de features (criado por feature/task)
 └── 00X_feature-name/
-    ├── PRD.md         ← (Feature only) requirements + business rules
-    ├── design.md      ← (Feature only) technical decisions + patterns
-    ├── specs.md       ← (Task + Feature) interfaces + acceptance criteria
-    └── tasks.md       ← T-001…T-NNN + attempt counters
+    ├── PRD.md         ← (somente Feature) requisitos + regras de negócio
+    ├── design.md      ← (somente Feature) decisões técnicas + padrões
+    ├── design-spec.md ← (somente UI) especificação de componente + tokens
+    ├── specs.md       ← (Task + Feature) interfaces + critérios de aceitação
+    ├── findings.md    ← (somente Research) relatório de investigação
+    └── tasks.md       ← T-001…T-NNN + contadores de tentativas
 
-docs/                  ← synced architectural documentation
-├── arc42/             ← 12 architectural sections
-├── c4/                ← 4 abstraction levels
+docs/                  ← documentação arquitetural sincronizada
+├── arc42/             ← 12 seções arquiteturais
+├── c4/                ← 4 níveis de abstração
 ├── adr/               ← Architecture Decision Records
-└── bdd/               ← Gherkin features
+└── bdd/               ← features Gherkin
 ```
 
 ---
 
-## Architecture
+## Arquitetura
 
-### Components and connections
+### Componentes e conexões
 
 ```
  ┌──────────────────────────────────────────────────────────────┐
@@ -44,17 +47,17 @@ docs/                  ← synced architectural documentation
  │  ┌──────────────┐  ┌────────────────┐  ┌─────────────────┐   │
  │  │   hooks/     │  │   commands/    │  │    agents/      │   │
  │  │              │  │                │  │                 │   │
- │  │ prompt.sh    │  │  /start        │  │  🔵 @leader     │   │
- │  │ ↳ mode hint  │  │  /status       │  │  🟢 @architect  │   │
- │  │              │  │  /audit        │  │  🟡 @developer  │   │
+ │  │ prompt.sh    │  │  /start        │  │  🔵 @planner    │   │
+ │  │ ↳ hint modo  │  │  /status       │  │  🟢 @architect  │   │
+ │  │              │  │  /audit        │  │  🟡 @coder      │   │
  │  │ lint.sh      │  │  /docs         │  │  🔴 @tester     │   │
- │  │ ↳ biome fmt  │  │  /ship  /sync  │  │  🟣 @reviewer   │   │
- │  │              │  │                │  │                 │   │
+ │  │ ↳ biome fmt  │  │  /ship  /sync  │  │  🩵 @designer   │   │
+ │  │              │  │                │  │  🟣 @deepdive   │   │
  │  │ loop.sh      │  └────────────────┘  └────────┬────────┘   │
  │  │ ↳ tasks.md   │                               │            │
  │  └──────┬───────┘                               │            │
  │         └───────────────────────────────────────┘            │
- │                              │ load                          │
+ │                              │ carrega                       │
  │  ┌───────────────────────────▼───────────────────────────┐   │
  │  │   skills/ (35)                    rules/ (70)         │   │
  │  │                                                       │   │
@@ -65,25 +68,25 @@ docs/                  ← synced architectural documentation
  └──────────────────────────────────────────────────────────────┘
 ```
 
-### Task flow
+### Fluxo de tarefas
 
 ```
-  user input
+  entrada do usuário
        │
-  ┌────▼──────────────────────────────────────────┐
-  │ prompt.sh — detects action verb → injects mode │
-  └────┬──────────────────────────────────────────┘
+  ┌────▼───────────────────────────────────────────┐
+  │ prompt.sh — detecta verbo de ação → injeta modo │
+  └────┬───────────────────────────────────────────┘
        │
   ┌────▼─────────────────────────────────────────────────┐
-  │                  🔵 @leader                          │
-  │         classifies → Quick / Task / Feature          │
+  │               Tech Lead (Claude Code)                │
+  │   classifica → Quick / Task / Feature / Research / UI│
   └────┬─────────────────────┬──────────────┬────────────┘
        │                     │              │
     Quick                  Task          Feature
        │                     │              │
        │              ┌──────▼──────┐  ┌───▼──────────────┐
        │              │ 🟢 @arch    │  │   🟢 @architect   │
-       │              │ light specs │  │ PRD+design+specs │
+       │              │ specs leves │  │ PRD+design+specs │
        │              └──────┬──────┘  └───┬──────────────┘
        │                     │             │
        └─────────────────────┴─────────────┘
@@ -91,294 +94,335 @@ docs/                  ← synced architectural documentation
                   src/[context]/[container]/[component]/
                              │
   ┌──────────────────────────▼────────────────────────────┐
-  │ 🟡 @developer — controller · service · model · repo   │
+  │ 🟡 @coder — controller · service · model · repo       │
   └──────────────────────────┬────────────────────────────┘
-                  [lint.sh → biome format on each Write]
+                  [lint.sh → biome format a cada Write]
   ┌──────────────────────────▼────────────────────────────┐
-  │ 🔴 @tester — bun test --coverage  ≥ 85% domain        │
+  │ 🔴 @tester — bun test --coverage  ≥ 85% domínio       │
   └──────────────────────────┬────────────────────────────┘
   ┌──────────────────────────▼────────────────────────────┐
-  │ 🟣 @reviewer — ICP · 70 rules · security              │
-  │               educational codetags in code            │
+  │ 🟢 @architect (review) — ICP · 70 regras · segurança  │
+  │                          codetags educacionais        │
   └────────────┬─────────────────────────┬────────────────┘
                │                         │
-         ✅ Approved              ❌ Rejected
-               │                    ↩ @developer (up to 3x)
-  [loop.sh checks tasks.md · blocks if - [ ] exists]
+         ✅ Aprovado               ❌ Rejeitado
+               │                    ↩ @coder (até 3x)
+  [loop.sh verifica tasks.md · bloqueia se - [ ] existe]
 ```
 
 ---
 
-## How it works
+## Como funciona
 
-Every development request goes through `@leader`, which **classifies the request into one of 3 modes before acting**:
+Toda solicitação de desenvolvimento é classificada pelo Tech Lead **antes de qualquer ação**:
 
-### Quick Mode — 🟡 @developer direct
+### Modo Quick — 🟡 @coder direto
 
-For point changes in ≤ 2 files without new domain entity.
+Para mudanças pontuais em ≤ 2 arquivos sem nova entidade de domínio.
 
 ```
-"fix typo in UserController"
-"remove console.log from src/"
-"adjust timeout from 30s to 60s"
+"corrigir typo no UserController"
+"remover console.log de src/"
+"ajustar timeout de 30s para 60s"
     ↓
-🟡 @developer → 🔴 @tester → 🟣 @reviewer → Done
+🟡 @coder → 🔴 @tester → 🟢 @architect review → Pronto
 ```
 
-### Task Mode — light specs + Code
+### Modo Task — specs leves + Code
 
-For new interface contract, clear scope, without architectural uncertainty.
+Para novo contrato de interface, escopo claro, sem incerteza arquitetural.
 
 ```
-"add endpoint POST /users/:id/roles"
-"integrate SendGrid in registration flow"
+"adicionar endpoint POST /users/:id/roles"
+"integrar SendGrid no fluxo de registro"
     ↓
 changes/00X/ + 🟢 @architect specs.md
     ↓
-🟡 @developer → 🔴 @tester → 🟣 @reviewer → Done
+🟡 @coder → 🔴 @tester → 🟢 @architect review → Pronto
 ```
 
-### Feature Mode — Full Spec Flow
+### Modo Feature — Fluxo Full Spec
 
-For new domain entity, technical uncertainty, broad architectural impact.
+Para nova entidade de domínio, incerteza técnica, impacto arquitetural amplo.
 
 ```
-"implement OAuth2 authentication with Google"
-"create billing module with Stripe"
+"implementar autenticação OAuth2 com Google"
+"criar módulo de cobrança com Stripe"
     ↓
-Phase 1: 🟢 @architect Research (PRD + design + specs)
-Phase 2: 🔵 @leader creates tasks.md
-Phase 3: 🟡 @developer → 🔴 @tester → 🟣 @reviewer (loops ≤ 3x)
-Phase 4: 🟢 @architect Docs Sync (arc42, c4, adr, bdd)
+Fase 1: 🔵 @planner cria tasks.md + PRD
+Fase 2: 🟢 @architect cria specs.md + design.md
+Fase 3: 🟡 @coder → 🔴 @tester → 🟢 @architect review (loops ≤ 3x)
+Fase 4: 🟢 @architect Docs Sync (arc42, c4, adr, bdd)
 ```
 
-### Feedback loop (Phase 3)
+### Loop de feedback (Fase 3)
 
 ```
-🟡 @developer → 🔴 @tester ──(failed ≤3x)──→ 🟡 @developer
-                      │
-                   (passed)
-                      ↓
-              🟣 @reviewer ──(rejected ≤3x)──→ 🟡 @developer
-                      │                                │
-                  (approved)            (attempts-developer ≥ 3)
-                      ↓                                ↓
-              🔵 @leader finalizes          🔵 @leader → Re-Spec
-             (Docs if Feature)         (🟢 @architect revises specs.md)
+🟡 @coder → 🔴 @tester ──(falhou ≤3x)──→ 🟡 @coder
+                  │
+               (passou)
+                  ↓
+        🟢 @architect review ──(rejeitado ≤3x)──→ 🟡 @coder
+                  │                                    │
+              (aprovado)              (attempts-coder ≥ 3)
+                  ↓                                    ↓
+          Tech Lead finaliza             Tech Lead → Re-Spec
+         (Docs se Feature)          (🟢 @architect revisa specs.md)
 ```
 
 ---
 
-## Agents
+## Agentes
 
-| Agent        | Model  | Role                                                                            |
+| Agente       | Modelo | Papel                                                                           |
 | ------------ | ------ | ------------------------------------------------------------------------------- |
-| `@leader`    | opus   | Classifies Quick/Task/Feature, orchestrates phases, manages re-spec             |
-| `@architect` | opus   | Full Research (PRD+design+specs) or light specs — maintains docs/               |
-| `@developer` | sonnet | Implements via specs.md or direct request (Quick)                               |
-| `@tester`    | sonnet | Generates and runs tests — `bun test --coverage` — coverage ≥85% domain         |
-| `@reviewer`  | opus   | CDD/ICP + 70 rules + security (ApplicationSecurityMCP) — annotates via codetags |
+| `@planner`   | opus   | Classifica + decompõe + cria `changes/` — orquestra sequência de agentes        |
+| `@architect` | opus   | Specs técnicas (interfaces, padrões) + docs sync + revisão arquitetural (CDD/ICP)|
+| `@designer`  | sonnet | Specs de UI/UX + design tokens + acessibilidade (WCAG) + Storybook              |
+| `@coder`     | sonnet | Implementa via specs.md ou pedido direto (Quick) — aplica 70 regras             |
+| `@tester`    | sonnet | Avaliador: gera testes + executa + emite pass/fail — cobertura ≥85% domínio     |
+| `@deepdive`  | opus   | Investigação profunda — bugs, performance, segurança, pesquisa de tecnologia    |
 
-### Anti-goals (what each agent does NOT do)
+### Anti-goals (o que cada agente NÃO faz)
 
-| Agent        | Does not                                                              |
-| ------------ | --------------------------------------------------------------------- |
-| `@leader`    | Write code, create tests, do review, create architectural docs        |
-| `@architect` | Implement code, run tests, do functional review                       |
-| `@developer` | Decide architecture/patterns, create specs, do CDD/ICP review         |
-| `@tester`    | Change production code, do architectural review                       |
-| `@reviewer`  | Implement code, create tests, sync docs                               |
+| Agente       | Não faz                                                              |
+| ------------ | -------------------------------------------------------------------- |
+| `@planner`   | Escrever código, criar specs técnicas, testar, investigar            |
+| `@architect` | Implementar código, executar testes, gerenciar workflow              |
+| `@designer`  | Escrever produção, decidir arquitetura técnica, executar testes      |
+| `@coder`     | Decidir arquitetura/padrões, criar specs, fazer review CDD/ICP       |
+| `@tester`    | Alterar código de produção, fazer revisão arquitetural               |
+| `@deepdive`  | Implementar código, criar planos, tomar decisões de implementação    |
 
-Full system prompts in `agents/`.
-
----
-
-## Commands
-
-| Command                              | When to use                                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------- |
-| `/start [feature-name]`              | Initializes `changes/00X_name/` with PRD, design, specs and tasks templates |
-| `/status`                            | Dashboard: features in progress, completed tasks, current phase, counters   |
-| `/audit [branch\|pr <n>\|src/path]`  | Full code review via @reviewer — posts result directly to PRs               |
-| `/docs [src/path]`                   | Syncs `docs/` (arc42, c4, adr, bdd) — works without Spec Flow              |
-| `/ship`                              | Prepares Conventional Commits commit and pushes to remote                   |
-| `/sync`                              | Updates branch with latest changes from remote repository                   |
-
-Full prompts in `commands/`.
+Prompts completos de sistema em `agents/`.
 
 ---
 
-## Automatic hooks
+## Comandos
 
-The 3 hooks form an automatic chain — execute without any manual invocation:
+| Comando                             | Quando usar                                                                      |
+| ----------------------------------- | -------------------------------------------------------------------------------- |
+| `/start [feature-name]`             | Inicializa `changes/00X_name/` com templates de PRD, design, specs e tasks      |
+| `/status`                           | Dashboard: features em andamento, tarefas concluídas, fase atual, contadores    |
+| `/audit [branch\|pr <n>\|src/path]` | Revisão completa de código via @architect (review) — posta resultado diretamente em PRs   |
+| `/docs [src/path]`                  | Sincroniza `docs/` (arc42, c4, adr, bdd) — funciona sem Spec Flow               |
+| `/ship`                             | Prepara commit Conventional Commits e empurra para remote                       |
+| `/sync`                             | Atualiza branch com últimas mudanças do repositório remoto                      |
+
+Prompts completos em `commands/`.
+
+---
+
+## Hooks automáticos
+
+Os hooks formam uma cadeia automática — executam sem qualquer invocação manual:
 
 ```
-User types something
+Usuário digita algo
     ↓
 [1] prompt.sh ← UserPromptSubmit
-    Detects if dev task → injects mode hint for @leader
+    Detecta se é tarefa dev → injeta hint de modo para o Tech Lead
+    Registra intent em .claude/telemetry/intent.jsonl
 
-Claude responds, writes/edits files
+Claude responde, escreve/edita arquivos
     ↓
-[2] lint.sh ← PostToolUse (Write|Edit|NotebookEdit)
-    Auto-formats with biome entire .ts/.tsx/.js/.jsx/.json file
+[2] lint.sh | security.sh | guard.sh ← PostToolUse (Write|Edit|NotebookEdit)
+    lint.sh      → auto-formata arquivos .ts/.tsx/.js/.jsx/.json
+    security.sh  → bloqueia se credencial hardcoded for detectada
+    guard.sh     → bloqueia se violação de regra 🔴 Crítica for detectada
 
-Claude finishes responding
+Claude termina de responder
     ↓
-[3] loop.sh ← Stop
-    Checks tasks.md — blocks if pending tasks exist ( - [ ] )
+[3] loop.sh → telemetry.sh ← Stop
+    loop.sh       → verifica tasks.md — bloqueia se existir - [ ] pendente
+    telemetry.sh  → registra trace JSON em .claude/telemetry/sessions.jsonl
 ```
 
-### Details of each hook
+### Detalhes de cada hook
 
-**`prompt.sh` — Mode routing**
+**`prompt.sh` — Roteamento de modo**
 
-Detects action verbs in the user prompt and injects a mode hint into the system prompt so `@leader` classifies before acting:
+Detecta verbos de ação no prompt do usuário e injeta um hint de modo no system prompt para que o Tech Lead classifique antes de agir:
 
 ```bash
-"create endpoint POST /users"    → hint: Task Mode
-"implement OAuth2"               → hint: Feature Mode
-"fix typo in controller"         → hint: Quick Mode
+"criar endpoint POST /users"    → hint: Modo Task
+"implementar OAuth2"             → hint: Modo Feature
+"corrigir typo no controller"   → hint: Modo Quick
 
-# Does NOT trigger (conceptual questions are ignored)
-"what is SOLID principle?"
-"how does @reviewer work?"
+# NÃO dispara (perguntas conceituais são ignoradas)
+"o que é princípio SOLID?"
+"como funciona @reviewer?"
 ```
 
-**`lint.sh` — Automatic formatting**
+**`lint.sh` — Formatação automática**
 
-Runs `bunx biome check --write` on every file written or edited. Covered extensions: `.ts` `.tsx` `.js` `.jsx` `.json`.
+Executa `bunx biome check --write` em todo arquivo escrito ou editado. Extensões cobertas: `.ts` `.tsx` `.js` `.jsx` `.json`.
 
-**`loop.sh` — Workflow guardian**
+**`loop.sh` — Guardião do workflow**
 
-Searches `changes/*/tasks.md` for unchecked items (`- [ ]`). If any exist, blocks the response and returns to `@leader` to continue.
+Busca `changes/*/tasks.md` por itens não marcados (`- [ ]`). Se algum existir, bloqueia a resposta e retorna ao `@leader` para continuar.
 
 ```bash
-# Escape hatch — use if the workflow gets stuck:
+# Escape hatch — usar se o workflow ficar travado:
 touch .claude/.loop-skip
-rm .claude/.loop-skip  # remove after resolving
+rm .claude/.loop-skip  # remover após resolver
 ```
 
-| Event                                        | Hook        | File                      |
-| -------------------------------------------- | ----------- | ------------------------- |
-| `PostToolUse` — `Write\|Edit\|NotebookEdit`  | `lint.sh`   | `.claude/hooks/lint.sh`   |
-| `Stop`                                       | `loop.sh`   | `.claude/hooks/loop.sh`   |
-| `UserPromptSubmit`                           | `prompt.sh` | `.claude/hooks/prompt.sh` |
+| Evento                                      | Hook           | Objetivo                                                                                                             |
+| ------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `UserPromptSubmit`                          | `prompt.sh`    | Injeta hint de modo (Quick/Task/Feature/Research/UI) + registra intent em `.claude/telemetry/intent.jsonl`           |
+| `PostToolUse` — `Write\|Edit\|NotebookEdit` | `lint.sh`      | Auto-formata arquivos `.ts/.tsx/.js/.jsx/.json` com `bunx biome check --write`                                       |
+| `PostToolUse` — `Write\|Edit\|NotebookEdit` | `security.sh`  | Bloqueia escrita se credencial hardcoded for detectada                                                               |
+| `PostToolUse` — `Write\|Edit\|NotebookEdit` | `guard.sh`     | Bloqueia escrita se violação de regra 🔴 Crítica for detectada                                                       |
+| `Stop`                                      | `loop.sh`      | Bloqueia encerramento se existir `- [ ]` pendente em `changes/*/tasks.md` + exibe contadores                         |
+| `Stop`                                      | `telemetry.sh` | Registra trace JSON (session_id, mode, tasks, attempts, violations) em `.claude/telemetry/sessions.jsonl`            |
 
 ---
 
-## Rules (70)
+## Regras (70)
 
-Architectural rules organized by category. Each rule has: definition, objective criteria, exceptions, how to detect (manual + automatic) and bidirectional cross-references.
+Regras arquiteturais organizadas por categoria. Cada regra tem: definição, critérios objetivos, exceções, como detectar (manual + automático) e referências cruzadas bidirecionais.
 
-| Category            | IDs     | Source                         |
+| Categoria           | IDs     | Fonte                          |
 | ------------------- | ------- | ------------------------------ |
 | Object Calisthenics | 001–009 | Jeff Bay                       |
 | SOLID               | 010–014 | Uncle Bob                      |
 | Package Principles  | 015–020 | Uncle Bob                      |
-| Clean Code          | 021–039 | Clean Code + general practices |
+| Clean Code          | 021–039 | Clean Code + práticas gerais   |
 | Twelve-Factor       | 040–051 | 12factor.net                   |
 | Anti-Patterns       | 052–070 | Fowler + Brown                 |
 
-**Severity:** 🔴 blocks PR · 🟠 requires justification · 🟡 improvement expected
+**Severidade:** 🔴 bloqueia PR · 🟠 requer justificativa · 🟡 melhoria esperada
 
-**Next available ID:** `071`
+**Próximo ID disponível:** `071`
 
-Full rules in `rules/`.
+Regras completas em `rules/`.
 
 ---
 
 ## Skills (35)
 
-Knowledge modules agents load on demand. Follow the **Progressive Disclosure** principle: `SKILL.md` is the lightweight index; details are in `references/`.
+Módulos de conhecimento que agentes carregam sob demanda. Seguem o princípio de **Progressive Disclosure** em 3 níveis — o runtime carrega apenas o necessário a cada etapa:
 
-| Group               | Skills                                                                                             |
-| ------------------- | -------------------------------------------------------------------------------------------------- |
-| Class structure     | anatomy, constructor, bracket                                                                      |
-| Members             | getter, setter, method                                                                             |
-| Behavior            | event, dataflow, render, state                                                                     |
-| Data                | enum, token, alphabetical                                                                          |
-| Organization        | colocation, revelation, story                                                                      |
-| Composition         | mixin, complexity                                                                                  |
-| Performance         | big-o                                                                                              |
-| Annotation          | **codetags** (16 documented tags)                                                                  |
-| OOP Principles      | **object-calisthenics** (9 rules), **solid** (5 principles), **package-principles** (6 principles) |
-| Code Practices      | **clean-code** (rules 021–039)                                                                     |
-| Methodology         | **cdd** (Cognitive-Driven Development — ICP = CC_base + Nesting + Responsibilities + Coupling)     |
-| Infrastructure      | **twelve-factor** (12 factors)                                                                     |
-| Design Patterns     | **gof** (23 patterns), **poeaa** (51 patterns)                                                     |
-| Documentation       | **arc42** (12 sections), **c4model** (4 levels), **adr**, **bdd**                                  |
-| Quality             | **software-quality** (McCall Model — 12 factors)                                                   |
-| Frontend            | **react** (patterns + 2026 rendering strategies)                                                   |
-| Anti-Patterns       | **anti-patterns** (26 cataloged patterns)                                                          |
+| Nível | Conteúdo                                                                 | Quando é carregado                                                    |
+| ----- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| 1     | Frontmatter YAML (`name` + `description`)                                | Discovery — runtime varre todos os skills para indexação              |
+| 2     | Seção `## Manifest` (applicability, prerequisites, constraints, scope)   | Candidato — skill foi selecionado como potencialmente relevante       |
+| 3     | Arquivos em `references/`                                                 | Ativo — skill está em uso efetivo durante a execução                  |
 
-Full skills in `skills/`.
+Exemplos do padrão nível 2: `skills/clean-code/SKILL.md` e `skills/colocation/SKILL.md` declaram `## Manifest` para expor ao runtime quando o detalhe em `references/` vale ser carregado.
+
+| Grupo           | Skills                                                                                             |
+| --------------- | -------------------------------------------------------------------------------------------------- |
+| Estrutura de classe | anatomy, constructor, bracket                                                                  |
+| Membros         | getter, setter, method                                                                             |
+| Comportamento   | event, dataflow, render, state                                                                     |
+| Dados           | enum, token, alphabetical                                                                          |
+| Organização     | colocation, revelation, story                                                                      |
+| Composição      | mixin, complexity                                                                                  |
+| Performance     | big-o                                                                                              |
+| Anotação        | **codetags** (16 tags documentadas)                                                                |
+| Princípios OOP  | **object-calisthenics** (9 regras), **solid** (5 princípios), **package-principles** (6 princípios) |
+| Práticas de código | **clean-code** (regras 021–039)                                                                 |
+| Metodologia     | **cdd** (Cognitive-Driven Development — ICP = CC_base + Nesting + Responsibilities + Coupling)     |
+| Infraestrutura  | **twelve-factor** (12 fatores)                                                                     |
+| Padrões de design | **gof** (23 padrões), **poeaa** (51 padrões)                                                    |
+| Documentação    | **arc42** (12 seções), **c4model** (4 níveis), **adr**, **bdd**                                   |
+| Qualidade       | **software-quality** (Modelo McCall — 12 fatores)                                                  |
+| Frontend        | **react** (padrões + estratégias de renderização 2026)                                            |
+| Anti-Patterns   | **anti-patterns** (26 padrões catalogados)                                                         |
+
+Skills completas em `skills/`.
+
+### Ciclo de Skill Distillation
+
+Quando uma Task ou Feature é concluída com `attempts-coder: 1` e tester aprova na primeira tentativa, o `specs.md` e o histórico do `tasks.md` são candidatos a refinamento de skill:
+
+1. Revisar `changes/*/specs.md` — padrões recorrentes → candidatos a novo skill ou update
+2. Identificar qual skill cobriu o cenário → abrir o `SKILL.md` e adicionar exemplo ou constraint
+3. Se padrão é novo (não coberto por nenhum skill) → criar novo skill com `/start nome-skill`
+4. Registrar a decisão de não-criar com codetag `// NOTE: padrão X já coberto por skill Y`
+
+**Gatilho automático**: `attempts-coder: 1` + tester pass → revisar skills relacionados ao modo da feature.
 
 ---
 
 ## ICP — Integrated Cognitive Persistence
 
-`@reviewer` measures cognitive load of each method using ICP:
+`@architect` (em modo review) mede carga cognitiva de cada método usando ICP:
 
 ```
 ICP = CC_base + Nesting + Responsibilities + Coupling
 ```
 
-| ICP  | Status        | Action                          |
-| ---- | ------------- | ------------------------------- |
-| ≤ 3  | 🟢 Excellent  | Maintain                        |
-| 4–6  | 🟡 Acceptable | Consider refactoring            |
-| 7–10 | 🟠 Concerning | Refactor before new feature     |
-| > 10 | 🔴 Critical   | Mandatory refactoring           |
+| ICP  | Status        | Ação                           |
+| ---- | ------------- | ------------------------------ |
+| ≤ 3  | 🟢 Excelente  | Manter                         |
+| 4–6  | 🟡 Aceitável  | Considerar refatoração         |
+| 7–10 | 🟠 Preocupante | Refatorar antes de nova feature |
+| > 10 | 🔴 Crítica    | Refatoração obrigatória        |
 
-Objective limits that define approved/rejected ICP:
+Limites objetivos que definem ICP aprovado/rejeitado:
 
-| Metric                           | Limit | Rule |
-| -------------------------------- | ----- | ---- |
-| Cyclomatic Complexity per method | ≤ 5   | 022  |
-| Lines per class                  | ≤ 50  | 007  |
-| Lines per method                 | ≤ 15  | 055  |
-| Parameters per function          | ≤ 3   | 033  |
-| Chaining per line                | ≤ 1   | 005  |
-| Indentation level                | ≤ 1   | 001  |
+| Métrica                            | Limite | Regra |
+| ---------------------------------- | ------ | ----- |
+| Complexidade Ciclomática por método | ≤ 5    | 022   |
+| Linhas por classe                  | ≤ 50   | 007   |
+| Linhas por método                  | ≤ 15   | 055   |
+| Parâmetros por função              | ≤ 3    | 033   |
+| Encadeamento por linha             | ≤ 1    | 005   |
+| Nível de indentação                | ≤ 1    | 001   |
 
 ---
 
 ## Codetags
 
-`@reviewer` annotates violations directly in code with educational tone — explaining why and the path to improve. Never reference internal configuration files.
+`@architect` (em modo review) anota violações diretamente no código com tom educacional — explicando o porquê e o caminho para melhorar. Nunca referencie arquivos de configuração internos.
 
-| Tag             | Severity | Blocks PR?      |
-| --------------- | -------- | --------------- |
-| `FIXME`         | Critical | Yes             |
-| `TODO`          | High     | No — should fix |
-| `XXX`           | Medium   | No — improvement|
-| `SECURITY`      | Critical | Yes             |
-| `HACK`          | High     | No              |
-| `OPTIMIZE`      | Medium   | No              |
-| `NOTE` / `INFO` | Low      | No              |
+| Tag             | Severidade | Bloqueia PR?        |
+| --------------- | ---------- | ------------------- |
+| `FIXME`         | Crítica    | Sim                 |
+| `TODO`          | Alta       | Não — deve corrigir |
+| `XXX`           | Média      | Não — melhoria      |
+| `SECURITY`      | Crítica    | Sim                 |
+| `HACK`          | Alta       | Não                 |
+| `OPTIMIZE`      | Média      | Não                 |
+| `NOTE` / `INFO` | Baixa      | Não                 |
 
 ```typescript
-// FIXME: This class is taking on too many responsibilities — handles both
-// authentication and database access. This makes it hard to test each part
-// independently. Separating into Repository resolves this.
+// FIXME: Esta classe está assumindo muitas responsabilidades — lida tanto com
+// autenticação quanto acesso a banco de dados. Isso dificulta testar cada parte
+// independentemente. Separar em Repository resolve isso.
 
-// TODO: With 5 parameters, it's hard to know what each represents.
-// Grouping into UserCreateInput makes the call more expressive.
+// TODO: Com 5 parâmetros, fica difícil saber o que cada um representa.
+// Agrupar em UserCreateInput torna a chamada mais expressiva.
 
-// XXX: The nested if/else works, but reading is tiring.
-// Early returns (guard clauses) linearize the flow.
+// XXX: O if/else aninhado funciona, mas a leitura é cansativa.
+// Retornos antecipados (guard clauses) linearizam o fluxo.
 ```
 
-Full tag reference in `skills/codetags/`.
+Referência completa de tags em `skills/codetags/`.
 
 ---
 
-## Dependency graph
+## Observabilidade
 
-`GRAPH.md` contains 4 Mermaid diagrams:
+O harness emite dois fluxos de telemetria em formato JSON Lines — um registro por linha, pronto para ingestão em pipelines de análise.
 
-1. **Rule layers** — OC → SOLID → Package → Clean Code → 12-Factor + Anti-Patterns
-2. **Skills → Rules** — which skill covers which rules
-3. **Skills → Skills** — interdependencies between skills
-4. **Agents → Skills → Rules** — which agent uses what
+| Arquivo                              | Origem         | Evento              | Conteúdo do registro                                                                    |
+| ------------------------------------ | -------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| `.claude/telemetry/intent.jsonl`     | `prompt.sh`    | `UserPromptSubmit`  | Intent detectado por prompt (modo sugerido, verbo de ação, timestamp, session_id)       |
+| `.claude/telemetry/sessions.jsonl`   | `telemetry.sh` | `Stop`              | Trace por sessão: `timestamp`, `session_id`, `cwd`, `feature`, `mode`, `tasks` (pending/done), `attempts` (coder/tester), `violations` |
+
+Os dois arquivos crescem apenas por append, nunca são reescritos pelos hooks, e podem ser consumidos por qualquer ferramenta que leia JSONL. A pasta `.claude/telemetry/` deve ficar fora do versionamento (já coberta pelo `.gitignore` local).
+
+---
+
+## Grafo de dependências
+
+`GRAPH.md` contém 4 diagramas Mermaid:
+
+1. **Camadas de regras** — OC → SOLID → Package → Clean Code → 12-Factor + Anti-Patterns
+2. **Skills → Regras** — qual skill cobre quais regras
+3. **Skills → Skills** — interdependências entre skills
+4. **Agentes → Skills → Regras** — qual agente usa o quê

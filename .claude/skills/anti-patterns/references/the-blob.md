@@ -1,24 +1,24 @@
 # The Blob (God Object)
 
-**Severity:** 🔴 Critical
-**Associated Rule:** Rule 025
+**Severidade:** 🔴 Crítica
+**Regra Associada:** Regra 025
 
-## What It Is
+## O Que É
 
-A single class or module accumulates most of the system's logic, controlling data and behaviors that should be distributed among multiple classes with well-defined responsibilities.
+Uma única classe ou módulo acumula a maior parte da lógica do sistema, controlando dados e comportamentos que deveriam ser distribuídos entre múltiplas classes com responsabilidades bem definidas.
 
-## Symptoms
+## Sintomas
 
-- Class with hundreds or thousands of lines
-- Dozens of methods without cohesion between them
-- Almost all system code imports this class
-- Difficult to test in isolation — depends on everything and everything depends on it
-- Changes in this class break unrelated functionalities
+- Classe com centenas ou milhares de linhas
+- Dezenas de métodos sem coesão entre si
+- Quase todo o código do sistema importa esta classe
+- Difícil de testar isoladamente — depende de tudo e tudo depende dela
+- Mudanças nesta classe quebram funcionalidades não relacionadas
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ One class managing user, authentication, email and report
+// ❌ Uma classe gerenciando usuário, autenticação, email e relatório
 class App {
   createUser(data) { ... }
   login(email, password) { ... }
@@ -29,19 +29,19 @@ class App {
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Each class with a single responsibility
+// ✅ Cada classe com uma única responsabilidade
 class UserRepository { createUser(data) { ... } }
 class AuthService { login(email, password) { ... } }
 class EmailService { sendWelcomeEmail(user) { ... } }
 class ReportService { generateReport(filters) { ... } }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: The Blob — App class has 8+ distinct responsibilities
-// TODO: Extract UserRepository, AuthService, EmailService, ReportService
+// FIXME: The Blob — classe App tem 8+ responsabilidades distintas
+// TODO: Extrair UserRepository, AuthService, EmailService, ReportService
 ```

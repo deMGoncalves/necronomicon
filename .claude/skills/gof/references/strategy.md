@@ -1,24 +1,24 @@
 # Strategy
 
-**Category:** Behavioral
-**Intent:** Define a family of algorithms, encapsulate each one, and make them interchangeable, allowing the algorithm to vary independently from clients that use it.
+**Categoria:** Comportamental
+**Intenção:** Definir uma família de algoritmos, encapsular cada um deles e torná-los intercambiáveis, permitindo que o algoritmo varie independentemente dos clientes que o utilizam.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Switch algorithm at runtime (e.g., different sorting, compression, calculation strategies)
-- Eliminate `if/switch` that select behavior by type
-- When multiple variants of an algorithm exist
-- To isolate variable business logic from the code that uses it
+- Trocar algoritmo em tempo de execução (ex.: diferentes estratégias de ordenação, compressão, cálculo)
+- Eliminar `if/switch` que selecionam comportamento por tipo
+- Quando existem múltiplas variantes de um algoritmo
+- Para isolar lógica de negócio variável do código que a utiliza
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When there's only one fixed algorithm — use directly without encapsulating (overengineering — rule 064)
-- When algorithm variation is rare and simple `if` is more readable
-- Prefer Strategy over Template Method when wanting composition instead of inheritance
+- Quando há apenas um algoritmo fixo — use diretamente sem encapsular (overengineering — rule 064)
+- Quando a variação do algoritmo é rara e `if` simples é mais legível
+- Prefira Strategy em vez de Template Method quando quiser composição em vez de herança
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface SortStrategy<T> {
@@ -51,23 +51,23 @@ class Sorter<T> {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const sorter = new Sorter(new NativeSortStrategy())
 sorter.sort([3, 1, 2])
 ```
 
-## Related to
+## Relacionado a
 
-- [state.md](state.md): complements — Strategy switches algorithm manually; State transitions behavior automatically based on state
-- [template-method.md](template-method.md): replaces — Strategy uses composition; Template Method uses inheritance; prefer Strategy when wanting to avoid inheritance
-- [decorator.md](decorator.md): complements — Decorator adds behavior by stacking; Strategy replaces central behavior
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new strategy without modifying Sorter
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — Sorter depends on SortStrategy interface, not on concrete implementations
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use when there's only one algorithm
+- [state.md](state.md): complementa — Strategy troca algoritmo manualmente; State realiza transições de comportamento automaticamente baseado em estado
+- [template-method.md](template-method.md): substitui — Strategy usa composição; Template Method usa herança; prefira Strategy quando quiser evitar herança
+- [decorator.md](decorator.md): complementa — Decorator adiciona comportamento empilhando wrappers; Strategy substitui comportamento central
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione nova estratégia sem modificar o Sorter
+- [rule 014 - Princípio da Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — Sorter depende da interface SortStrategy, não das implementações concretas
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use quando há apenas um algoritmo
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

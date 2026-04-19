@@ -1,26 +1,26 @@
 # Flyweight
 
-**Category:** Structural
-**Intent:** Use sharing to support large numbers of fine-grained objects efficiently.
+**Categoria:** Estrutural
+**Intenção:** Usar compartilhamento para suportar eficientemente grandes quantidades de objetos de granularidade fina.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Application needs to create large number of similar objects consuming lots of memory
-- Intrinsic state (shareable) can be separated from extrinsic state (unique per context)
-- E.g.: characters in text editor, particles in simulations, sprites in games
+- A aplicação precisa criar grande número de objetos similares consumindo muita memória
+- O estado intrínseco (compartilhável) pode ser separado do estado extrínseco (único por contexto)
+- Ex.: caracteres em editor de texto, partículas em simulações, sprites em jogos
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Without evidence of memory problem — don't optimize prematurely (rule 069)
-- When the separation between intrinsic and extrinsic state is artificial or confusing
-- When the number of objects is small and the savings aren't significant
+- Sem evidência de problema de memória — não otimize prematuramente (rule 069)
+- Quando a separação entre estado intrínseco e extrínseco é artificial ou confusa
+- Quando o número de objetos é pequeno e a economia não é significativa
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Intrinsic state: shared among many instances
+// Estado intrínseco: compartilhado entre muitas instâncias
 class CharacterGlyph {
   constructor(
     readonly symbol: string,
@@ -29,12 +29,12 @@ class CharacterGlyph {
   ) {}
 
   render(position: { x: number; y: number }): void {
-    // renders symbol at informed position (extrinsic state)
-    console.log(`${this.symbol} at ${position.x},${position.y}`)
+    // renderiza o símbolo na posição informada (estado extrínseco)
+    console.log(`${this.symbol} em ${position.x},${position.y}`)
   }
 }
 
-// Factory that manages the Flyweight pool
+// Factory que gerencia o pool de Flyweights
 class GlyphFactory {
   private readonly pool = new Map<string, CharacterGlyph>()
 
@@ -48,21 +48,21 @@ class GlyphFactory {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const factory = new GlyphFactory()
 factory.getGlyph('A', 'Arial', 12).render({ x: 0, y: 0 })
 ```
 
-## Related to
+## Relacionado a
 
-- [singleton.md](singleton.md): complements — Singleton ensures one instance; Flyweight manages pool of shared instances
-- [factory-method.md](factory-method.md): depends — GlyphFactory uses factory pattern to manage the Flyweight pool
-- [rule 069 - Prohibition of Premature Optimization](../../../rules/069_proibicao-otimizacao-prematura.md): reinforces — use only with evidence of measured memory problem
-- [rule 029 - Object Immutability](../../../rules/029_imutabilidade-objetos-freeze.md): reinforces — Flyweights must be immutable since they're shared between contexts
+- [singleton.md](singleton.md): complementa — Singleton garante uma instância; Flyweight gerencia pool de instâncias compartilhadas
+- [factory-method.md](factory-method.md): depende — GlyphFactory usa padrão factory para gerenciar o pool de Flyweights
+- [rule 069 - Proibição de Otimização Prematura](../../../rules/069_proibicao-otimizacao-prematura.md): reforça — use apenas com evidência de problema de memória medido
+- [rule 029 - Imutabilidade de Objetos](../../../rules/029_imutabilidade-objetos-freeze.md): reforça — Flyweights devem ser imutáveis pois são compartilhados entre contextos
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

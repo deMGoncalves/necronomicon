@@ -1,39 +1,39 @@
-# Naming (Rules 006, 034, 035)
+# Nomenclatura (Regras 006, 034, 035)
 
-## Rules
+## Regras
 
-- **006**: No abbreviated names or ambiguous acronyms
-- **034**: Classes = nouns, Methods = verbs
-- **035**: No misleading names or Hungarian notation
+- **006**: Proibição de nomes abreviados ou acrônimos ambíguos
+- **034**: Classes = substantivos, Métodos = verbos
+- **035**: Proibição de nomes enganosos ou notação húngara
 
 ## Checklist
 
-- [ ] Names ≥3 characters (except `i`, `j` in loops)
-- [ ] No acronyms (`Mngr` → `Manager`)
-- [ ] Classes in PascalCase, singular nouns
-- [ ] Methods in camelCase, verbs
-- [ ] Booleans with prefixes `is`, `has`, `can`
-- [ ] Collections named according to real structure (Set, Map, Array)
-- [ ] No type prefixes (`strName` → `name`)
+- [ ] Nomes com ≥3 caracteres (exceto `i`, `j` em loops)
+- [ ] Sem acrônimos (`Mngr` → `Manager`)
+- [ ] Classes em PascalCase, substantivos singulares
+- [ ] Métodos em camelCase, verbos
+- [ ] Booleanos com prefixos `is`, `has`, `can`
+- [ ] Coleções nomeadas conforme estrutura de dados real (Set, Map, Array)
+- [ ] Sem prefixos de tipo (`strName` → `name`)
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
-class UserMgr { } // ambiguous acronym
-function usr(id) { } // abbreviated + noun as method
-const strName = 'Alice'; // Hungarian notation
-const accountList = new Set(); // misleading name (Set isn't List)
+// ❌ Violações
+class UserMgr { } // acrônimo ambíguo
+function usr(id) { } // abreviado + substantivo como método
+const strName = 'Alice'; // notação húngara
+const accountList = new Set(); // nome enganoso (Set não é List)
 
-// ✅ Compliance
+// ✅ Conformidade
 class UserManager { }
-function getUser(id) { } // verb + noun
+function getUser(id) { } // verbo + substantivo
 const userName = 'Alice';
 const accountSet = new Set();
 const isActive = true;
 const hasPermission = user.roles.includes('admin');
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-Clear names reduce cognitive cost — reader understands intent without needing to read implementation.
+Nomes claros reduzem custo cognitivo — o leitor entende a intenção sem precisar ler a implementação.

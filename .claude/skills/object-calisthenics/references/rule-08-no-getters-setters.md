@@ -1,79 +1,79 @@
-# Rule 8 — No Getters/Setters Prohibition
+# Regra 8 — Proibição de No Getters/Setters
 
-**deMGoncalves Rule:** COMPORTAMENTAL-008
-**Question:** Is this method a pure getter/setter without business logic?
+**Regra deMGoncalves:** COMPORTAMENTAL-008
+**Questão:** Este método é um getter/setter puro sem lógica de negócio?
 
-## What It Is
+## O que é
 
-Prohibits the creation of methods purely for accessing or directly modifying the internal state of the object (such as `getProperty()` and `setProperty()`), reinforcing encapsulation and the "Tell, Don't Ask" principle.
+Proíbe a criação de métodos puramente para acesso ou modificação direta do estado interno do objeto (como `getPropriedade()` e `setPropriedade()`), reforçando o encapsulamento e o princípio "Tell, Don't Ask".
 
-## When to Apply
+## Quando Aplicar
 
-- Method with name `getXxx()` that only returns attribute
-- Method with name `setXxx()` that only assigns value
-- Method that exposes internal state without transformation
-- Client deciding logic based on getter
+- Método com nome `getXxx()` que apenas retorna atributo
+- Método com nome `setXxx()` que apenas atribui valor
+- Método que expõe estado interno sem transformação
+- Cliente decidindo lógica baseado em getter
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class Order {
   private status: string;
   private items: Item[];
 
-  getStatus(): string {  // VIOLATES: pure getter
+  getStatus(): string {  // VIOLA: getter puro
     return this.status;
   }
 
-  setStatus(status: string): void {  // VIOLATES: pure setter
+  setStatus(status: string): void {  // VIOLA: setter puro
     this.status = status;
   }
 
-  getItems(): Item[] {  // VIOLATES: exposes internal collection
+  getItems(): Item[] {  // VIOLA: expõe coleção interna
     return this.items;
   }
 }
 
-// Client deciding logic - VIOLATES Tell, Don't Ask
+// Cliente decidindo lógica - VIOLA Tell, Don't Ask
 if (order.getStatus() === 'pending') {
   order.setStatus('processing');
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class Order {
   private status: OrderStatus;
   private items: OrderItemList;
 
-  startProcessing(): void {  // Intention method
+  startProcessing(): void {  // Método de intenção
     if (!this.status.isPending()) {
-      throw new Error('Cannot process non-pending order');
+      throw new Error('Não é possível processar pedido não pendente');
     }
     this.status = OrderStatus.processing();
   }
 
-  addItem(item: Item): void {  // Behavior method
+  addItem(item: Item): void {  // Método de comportamento
     this.items.add(item);
   }
 
-  getTotalValue(): number {  // Transformation/calculation is OK
+  getTotalValue(): number {  // Transformação/cálculo é OK
     return this.items.getTotalValue();
   }
 }
 
-// Client telling what to do - CORRECT
+// Cliente dizendo o que fazer - CORRETO
 order.startProcessing();
 ```
 
-## Exceptions
+## Exceções
 
-- **DTOs**: Pure classes for data transfer
-- **Serialization Frameworks**: Libraries that require getters/setters
+- **DTOs**: Classes puras para transferência de dados
+- **Frameworks de Serialização**: Bibliotecas que exigem getters/setters
 
-## Related Rules
+## Regras Relacionadas
 
-- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reinforces
-- [003 - Primitive Encapsulation](rule-03-wrap-primitives.md): complements
-- [004 - First Class Collections](rule-04-first-class-collections.md): reinforces
+- [009 - Tell, Don't Ask](rule-09-tell-dont-ask.md): reforça
+- [003 - Wrap Primitives](rule-03-wrap-primitives.md): complementa
+- [004 - First Class Collections](rule-04-first-class-collections.md): reforça

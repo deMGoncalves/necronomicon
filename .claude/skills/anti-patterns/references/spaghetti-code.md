@@ -1,24 +1,24 @@
 # Spaghetti Code
 
-**Severity:** 🔴 Critical
-**Associated Rule:** Rule 060
+**Severidade:** 🔴 Crítica
+**Regra Associada:** Regra 060
 
-## What It Is
+## O Que É
 
-Code with chaotic control flow and non-existent structure: functions calling others in arbitrary order, shared mutable global state, mixed responsibilities without layer separation.
+Código com fluxo de controle caótico e estrutura inexistente: funções chamando outras em ordem arbitrária, estado global mutável compartilhado, responsabilidades misturadas sem separação de camadas.
 
-## Symptoms
+## Sintomas
 
-- Huge functions with multiple nesting levels
-- Global state modified in unexpected places
-- Execution flow jumping between files/functions without clear hierarchy
-- Impossible to understand what a function does without reading everything it calls
-- No separation between I/O, business logic and presentation
+- Funções enormes com múltiplos níveis de aninhamento
+- Estado global modificado em lugares inesperados
+- Fluxo de execução saltando entre arquivos/funções sem hierarquia clara
+- Impossível entender o que uma função faz sem ler tudo que ela chama
+- Nenhuma separação entre I/O, lógica de negócio e apresentação
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Logic, I/O and presentation mixed without structure
+// ❌ Lógica, I/O e apresentação misturados sem estrutura
 async function handleCheckout(req, res) {
   const user = await db.query(`SELECT * FROM users WHERE id = ${req.body.userId}`);
   if (user && user.active) {
@@ -30,19 +30,19 @@ async function handleCheckout(req, res) {
         await db.query(`UPDATE products SET stock = stock - ${item.qty} WHERE id = ${item.id}`);
       }
     }
-    await sendEmail(user.email, `Your order of $${total} has been confirmed`);
+    await sendEmail(user.email, `Seu pedido de R$${total} foi confirmado`);
     globalOrderCount++;
     res.json({ ok: true, total });
   } else {
-    res.status(400).json({ error: 'Inactive user' });
+    res.status(400).json({ error: 'Usuário inativo' });
   }
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Responsibilities separated into layers
+// ✅ Responsabilidades separadas em camadas
 class CheckoutService {
   async process(userId, items) {
     const user = await this.userRepo.findActiveOrThrow(userId);
@@ -53,9 +53,9 @@ class CheckoutService {
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Spaghetti Code — I/O, validation, logic and presentation mixed
-// TODO: Separate into layers: Controller → Service → Repository
+// FIXME: Spaghetti Code — I/O, validação, lógica e apresentação misturados
+// TODO: Separar em camadas: Controller → Service → Repository
 ```

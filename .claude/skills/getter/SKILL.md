@@ -1,6 +1,6 @@
 ---
 name: getter
-description: Convention for using getters for reading value treatment. Use when creating getters that need to transform, validate or format data before exposing — when reviewing getters that return raw values without logic.
+description: Convenção para uso de getters para tratamento de leitura de valores. Use ao criar getters que precisam transformar, validar ou formatar dados antes de expor — ao revisar getters que retornam valores brutos sem lógica.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,48 +10,59 @@ metadata:
 
 # Getter
 
-Convention for using getters for reading value treatment associated with private members.
+Convenção para uso de getters para tratamento de leitura de valores associados a membros privados.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating getters that need to treat value reading, always associated with private members.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Criação de getters que precisam aplicar valor padrão, transformação, formatação ou inicialização lazy a um membro privado (`#`) |
+| **Prerequisites** | Skill `anatomy` para posicionamento do getter na classe (grupo 2); membro privado correspondente já declarado (grupo 1) |
+| **Constraints** | Getter puro sem lógica é proibido (rule 008); getter não deve ter efeitos colaterais nem modificar estado; getter acessa apenas um membro privado |
+| **Scope** | Padrões de implementação (null coalescing `??=`, transformação condicional, inicialização lazy); relação obrigatória com membro privado; limite de 15 linhas |
 
-## Purpose
+---
 
-| Responsibility | Description |
-|----------------|-------------|
-| Default value | Assign default value when private member is null or undefined |
-| Transformation | Apply transformation or formatting to read value |
-| Lazy initialization | Create instance only when first accessed |
-| Read validation | Return alternative value based on conditions |
+## Quando Usar
 
-## Implementation Patterns
+Use ao criar getters que precisam tratar leitura de valores, sempre associados a membros privados.
 
-| Pattern | Usage |
-|---------|-------|
-| Null coalescing | Assign default value using `??=` operator |
-| Direct return | Return value without transformation when no default |
-| Conditional transformation | Apply transformation based on value condition |
-| Lazy initialization | Create complex instance only on first access |
+## Propósito
 
-## Relation with Private Members
+| Responsabilidade | Descrição |
+|------------------|-------------|
+| Valor padrão | Atribuir valor padrão quando membro privado é null ou undefined |
+| Transformação | Aplicar transformação ou formatação ao valor lido |
+| Inicialização lazy | Criar instância apenas quando primeiro acessado |
+| Validação de leitura | Retornar valor alternativo baseado em condições |
 
-| Rule | Description |
-|------|-------------|
-| Always private | Getter must access private member (prefix `#`) |
-| Never public | Getter should not read public property |
-| One to one | Each getter accesses single private member |
-| Corresponding name | Getter name corresponds to private member name |
+## Padrões de Implementação
 
-## Examples
+| Padrão | Uso |
+|--------|-----|
+| Null coalescing | Atribuir valor padrão usando operador `??=` |
+| Retorno direto | Retornar valor sem transformação quando não há padrão |
+| Transformação condicional | Aplicar transformação baseada em condição do valor |
+| Inicialização lazy | Criar instância complexa apenas no primeiro acesso |
+
+## Relação com Membros Privados
+
+| Regra | Descrição |
+|-------|-------------|
+| Sempre privado | Getter deve acessar membro privado (prefixo `#`) |
+| Nunca público | Getter não deve ler propriedade pública |
+| Um para um | Cada getter acessa um único membro privado |
+| Nome correspondente | Nome do getter corresponde ao nome do membro privado |
+
+## Exemplos
 
 ```typescript
-// ❌ Bad — trivial getter without logic (should be property)
-get name() { return this.#name }  // just returns, no transformation
+// ❌ Bad — getter trivial sem lógica (deveria ser propriedade)
+get name() { return this.#name }  // apenas retorna, sem transformação
 
-// ✅ Good — getter with transformation logic
+// ✅ Good — getter com lógica de transformação
 get displayName() {
   return this.#name?.trim().toLowerCase() ?? 'anonymous'
 }
@@ -61,28 +72,28 @@ get isValid() {
 }
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Pure getter without logic | Violates rule 008: getter must have treatment logic, not be mere accessor |
-| Complex logic | Getters should have simple and predictable logic |
-| Side effects | Getter should not modify state or trigger actions |
-| Expensive operations | Avoid heavy operations that make reading slow |
-| Multiple member access | Getter should focus on single private member (rule 010) |
+| O que evitar | Razão |
+|--------------|-------|
+| Getter puro sem lógica | Viola rule 008: getter deve ter lógica de tratamento, não ser mero accessor |
+| Lógica complexa | Getters devem ter lógica simples e previsível |
+| Efeitos colaterais | Getter não deve modificar estado ou disparar ações |
+| Operações caras | Evitar operações pesadas que tornam leitura lenta |
+| Acesso a múltiplos membros | Getter deve focar em um único membro privado (rule 010) |
 
-## Best Practices
+## Melhores Práticas
 
-| Practice | Description |
-|----------|-------------|
-| Null coalescing | Use `??=` to assign default value concisely |
-| Direct return | Return value without transformation when no additional logic |
-| Lazy initialization | Create complex instances only on first access |
-| Getter with setter | Always have corresponding setter for same private member |
+| Prática | Descrição |
+|---------|-------------|
+| Null coalescing | Usar `??=` para atribuir valor padrão de forma concisa |
+| Retorno direto | Retornar valor sem transformação quando não há lógica adicional |
+| Inicialização lazy | Criar instâncias complexas apenas no primeiro acesso |
+| Getter com setter | Sempre ter setter correspondente para o mesmo membro privado |
 
-## Rationale
+## Justificativa
 
-- [008 - Prohibition of Pure Getters/Setters](../../rules/008_proibicao-getters-setters.md): getters are allowed when they have treatment logic (default value, transformation, lazy initialization), prohibited when they are mere direct accessors without logic
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): treatment logic centralized in getter keeps code predictable and easy to maintain
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): getter has single responsibility of treating corresponding private member reading
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): getter should have maximum 15 lines, extract complex logic to methods
+- [008 - Proibição de Getters/Setters Puros](../../rules/008_proibicao-getters-setters.md): getters são permitidos quando têm lógica de tratamento (valor padrão, transformação, inicialização lazy), proibidos quando são meros accessors diretos sem lógica
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): lógica de tratamento centralizada no getter mantém código previsível e fácil de manter
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): getter tem responsabilidade única de tratar leitura do membro privado correspondente
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): getter deve ter máximo 15 linhas, extrair lógica complexa para métodos

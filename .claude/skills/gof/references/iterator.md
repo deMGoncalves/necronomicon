@@ -1,24 +1,24 @@
 # Iterator
 
-**Category:** Behavioral
-**Intent:** Provide a way to access elements of an aggregate object sequentially without exposing its underlying representation.
+**Categoria:** Comportamental
+**Intenção:** Fornecer uma forma de acessar sequencialmente os elementos de um objeto agregado sem expor sua representação subjacente.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Traverse collections without exposing internal structure
-- Support multiple ways to traverse the same collection
-- Provide uniform interface to traverse different structures
-- In JavaScript/TypeScript, implement `Symbol.iterator` protocol
+- Percorrer coleções sem expor a estrutura interna
+- Suportar múltiplas formas de percorrer a mesma coleção
+- Fornecer interface uniforme para percorrer estruturas diferentes
+- Em JavaScript/TypeScript, implementar o protocolo `Symbol.iterator`
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When the collection is simple and native arrays with `for...of` are sufficient
-- When manually creating Iterator class adds complexity without gain — in modern JS/TS, prefer native `Symbol.iterator` protocol
-- For traversal of structures that already expose adequate iteration APIs
+- Quando a coleção é simples e arrays nativos com `for...of` são suficientes
+- Quando criar classe Iterator manualmente adiciona complexidade sem ganho — em JS/TS moderno, prefira o protocolo nativo `Symbol.iterator`
+- Para percurso de estruturas que já expõem APIs de iteração adequadas
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class Range implements Iterable<number> {
@@ -46,7 +46,7 @@ class Range implements Iterable<number> {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 for (const n of new Range(1, 10, 2)) {
@@ -54,14 +54,14 @@ for (const n of new Range(1, 10, 2)) {
 }
 ```
 
-## Related to
+## Relacionado a
 
-- [composite.md](composite.md): complements — Iterator frequently used to traverse Composite structures
-- [visitor.md](visitor.md): complements — Visitor can use Iterator to traverse collection elements
-- [rule 004 - First Class Collections](../../../rules/004_colecoes-primeira-classe.md): complements — Iterator implements traversal behavior encapsulated in collection
-- [rule 008 - Prohibition of Getters and Setters](../../../rules/008_proibicao-getters-setters.md): reinforces — Iterator exposes traversal behavior, not collection's internal state
+- [composite.md](composite.md): complementa — Iterator frequentemente usado para percorrer estruturas Composite
+- [visitor.md](visitor.md): complementa — Visitor pode usar Iterator para percorrer elementos de coleção
+- [rule 004 - Coleções de Primeira Classe](../../../rules/004_colecoes-primeira-classe.md): complementa — Iterator implementa comportamento de percurso encapsulado na coleção
+- [rule 008 - Proibição de Getters e Setters](../../../rules/008_proibicao-getters-setters.md): reforça — Iterator expõe comportamento de percurso, não o estado interno da coleção
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

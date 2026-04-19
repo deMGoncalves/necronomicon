@@ -1,64 +1,64 @@
 # Usability — Usabilidade
 
-**Dimension:** Operation
-**Default Severity:** 🟡 Suggestion
-**Key Question:** Is it easy to use?
+**Dimensão:** Operação
+**Severidade Padrão:** 🟡 Sugestão
+**Questão-Chave:** É fácil de usar?
 
-## What It Is
+## O que é
 
-The effort required to learn, operate, prepare inputs, and interpret outputs from the software. Usability encompasses interface clarity, understandable error messages, user feedback, and accessibility.
+O esforço necessário para aprender, operar, preparar entradas e interpretar saídas do software. Usabilidade engloba clareza da interface, mensagens de erro compreensíveis, feedback ao usuário e acessibilidade.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Destructive action without confirmation | 🟠 Important |
-| Technical error message exposed | 🟠 Important |
-| Missing loading indicator for long operation | 🟡 Suggestion |
-| Minor visual inconsistency | 🟡 Suggestion |
+| Ação destrutiva sem confirmação | 🟠 Importante |
+| Mensagem de erro técnica exposta ao usuário | 🟠 Importante |
+| Indicador de carregamento ausente em operação longa | 🟡 Sugestão |
+| Inconsistência visual menor | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not usable - generic message
+// ❌ Inutilizável - mensagem genérica
 try {
   await saveUser(data);
 } catch (error) {
-  showError('An error occurred'); // What happened? What to do?
+  showError('Ocorreu um erro'); // O que aconteceu? O que fazer?
 }
 
-// ✅ Usable - specific and actionable message
+// ✅ Utilizável - mensagem específica e acionável
 try {
   await saveUser(data);
 } catch (error) {
   if (error.code === 'EMAIL_TAKEN') {
-    showError('This email is already in use. Try another or log in.');
+    showError('Este email já está em uso. Tente outro ou faça login.');
   } else if (error.code === 'NETWORK_ERROR') {
-    showError('No connection. Check your internet and try again.');
+    showError('Sem conexão. Verifique sua internet e tente novamente.');
   } else {
-    showError('Could not save. Try again in a few minutes.');
+    showError('Não foi possível salvar. Tente novamente em alguns minutos.');
   }
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// UX(034): Error message should be more specific
-// UX: Add visual feedback during loading
+// UX(034): Mensagem de erro deve ser mais específica
+// UX: Adicionar feedback visual durante o carregamento
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Destructive action without confirmation | 🟠 Important |
-| Technical error message exposed | 🟠 Important |
-| Missing loading indicator for long operation | 🟡 Suggestion |
-| Minor visual inconsistency | 🟡 Suggestion |
+| Ação destrutiva sem confirmação | 🟠 Importante |
+| Mensagem de erro técnica exposta ao usuário | 🟠 Importante |
+| Indicador de carregamento ausente em operação longa | 🟡 Sugestão |
+| Inconsistência visual menor | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 006 - Prohibition of Abbreviated Names
-- 034 - Consistent Class and Method Names
-- 026 - Comment Quality
+- 006 - Proibição de Nomes Abreviados
+- 034 - Nomes de Classes e Métodos Consistentes
+- 026 - Qualidade de Comentários

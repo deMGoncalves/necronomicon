@@ -1,24 +1,24 @@
 # Builder
 
-**Category:** Creational
-**Intent:** Separate the construction of a complex object from its representation, allowing step-by-step construction.
+**Categoria:** Criacional
+**Intenção:** Separar a construção de um objeto complexo de sua representação, permitindo construção passo a passo.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Object has many optional parameters in constructor (avoids telescoping constructors)
-- Object construction involves multiple steps or configurations
-- Different representations of an object from the same construction process
-- When building SQL queries, HTTP requests, or configuration objects
+- Objeto tem muitos parâmetros opcionais no construtor (evita construtores telescópicos)
+- A construção do objeto envolve múltiplas etapas ou configurações
+- Diferentes representações de um objeto a partir do mesmo processo de construção
+- Ao construir queries SQL, requisições HTTP ou objetos de configuração
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When the object is simple and has few parameters — use direct constructor (overengineering — rule 064)
-- When all parameters are mandatory and always present
-- When there's no variation in construction
+- Quando o objeto é simples e tem poucos parâmetros — use construtor direto (overengineering — rule 064)
+- Quando todos os parâmetros são obrigatórios e sempre presentes
+- Quando não há variação na construção
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class QueryBuilder {
@@ -51,21 +51,21 @@ class QueryBuilder {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 new QueryBuilder().from('users').where('active = true').limit(10).build()
 ```
 
-## Related to
+## Relacionado a
 
-- [abstract-factory.md](abstract-factory.md): complements — Abstract Factory creates families; Builder builds a single complex product
-- [prototype.md](prototype.md): complements — Prototype can be used when the Builder's final object needs to be cloned
-- [rule 033 - Max Parameters per Function](../../../rules/033_limite-parametros-funcao.md): reinforces — Builder eliminates constructors with many parameters
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use for simple objects
-- [rule 005 - Max One Call per Line](../../../rules/005_maximo-uma-chamada-por-linha.md): complements — Builder's fluent interface is permitted exception to chaining
+- [abstract-factory.md](abstract-factory.md): complementa — Abstract Factory cria famílias; Builder constrói um único produto complexo
+- [prototype.md](prototype.md): complementa — Prototype pode ser usado quando o objeto final do Builder precisa ser clonado
+- [rule 033 - Limite de Parâmetros por Função](../../../rules/033_limite-parametros-funcao.md): reforça — Builder elimina construtores com muitos parâmetros
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use para objetos simples
+- [rule 005 - Máximo Uma Chamada por Linha](../../../rules/005_maximo-uma-chamada-por-linha.md): complementa — a interface fluente do Builder é exceção permitida ao encadeamento
 
 ---
 
-**GoF Category:** Creational
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Criacional
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

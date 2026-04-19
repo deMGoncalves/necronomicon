@@ -1,25 +1,25 @@
 # Lazy Load
 
-**Layer:** Object-Relational
-**Complexity:** Moderate
-**Intent:** An object that doesn't contain all the data it needs, but knows how to get it — loading occurs only when the data is actually accessed.
+**Camada:** Object-Relational
+**Complexidade:** Moderada
+**Intenção:** Um objeto que não contém todos os dados de que precisa, mas sabe como obtê-los — o carregamento ocorre apenas quando os dados são realmente acessados.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Large relationships that are rarely accessed
-- When loading all data at once would be too costly
-- In domain objects with associations that aren't always needed
-- To optimize loading time in queries with many relationships
+- Relacionamentos grandes que raramente são acessados
+- Quando carregar todos os dados de uma vez seria muito custoso
+- Em objetos de domínio com associações que nem sempre são necessárias
+- Para otimizar o tempo de carregamento em queries com muitos relacionamentos
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When data will always be needed (load together — Eager Loading)
-- When overhead of additional queries is worse than loading everything at once (N+1 problem)
-- In loops where Lazy Load would cause N+1 queries (use Eager Loading with JOIN)
+- Quando os dados sempre serão necessários (carregar junto — Eager Loading)
+- Quando o overhead de queries adicionais é pior do que carregar tudo de uma vez (problema N+1)
+- Em loops onde Lazy Load causaria N+1 queries (use Eager Loading com JOIN)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class Customer {
@@ -31,7 +31,7 @@ class Customer {
     private readonly orderRepository: OrderRepository
   ) {}
 
-  // Lazy Load: loads orders only when accessed
+  // Lazy Load: carrega pedidos apenas quando acessados
   async getOrders(): Promise<Order[]> {
     if (!this._orders) {
       this._orders = await this.orderRepository.findByCustomerId(this.id)
@@ -40,7 +40,7 @@ class Customer {
   }
 }
 
-// Alternative with Virtual Proxy
+// Alternativa com Virtual Proxy
 class LazyOrderCollection {
   private loaded = false
   private orders: Order[] = []
@@ -60,12 +60,12 @@ class LazyOrderCollection {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [identity-map.md](identity-map.md): complements — Identity Map prevents duplicate loads when Lazy Load is triggered multiple times
-- [rule 069 - Prohibition of Premature Optimization](../../../rules/069_proibicao-otimizacao-prematura.md): reinforces — measure before introducing Lazy Load; can create N+1 if used without criteria
+- [identity-map.md](identity-map.md): complementa — Identity Map evita carregamentos duplicados quando Lazy Load é acionado múltiplas vezes
+- [regra 069 - Proibição de Otimização Prematura](../../../rules/069_proibicao-otimizacao-prematura.md): reforça — meça antes de introduzir Lazy Load; pode criar N+1 se usado sem critério
 
 ---
 
-**PoEAA Layer:** Object-Relational
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Object-Relational
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

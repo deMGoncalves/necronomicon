@@ -4,7 +4,7 @@
 **Rule deMGoncalves:** [016 - Princípio do Fechamento Comum](../../../rules/016_principio-fechamento-comum.md)
 **Pergunta:** Classes que mudam juntas pelo mesmo motivo estão empacotadas juntas?
 
-## What It Is
+## O Que É
 
 **Classes que mudam juntas pela mesma razão devem ser empacotadas juntas.**
 

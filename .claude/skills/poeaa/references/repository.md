@@ -1,27 +1,27 @@
 # Repository
 
-**Layer:** Data Source
-**Complexity:** Complex
-**Intent:** Mediates between domain and data mapping layers using a collection-like interface for accessing domain objects.
+**Camada:** Data Source
+**Complexidade:** Complexa
+**Intenção:** Faz a mediação entre as camadas de domínio e de mapeamento de dados usando uma interface semelhante a uma coleção para acessar objetos de domínio.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- When need to completely abstract data source from domain
-- To facilitate database switching or testing with fakes
-- With rich Domain Model that shouldn't know about data source
-- When complex queries exist that should be centralized
+- Quando é necessário abstrair completamente a fonte de dados do domínio
+- Para facilitar a troca de banco ou os testes com fakes
+- Com Domain Model rico que não deve conhecer a fonte de dados
+- Quando há queries complexas que devem ser centralizadas
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Simple domains with Transaction Script (overengineering — rule 064)
-- When Active Record is already sufficient for complexity level
+- Domínios simples com Transaction Script (overengineering — regra 064)
+- Quando Active Record já é suficiente para o nível de complexidade
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Repository interface (domain abstraction)
+// Interface do Repository (abstração de domínio)
 interface UserRepository {
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
@@ -29,7 +29,7 @@ interface UserRepository {
   delete(id: string): Promise<void>
 }
 
-// Concrete implementation for production
+// Implementação concreta para produção
 class PostgresUserRepository implements UserRepository {
   async findById(id: string): Promise<User | null> {
     const row = await this.db.query('SELECT * FROM users WHERE id = $1', [id])
@@ -49,7 +49,7 @@ class PostgresUserRepository implements UserRepository {
   }
 }
 
-// Fake for tests
+// Fake para testes
 class InMemoryUserRepository implements UserRepository {
   private readonly store = new Map<string, User>()
 
@@ -62,15 +62,15 @@ class InMemoryUserRepository implements UserRepository {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [data-mapper.md](data-mapper.md): depends — Repository delegates object-relational mapping to Data Mapper
-- [unit-of-work.md](unit-of-work.md): complements — Unit of Work coordinates commits of multiple repositories atomically
-- [identity-map.md](identity-map.md): complements — Identity Map prevents duplicate loads within repository
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — completely isolates domain from data infrastructure
-- [rule 032 - Minimum Test Coverage](../../../rules/032_cobertura-teste-minima-qualidade.md): complements — repository interface allows substitution by fake in unit tests
+- [data-mapper.md](data-mapper.md): depende — Repository delega o mapeamento objeto-relacional ao Data Mapper
+- [unit-of-work.md](unit-of-work.md): complementa — Unit of Work coordena commits de múltiplos repositórios atomicamente
+- [identity-map.md](identity-map.md): complementa — Identity Map evita carregamentos duplicados dentro do repositório
+- [regra 014 - Princípio de Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — isola completamente o domínio da infraestrutura de dados
+- [regra 032 - Cobertura Mínima de Testes](../../../rules/032_cobertura-teste-minima-qualidade.md): complementa — a interface do repositório permite substituição por fake em testes unitários
 
 ---
 
-**PoEAA Layer:** Data Source
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Data Source
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)

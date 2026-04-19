@@ -1,24 +1,24 @@
 # Command
 
-**Category:** Behavioral
-**Intent:** Encapsulate a request as an object, allowing to parameterize clients with different requests, queue, log and support reversible operations.
+**Categoria:** Comportamental
+**Intenção:** Encapsular uma requisição como um objeto, permitindo parametrizar clientes com diferentes requisições, enfileirar, registrar e suportar operações reversíveis.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Implement undo/redo
-- Queue operations for deferred execution
-- Log operation history
-- Implement transactions that can be reverted
+- Implementar undo/redo
+- Enfileirar operações para execução diferida
+- Registrar histórico de operações
+- Implementar transações que podem ser revertidas
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- For simple operations without need for undo/queuing (overengineering — rule 064)
-- When the overhead of creating Command objects exceeds the benefit
-- When the operation doesn't need to be stored, undone or passed along
+- Para operações simples sem necessidade de undo/enfileiramento (overengineering — rule 064)
+- Quando a sobrecarga de criar objetos Command supera o benefício
+- Quando a operação não precisa ser armazenada, desfeita ou repassada
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Command {
@@ -57,22 +57,22 @@ class CommandHistory {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const history = new CommandHistory()
 history.execute(new InsertCommand(editor, 'Hello'))
 ```
 
-## Related to
+## Relacionado a
 
-- [memento.md](memento.md): complements — Command records operations for undo; Memento saves state for rollback
-- [chain-of-responsibility.md](chain-of-responsibility.md): complements — Chain defines who processes; Command encapsulates what is processed
-- [rule 010 - Single Responsibility Principle](../../../rules/010_principio-responsabilidade-unica.md): reinforces — each Command encapsulates a single reversible operation
-- [rule 036 - Restriction of Functions with Side Effects](../../../rules/036_restricao-funcoes-efeitos-colaterais.md): reinforces — execute() is explicit Command with intentional and documented side effect
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — don't use without real need for undo or history
+- [memento.md](memento.md): complementa — Command registra operações para undo; Memento salva estado para rollback
+- [chain-of-responsibility.md](chain-of-responsibility.md): complementa — Chain define quem processa; Command encapsula o que é processado
+- [rule 010 - Princípio da Responsabilidade Única](../../../rules/010_principio-responsabilidade-unica.md): reforça — cada Command encapsula uma única operação reversível
+- [rule 036 - Restrição de Funções com Efeitos Colaterais](../../../rules/036_restricao-funcoes-efeitos-colaterais.md): reforça — execute() é Command explícito com efeito colateral intencional e documentado
+- [rule 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — não use sem necessidade real de undo ou histórico
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

@@ -1,52 +1,52 @@
 # Portability — Portabilidade
 
-**Dimension:** Transition
-**Default Severity:** 🟡 Suggestion
-**Key Question:** Can it run in another environment?
+**Dimensão:** Transição
+**Severidade Padrão:** 🟡 Sugestão
+**Questão-Chave:** Pode rodar em outro ambiente?
 
-## What It Is
+## O que é
 
-The effort required to transfer software from one hardware/software environment to another. High portability means the application can run on different operating systems, browsers, or cloud infrastructures with minimal or no modification.
+O esforço necessário para transferir o software de um ambiente de hardware/software para outro. Alta portabilidade significa que a aplicação pode rodar em diferentes sistemas operacionais, navegadores ou infraestruturas de nuvem com modificações mínimas ou nenhuma.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Hardcoded absolute path | 🟠 Important |
-| Vendor lock-in in critical service | 🟠 Important |
-| Shell command without fallback | 🟡 Suggestion |
-| Hardcoded line ending | 🟡 Suggestion |
+| Caminho absoluto hardcoded | 🟠 Importante |
+| Vendor lock-in em serviço crítico | 🟠 Importante |
+| Comando de shell sem fallback | 🟡 Sugestão |
+| Quebra de linha hardcoded | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not portable - system-specific path
+// ❌ Não portável - caminho específico do sistema
 const configPath = '/home/user/app/config.json';
 const tempDir = 'C:\\Users\\Admin\\Temp';
 
-// ✅ Portable - relative paths or via environment
+// ✅ Portável - caminhos relativos ou via variável de ambiente
 const configPath = path.join(process.cwd(), 'config.json');
 const tempDir = process.env.TEMP_DIR || os.tmpdir();
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// PORTABILITY(042): Absolute path - use environment variable
-// PORTABILITY: Linux-specific command - add fallback
+// PORTABILITY(042): Caminho absoluto - usar variável de ambiente
+// PORTABILITY: Comando específico do Linux - adicionar fallback
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Hardcoded absolute path | 🟠 Important |
-| Vendor lock-in in critical service | 🟠 Important |
-| Shell command without fallback | 🟡 Suggestion |
-| Hardcoded line ending | 🟡 Suggestion |
+| Caminho absoluto hardcoded | 🟠 Importante |
+| Vendor lock-in em serviço crítico | 🟠 Importante |
+| Comando de shell sem fallback | 🟡 Sugestão |
+| Quebra de linha hardcoded | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 042 - Configurations via Environment
-- 041 - Explicit Declaration of Dependencies
-- 024 - Prohibition of Magic Constants
+- 042 - Configurações via Ambiente
+- 041 - Declaração Explícita de Dependências
+- 024 - Proibição de Constantes Mágicas

@@ -1,38 +1,38 @@
-# Factor 01 — Codebase
+# Fator 01 — Codebase
 
-**deMGoncalves Rule:** [040 - Single Codebase](../../../rules/040_base-codigo-unica.md)
-**Question:** One application = one repository tracked in version control?
+**Regra deMGoncalves:** [040 - Base de Código Única](../../../rules/040_base-codigo-unica.md)
+**Questão:** Uma aplicação = um repositório rastreado em controle de versão?
 
-## What It Is
+## O que é
 
-An application must have exactly one codebase tracked in version control, with multiple deploys originating from that same base. The relationship between codebase and application is always **1:1**.
+Uma aplicação deve ter exatamente uma base de código rastreada em controle de versão, com múltiplos deploys originados dessa mesma base. A relação entre codebase e aplicação é sempre **1:1**.
 
-**Multiple codebases = distributed system, not an application.**
-**Shared code = extract to library with independent versioning.**
+**Múltiplas bases de código = sistema distribuído, não uma aplicação.**
+**Código compartilhado = extrair para biblioteca com versionamento independente.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] The application has **a single repository** in Git with branches for environments (dev, staging, prod)
-- [ ] Shared code between applications was extracted into **independent libraries** with their own versioning
-- [ ] Zero occurrences of *copy-paste deployment* between repositories
+- [ ] A aplicação possui **um único repositório** no Git com branches para ambientes (dev, staging, prod)
+- [ ] Código compartilhado entre aplicações foi extraído em **bibliotecas independentes** com versionamento próprio
+- [ ] Zero ocorrências de *copy-paste deployment* entre repositórios
 
-## ❌ Violation
+## ❌ Violação
 
 ```bash
-# Multiple codebase structure for same app
+# Estrutura com múltiplas bases de código para a mesma app
 repo-app-frontend/
 repo-app-backend/
 repo-app-workers/
 
-# Duplicated code in multiple repos
-repo-app-a/src/utils/validation.js  # duplicated
-repo-app-b/src/utils/validation.js  # violation
+# Código duplicado em múltiplos repositórios
+repo-app-a/src/utils/validation.js  # duplicado
+repo-app-b/src/utils/validation.js  # violação
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```bash
-# Single repository with multiple environments
+# Repositório único com múltiplos ambientes
 repo-app/
 ├── .git/
 ├── src/
@@ -41,15 +41,15 @@ repo-app/
 │   └── workers/
 └── branches: main, staging, dev
 
-# Shared code extracted to library
-@company/validation-lib  # independent npm package
+# Código compartilhado extraído como biblioteca
+@company/validation-lib  # pacote npm independente
   ├── version: 1.2.3
-  └── used by: app-a, app-b, app-c
+  └── usado por: app-a, app-b, app-c
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Code duplicated in multiple repos — extract to @company/shared-utils
+// FIXME: Código duplicado em múltiplos repositórios — extrair para @company/shared-utils
 function validateEmail(email: string): boolean { /* ... */ }
 ```

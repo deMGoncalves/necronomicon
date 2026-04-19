@@ -1,37 +1,37 @@
-# Rendering Strategies Overview
+# Visão Geral de Estratégias de Renderização
 
-Decision guide for choosing between CSR, SSR, SSG, ISR, and RSC in React (2026).
+Guia de decisão para escolher entre CSR, SSR, SSG, ISR e RSC no React (2026).
 
 ---
 
-## Decision Matrix
+## Matriz de Decisão
 
-| Strategy | SEO | TTI | Bundle | Infrastructure | When to Use |
-|----------|-----|-----|--------|----------------|-------------|
-| **CSR** | ❌ | Slow | Large | Simple | Dashboards, internal apps |
-| **SSR** | ✅ | Medium | Large | Complex | Dynamic content + SEO |
-| **SSG** | ✅ | Fast | Medium | Simple | Blogs, docs, marketing |
-| **ISR** | ✅ | Fast | Medium | Medium | SSG + frequent updates |
-| **RSC** | ✅ | Very fast | Small | Complex | Reduce bundle, server-side data fetching |
+| Estratégia | SEO | TTI | Bundle | Infraestrutura | Quando Usar |
+|------------|-----|-----|--------|----------------|-------------|
+| **CSR** | ❌ | Lento | Grande | Simples | Dashboards, apps internos |
+| **SSR** | ✅ | Médio | Grande | Complexa | Conteúdo dinâmico + SEO |
+| **SSG** | ✅ | Rápido | Médio | Simples | Blogs, docs, marketing |
+| **ISR** | ✅ | Rápido | Médio | Médio | SSG + atualizações frequentes |
+| **RSC** | ✅ | Muito rápido | Pequeno | Complexa | Reduzir bundle, busca de dados no servidor |
 
 ---
 
 ## Client-Side Rendering (CSR)
 
-**How it works:** JavaScript renders everything in the browser.
+**Como funciona:** JavaScript renderiza tudo no navegador.
 
-**When to use:**
-- Administrative dashboards
-- Internal tools
-- Highly interactive apps without SEO
-- Controlled environments
+**Quando usar:**
+- Dashboards administrativos
+- Ferramentas internas
+- Apps altamente interativos sem SEO
+- Ambientes controlados
 
-**When NOT to use:**
-- Public pages with SEO
-- Content-rich sites
-- Critical Time-to-Interactive
+**Quando NÃO usar:**
+- Páginas públicas com SEO
+- Sites com muito conteúdo
+- Time-to-Interactive crítico
 
-**Example (Vite + React):**
+**Exemplo (Vite + React):**
 ```tsx
 // main.tsx
 import React from 'react';
@@ -45,23 +45,23 @@ ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
 
 ## Server-Side Rendering (SSR)
 
-**How it works:** HTML rendered on server at each request.
+**Como funciona:** HTML renderizado no servidor a cada requisição.
 
-**When to use:**
-- Dynamic content + critical SEO
-- User personalization
-- Important initial performance
+**Quando usar:**
+- Conteúdo dinâmico + SEO crítico
+- Personalização por usuário
+- Performance inicial importante
 
-**When NOT to use:**
-- Static content (use SSG)
-- High server load without cache
+**Quando NÃO usar:**
+- Conteúdo estático (usar SSG)
+- Alta carga no servidor sem cache
 
-**Example (Next.js App Router):**
+**Exemplo (Next.js App Router):**
 ```tsx
 // app/page.tsx
 export default async function Page() {
   const data = await fetch('https://api.example.com/data');
-  return <div>{/* render data */}</div>;
+  return <div>{/* renderizar dados */}</div>;
 }
 ```
 
@@ -69,18 +69,18 @@ export default async function Page() {
 
 ## Static Site Generation (SSG)
 
-**How it works:** HTML generated at build time.
+**Como funciona:** HTML gerado no momento do build.
 
-**When to use:**
-- Blogs, docs, marketing pages
-- Content that changes rarely
-- Critical SEO + maximum performance
+**Quando usar:**
+- Blogs, docs, páginas de marketing
+- Conteúdo que muda raramente
+- SEO crítico + máxima performance
 
-**When NOT to use:**
-- User-personalized content
-- Frequently changing data (use ISR)
+**Quando NÃO usar:**
+- Conteúdo personalizado por usuário
+- Dados que mudam frequentemente (usar ISR)
 
-**Example (Next.js):**
+**Exemplo (Next.js):**
 ```tsx
 // app/blog/[slug]/page.tsx
 export async function generateStaticParams() {
@@ -89,7 +89,7 @@ export async function generateStaticParams() {
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
-  return <article>{/* render post */}</article>;
+  return <article>{/* renderizar post */}</article>;
 }
 ```
 
@@ -97,25 +97,25 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
 ## Incremental Static Regeneration (ISR)
 
-**How it works:** SSG + incremental revalidation (regenerates pages in background).
+**Como funciona:** SSG + revalidação incremental (regenera páginas em background).
 
-**When to use:**
-- Semi-static content (daily/weekly updates)
-- E-commerce (product pages)
-- News
+**Quando usar:**
+- Conteúdo semi-estático (atualizações diárias/semanais)
+- E-commerce (páginas de produto)
+- Notícias
 
-**When NOT to use:**
-- Real-time data (use SSR or CSR)
-- Completely static content (use pure SSG)
+**Quando NÃO usar:**
+- Dados em tempo real (usar SSR ou CSR)
+- Conteúdo completamente estático (usar SSG puro)
 
-**Example (Next.js):**
+**Exemplo (Next.js):**
 ```tsx
 // app/products/[id]/page.tsx
-export const revalidate = 3600; // revalidate every 1 hour
+export const revalidate = 3600; // revalidar a cada 1 hora
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await getProduct(params.id);
-  return <div>{/* render product */}</div>;
+  return <div>{/* renderizar produto */}</div>;
 }
 ```
 
@@ -123,24 +123,24 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
 ## React Server Components (RSC)
 
-**How it works:** Components render on server without sending JavaScript to client.
+**Como funciona:** Componentes renderizam no servidor sem enviar JavaScript ao cliente.
 
-**When to use:**
-- Drastically reduce bundle size
-- Direct data fetching in component
-- Server-side database/API access
-- Large libraries (markdown parsers, etc.)
+**Quando usar:**
+- Reduzir drasticamente o tamanho do bundle
+- Busca de dados diretamente no componente
+- Acesso a banco/API no lado do servidor
+- Bibliotecas grandes (parsers de markdown, etc.)
 
-**When NOT to use:**
-- Components with interactivity (event handlers)
-- Components using React hooks
-- Browser-only APIs
+**Quando NÃO usar:**
+- Componentes com interatividade (event handlers)
+- Componentes usando React hooks
+- APIs exclusivas do navegador
 
-**Example (Next.js 13+ App Router):**
+**Exemplo (Next.js 13+ App Router):**
 ```tsx
-// app/page.tsx (Server Component by default)
+// app/page.tsx (Server Component por padrão)
 async function Page() {
-  const data = await db.query('SELECT * FROM users'); // direct DB access
+  const data = await db.query('SELECT * FROM users'); // acesso direto ao banco
   return (
     <div>
       {data.map(user => (
@@ -157,15 +157,15 @@ import { useState } from 'react';
 
 export function LikeButton() {
   const [liked, setLiked] = useState(false);
-  return <button onClick={() => setLiked(!liked)}>Like</button>;
+  return <button onClick={() => setLiked(!liked)}>Curtir</button>;
 }
 ```
 
 ---
 
-## Hybrid Approach (Recommended for 2026)
+## Abordagem Híbrida (Recomendada para 2026)
 
-**Next.js 13+ App Router:** SSR + RSC + Streaming + Selective Hydration
+**Next.js 13+ App Router:** SSR + RSC + Streaming + Hidratação Seletiva
 
 ```tsx
 // app/layout.tsx (Server Component)
@@ -175,7 +175,7 @@ export default function RootLayout({ children }) {
       <body>
         <Header /> {/* Server Component */}
         <Suspense fallback={<Loading />}>
-          {children} {/* Can be Server or Client Component */}
+          {children} {/* Pode ser Server ou Client Component */}
         </Suspense>
         <Footer /> {/* Server Component */}
       </body>
@@ -187,13 +187,13 @@ export default function RootLayout({ children }) {
 import { ClientChart } from './ClientChart';
 
 export default async function Dashboard() {
-  const data = await fetchDashboardData(); // server-side
+  const data = await fetchDashboardData(); // lado do servidor
 
   return (
     <div>
       <h1>Dashboard</h1>
       <ServerStats data={data} /> {/* Server Component */}
-      <ClientChart data={data} /> {/* Client Component with interactivity */}
+      <ClientChart data={data} /> {/* Client Component com interatividade */}
     </div>
   );
 }
@@ -201,45 +201,45 @@ export default async function Dashboard() {
 
 ---
 
-## Decision Checklist
+## Checklist de Decisão
 
 ```
-1. Need SEO?
-   ├─ No → CSR
-   └─ Yes → continue
+1. Precisa de SEO?
+   ├─ Não → CSR
+   └─ Sim → continuar
 
-2. Is content static or dynamic?
-   ├─ Static → SSG or ISR
-   └─ Dynamic → continue
+2. O conteúdo é estático ou dinâmico?
+   ├─ Estático → SSG ou ISR
+   └─ Dinâmico → continuar
 
-3. Need to drastically reduce bundle?
-   ├─ Yes → RSC
-   └─ No → SSR
+3. Precisa reduzir drasticamente o bundle?
+   ├─ Sim → RSC
+   └─ Não → SSR
 
-4. How often does content change?
-   ├─ Rarely (< 1x/day) → SSG
-   ├─ Periodically (1x/hour) → ISR
-   └─ Constantly (real-time) → SSR or CSR with polling
+4. Com que frequência o conteúdo muda?
+   ├─ Raramente (< 1x/dia) → SSG
+   ├─ Periodicamente (1x/hora) → ISR
+   └─ Constantemente (tempo real) → SSR ou CSR com polling
 
-5. Framework available?
-   ├─ Next.js → use App Router (RSC + SSR + ISR)
-   ├─ Remix → native SSR
-   └─ Vite → CSR or manual SSR
+5. Framework disponível?
+   ├─ Next.js → usar App Router (RSC + SSR + ISR)
+   ├─ Remix → SSR nativo
+   └─ Vite → CSR ou SSR manual
 ```
 
 ---
 
-## Performance Metrics (typical)
+## Métricas de Performance (típicas)
 
-| Metric | CSR | SSR | SSG | ISR | RSC |
-|--------|-----|-----|-----|-----|-----|
-| **TTFB** | Fast | Medium | Fast | Fast | Medium |
-| **FCP** | Slow | Medium | Fast | Fast | Medium |
-| **TTI** | Slow | Medium | Fast | Fast | Fast |
+| Métrica | CSR | SSR | SSG | ISR | RSC |
+|---------|-----|-----|-----|-----|-----|
+| **TTFB** | Rápido | Médio | Rápido | Rápido | Médio |
+| **FCP** | Lento | Médio | Rápido | Rápido | Médio |
+| **TTI** | Lento | Médio | Rápido | Rápido | Rápido |
 | **Bundle** | 200KB+ | 200KB+ | 150KB | 150KB | 50KB |
 
 ---
 
-**Source:** [patterns.dev/react](https://www.patterns.dev/react), Next.js Docs, React Docs
-**Updated on**: 2026-04-01
-**Version**: 1.0
+**Fonte:** [patterns.dev/react](https://www.patterns.dev/react), Next.js Docs, React Docs
+**Atualizado em**: 2026-04-01
+**Versão**: 1.0

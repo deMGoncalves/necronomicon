@@ -1,49 +1,49 @@
 # Long Method
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 055
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 055
 
-## What It Is
+## O Que É
 
-Function or method with too many lines, performing multiple tasks in sequence. Fowler: the longer the function, the harder to understand. Short functions with good names are self-documented.
+Função ou método com linhas demais, executando múltiplas tarefas em sequência. Fowler: quanto mais longa a função, mais difícil de entender. Funções curtas com bons nomes são autodocumentadas.
 
-## Symptoms
+## Sintomas
 
-- Functions with more than 20–30 lines
-- Need for comments separating "sections" within the function
-- Multiple abstraction levels mixed: I/O, validation, calculation, formatting
-- Impossible to test without complex setup
-- More than one return point with different logic in each
+- Funções com mais de 20–30 linhas
+- Necessidade de comentários separando "seções" dentro da função
+- Múltiplos níveis de abstração misturados: I/O, validação, cálculo, formatação
+- Impossível testar sem setup complexo
+- Mais de um ponto de retorno com lógica diferente em cada
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ One function doing validation, transformation, persistence and notification
+// ❌ Uma função fazendo validação, transformação, persistência e notificação
 async function registerUser(data) {
-  // validation
-  if (!data.email) throw new Error('Email required');
-  if (!data.email.includes('@')) throw new Error('Invalid email');
-  if (!data.password || data.password.length < 8) throw new Error('Weak password');
+  // validação
+  if (!data.email) throw new Error('Email obrigatório');
+  if (!data.email.includes('@')) throw new Error('Email inválido');
+  if (!data.password || data.password.length < 8) throw new Error('Senha fraca');
 
-  // transformation
+  // transformação
   const hashedPassword = await bcrypt.hash(data.password, 10);
   const slug = data.name.toLowerCase().replace(/\s+/g, '-');
 
-  // persistence
+  // persistência
   const user = await db.users.create({ ...data, password: hashedPassword, slug });
 
-  // notification
-  await emailService.send(user.email, 'Welcome!', welcomeTemplate(user));
+  // notificação
+  await emailService.send(user.email, 'Bem-vindo!', welcomeTemplate(user));
   await analyticsService.track('user_registered', { userId: user.id });
 
   return user;
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Each responsibility in its own function
+// ✅ Cada responsabilidade em sua própria função
 async function registerUser(data) {
   validateUserData(data);
   const prepared = await prepareUserData(data);
@@ -53,9 +53,9 @@ async function registerUser(data) {
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Long Method — 27 lines, 4 responsibilities
-// TODO: Extract validateUserData, prepareUserData, notifyRegistration
+// FIXME: Long Method — 27 linhas, 4 responsabilidades
+// TODO: Extrair validateUserData, prepareUserData, notifyRegistration
 ```

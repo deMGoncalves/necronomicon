@@ -1,49 +1,49 @@
 # Shotgun Surgery
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 058
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 058
 
-## What It Is
+## O Que É
 
-A single logical change requires alterations in many different places in the code simultaneously. Each time something changes, you "shoot" edits throughout the codebase like shotgun pellets. Opposite of Divergent Change: here, one change requires N altered files.
+Uma única mudança lógica requer alterações em muitos lugares diferentes do código simultaneamente. Cada vez que algo muda, edições são "disparadas" por toda a base de código como perdigões de uma espingarda. Oposto do Divergent Change: aqui, uma mudança requer N arquivos alterados.
 
-## Symptoms
+## Sintomas
 
-- Behavior change requires altering 3+ classes/modules
-- Same calculation or validation logic exists in multiple locations
-- Adding new field/feature requires modifying N files in different layers
-- Bug fix needs to be applied in multiple files with same correction pattern
-- Code review: "why did you also change this file?"
+- Mudança de comportamento requer alterar 3+ classes/módulos
+- Mesma lógica de cálculo ou validação existe em múltiplos locais
+- Adicionar novo campo/feature requer modificar N arquivos em camadas diferentes
+- Correção de bug precisa ser aplicada em múltiplos arquivos com o mesmo padrão
+- Code review: "por que você também mudou esse arquivo?"
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Adding "phone" field requires editing all these files:
-// user.model.js      → add field
-// user.validator.js  → add validation
-// user.dto.js        → add to DTO
-// user.mapper.js     → add to mapping
-// user.repository.js → add to query
-// user.test.js       → add to fixtures
+// ❌ Adicionar campo "phone" requer editar todos esses arquivos:
+// user.model.js      → adicionar campo
+// user.validator.js  → adicionar validação
+// user.dto.js        → adicionar ao DTO
+// user.mapper.js     → adicionar ao mapeamento
+// user.repository.js → adicionar à query
+// user.test.js       → adicionar aos fixtures
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Cohesive feature: schema centralizes everything (Move Method + Move Field)
+// ✅ Feature coesa: schema centraliza tudo (Move Method + Move Field)
 const userSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  phone: z.string().regex(/^\+\d{10,15}$/), // add here → works system-wide
+  phone: z.string().regex(/^\+\d{10,15}$/), // adicionar aqui → funciona em todo o sistema
 });
 
-// Type inference + validation + DTO + mapping = all in one place
+// Inferência de tipos + validação + DTO + mapeamento = tudo em um lugar
 type User = z.infer<typeof userSchema>;
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Shotgun Surgery — adding field requires N files: model, validator, dto, mapper, repository
-// TODO: Centralize schema with Zod/Yup for unified validation + types + DTOs
+// FIXME: Shotgun Surgery — adicionar campo requer N arquivos: model, validator, dto, mapper, repository
+// TODO: Centralizar schema com Zod/Yup para validação + tipos + DTOs unificados
 ```

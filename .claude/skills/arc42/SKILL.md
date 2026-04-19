@@ -1,6 +1,6 @@
 ---
 name: arc42
-description: Arc42 architectural documentation template with 12 sections. Use when @architect needs to create or update documentation in docs/arc42/ — when documenting a new feature, after architectural changes or in Phase 4 of the workflow.
+description: Template de documentação arquitetural arc42 com 12 seções. Use quando @architect precisar criar ou atualizar documentação em docs/arc42/ — ao documentar nova feature, após mudanças arquiteturais ou na Fase 4 do workflow.
 model: haiku
 allowed-tools: Read, Write, Edit
 metadata:
@@ -11,131 +11,144 @@ metadata:
 
 # Arc42
 
-Architectural documentation template with 12 standardized sections.
+Template de documentação arquitetural com 12 seções padronizadas.
 
-## When to Use
+---
 
-- Phase 4 (Docs): @architect syncs docs/arc42/ after implementation
-- When creating a new project: @architect creates initial documentation
-- When making important architectural decisions: update affected sections
+## Manifest
 
-## Structure of 12 Sections
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Fase 4 (Docs) do workflow; criação de novo projeto; mudanças arquiteturais que afetam decisões de design já documentadas |
+| **Prerequisites** | Feature ou sistema implementado; decisões arquiteturais tomadas e registradas em ADRs; diagramas C4 disponíveis para §5 |
+| **Constraints** | Não criar antes da implementação; §9 é apenas índice de ADRs — não duplicar conteúdo; idioma obrigatório pt-BR |
+| **Scope** | 12 seções em `docs/arc42/`: introdução, restrições, contexto, solução, blocos, runtime, deployment, conceitos, decisões, qualidade, riscos, glossário |
 
-| Section | File | Expected Content | Reference |
-|---------|------|------------------|-----------|
-| §1 Introduction and Goals | 01_introduction_and_goals.md | Overview, FR, NFR, acceptance criteria, stakeholders | [01_introduction_and_goals.md](references/01_introduction_and_goals.md) |
-| §2 Architecture Constraints | 02_architecture_constraints.md | Technical, organizational constraints, mandatory conventions | [02_architecture_constraints.md](references/02_architecture_constraints.md) |
-| §3 Context and Scope | 03_context_and_scope.md | System context diagram, external actors, external systems, interfaces | [03_context_and_scope.md](references/03_context_and_scope.md) |
-| §4 Solution Strategy | 04_solution_strategy.md | Fundamental decisions: technologies, architecture, quality | [04_solution_strategy.md](references/04_solution_strategy.md) |
-| §5 Building Block View | 05_building_block_view.md | Decomposition into components (level 1, 2, 3), responsibilities | [05_building_block_view.md](references/05_building_block_view.md) |
-| §6 Runtime View | 06_runtime_view.md | Execution flows, sequence diagrams, scenarios | [06_runtime_view.md](references/06_runtime_view.md) |
-| §7 Deployment View | 07_deployment_view.md | Infrastructure, containers, environments (dev, staging, prod) | [07_deployment_view.md](references/07_deployment_view.md) |
-| §8 Crosscutting Concepts | 08_concepts.md | Transversal patterns: logging, security, error handling, patterns | [08_concepts.md](references/08_concepts.md) |
-| §9 Architecture Decisions | 09_architecture_decisions.md | Index of all ADRs | [09_architecture_decisions.md](references/09_architecture_decisions.md) |
-| §10 Quality Requirements | 10_quality_requirements.md | Quality tree, quality scenarios, metrics | [10_quality_requirements.md](references/10_quality_requirements.md) |
-| §11 Technical Risks | 11_technical_risks.md | Identified risks, impact, mitigation | [11_technical_risks.md](references/11_technical_risks.md) |
-| §12 Glossary | 12_glossary.md | Domain and technical terms with definitions | [12_glossary.md](references/12_glossary.md) |
+---
 
-## Arc42 File Format
+## Quando Usar
+
+- Fase 4 (Docs): @architect sincroniza docs/arc42/ após implementação
+- Ao criar um novo projeto: @architect cria documentação inicial
+- Ao tomar decisões arquiteturais importantes: atualizar seções afetadas
+
+## Estrutura das 12 Seções
+
+| Seção | Arquivo | Conteúdo Esperado | Referência |
+|-------|---------|-------------------|------------|
+| §1 Introdução e Objetivos | 01_introduction_and_goals.md | Visão geral, RF, RNF, critérios de aceitação, stakeholders | [01_introduction_and_goals.md](references/01_introduction_and_goals.md) |
+| §2 Restrições Arquiteturais | 02_architecture_constraints.md | Restrições técnicas, organizacionais, convenções obrigatórias | [02_architecture_constraints.md](references/02_architecture_constraints.md) |
+| §3 Contexto e Escopo | 03_context_and_scope.md | Diagrama de contexto do sistema, atores externos, sistemas externos, interfaces | [03_context_and_scope.md](references/03_context_and_scope.md) |
+| §4 Estratégia de Solução | 04_solution_strategy.md | Decisões fundamentais: tecnologias, arquitetura, qualidade | [04_solution_strategy.md](references/04_solution_strategy.md) |
+| §5 Visão de Blocos de Construção | 05_building_block_view.md | Decomposição em componentes (nível 1, 2, 3), responsabilidades | [05_building_block_view.md](references/05_building_block_view.md) |
+| §6 Visão em Runtime | 06_runtime_view.md | Fluxos de execução, diagramas de sequência, cenários | [06_runtime_view.md](references/06_runtime_view.md) |
+| §7 Visão de Deployment | 07_deployment_view.md | Infraestrutura, containers, ambientes (dev, staging, prod) | [07_deployment_view.md](references/07_deployment_view.md) |
+| §8 Conceitos Transversais | 08_concepts.md | Padrões transversais: logging, segurança, tratamento de erros, patterns | [08_concepts.md](references/08_concepts.md) |
+| §9 Decisões Arquiteturais | 09_architecture_decisions.md | Índice de todos os ADRs | [09_architecture_decisions.md](references/09_architecture_decisions.md) |
+| §10 Requisitos de Qualidade | 10_quality_requirements.md | Árvore de qualidade, cenários de qualidade, métricas | [10_quality_requirements.md](references/10_quality_requirements.md) |
+| §11 Riscos Técnicos | 11_technical_risks.md | Riscos identificados, impacto, mitigação | [11_technical_risks.md](references/11_technical_risks.md) |
+| §12 Glossário | 12_glossary.md | Termos de domínio e técnicos com definições | [12_glossary.md](references/12_glossary.md) |
+
+## Formato de Arquivo Arc42
 
 ```markdown
-# §N — [Section Title]
+# §N — [Título da Seção]
 
-## [Subsection 1]
+## [Subseção 1]
 
-[Content with tables, lists, ASCII diagrams]
+[Conteúdo com tabelas, listas, diagramas ASCII]
 
-## [Subsection 2]
-
----
-
-## Related to
-
-- [Cross-references to ADRs, BDD, C4]
+## [Subseção 2]
 
 ---
 
-**Author:** [Name] · [Link]
+## Relacionado a
+
+- [Referências cruzadas para ADRs, BDD, C4]
+
+---
+
+**Autor:** [Nome] · [Link]
 ```
 
-## Conventions
+## Convenções
 
-- Context diagram: use ASCII art or Mermaid
-- Tables for external actors, systems, FR, NFR
-- Cross-references between §§ and ADRs/BDD
-- Language: Brazilian Portuguese
-- Section §9 is an index of ADRs (not duplicated content)
+- Diagrama de contexto: usar ASCII art ou Mermaid
+- Tabelas para atores externos, sistemas, RF, RNF
+- Referências cruzadas entre §§ e ADRs/BDD
+- Idioma: Português brasileiro
+- Seção §9 é um índice de ADRs (não conteúdo duplicado)
 
-## Examples
+## Exemplos
 
 ```markdown
-// ❌ Bad — free documentation without structure
-## Architecture
-The system uses microservices and has a PostgreSQL database.
-It connects with the payment API.
+// ❌ Ruim — documentação livre sem estrutura
+## Arquitetura
+O sistema usa microserviços e tem um banco PostgreSQL.
+Ele se conecta com a API de pagamento.
 
-// ✅ Good — Arc42 with structured sections and clear context
-# §1 — Introduction and Goals
+// ✅ Bom — Arc42 com seções estruturadas e contexto claro
+# §1 — Introdução e Objetivos
 
-## Overview
-E-commerce system for selling digital products.
+## Visão Geral
+Sistema de e-commerce para venda de produtos digitais.
 
-## Functional Requirements
-| ID   | Requirement                        |
+## Requisitos Funcionais
+| ID   | Requisito                          |
 |------|------------------------------------|
-| FR-1 | User can create account            |
-| FR-2 | User can add to cart               |
+| FR-1 | Usuário pode criar conta           |
+| FR-2 | Usuário pode adicionar ao carrinho |
 
-## Quality Goals
-| Quality        | Metric            |
+## Objetivos de Qualidade
+| Qualidade      | Métrica           |
 |----------------|-------------------|
-| Availability   | 99.9% uptime      |
-| Performance    | Latency < 200ms   |
+| Disponibilidade| 99.9% uptime      |
+| Performance    | Latência < 200ms  |
 
 ---
 
-# §3 — Context and Scope
+# §3 — Contexto e Escopo
 
-## System Context
+## Contexto do Sistema
 ```
-[User] --uses--> [E-commerce System] --integrates--> [Payment Gateway]
+[Usuário] --usa--> [Sistema E-commerce] --integra--> [Gateway de Pagamento]
 ```
 
-## External Interfaces
-| System          | Protocol | Responsibility       |
-|-----------------|----------|---------------------|
-| Stripe Gateway  | REST     | Process payments    |
-| Email Service   | SMTP     | Send confirmations  |
+## Interfaces Externas
+| Sistema          | Protocolo | Responsabilidade    |
+|------------------|-----------|---------------------|
+| Stripe Gateway   | REST      | Processar pagamentos|
+| Email Service    | SMTP      | Enviar confirmações |
 
 ---
 
-# §5 — Building Block View
+# §5 — Visão de Blocos de Construção
 
-## Level 1 — Containers
+## Nível 1 — Containers
 - Frontend (React SPA)
 - Backend API (Node.js)
-- PostgreSQL Database
+- Banco de Dados PostgreSQL
 
-## Level 2 — Backend Components
+## Nível 2 — Componentes do Backend
 - AuthController
 - OrderService
-- PaymentGateway (external integration)
+- PaymentGateway (integração externa)
 
 ---
 
-# §9 — Architecture Decisions
+# §9 — Decisões Arquiteturais
 
-→ See [docs/adr/](../../adr/) for individual ADRs:
-- ADR-001: Choice of Node.js for backend
+→ Ver [docs/adr/](../../adr/) para ADRs individuais:
+- ADR-001: Escolha de Node.js para backend
 - ADR-002: PostgreSQL vs MongoDB
 ```
 
-## Rationale
+## Justificativa
 
-- Documented architecture ensures fast onboarding and decision traceability
-- Reference: arc42.org template, adapted for JS/TS projects
+- Arquitetura documentada garante onboarding rápido e rastreabilidade de decisões
+- Referência: template arc42.org, adaptado para projetos JS/TS
 
 **Related skills:**
-- [`c4model`](../c4model/SKILL.md) — reinforces: arc42 §5 uses C4 diagrams for building blocks
-- [`adr`](../adr/SKILL.md) — reinforces: arc42 §9 centralizes ADRs of architectural decisions
-- [`bdd`](../bdd/SKILL.md) — complements: arc42 §10 integrates with BDD features for requirements
+- [`c4model`](../c4model/SKILL.md) — reforça: arc42 §5 usa diagramas C4 para blocos de construção
+- [`adr`](../adr/SKILL.md) — reforça: arc42 §9 centraliza ADRs de decisões arquiteturais
+- [`bdd`](../bdd/SKILL.md) — complementa: arc42 §10 integra com features BDD para requisitos

@@ -1,49 +1,49 @@
 # Boat Anchor
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 067
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 067
 
-## What It Is
+## O Que É
 
-Software component (library, module, class, entire system) or dependency kept in codebase because "it might be useful in the future," but currently has no active purpose. Like an anchor on a boat: weight without utility.
+Componente de software (biblioteca, módulo, classe, sistema inteiro) ou dependência mantido na base de código porque "pode ser útil no futuro", mas que atualmente não tem nenhum propósito ativo. Como uma âncora num barco: peso sem utilidade.
 
-## Symptoms
+## Sintomas
 
-- Dependency listed in `package.json`, `requirements.txt` but never imported
-- Library imported but never called (`import X` without `X.method()` usage)
-- Imported modules but never used
-- Dependencies in `package.json` without any code reference
-- Provisioned infrastructure that nobody uses (queues, databases, services)
-- "Future integration" code written before integration exists
-- Comments like `// will be used when we implement X`
+- Dependência listada em `package.json`, `requirements.txt` mas nunca importada
+- Biblioteca importada mas nunca chamada (`import X` sem uso de `X.method()`)
+- Módulos importados mas nunca utilizados
+- Dependências em `package.json` sem nenhuma referência no código
+- Infraestrutura provisionada que ninguém usa (filas, bancos de dados, serviços)
+- Código de "integração futura" escrito antes de a integração existir
+- Comentários como `// será usado quando implementarmos X`
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Dependency installed "for when we need it"
-// package.json has: "pdfkit", "sharp", "node-cron"
-// None of them have a single line of use in the code
+// ❌ Dependência instalada "para quando precisarmos"
+// package.json tem: "pdfkit", "sharp", "node-cron"
+// Nenhuma delas tem uma única linha de uso no código
 
-// ❌ Module created "for next sprint"
+// ❌ Módulo criado "para o próximo sprint"
 export class ReportExporter {
-  exportToExcel() { /* TODO: implement */ }
-  exportToPowerPoint() { /* TODO: implement */ }
+  exportToExcel() { /* TODO: implementar */ }
+  exportToPowerPoint() { /* TODO: implementar */ }
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Only what is used exists (YAGNI)
-// package.json: only dependencies with real references in code
-// Module created when feature is needed, with tests from the start
+// ✅ Só existe o que é usado (YAGNI)
+// package.json: apenas dependências com referências reais no código
+// Módulo criado quando a feature for necessária, com testes desde o início
 
-// Use: npm-check, depcheck, pipreqs, go mod tidy to detect
+// Usar: npm-check, depcheck, pipreqs, go mod tidy para detectar
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Boat Anchor — pdfkit/sharp/node-cron installed but never referenced
-// TODO: npm uninstall; create module when need is real
+// FIXME: Boat Anchor — pdfkit/sharp/node-cron instalados mas nunca referenciados
+// TODO: npm uninstall; criar módulo quando a necessidade for real
 ```

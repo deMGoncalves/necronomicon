@@ -1,55 +1,55 @@
 # Integrity — Integridade
 
-**Dimension:** Operation
-**Default Severity:** 🔴 Critical (ALWAYS blocker)
-**Key Question:** Does it offer security?
+**Dimensão:** Operação
+**Severidade Padrão:** 🔴 Crítica (SEMPRE blocker)
+**Questão-Chave:** Oferece segurança?
 
-## What It Is
+## O que é
 
-The degree to which access to software or data can be controlled and protected. Integrity encompasses protection against attacks, data validation, access control, and protection of sensitive information.
+O grau em que o acesso ao software ou aos dados pode ser controlado e protegido. Integridade engloba proteção contra ataques, validação de dados, controle de acesso e proteção de informações sensíveis.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Any security vulnerability | 🔴 Blocker |
-| Possible vulnerability (needs analysis) | 🔴 Blocker |
-| Security improvement (not vulnerable) | 🟠 Important |
+| Qualquer vulnerabilidade de segurança | 🔴 Blocker |
+| Possível vulnerabilidade (necessita análise) | 🔴 Blocker |
+| Melhoria de segurança (sem vulnerabilidade) | 🟠 Importante |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Vulnerable - SQL Injection
+// ❌ Vulnerável - SQL Injection
 function getUser(username) {
   return db.query(`SELECT * FROM users WHERE username = '${username}'`);
 }
 
-// ✅ Secure - Prepared Statement
+// ✅ Seguro - Prepared Statement
 function getUser(username) {
   return db.query('SELECT * FROM users WHERE username = ?', [username]);
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// SECURITY: Sanitize input before using in query
-// FIXME: SQL injection vulnerability - use prepared statement
-// FIXME: API key hardcoded - move to environment variable
+// SECURITY: Sanitizar entrada antes de usar na query
+// FIXME: Vulnerabilidade de SQL injection - usar prepared statement
+// FIXME: API key hardcoded - mover para variável de ambiente
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-**ALWAYS 🔴 Blocker** - No exceptions for security vulnerabilities.
+**SEMPRE 🔴 Blocker** - Sem exceções para vulnerabilidades de segurança.
 
-| Situation | Action |
+| Situação | Ação |
 |----------|------|
-| Any security vulnerability | 🔴 Blocker - do not merge |
-| Possible vulnerability (needs analysis) | 🔴 Blocker until confirmed |
-| Security improvement (not vulnerable) | 🟠 Important |
+| Qualquer vulnerabilidade de segurança | 🔴 Blocker - não fazer merge |
+| Possível vulnerabilidade (necessita análise) | 🔴 Blocker até confirmação |
+| Melhoria de segurança (sem vulnerabilidade) | 🟠 Importante |
 
-## Related Rules
+## Regras Relacionadas
 
-- 030 - Prohibition of Unsafe Functions
-- 042 - Configurations via Environment
-- 024 - Prohibition of Magic Constants
+- 030 - Proibição de Funções Inseguras
+- 042 - Configurações via Ambiente
+- 024 - Proibição de Constantes Mágicas

@@ -1,55 +1,55 @@
 # Adaptability — Adaptabilidade
 
-**Dimension:** Operation
-**Default Severity:** 🟠 Important
-**Key Question:** Is it configurable?
+**Dimensão:** Operação
+**Severidade Padrão:** 🟠 Importante
+**Questão-Chave:** É configurável?
 
-## What It Is
+## O que é
 
-The ease with which software can be modified to meet different user needs, environments, or requirements without source code alteration. Adaptability includes configurability, parameterization, and extensibility via plugins.
+A facilidade com que o software pode ser modificado para atender diferentes necessidades de usuários, ambientes ou requisitos sem alteração do código-fonte. Adaptabilidade inclui configurabilidade, parametrização e extensibilidade via plugins.
 
-## Problem Indicators
+## Indicadores de Problema
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Hardcoded credentials/URLs | 🔴 Blocker |
-| Client-specific logic hardcoded | 🟠 Important |
-| Timeout/retry without configuration | 🟠 Important |
-| UI texts without i18n | 🟡 Suggestion |
+| Credenciais/URLs hardcoded | 🔴 Blocker |
+| Lógica específica de cliente hardcoded | 🟠 Importante |
+| Timeout/retry sem configuração | 🟠 Importante |
+| Textos de UI sem i18n | 🟡 Sugestão |
 
-## Violation Example
+## Exemplo de Violação
 
 ```javascript
-// ❌ Not adaptable - fixed values in code
+// ❌ Não adaptável - valores fixos no código
 function shouldRetry(attempts) {
-  return attempts < 3; // Always 3 attempts
+  return attempts < 3; // Sempre 3 tentativas
 }
 
-// ✅ Adaptable - configurable values
+// ✅ Adaptável - valores configuráveis
 function shouldRetry(attempts) {
   const maxRetries = config.get('MAX_RETRIES', 3);
   return attempts < maxRetries;
 }
 ```
 
-## Suggested Codetags
+## Codetags Sugeridas
 
 ```javascript
-// CONFIG(042): This value should be configurable via environment
-// CONFIG(024): Consider feature flag for this functionality
+// CONFIG(042): Este valor deve ser configurável via ambiente
+// CONFIG(024): Considerar feature flag para esta funcionalidade
 ```
 
-## Severity Calibration
+## Calibração de Severidade
 
-| Situation | Severity |
+| Situação | Severidade |
 |----------|-----------|
-| Hardcoded environment credentials/URLs | 🔴 Blocker |
-| Client-specific logic hardcoded | 🟠 Important |
-| Timeout/retry without configuration | 🟠 Important |
-| UI texts without i18n | 🟡 Suggestion |
+| Credenciais/URLs de ambiente hardcoded | 🔴 Blocker |
+| Lógica específica de cliente hardcoded | 🟠 Importante |
+| Timeout/retry sem configuração | 🟠 Importante |
+| Textos de UI sem i18n | 🟡 Sugestão |
 
-## Related Rules
+## Regras Relacionadas
 
-- 042 - Configurations via Environment
-- 024 - Prohibition of Magic Constants
-- 011 - Open/Closed Principle
+- 042 - Configurações via Ambiente
+- 024 - Proibição de Constantes Mágicas
+- 011 - Princípio Aberto/Fechado

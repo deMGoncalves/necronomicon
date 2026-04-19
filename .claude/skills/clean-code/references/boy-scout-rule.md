@@ -1,27 +1,27 @@
-# Boy Scout Rule (Rule 039)
+# Boy Scout Rule (Regra 039)
 
-## Rule
+## Regra
 
-- **039**: Always leave code better than you found it
+- **039**: Sempre deixar o código melhor do que o encontrou
 
 ## Checklist
 
-- [ ] Small code smells fixed in alteration scope
-- [ ] Modified files with CC>5 → refactor
-- [ ] Bad names → rename during alteration
-- [ ] Missing guard clauses → add
-- [ ] PR diff shows improvements beyond requested
+- [ ] Pequenos code smells corrigidos no escopo da alteração
+- [ ] Arquivos modificados com CC>5 → refatorar
+- [ ] Nomes ruins → renomear durante a alteração
+- [ ] Guard clauses ausentes → adicionar
+- [ ] Diff do PR mostra melhorias além do solicitado
 
-## Philosophy
+## Filosofia
 
-> "Leave the campground cleaner than you found it."
+> "Deixe o acampamento mais limpo do que o encontrou."
 
-Continuous and emergent refactoring prevents technical debt accumulation. Don't wait for "refactoring sprint" — improve whenever touching code.
+A refatoração contínua e emergente previne o acúmulo de débito técnico. Não espere um "sprint de refatoração" — melhore sempre que tocar no código.
 
-## Examples
+## Exemplos
 
 ```typescript
-// Before (found)
+// Antes (encontrado)
 function processOrder(order) {
   if (order.status == 'pending') {
     if (order.items.length > 0) {
@@ -39,14 +39,14 @@ function processOrder(order) {
   return false;
 }
 
-// After (improved while passing through)
+// Depois (melhorado ao passar pelo código)
 function processOrder(order: Order): boolean {
-  // Guard clauses added
+  // Guard clauses adicionadas
   if (order.status !== OrderStatus.PENDING) return false;
   if (order.total <= 0) return false;
   if (!order.user) return false;
 
-  // Main logic
+  // Lógica principal
   order.status = OrderStatus.PROCESSING;
   saveOrder(order);
   return true;
@@ -56,7 +56,7 @@ function processCardPayment(order: Order): string {
   return order.amount > 1000 ? applyDiscount(order) : processPayment(order);
 }
 
-// Enums created where there were magic strings
+// Enums criados onde havia strings mágicas
 enum OrderStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
@@ -64,25 +64,25 @@ enum OrderStatus {
 }
 ```
 
-## Scouting Opportunities
+## Oportunidades de Escotismo
 
-| Found | Scouting Action |
-|-------|-----------------|
-| `if (x) { if (y) { ... } }` | Apply guard clause or extract method |
-| `strName`, `bIsActive` | Remove Hungarian notation |
-| `const val = 100` | Create named constant (`MAX_RETRIES`) |
-| Method with CC=6 | Extract conditionals into private methods |
-| Redundant comment | Remove or transform into WHY |
-| `return null` | Throw domain exception |
+| Encontrado | Ação de Escotismo |
+|-----------|-------------------|
+| `if (x) { if (y) { ... } }` | Aplicar guard clause ou extrair método |
+| `strName`, `bIsActive` | Remover notação húngara |
+| `const val = 100` | Criar constante nomeada (`MAX_RETRIES`) |
+| Método com CC=6 | Extrair condicionais em métodos privados |
+| Comentário redundante | Remover ou transformar em POR QUÊ |
+| `return null` | Lançar exceção de domínio |
 
-## When NOT to Apply
+## Quando NÃO Aplicar
 
-- **Critical Hotfixes**: Refactoring risk > immediate gain
-- **Untested Code**: Without tests, refactoring can introduce bugs
-- **Too distant scope**: Don't refactor files unrelated to PR
+- **Hotfixes Críticos**: Risco de refatoração > ganho imediato
+- **Código Sem Testes**: Sem testes, refatoração pode introduzir bugs
+- **Escopo muito distante**: Não refatorar arquivos não relacionados ao PR
 
-## Relation to ICP
+## Relação com ICP
 
-- Reduces technical debt incrementally
-- Keeps CC_base and Responsibilities under control
-- Prevents Blob and Lava Flow formation
+- Reduz débito técnico incrementalmente
+- Mantém CC_base e Responsabilidades sob controle
+- Previne a formação de Blob e Lava Flow

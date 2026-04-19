@@ -1,24 +1,24 @@
 # Factory Method
 
-**Category:** Creational
-**Intent:** Define an interface for creating objects, but let subclasses decide which class to instantiate.
+**Categoria:** Criacional
+**Intenção:** Definir uma interface para criar objetos, mas deixar as subclasses decidirem qual classe instanciar.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- When the exact type of object to be created depends on context
-- When subclasses should be able to specialize the creation process
-- To isolate object creation from the logic that uses them
-- When integrating with multiple providers or adapters
+- Quando o tipo exato de objeto a ser criado depende do contexto
+- Quando subclasses devem ser capazes de especializar o processo de criação
+- Para isolar a criação de objetos da lógica que os utiliza
+- Ao integrar com múltiplos provedores ou adapters
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When there's only one concrete type — a simple `new` is sufficient
-- When `switch/if` to decide which class to create remains in high-level class (violates OCP — rule 011)
-- For simple objects without creation variations (overengineering — rule 064)
+- Quando há apenas um tipo concreto — um simples `new` é suficiente
+- Quando o `switch/if` para decidir qual classe criar permanece na classe de alto nível (viola OCP — rule 011)
+- Para objetos simples sem variações de criação (overengineering — rule 064)
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface Notifier {
@@ -26,7 +26,7 @@ interface Notifier {
 }
 
 abstract class NotificationService {
-  // Factory Method — subclasses implement
+  // Factory Method — subclasses implementam
   protected abstract createNotifier(): Notifier
 
   async notify(message: string): Promise<void> {
@@ -42,21 +42,21 @@ class EmailNotificationService extends NotificationService {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
-new EmailNotificationService().notify('Order confirmed')
+new EmailNotificationService().notify('Pedido confirmado')
 ```
 
-## Related to
+## Relacionado a
 
-- [abstract-factory.md](abstract-factory.md): complements — Abstract Factory uses Factory Methods internally to create families
-- [template-method.md](template-method.md): complements — both use inheritance to delegate behavior to subclasses
-- [singleton.md](singleton.md): complements — Factory Method can control and return Singleton instance
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new types without modifying existing code
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): reinforces — depends on abstraction, not on concrete class
+- [abstract-factory.md](abstract-factory.md): complementa — Abstract Factory usa Factory Methods internamente para criar famílias
+- [template-method.md](template-method.md): complementa — ambos usam herança para delegar comportamento às subclasses
+- [singleton.md](singleton.md): complementa — Factory Method pode controlar e retornar a instância Singleton
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione novos tipos sem modificar código existente
+- [rule 014 - Princípio da Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): reforça — depende de abstração, não de classe concreta
 
 ---
 
-**GoF Category:** Creational
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Criacional
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

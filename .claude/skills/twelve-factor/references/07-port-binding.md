@@ -1,47 +1,47 @@
-# Factor 07 — Port Binding
+# Fator 07 — Port Binding
 
-**deMGoncalves Rule:** [046 - Port Binding](../../../rules/046_port-binding.md)
-**Question:** Self-contained app with embedded HTTP server (doesn't depend on external server)?
+**Regra deMGoncalves:** [046 - Port Binding](../../../rules/046_port-binding.md)
+**Questão:** Aplicação autocontida com servidor HTTP embutido (não depende de servidor externo)?
 
-## What It Is
+## O que é
 
-The application must be **completely self-contained** and expose its services through *port binding*. It should not depend on an external web server (Apache, Nginx) injected at runtime to be executable — the HTTP server must be embedded in the application.
+A aplicação deve ser **completamente autocontida** e expor seus serviços através de *port binding*. Ela não deve depender de um servidor web externo (Apache, Nginx) injetado em runtime para ser executável — o servidor HTTP deve ser embutido na aplicação.
 
-**Port binding = portable app + natural microservices architecture.**
+**Port binding = aplicação portável + arquitetura de microserviços natural.**
 
-## Compliance Criteria
+## Critérios de Conformidade
 
-- [ ] Application starts its own HTTP/HTTPS server and binds to port specified by environment variable
-- [ ] Zero dependency on external web server configuration (VirtualHost, .htaccess) to function
-- [ ] Execution port configurable via `PORT` or equivalent (not hardcoded)
+- [ ] Aplicação inicia seu próprio servidor HTTP/HTTPS e faz bind na porta especificada por variável de ambiente
+- [ ] Zero dependência de configuração de servidor web externo (VirtualHost, .htaccess) para funcionar
+- [ ] Porta de execução configurável via `PORT` ou equivalente (não hardcoded)
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
-// Hardcoded port ❌
+// Porta hardcoded ❌
 const app = express();
-app.listen(3000);  // not configurable
+app.listen(3000);  // não configurável
 
-// External server dependency ❌
-// Apache + mod_proxy configured in /etc/apache2/sites-enabled/
-# VirtualHost needed for app to work
+// Dependência de servidor externo ❌
+// Apache + mod_proxy configurado em /etc/apache2/sites-enabled/
+# VirtualHost necessário para a app funcionar
 <VirtualHost *:80>
   ProxyPass / http://localhost:3000/
 </VirtualHost>
 ```
 
-## ✅ Good
+## ✅ Conforme
 
 ```typescript
-// Configurable port via env var ✅
+// Porta configurável via variável de ambiente ✅
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Servidor rodando na porta ${port}`);
 });
 
-// Embedded HTTP server in application
+// Servidor HTTP embutido na aplicação
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 
@@ -49,9 +49,9 @@ const app = new Hono();
 serve({ fetch: app.fetch, port: Number(process.env.PORT) });
 ```
 
-## Codetag when violated
+## Codetag quando violado
 
 ```typescript
-// FIXME: Hardcoded port — use process.env.PORT
+// FIXME: Porta hardcoded — usar process.env.PORT
 const PORT = 8080;
 ```

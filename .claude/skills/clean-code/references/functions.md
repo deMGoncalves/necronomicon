@@ -1,28 +1,28 @@
-# Functions (Rules 033, 037)
+# Funções (Regras 033, 037)
 
-## Rules
+## Regras
 
-- **033**: Maximum 3 parameters per function
-- **037**: Prohibition of flag arguments (boolean flags)
+- **033**: Máximo de 3 parâmetros por função
+- **037**: Proibição de argumentos sinalizadores (boolean flags)
 
 ## Checklist
 
-- [ ] Functions with ≤3 parameters
-- [ ] Parameters >3 → create Parameter Object (DTO)
-- [ ] No boolean flags that alter main flow
-- [ ] Branches → separate methods with clear names
+- [ ] Funções com ≤3 parâmetros
+- [ ] Parâmetros >3 → criar Parameter Object (DTO)
+- [ ] Sem boolean flags que alteram o fluxo principal
+- [ ] Ramificações → métodos separados com nomes claros
 
-## Examples
+## Exemplos
 
 ```typescript
-// ❌ Violations
-function createOrder(userId, productId, quantity, discount, coupon, address) { } // 6 params
+// ❌ Violações
+function createOrder(userId, productId, quantity, discount, coupon, address) { } // 6 parâmetros
 function render(user, isAdmin) { // boolean flag
   if (isAdmin) return renderAdminView(user);
   return renderUserView(user);
 }
 
-// ✅ Compliance
+// ✅ Conformidade
 interface CreateOrderInput {
   userId: string;
   productId: string;
@@ -34,11 +34,11 @@ interface CreateOrderInput {
 
 function createOrder(input: CreateOrderInput) { }
 
-// Separate methods instead of flag
+// Métodos separados em vez de flag
 function renderUser(user: User) { }
 function renderAdminUser(user: User) { }
 ```
 
-## Relation to ICP
+## Relação com ICP
 
-Fewer parameters = lower coupling and clearer responsibilities.
+Menos parâmetros = menor acoplamento e responsabilidades mais claras.

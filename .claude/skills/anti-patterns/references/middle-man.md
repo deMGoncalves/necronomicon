@@ -1,24 +1,24 @@
 # Middle Man
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 061
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 061
 
-## What It Is
+## O Que É
 
-Class that delegates most of its methods to another class without adding value of its own. If 50%+ of a class's methods just pass calls (`return this.obj.method(args)`) to another object, it's a useless Middle Man. Inverse of Feature Envy.
+Classe que delega a maioria dos seus métodos para outra classe sem adicionar valor próprio. Se 50%+ dos métodos de uma classe apenas repassam chamadas (`return this.obj.method(args)`) para outro objeto, é um Middle Man inútil. Inverso do Feature Envy.
 
-## Symptoms
+## Sintomas
 
-- 50%+ of class methods are one-line delegates without adding value
-- Class exists only to hide another object initially exposed directly
-- Whenever you add a method to the real object, you add same wrapper to Middle Man
-- Stack trace always shows same method names in two consecutive layers
-- Middle Man is not used/tested in isolation — always needs the real object working
+- 50%+ dos métodos da classe são delegates de uma linha sem adicionar valor
+- Classe existe apenas para esconder outro objeto inicialmente exposto diretamente
+- Sempre que um método é adicionado ao objeto real, o mesmo wrapper é adicionado ao Middle Man
+- Stack trace sempre mostra os mesmos nomes de método em duas camadas consecutivas
+- Middle Man não é usado/testado isoladamente — sempre precisa do objeto real funcionando
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ Manager that only passes everything to Department
+// ❌ Manager que apenas repassa tudo para Department
 class Manager {
   constructor(department) { this.department = department; }
   getEmployees() { return this.department.getEmployees(); }
@@ -28,25 +28,25 @@ class Manager {
 }
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Use Department directly — Manager adds no value (Remove Middle Man)
+// ✅ Usar Department diretamente — Manager não adiciona valor (Remove Middle Man)
 const employees = department.getEmployees();
 
-// If Manager has logic of its own beyond delegating, then it makes sense:
+// Se Manager tiver lógica própria além de delegar, então faz sentido:
 class Manager {
   approve(request) {
-    // real approval logic — adds value
-    if (request.amount > this.approvalLimit) throw new Error('Above limit');
+    // lógica real de aprovação — adiciona valor
+    if (request.amount > this.approvalLimit) throw new Error('Acima do limite');
     return this.department.processRequest(request);
   }
 }
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Middle Man — Manager only delegates 5/6 methods to Department
-// TODO: Remove Middle Man — expose Department directly or add real logic to Manager
+// FIXME: Middle Man — Manager apenas delega 5/6 métodos para Department
+// TODO: Remove Middle Man — expor Department diretamente ou adicionar lógica real ao Manager
 ```

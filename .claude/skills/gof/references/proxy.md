@@ -1,24 +1,24 @@
 # Proxy
 
-**Category:** Structural
-**Intent:** Provide a substitute or placeholder for another object to control access to it.
+**Categoria:** Estrutural
+**Intenção:** Fornecer um substituto ou placeholder para outro objeto, a fim de controlar o acesso a ele.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Lazy loading: load heavy resource only when necessary
-- Cache: store result of expensive operations
-- Access control: verify permissions before delegating
-- Transparent logging and monitoring
+- Lazy loading: carregar recurso pesado apenas quando necessário
+- Cache: armazenar resultado de operações custosas
+- Controle de acesso: verificar permissões antes de delegar
+- Logging e monitoramento transparentes
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When it doesn't add real behavior — becomes useless Middle Man (rule 061)
-- For simple delegation without control, cache or access — use the object directly
-- When Proxy latency exceeds the benefit it provides
+- Quando não adiciona comportamento real — torna-se Middle Man inútil (rule 061)
+- Para delegação simples sem controle, cache ou acesso — use o objeto diretamente
+- Quando a latência do Proxy supera o benefício que ele fornece
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 interface ImageLoader {
@@ -27,17 +27,17 @@ interface ImageLoader {
 
 class RealImage implements ImageLoader {
   constructor(private readonly filename: string) {
-    this.loadFromDisk() // expensive operation
+    this.loadFromDisk() // operação custosa
   }
 
   private loadFromDisk(): void {
-    console.log(`Loading ${this.filename} from disk...`)
+    console.log(`Carregando ${this.filename} do disco...`)
   }
 
-  display(): string { return `Displaying ${this.filename}` }
+  display(): string { return `Exibindo ${this.filename}` }
 }
 
-// Proxy with lazy loading and cache
+// Proxy com lazy loading e cache
 class ImageProxy implements ImageLoader {
   private realImage: RealImage | null = null
 
@@ -45,28 +45,28 @@ class ImageProxy implements ImageLoader {
 
   display(): string {
     if (!this.realImage) {
-      this.realImage = new RealImage(this.filename) // loads only when necessary
+      this.realImage = new RealImage(this.filename) // carrega apenas quando necessário
     }
     return this.realImage.display()
   }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 const image: ImageLoader = new ImageProxy('photo.jpg')
 image.display()
 ```
 
-## Related to
+## Relacionado a
 
-- [adapter.md](adapter.md): complements — Adapter converts interface; Proxy maintains same interface and controls access
-- [decorator.md](decorator.md): complements — similar structure; Decorator adds behavior; Proxy controls access to real object
-- [rule 061 - Prohibition of Middle Man](../../../rules/061_proibicao-middle-man.md): reinforces — Proxy should add real control (cache, access, lazy load), not just delegate
-- [rule 036 - Restriction of Functions with Side Effects](../../../rules/036_restricao-funcoes-efeitos-colaterais.md): complements — Proxy side effects (cache, log) should be documented and intentional
+- [adapter.md](adapter.md): complementa — Adapter converte interface; Proxy mantém a mesma interface e controla acesso
+- [decorator.md](decorator.md): complementa — estrutura similar; Decorator adiciona comportamento; Proxy controla acesso ao objeto real
+- [rule 061 - Proibição de Middle Man](../../../rules/061_proibicao-middle-man.md): reforça — Proxy deve adicionar controle real (cache, acesso, lazy load), não apenas delegar
+- [rule 036 - Restrição de Funções com Efeitos Colaterais](../../../rules/036_restricao-funcoes-efeitos-colaterais.md): complementa — efeitos colaterais do Proxy (cache, log) devem ser documentados e intencionais
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

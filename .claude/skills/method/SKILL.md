@@ -1,6 +1,6 @@
 ---
 name: method
-description: Convention for implementing class methods — when creating action methods in classes, implementing operations that coordinate behaviors and should return context for chaining
+description: Convenção para implementação de métodos de classe — ao criar métodos de ação em classes, implementar operações que coordenam comportamentos e devem retornar contexto para encadeamento
 model: sonnet
 allowed-tools: Read, Write, Edit
 metadata:
@@ -10,87 +10,98 @@ metadata:
 
 # Method
 
-Convention for implementing class methods focused on fluency and single responsibility.
+Convenção para implementação de métodos de classe focados em fluência e responsabilidade única.
 
 ---
 
-## When to Use
+## Manifest
 
-Use when creating methods that execute actions, operations or coordinate behaviors in classes.
+| Campo | Valor |
+|-------|-------|
+| **Applicability** | Ao criar métodos que executam ações, operações ou coordenam comportamentos em classes; ao revisar métodos sem retorno que impedem encadeamento |
+| **Prerequisites** | Compreensão de interfaces fluentes (Builder pattern); rules 010 (SRP), 002 (no-else), 033 (max params) |
+| **Constraints** | Não aplicar retorno `this` em métodos com valor de retorno específico; não criar métodos com múltiplas responsabilidades; limite de 15 linhas por método (rule 007) |
+| **Scope** | Nomenclatura, regras de retorno, decorators associados e padrões de implementação de métodos de classe |
 
-## Purpose
+---
 
-| Responsibility | Description |
-|----------------|-------------|
-| Business action | Execute operation representing business intention |
-| Coordination | Orchestrate calls to other methods or services |
-| Event | Respond to DOM or lifecycle events |
-| Transformation | Apply data or state transformation |
+## Quando Usar
 
-## Return Rule
+Use ao criar métodos que executam ações, operações ou coordenam comportamentos em classes.
 
-| Situation | Recommended Return |
-|-----------|-------------------|
-| Public method that modifies state | `return this` for fluent interface |
-| Method with return value | Specific value type |
-| Async method without return | `return this` |
-| Async method with return | Specific value type via Promise |
-| Event handlers and callbacks | Optional (can be `void`) |
+## Propósito
 
-## Return Justification
+| Responsabilidade | Descrição |
+|------------------|-------------|
+| Ação de negócio | Executar operação representando intenção de negócio |
+| Coordenação | Orquestrar chamadas a outros métodos ou serviços |
+| Evento | Responder a eventos DOM ou de lifecycle |
+| Transformação | Aplicar transformação de dados ou estado |
 
-| Benefit | Description |
-|---------|-------------|
-| Fluent interface | Enables method call chaining |
-| Consistency | Predictable pattern across codebase |
-| Composition | Facilitates operation composition |
-| Readability | More expressive and declarative code |
+## Regra de Retorno
 
-## Implementation Patterns
+| Situação | Retorno Recomendado |
+|----------|---------------------|
+| Método público que modifica estado | `return this` para interface fluente |
+| Método com valor de retorno | Tipo específico de valor |
+| Método async sem retorno | `return this` |
+| Método async com retorno | Tipo específico de valor via Promise |
+| Event handlers e callbacks | Opcional (pode ser `void`) |
 
-| Pattern | Usage |
-|---------|-------|
-| Public method | Externally accessible methods |
-| Method with Symbol | Private methods or contracts using bracket notation |
-| Method with decorator | Methods decorated with event handlers or lifecycle hooks |
-| Async method | Methods that execute async operations |
+## Justificativa de Retorno
 
-## Associated Decorators
+| Benefício | Descrição |
+|-----------|-------------|
+| Interface fluente | Permite encadeamento de chamadas de método |
+| Consistência | Padrão previsível em toda codebase |
+| Composição | Facilita composição de operações |
+| Legibilidade | Código mais expressivo e declarativo |
 
-| Decorator | Function |
-|-----------|----------|
-| on.{event} | Bind method to specific DOM event |
-| connected | Execute method when component is connected to DOM |
-| disconnected | Execute method when component is disconnected from DOM |
-| didPaint | Execute method after complete rendering |
-| before | Execute logic before main method |
-| after | Execute logic after main method |
-| around | Execute logic around main method |
+## Padrões de Implementação
 
-## Nomenclature
+| Padrão | Uso |
+|--------|-----|
+| Método público | Métodos acessíveis externamente |
+| Método com Symbol | Métodos privados ou contratos usando bracket notation |
+| Método com decorator | Métodos decorados com event handlers ou lifecycle hooks |
+| Método async | Métodos que executam operações assíncronas |
 
-| Rule | Description |
-|------|-------------|
-| Imperative verb | Name should start with verb indicating action |
-| Clear intention | Name reveals what method does without comment needed |
-| Specific | Avoid generic names that don't express real intention |
-| Concise | Short but sufficiently descriptive name |
+## Decorators Associados
 
-## Examples
+| Decorator | Função |
+|-----------|---------|
+| on.{event} | Vincular método a evento DOM específico |
+| connected | Executar método quando componente é conectado ao DOM |
+| disconnected | Executar método quando componente é desconectado do DOM |
+| didPaint | Executar método após renderização completa |
+| before | Executar lógica antes do método principal |
+| after | Executar lógica após o método principal |
+| around | Executar lógica ao redor do método principal |
+
+## Nomenclatura
+
+| Regra | Descrição |
+|-------|-------------|
+| Verbo imperativo | Nome deve começar com verbo indicando ação |
+| Intenção clara | Nome revela o que o método faz sem necessidade de comentário |
+| Específico | Evitar nomes genéricos que não expressam intenção real |
+| Conciso | Nome curto mas suficientemente descritivo |
+
+## Exemplos
 
 ```typescript
-// ❌ Bad — method without return (doesn't chain)
+// ❌ Bad — método sem retorno (não encadeia)
 class QueryBuilder {
   where(condition: string) {
     this.conditions.push(condition)
-    // implicit undefined return
+    // retorno undefined implícito
   }
 }
 const q = new QueryBuilder()
 q.where('id = 1')
-q.where('status = active')  // separate calls
+q.where('status = active')  // chamadas separadas
 
-// ✅ Good — method returns this for chaining
+// ✅ Good — método retorna this para encadeamento
 class QueryBuilder {
   where(condition: string): this {
     this.conditions.push(condition)
@@ -99,34 +110,34 @@ class QueryBuilder {
 }
 const q = new QueryBuilder()
   .where('id = 1')
-  .where('status = active')  // fluent interface
+  .where('status = active')  // interface fluente
 ```
 
-## Prohibitions
+## Proibições
 
-| What to avoid | Reason |
-|---------------|--------|
-| Multiple responsibilities | Method should have single responsibility (rule 010) |
-| Complex logic | Maximum cyclomatic complexity of 5 (rule 022) |
-| Hidden side effects | Side effects should be explicit in name |
-| Excessive parameters | Maximum 3 parameters per method (rule 033) |
-| Too long method | Maximum 15 lines per method (rule 007) |
-| Using else | Use guard clauses instead of else (rule 002) |
+| O que evitar | Razão |
+|--------------|-------|
+| Múltiplas responsabilidades | Método deve ter responsabilidade única (rule 010) |
+| Lógica complexa | Complexidade ciclomática máxima de 5 (rule 022) |
+| Efeitos colaterais ocultos | Efeitos colaterais devem ser explícitos no nome |
+| Parâmetros excessivos | Máximo 3 parâmetros por método (rule 033) |
+| Método muito longo | Máximo 15 linhas por método (rule 007) |
+| Usar else | Usar guard clauses ao invés de else (rule 002) |
 
-## Best Practices
+## Melhores Práticas
 
-| Practice | Description |
-|----------|-------------|
-| Return this | Enable fluent interface in state-modifying methods |
-| Use Symbol | Encapsulate private methods with bracket notation |
-| Descriptive name | Imperative verb revealing clear intention |
-| Guard clauses | Use early returns instead of else (rule 002) |
-| Extract complexity | Helper methods for complex logic |
+| Prática | Descrição |
+|---------|-------------|
+| Retornar this | Habilitar interface fluente em métodos que modificam estado |
+| Usar Symbol | Encapsular métodos privados com bracket notation |
+| Nome descritivo | Verbo imperativo revelando intenção clara |
+| Guard clauses | Usar retornos antecipados ao invés de else (rule 002) |
+| Extrair complexidade | Métodos auxiliares para lógica complexa |
 
-## Rationale
+## Justificativa
 
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): each method has single responsibility, expressed clearly in name
-- [022 - Prioritization of Simplicity and Clarity](../../rules/022_priorizacao-simplicidade-clareza.md): simple and predictable methods with maximum cyclomatic complexity of 5
-- [033 - Function Parameter Limit](../../rules/033_limite-parametros-funcao.md): maximum 3 parameters to maintain clarity
-- [007 - Maximum Lines per Class](../../rules/007_limite-maximo-linhas-classe.md): methods with maximum 15 lines
-- [002 - Prohibition of Else](../../rules/002_proibicao-clausula-else.md): use guard clauses to reduce nesting and complexity
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): cada método tem responsabilidade única, expressa claramente no nome
+- [022 - Priorização da Simplicidade e Clareza](../../rules/022_priorizacao-simplicidade-clareza.md): métodos simples e previsíveis com complexidade ciclomática máxima de 5
+- [033 - Limite de Parâmetros por Função](../../rules/033_limite-parametros-funcao.md): máximo 3 parâmetros para manter clareza
+- [007 - Limite Máximo de Linhas por Classe](../../rules/007_limite-maximo-linhas-classe.md): métodos com máximo 15 linhas
+- [002 - Proibição de Else](../../rules/002_proibicao-clausula-else.md): usar guard clauses para reduzir aninhamento e complexidade

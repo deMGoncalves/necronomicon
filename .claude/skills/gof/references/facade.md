@@ -1,32 +1,32 @@
 # Facade
 
-**Category:** Structural
-**Intent:** Provide a simplified interface to a set of interfaces in a subsystem, defining a high-level interface that makes the subsystem easier to use.
+**Categoria:** Estrutural
+**Intenção:** Fornecer uma interface simplificada para um conjunto de interfaces de um subsistema, definindo uma interface de alto nível que torna o subsistema mais fácil de usar.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Simplify complex interface for most common clients
-- When having subsystem with many dependencies between classes
-- To decouple clients from internal implementations of subsystem
-- As a single entry point for modules with many parts
+- Simplificar interface complexa para os clientes mais comuns
+- Quando o subsistema tem muitas dependências entre classes
+- Para desacoplar clientes das implementações internas do subsistema
+- Como ponto de entrada único para módulos com muitas partes
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When Facade accumulates business logic — becomes God Object (rule 025 — The Blob)
-- When it becomes Middle Man with no added value, just delegating (rule 061)
-- To hide complexity that should be resolved with refactoring
+- Quando a Facade acumula lógica de negócio — torna-se God Object (rule 025 — The Blob)
+- Quando se torna Middle Man sem valor agregado, apenas delegando (rule 061)
+- Para ocultar complexidade que deveria ser resolvida com refatoração
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
-// Complex subsystem with multiple classes
+// Subsistema complexo com múltiplas classes
 class AudioDecoder { decode(file: string): Buffer { return Buffer.alloc(0) } }
 class VideoDecoder { decode(file: string): Buffer { return Buffer.alloc(0) } }
 class AudioMixer { mix(audio: Buffer, volume: number): Buffer { return audio } }
 
-// Facade: simple interface to complex subsystem
+// Facade: interface simples para subsistema complexo
 class VideoPlayerFacade {
   private readonly audioDecoder = new AudioDecoder()
   private readonly videoDecoder = new VideoDecoder()
@@ -36,26 +36,26 @@ class VideoPlayerFacade {
     const audio = this.audioDecoder.decode(videoFile)
     const video = this.videoDecoder.decode(videoFile)
     const mixed = this.audioMixer.mix(audio, 1.0)
-    // renders video with mixed audio
+    // renderiza vídeo com áudio mixado
   }
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 new VideoPlayerFacade().play('video.mp4')
 ```
 
-## Related to
+## Relacionado a
 
-- [adapter.md](adapter.md): complements — Adapter converts incompatible interface; Facade simplifies existing interface
-- [mediator.md](mediator.md): complements — both simplify dependencies; Mediator coordinates objects that know each other; Facade defines simple interface to subsystem
-- [rule 025 - Prohibition of Anti-Pattern The Blob](../../../rules/025_proibicao-anti-pattern-the-blob.md): reinforces — Facade should not contain business logic, only delegate
-- [rule 061 - Prohibition of Middle Man](../../../rules/061_proibicao-middle-man.md): reinforces — Facade should simplify, not be empty wrapper
-- [rule 014 - Dependency Inversion Principle](../../../rules/014_principio-inversao-dependencia.md): complements — clients depend on Facade, isolated from concrete subsystem classes
+- [adapter.md](adapter.md): complementa — Adapter converte interface incompatível; Facade simplifica interface existente
+- [mediator.md](mediator.md): complementa — ambos simplificam dependências; Mediator coordena objetos que se conhecem mutuamente; Facade define interface simples para subsistema
+- [rule 025 - Proibição do Anti-Pattern The Blob](../../../rules/025_proibicao-anti-pattern-the-blob.md): reforça — Facade não deve conter lógica de negócio, apenas delegar
+- [rule 061 - Proibição de Middle Man](../../../rules/061_proibicao-middle-man.md): reforça — Facade deve simplificar, não ser wrapper vazio
+- [rule 014 - Princípio da Inversão de Dependência](../../../rules/014_principio-inversao-dependencia.md): complementa — clientes dependem da Facade, isolados das classes concretas do subsistema
 
 ---
 
-**GoF Category:** Structural
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Estrutural
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

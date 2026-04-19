@@ -1,57 +1,57 @@
 # Accidental Mutation
 
-**Severity:** 🟠 High
-**Associated Rule:** Rule 052
+**Severidade:** 🟠 Alta
+**Regra Associada:** Regra 052
 
-## What It Is
+## O Que É
 
-A function receives an object or array as parameter and modifies it directly, without the caller expecting or wanting this change. The side effect is invisible in the function signature — the name suggests a read or transformation operation, but the original state is silently altered.
+Uma função recebe um objeto ou array como parâmetro e o modifica diretamente, sem que o chamador espere ou queira essa alteração. O efeito colateral é invisível na assinatura da função — o nome sugere uma operação de leitura ou transformação, mas o estado original é silenciosamente alterado.
 
-## Symptoms
+## Sintomas
 
-- Function named as `getX`, `filterX` or `calculateX` that also modifies the parameter
-- Bugs that appear only after calling a specific function
-- Arrays that change order unexpectedly (`Array.sort` operates in-place)
-- Objects with properties changed without the calling module explicitly doing so
-- Tests dependent on execution order
+- Função nomeada como `getX`, `filterX` ou `calculateX` que também modifica o parâmetro
+- Bugs que aparecem apenas após chamar uma função específica
+- Arrays que mudam de ordem inesperadamente (`Array.sort` opera in-place)
+- Objetos com propriedades alteradas sem que o módulo chamador o faça explicitamente
+- Testes dependentes da ordem de execução
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ .sort() operates in-place — modifies original array
+// ❌ .sort() opera in-place — modifica o array original
 function getTopUsers(users) {
   return users
-    .sort((a, b) => b.score - a.score) // MUTATES users!
+    .sort((a, b) => b.score - a.score) // MUTA users!
     .slice(0, 5);
 }
 
 const users = [{ name: 'Alice', score: 80 }, { name: 'Bob', score: 95 }];
 const top = getTopUsers(users);
-console.log(users); // [Bob, Alice] — original order destroyed
+console.log(users); // [Bob, Alice] — ordem original destruída
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Shallow copy with spread — preserves original array
+// ✅ Cópia rasa com spread — preserva o array original
 function getTopUsers(users) {
   return [...users]
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
 }
 
-// ✅ For objects: return new object
+// ✅ Para objetos: retornar novo objeto
 function deactivate(user) {
   return { ...user, active: false };
 }
 
-// ✅ For deep clone: structuredClone (Node 17+)
+// ✅ Para clone profundo: structuredClone (Node 17+)
 const copy = structuredClone(order);
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Accidental Mutation — getTopUsers modifies original array via .sort()
-// TODO: Clone users before sorting: [...users].sort(...)
+// FIXME: Accidental Mutation — getTopUsers modifica o array original via .sort()
+// TODO: Clonar users antes de ordenar: [...users].sort(...)
 ```

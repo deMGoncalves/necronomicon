@@ -1,34 +1,34 @@
-# Rule 4 — First Class Collections
+# Regra 4 — First Class Collections
 
-**deMGoncalves Rule:** ESTRUTURAL-004
-**Question:** Is this collection returned or received as native Array/Map/Set?
+**Regra deMGoncalves:** ESTRUTURAL-004
+**Questão:** Esta coleção é retornada ou recebida como Array/Map/Set nativo?
 
-## What It Is
+## O que é
 
-Determines that any collection (list, array, map) with associated business logic or behavior must be encapsulated in a dedicated class (First Class Collection).
+Determina que qualquer coleção (lista, array, mapa) com lógica de negócio ou comportamento associado deve ser encapsulada em uma classe dedicada (First Class Collection).
 
-## When to Apply
+## Quando Aplicar
 
-- Public method returns `Array<T>`
-- Public method receives `Array<T>` as parameter
-- Filter/sort/sum logic applied in multiple locations
-- Collection with domain meaning (e.g., OrderList, Employees)
+- Método público retorna `Array<T>`
+- Método público recebe `Array<T>` como parâmetro
+- Lógica de filtro/ordenação/soma aplicada em múltiplos locais
+- Coleção com significado de domínio (ex.: ListaDePedidos, Funcionarios)
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class OrderService {
-  getActiveOrders(): Order[] {  // Returns native Array - VIOLATES
+  getActiveOrders(): Order[] {  // Retorna Array nativo - VIOLA
     return this.orders.filter(o => o.isActive());
   }
 
-  getTotalValue(orders: Order[]): number {  // Receives Array - VIOLATES
+  getTotalValue(orders: Order[]): number {  // Recebe Array - VIOLA
     return orders.reduce((sum, o) => sum + o.value, 0);
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class OrderList {
@@ -61,13 +61,13 @@ class OrderService {
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Pure DTOs**: Data transfer between layers without logic
-- **Framework APIs**: React props, ORM queries that require arrays
+- **DTOs Puros**: Transferência de dados entre camadas sem lógica
+- **APIs de Framework**: Props do React, queries de ORM que exigem arrays
 
-## Related Rules
+## Regras Relacionadas
 
-- [007 - Small Classes](rule-07-small-classes.md): reinforces
-- [008 - No Getters/Setters Prohibition](rule-08-no-getters-setters.md): reinforces
-- [010 - Single Responsibility Principle](../../rules/010_principio-responsabilidade-unica.md): reinforces
+- [007 - Classes Pequenas](rule-07-small-classes.md): reforça
+- [008 - Proibição de Getters/Setters](rule-08-no-getters-setters.md): reforça
+- [010 - Princípio da Responsabilidade Única](../../rules/010_principio-responsabilidade-unica.md): reforça

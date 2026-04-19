@@ -1,43 +1,43 @@
-# Rule 9 — Tell, Don't Ask
+# Regra 9 — Tell, Don't Ask
 
-**deMGoncalves Rule:** COMPORTAMENTAL-009
-**Question:** Does this code ask for state to decide action?
+**Regra deMGoncalves:** COMPORTAMENTAL-009
+**Questão:** Este código pergunta pelo estado para decidir uma ação?
 
-## What It Is
+## O que é
 
-Requires that a method call methods or access properties only from its "immediate neighbors": the object itself, objects passed as arguments, objects it creates, or objects that are direct internal properties.
+Exige que um método chame métodos ou acesse propriedades apenas de seus "vizinhos imediatos": o próprio objeto, objetos passados como argumento, objetos que ele cria ou objetos que são propriedades internas diretas.
 
-**Principle**: Tell the object what to do, don't ask for its state to make decisions.
+**Princípio**: Diga ao objeto o que fazer, não pergunte pelo seu estado para tomar decisões.
 
-## When to Apply
+## Quando Aplicar
 
-- Code asks for state: `if (obj.getStatus() === 'X')`
-- Code decides action based on another object's state
+- Código pergunta pelo estado: `if (obj.getStatus() === 'X')`
+- Código decide ação baseado no estado de outro objeto
 - Train wreck: `a.getB().getC().f()`
-- Law of Demeter violation
+- Violação da Lei de Demeter
 
-## ❌ Violation
+## ❌ Violação
 
 ```typescript
 class OrderProcessor {
   process(order: Order): void {
-    // ASKS state to decide - VIOLATES
+    // PERGUNTA estado para decidir - VIOLA
     if (order.getStatus() === 'pending') {
       if (order.getPayment().isPaid()) {
         order.setStatus('processing');
-        order.getCustomer().sendEmail('Order processing');
+        order.getCustomer().sendEmail('Pedido em processamento');
       }
     }
   }
 }
 ```
 
-## ✅ Correct
+## ✅ Correto
 
 ```typescript
 class OrderProcessor {
   process(order: Order): void {
-    // TELLS object what to do
+    // DIZ ao objeto o que fazer
     order.processIfReady();
   }
 }
@@ -53,12 +53,12 @@ class Order {
 }
 ```
 
-## ✅ Correct (Even Better)
+## ✅ Correto (Ainda Melhor)
 
 ```typescript
 class Order {
   processIfReady(): void {
-    // Each object has its own responsibility
+    // Cada objeto tem sua própria responsabilidade
     this.validateCanProcess();
     this.startProcessing();
     this.notifyCustomer();
@@ -83,13 +83,13 @@ class Order {
 }
 ```
 
-## Exceptions
+## Exceções
 
-- **Fluent Interfaces**: Builders where method returns `this`
-- **DTOs/Value Objects**: Access to data from pure containers
+- **Fluent Interfaces**: Builders onde o método retorna `this`
+- **DTOs/Value Objects**: Acesso a dados de contêineres puramente de dados
 
-## Related Rules
+## Regras Relacionadas
 
-- [008 - No Getters/Setters Prohibition](rule-08-no-getters-setters.md): reinforces
-- [005 - One Dot per Line](rule-05-one-dot-per-line.md): reinforces
-- [012 - Liskov Substitution Principle](../../rules/012_principio-substituicao-liskov.md): reinforces
+- [008 - Proibição de Getters/Setters](rule-08-no-getters-setters.md): reforça
+- [005 - One Dot per Line](rule-05-one-dot-per-line.md): reforça
+- [012 - Princípio de Substituição de Liskov](../../rules/012_principio-substituicao-liskov.md): reforça

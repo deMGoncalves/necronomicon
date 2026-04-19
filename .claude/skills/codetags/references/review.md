@@ -1,55 +1,55 @@
-# REVIEW — Needs Review
+# REVIEW — Precisa de Revisão
 
-**Severity:** 🟡 Medium | Resolve before merge
-**Blocks PR:** Yes (if critical for correctness)
+**Severidade:** 🟡 Média | Resolver antes do merge
+**Bloqueia PR:** Sim (se crítico para corretude)
 
-## What It Is
+## O Que É
 
-Marks code that needs to be reviewed by another developer, domain specialist or stakeholder. Indicates uncertainty about approach or need for external validation before considering complete.
+Marca código que precisa ser revisado por outro desenvolvedor, especialista de domínio ou stakeholder. Indica incerteza sobre a abordagem ou necessidade de validação externa antes de considerar completo.
 
-## When to Use
+## Quando Usar
 
-- Complex business logic (tax rule needing validation)
-- Architectural decision (pattern choice to confirm)
-- Security code (authentication to be audited)
-- Domain unknown by author (area author doesn't master)
+- Lógica de negócio complexa (regra tributária precisando de validação)
+- Decisão arquitetural (escolha de padrão para confirmar)
+- Código de segurança (autenticação a ser auditada)
+- Domínio desconhecido pelo autor (área que o autor não domina)
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- Identified bug → use **FIXME**
-- Code to refactor → use **REFACTOR**
-- Doubt about approach → use **QUESTION**
-- Contextual information → use **NOTE**
+- Bug identificado → usar **FIXME**
+- Código a refatorar → usar **REFACTOR**
+- Dúvida sobre abordagem → usar **QUESTION**
+- Informação contextual → usar **NOTE**
 
-## Format
+## Formato
 
 ```typescript
-// REVIEW: description - what to review specifically
-// REVIEW: directed description
-// REVIEW: [security|business|architecture] categorized description
+// REVIEW: descrição - o que revisar especificamente
+// REVIEW: descrição direcionada
+// REVIEW: [segurança|negócio|arquitetura] descrição categorizada
 ```
 
-## Example
+## Exemplo
 
 ```typescript
-// REVIEW: ICMS calculation - validate with accounting
-// Based on 2023 documentation, may be outdated
+// REVIEW: cálculo de ICMS - validar com contabilidade
+// Baseado na documentação de 2023, pode estar desatualizado
 function calculateICMS(product: Product, state: string): number {
   const rates = { 'SP': 0.18, 'RJ': 0.20, 'MG': 0.18 };
   return product.price * (rates[state] || 0.17);
 }
 
-// REVIEW: rate limiting implementation
-// Verify if approach is sufficient against DDoS
+// REVIEW: implementação de rate limiting
+// Verificar se abordagem é suficiente contra DDoS
 const rateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: 'Too many requests'
+  message: 'Muitas requisições'
 });
 
-// REVIEW: product matching algorithm
-// Test with real dataset before deploy
-// Edge cases: products without description, very short descriptions
+// REVIEW: algoritmo de correspondência de produtos
+// Testar com dataset real antes do deploy
+// Casos extremos: produtos sem descrição, descrições muito curtas
 function findSimilarProducts(product: Product, catalog: Product[]) {
   const scores = catalog.map(p => ({
     product: p,
@@ -61,25 +61,25 @@ function findSimilarProducts(product: Product, catalog: Product[]) {
     .slice(0, 10);
 }
 
-// REVIEW: behavior when user doesn't have permission
-// Spec says "deny access" but doesn't specify:
-// - Return 403 or 404?
-// - Show message or redirect?
-// - Log attempt?
+// REVIEW: comportamento quando usuário não tem permissão
+// Spec diz "negar acesso" mas não especifica:
+// - Retornar 403 ou 404?
+// - Mostrar mensagem ou redirecionar?
+// - Registrar tentativa no log?
 function checkAccess(user: User, resource: Resource) {
   if (!user.hasPermission(resource)) {
-    throw new ForbiddenError('Access denied');
+    throw new ForbiddenError('Acesso negado');
   }
 }
 ```
 
-## Resolution
+## Resolução
 
-- **Timeline:** Before PR (blocker) or before merge (business validation)
-- **Action:** Identify reviewer, request review explicitly, await feedback, implement adjustments, remove tag after approval
-- **Converted to:** NOTE (if decision is documented) or removed (after approval)
+- **Prazo:** Antes do PR (bloqueador) ou antes do merge (validação de negócio)
+- **Ação:** Identificar revisor, solicitar revisão explicitamente, aguardar feedback, implementar ajustes, remover tag após aprovação
+- **Convertido em:** NOTE (se decisão for documentada) ou removido (após aprovação)
 
-## Related to
+## Relacionado a
 
-- Rules: [032 - Test Coverage](../../../.claude/rules/032_cobertura-teste-minima-qualidade.md) (reviewed code should have tests)
-- Similar tags: REVIEW (needs validation) vs QUESTION (author's doubt)
+- Rules: [032 - Cobertura de Testes](../../../.claude/rules/032_cobertura-teste-minima-qualidade.md) (código revisado deve ter testes)
+- Tags similares: REVIEW (precisa de validação) vs QUESTION (dúvida do autor)

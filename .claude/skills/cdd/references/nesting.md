@@ -21,7 +21,7 @@ Cada nível adiciona um **contexto que deve ser mantido na memória de trabalho*
 - Nível 3: "estamos dentro do if E dentro do for E dentro do if"
 - Nível 4+: **Pyramid of Doom** — impossível rastrear mentalmente
 
-## Examples
+## Exemplos
 
 ```javascript
 // 1 nível → +0 ICP (Guard Clauses)

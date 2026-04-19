@@ -1,28 +1,28 @@
 # Template Method
 
-**Category:** Behavioral
-**Intent:** Define the skeleton of an algorithm in an operation, deferring definition of some steps to subclasses, without changing the algorithm structure.
+**Categoria:** Comportamental
+**Intenção:** Definir o esqueleto de um algoritmo em uma operação, adiando a definição de alguns passos para subclasses, sem alterar a estrutura do algoritmo.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Algorithm with fixed structure but variable steps between subclasses
-- Avoid duplication when multiple classes have similar algorithms with small differences
-- Implement optional hooks in frameworks
-- When clients should be able to extend specific parts, not the entire structure
+- Algoritmo com estrutura fixa mas com passos variáveis entre subclasses
+- Evitar duplicação quando múltiplas classes têm algoritmos similares com pequenas diferenças
+- Implementar hooks opcionais em frameworks
+- Quando clientes devem poder estender partes específicas, não a estrutura inteira
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When inheritance can be replaced by composition — prefer Strategy (rule 059 — Refused Bequest)
-- When subclasses need to alter the algorithm structure, not just steps
-- For extension where inheritance would cause subclass explosion
+- Quando herança pode ser substituída por composição — prefira Strategy (rule 059 — Herança Recusada)
+- Quando subclasses precisam alterar a estrutura do algoritmo, não apenas os passos
+- Para extensão onde herança causaria explosão de subclasses
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 abstract class ReportGenerator {
-  // Template Method: defines the algorithm skeleton
+  // Template Method: define o esqueleto do algoritmo
   generate(data: unknown[]): string {
     const header = this.renderHeader()
     const body = this.renderBody(data)
@@ -32,9 +32,9 @@ abstract class ReportGenerator {
 
   protected abstract renderBody(data: unknown[]): string
 
-  // Optional hooks with default implementation
-  protected renderHeader(): string { return '=== Report ===' }
-  protected renderFooter(): string { return '=== End ===' }
+  // Hooks opcionais com implementação padrão
+  protected renderHeader(): string { return '=== Relatório ===' }
+  protected renderFooter(): string { return '=== Fim ===' }
 }
 
 class CSVReport extends ReportGenerator {
@@ -44,20 +44,20 @@ class CSVReport extends ReportGenerator {
 }
 ```
 
-## Real Usage Example
+## Exemplo de Uso Real
 
 ```typescript
 new CSVReport().generate([{ name: 'Alice', age: 30 }])
 ```
 
-## Related to
+## Relacionado a
 
-- [factory-method.md](factory-method.md): complements — Factory Method is frequently a step in Template Method
-- [strategy.md](strategy.md): replaces — Strategy uses composition; Template Method uses inheritance; prefer Strategy to avoid inheritance coupling
-- [rule 059 - Prohibition of Refused Bequest](../../../rules/059_proibicao-heranca-refusao.md): reinforces — subclasses should not override the template method, only the abstract steps
-- [rule 011 - Open/Closed Principle](../../../rules/011_principio-aberto-fechado.md): reinforces — add new variant without changing base algorithm
+- [factory-method.md](factory-method.md): complementa — Factory Method é frequentemente um passo no Template Method
+- [strategy.md](strategy.md): substitui — Strategy usa composição; Template Method usa herança; prefira Strategy para evitar acoplamento por herança
+- [rule 059 - Proibição de Herança Recusada](../../../rules/059_proibicao-heranca-refusao.md): reforça — subclasses não devem sobrescrever o template method, apenas os passos abstratos
+- [rule 011 - Princípio Aberto/Fechado](../../../rules/011_principio-aberto-fechado.md): reforça — adicione nova variante sem alterar o algoritmo base
 
 ---
 
-**GoF Category:** Behavioral
-**Source:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)
+**Categoria GoF:** Comportamental
+**Fonte:** Design Patterns — Gamma, Helm, Johnson, Vlissides (1994)

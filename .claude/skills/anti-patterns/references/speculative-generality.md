@@ -1,42 +1,42 @@
 # Speculative Generality
 
-**Severity:** 🟡 Medium
-**Associated Rule:** Rule 023
+**Severidade:** 🟡 Média
+**Regra Associada:** Regra 023
 
-## What It Is
+## O Que É
 
-Code created to support hypothetical use cases that "might" be needed in the future: hooks, parameters, abstract classes, and configurations that have no current use. Fowler: *"Oh, I think we'll need the ability to do this kind of thing someday."*
+Código criado para suportar casos de uso hipotéticos que "podem" ser necessários no futuro: hooks, parâmetros, classes abstratas e configurações que não têm uso atual. Fowler: *"Oh, acho que vamos precisar da capacidade de fazer esse tipo de coisa algum dia."*
 
-## Symptoms
+## Sintomas
 
-- Empty classes or methods that aim to be placeholders for future functionality
-- Function parameters that always receive the same value and never vary
-- Abstract classes with a single implementer
-- Hooks and callbacks never invoked ("for future extensibility")
-- Public methods that no external code calls
-- Inheritance created "for when we have more types"
-- Code with more than 5% of lines marked as disabled or with `// TODO: future implementation`
+- Classes ou métodos vazios que visam ser placeholders para funcionalidades futuras
+- Parâmetros de função que sempre recebem o mesmo valor e nunca variam
+- Classes abstratas com um único implementador
+- Hooks e callbacks nunca invocados ("para extensibilidade futura")
+- Métodos públicos que nenhum código externo chama
+- Herança criada "para quando tivermos mais tipos"
+- Código com mais de 5% das linhas marcadas como desabilitadas ou com `// TODO: implementação futura`
 
-## ❌ Example (violation)
+## ❌ Exemplo (violação)
 
 ```javascript
-// ❌ "options" parameter never used with different values
+// ❌ Parâmetro "options" nunca usado com valores diferentes
 function getUser(id, options = { includeDeleted: false, format: 'full' }) {
-  // options.includeDeleted is never true in any caller
-  // options.format is never different from 'full'
+  // options.includeDeleted nunca é true em nenhum chamador
+  // options.format nunca é diferente de 'full'
   return db.users.find(id);
 }
 
-// ❌ Abstract class with single implementer
-class BaseNotifier { notify(message) { throw new Error('Not implemented'); } }
+// ❌ Classe abstrata com único implementador
+class BaseNotifier { notify(message) { throw new Error('Não implementado'); } }
 class EmailNotifier extends BaseNotifier { notify(message) { sendEmail(message); } }
-// EmailNotifier is the only implementer that will exist for the next 2 years
+// EmailNotifier é o único implementador que existirá pelos próximos 2 anos
 ```
 
-## ✅ Refactoring
+## ✅ Refatoração
 
 ```javascript
-// ✅ Simple and direct — add flexibility when there's a real use case (YAGNI)
+// ✅ Simples e direto — adicionar flexibilidade quando houver caso de uso real (YAGNI)
 function getUser(id) {
   return db.users.find(id);
 }
@@ -45,12 +45,12 @@ function sendNotification(message) {
   sendEmail(message);
 }
 
-// When there's a real SMSNotifier, then create abstraction
+// Quando houver um SMSNotifier real, então criar a abstração
 ```
 
-## Suggested Codetag
+## Codetag Sugerido
 
 ```typescript
-// FIXME: Speculative Generality — options never used, BaseNotifier has 1 impl
-// TODO: Remove abstraction until 2nd REAL implementer exists
+// FIXME: Speculative Generality — options nunca usado, BaseNotifier tem 1 implementação
+// TODO: Remover abstração até existir 2º implementador REAL
 ```

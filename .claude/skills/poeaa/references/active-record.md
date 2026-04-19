@@ -1,25 +1,25 @@
 # Active Record
 
-**Layer:** Data Source
-**Complexity:** Simple
-**Intent:** An object that encapsulates a row in a database table, encapsulates database access, and adds domain logic on the data.
+**Camada:** Data Source
+**Complexidade:** Simples
+**Intenção:** Um objeto que encapsula uma linha de uma tabela de banco de dados, encapsula o acesso ao banco e adiciona lógica de domínio sobre os dados.
 
 ---
 
-## When to Use
+## Quando Usar
 
-- Simple applications where domain object = database row
-- When business logic is simple and doesn't benefit from database isolation
-- Straight CRUDs with little additional logic
-- Frameworks like Rails ActiveRecord, Eloquent — where the pattern is idiomatic
+- Aplicações simples onde objeto de domínio = linha do banco
+- Quando a lógica de negócio é simples e não se beneficia do isolamento do banco
+- CRUDs diretos com pouca lógica adicional
+- Frameworks como Rails ActiveRecord, Eloquent — onde o padrão é idiomático
 
-## When NOT to Use
+## Quando NÃO Usar
 
-- When domain has complex rules that shouldn't be coupled to database (use Data Mapper)
-- When need to test domain without database
-- When database schema differs significantly from domain model
+- Quando o domínio tem regras complexas que não deveriam ser acopladas ao banco (use Data Mapper)
+- Quando é necessário testar o domínio sem banco de dados
+- Quando o schema do banco difere significativamente do modelo de domínio
 
-## Minimal Structure (TypeScript)
+## Estrutura Mínima (TypeScript)
 
 ```typescript
 class User {
@@ -32,7 +32,7 @@ class User {
     this.email = email
   }
 
-  // Object knows how to save itself
+  // O objeto sabe como salvar a si mesmo
   async save(): Promise<void> {
     if (this.id) {
       await db.execute('UPDATE users SET name=?, email=? WHERE id=?', [this.name, this.email, this.id])
@@ -52,14 +52,14 @@ class User {
 }
 ```
 
-## Related
+## Relacionado com
 
-- [data-mapper.md](data-mapper.md): substitutes when domain becomes complex and needs to be isolated from infrastructure
-- [transaction-script.md](transaction-script.md): complements — Active Record is the natural persistence choice for Transaction Script
-- [row-data-gateway.md](row-data-gateway.md): substitutes when domain logic grows beyond simple data access
-- [rule 064 - Prohibition of Overengineering](../../../rules/064_proibicao-overengineering.md): reinforces — use Active Record when Data Mapper doesn't add real value
+- [data-mapper.md](data-mapper.md): substitui quando o domínio se torna complexo e precisa ser isolado da infraestrutura
+- [transaction-script.md](transaction-script.md): complementa — Active Record é a escolha natural de persistência para Transaction Script
+- [row-data-gateway.md](row-data-gateway.md): substitui quando a lógica de domínio cresce além do simples acesso a dados
+- [regra 064 - Proibição de Overengineering](../../../rules/064_proibicao-overengineering.md): reforça — usar Active Record quando Data Mapper não agrega valor real
 
 ---
 
-**PoEAA Layer:** Data Source
-**Source:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
+**Camada PoEAA:** Data Source
+**Fonte:** Patterns of Enterprise Application Architecture — Martin Fowler (2002)
