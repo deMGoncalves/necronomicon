@@ -1,176 +1,234 @@
-# How to Contribute
+# Como Contribuir
 
-Thank you for wanting to contribute to **oh my claude**! This project is an AI-assisted development workflow — your contribution can help other developers write better code with Claude Code.
+Obrigado por querer contribuir com o **oh my claude**! Este projeto é um workflow de desenvolvimento assistido por IA — sua contribuição pode ajudar outros desenvolvedores a escrever código melhor com o Claude Code.
 
-## What you can contribute
+## O que você pode contribuir
 
-| Type | Description | Where it lives |
-|------|-------------|----------------|
-| **New rule** | Architectural rule with objective criteria | `.claude/rules/` |
-| **New skill** | Knowledge module for agents | `.claude/skills/` |
-| **New command** | Invokable command with `/name` | `.claude/commands/` |
-| **Agent improvement** | Refinement of existing agent | `.claude/agents/` |
-| **Bug fix** | Error in hook, command or agent | Where the bug is |
-| **Documentation** | Improvement to README or markdowns | Project root |
+| Tipo | Descrição | Onde fica |
+|------|-----------|-----------|
+| **Nova rule** | Rule arquitetural com critérios objetivos | `.claude/rules/` |
+| **Nova skill** | Módulo de conhecimento para agents | `.claude/skills/` |
+| **Novo command** | Command invocável com `/nome` | `.claude/commands/` |
+| **Melhoria de agent** | Refinamento de agent existente | `.claude/agents/` |
+| **Correção de bug** | Erro em hook, command ou agent | Onde o bug está |
+| **Documentação** | Melhoria no README ou markdowns | Raiz do projeto |
+| **Novo agent** | Novo agent especializado | `.claude/agents/` |
+| **Novo modo** | Novo modo de workflow (Quick/Task/Feature/Research/UI) | `.claude/CLAUDE.md` |
 
 ---
 
-## Adding a Rule
+## Adicionando uma Rule
 
-Create the file in `.claude/rules/` following the template:
+Crie o arquivo em `.claude/rules/` seguindo o template:
 
 ```markdown
-# [Rule Title]
+# [Título da Rule]
 
-**ID**: [CATEGORY-NNN]
-**Severity**: [🔴 Critical | 🟠 High | 🟡 Medium]
-**Category**: [Structural | Behavioral | Creational | Infrastructure]
+**ID**: [CATEGORIA-NNN]
+**Severidade**: [🔴 Crítica | 🟠 Alta | 🟡 Média]
+**Categoria**: [Estrutural | Comportamental | Criacional | Infraestrutura]
 
 ---
 
-## What it is
+## O que é
 
-[Clear and concise description]
+[Descrição clara e concisa]
 
-## Why it matters
+## Por que importa
 
-[Impact on code and maintainability]
+[Impacto no código e na manutenibilidade]
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] [Measurable criterion 1]
-- [ ] [Measurable criterion 2]
+- [ ] [Critério mensurável 1]
+- [ ] [Critério mensurável 2]
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- [When the rule can be ignored]
+- [Quando a rule pode ser ignorada]
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-[What to check in code]
+[O que verificar no código]
 
-### Automatic
-[Tool and configuration: ESLint, Biome, SonarQube]
+### Automático
+[Ferramenta e configuração: ESLint, Biome, SonarQube]
 
-## Related to
+## Relacionada com
 
-- [NNN - Rule Name](NNN_name.md): [type of relationship]
+- [NNN - Nome da Rule](NNN_nome.md): [tipo de relacionamento]
 
 ---
 
-**Created on**: YYYY-MM-DD  **Version**: 1.0
+**Criada em**: AAAA-MM-DD  **Versão**: 1.0
 ```
 
-**Rules for ID:**
-- Object Calisthenics: `001–009` (next: `010`)
+**Rules para ID:**
+- Object Calisthenics: `001–009` (próximo: `010`)
 - SOLID: `010–014`
-- Package Principles: `015–020`
+- Princípios de Pacote: `015–020`
 - Clean Code: `021–039`
 - Twelve-Factor: `040–051`
 - Anti-Patterns: `052–070`
-- **New rules:** next available ID is `071`
+- **Novas rules:** próximo ID disponível é `071` (veja `.claude/CLAUDE.md` para o mais alto atual)
 
 ---
 
-## Adding a Skill
+## Adicionando um Agent
 
-Create directory in `.claude/skills/skill-name/` with `SKILL.md`:
+Crie um novo arquivo em `.claude/agents/nome-do-agent.md`:
 
 ```yaml
 ---
-name: skill-name          # kebab-case
-description: "[What it is]. Use when [condition] — [specific triggers]."
-model: haiku               # haiku for quick reference, sonnet for analysis
-allowed-tools: Read        # minimum necessary
+name: nome-do-agent
+description: "[Papel em uma linha]. [Quando usar — gatilho específico]."
+model: sonnet        # sonnet para implementação, opus para raciocínio profundo
+tools: Read, Write, Edit, Bash, Glob, Grep
+color: [qualquer nome de cor]
+---
+```
+
+**Estrutura do corpo:**
+```
+## Papel
+[Descrição de responsabilidade única]
+
+## Anti-objetivos
+[O que este agent explicitamente NÃO faz]
+
+## Contrato de Entrada
+[Tabela Entrada → Saída]
+
+## Contrato de Saída
+[O que a saída deve conter]
+
+## Skills
+[Tabela Contexto → Skills]
+
+## Regras
+[Tabela Severidade → IDs → Ação]
+
+## Fluxo de Trabalho
+[Tabela passo a passo]
+
+## Tratamento de Erros
+[Tabela Situação → Ação]
+
+## Critérios de Conclusão
+[Tabela Status → Critérios mensuráveis]
+```
+
+**Princípios de design de agents:**
+- Responsabilidade única — um agent, um trabalho
+- Contratos explícitos de entrada/saída
+- Loops limitados (máximo 3 tentativas rastreadas em tasks.md)
+- Agnóstico de tecnologia — sem nomes de ferramentas específicas no texto
+- Idioma: português para todo o conteúdo
+
+---
+
+## Adicionando uma Skill
+
+Crie o diretório em `.claude/skills/nome-da-skill/` com `SKILL.md`:
+
+```yaml
+---
+name: nome-da-skill          # kebab-case
+description: "[O que é]. Usar quando [condição] — [gatilhos específicos]."
+model: haiku               # haiku para referência rápida, sonnet para análise
+allowed-tools: Read        # mínimo necessário
 metadata:
-  author: YourName
+  author: SeuNome
   version: "1.0.0"
 ---
 ```
 
-**Body structure:**
+**Estrutura do corpo:**
 ```
-## When to Use
-## [Main content]
-## Examples (❌ Bad / ✅ Good)
-## Prohibitions
-## Rationale  ← links to related rules
+## Quando Usar
+## [Conteúdo principal]
+## Exemplos (❌ Ruim / ✅ Bom)
+## Proibições
+## Justificativa  ← links para rules relacionadas
 ```
 
-For skills with lots of content, use `references/`:
+Para skills com muito conteúdo, use `references/`:
 ```
-skill-name/
-├── SKILL.md          ← lightweight index
+nome-da-skill/
+├── SKILL.md          ← índice leve
 └── references/
-    └── detail.md     ← content loaded on demand
+    └── detalhe.md     ← conteúdo carregado sob demanda
 ```
 
 ---
 
-## Adding a Command
+## Adicionando um Command
 
-Create file in `.claude/commands/name.md`:
+Crie o arquivo em `.claude/commands/nome.md`:
 
 ```yaml
 ---
-description: "[Main usage in ≤ 250 chars, front-loaded]"
-argument-hint: "[expected args]"  # optional
-allowed-tools: Tool, Bash(specific command *)
+description: "[Uso principal em ≤ 250 chars, informação mais importante primeiro]"
+argument-hint: "[args esperados]"  # opcional
+allowed-tools: Tool, Bash(comando específico *)
 ---
 
-## Purpose
+## Propósito
 
-[1-2 lines + live context with !`command`]
+[1-2 linhas + contexto ao vivo com !`comando`]
 
-## Instructions
+## Instruções
 
-1. [Step 1]
-2. [Step 2]
+1. [Passo 1]
+2. [Passo 2]
 ```
 
 ---
 
-## PR Process
+## Processo de Pull Request
 
-1. **Fork** the repository
-2. **Create a branch** with descriptive name:
-   - `rule/071-rule-name`
-   - `skill/skill-name`
-   - `fix/bug-description`
-3. **Implement** following templates above
-4. **Add to CHANGELOG.md** in `[Unreleased]` section
-5. **Open a Pull Request** with filled template
+1. **Fork** do repositório
+2. **Crie um branch** com nome descritivo:
+   - `rule/071-nome-da-rule`
+   - `skill/nome-da-skill`
+   - `fix/descricao-do-bug`
+   - `agent/nome-do-agent`
+   - `docs/descricao-da-melhoria`
+3. **Implemente** seguindo os templates acima
+4. **Adicione ao CHANGELOG.md** na seção `[Unreleased]`
+5. **Abra um Pull Request** com o template preenchido
 
-### Quality checklist
+### Checklist de qualidade
 
-For **rules:**
-- [ ] Unique ID in correct category
-- [ ] Objective and measurable criteria (not subjective)
-- [ ] Bidirectional cross-references with related rules
-- [ ] Justified severity
+Para **rules:**
+- [ ] ID único na categoria correta
+- [ ] Critérios objetivos e mensuráveis (não subjetivos)
+- [ ] Referências cruzadas bidirecionais com rules relacionadas
+- [ ] Severidade justificada
 
-For **skills:**
-- [ ] Complete frontmatter with `metadata.author`
-- [ ] Section `## Examples` with ❌/✅
-- [ ] `## Rationale` with links to rules
-- [ ] Description with specific triggers (≤ 250 chars)
+Para **skills:**
+- [ ] Frontmatter completo com `metadata.author`
+- [ ] Seção `## Exemplos` com ❌/✅
+- [ ] `## Justificativa` com links para rules
+- [ ] Descrição com gatilhos específicos (≤ 250 chars)
 
-For **commands:**
-- [ ] Tested with Claude Code CLI
-- [ ] `allowed-tools` with minimum permissions
-- [ ] Live context injection with `!`cmd`` where applicable
-- [ ] `$ARGUMENTS` used where command accepts args
+Para **commands:**
+- [ ] Testado com Claude Code CLI
+- [ ] `allowed-tools` com permissões mínimas
+- [ ] Injeção de contexto ao vivo com `` !`cmd` `` onde aplicável
+- [ ] `$ARGUMENTS` usado onde o command aceita args
 
 ---
 
-## Code standards
+## Padrões de código
 
-- **Language:** Portuguese for documentation, English for TypeScript code
-- **File names:** `kebab-case`
-- **Codetags:** educational — explain why, not just what
-- **Examples:** always `❌ Bad` before `✅ Good`
+- **Idioma:** português para documentação, inglês para código TypeScript
+- **Nomes de arquivos:** `kebab-case`
+- **Codetags:** educativos — explique o porquê, não apenas o quê
+- **Agents:** agnósticos de tecnologia — sem nomes de ferramentas específicas no texto dos agents
+- **Exemplos:** sempre `❌ Ruim` antes de `✅ Bom`
 
-## Questions?
+## Dúvidas?
 
-Open a [Discussion](https://github.com/melisource/fury_oh-my-claude/discussions) to talk before implementing something big.
+Abra uma [Discussion](https://github.com/melisource/fury_oh-my-claude/discussions) para conversar antes de implementar algo grande.

@@ -1,47 +1,47 @@
-# Security Policy
+# Política de Segurança
 
-## Supported versions
+## Versões suportadas
 
-| Version | Supported |
-|---------|-----------|
-| 1.x     | ✅ Yes    |
-| < 1.0   | ❌ No     |
+| Versão  | Suportada  |
+|---------|------------|
+| 1.x     | ✅ Sim     |
+| < 1.0   | ❌ Não     |
 
-## Reporting a vulnerability
+## Reportando uma vulnerabilidade
 
-**Do not open a public issue to report security vulnerabilities.**
+**Não abra uma issue pública para reportar vulnerabilidades de segurança.**
 
-If you found a security issue in `oh my claude`, please:
+Se você encontrou um problema de segurança no `oh my claude`, por favor:
 
-1. **Send an email** to: [security@deMGoncalves.dev](mailto:security@deMGoncalves.dev)
-2. **Or use** [GitHub Security Advisories](https://github.com/melisource/fury_oh-my-claude/security/advisories/new) (private)
+1. **Envie um e-mail** para: [security@deMGoncalves.dev](mailto:security@deMGoncalves.dev)
+2. **Ou utilize** os [GitHub Security Advisories](https://github.com/melisource/fury_oh-my-claude/security/advisories/new) (privado)
 
-### What to include in the report
+### O que incluir no relatório
 
-- Description of the problem
-- Steps to reproduce
-- Potential impact
-- Fix suggestion (if you have one)
+- Descrição do problema
+- Passos para reprodução
+- Impacto potencial
+- Sugestão de correção (se houver)
 
-### Process
+### Processo
 
-1. You will receive confirmation within **48 hours**
-2. The issue will be investigated and classified
-3. A fix will be developed and tested
-4. The vulnerability will be disclosed after patch is published
+1. Você receberá uma confirmação em até **48 horas**
+2. O problema será investigado e classificado
+3. Uma correção será desenvolvida e testada
+4. A vulnerabilidade será divulgada após a publicação do patch
 
-## Scope
+## Escopo
 
-This project is a **Claude Code CLI workflow** with:
+Este projeto é um **workflow para Claude Code CLI** composto por:
 
-- **Shell hooks** (`lint.sh`, `loop.sh`, `prompt.sh`) — local command execution
-- **Configured MCPs** (`.mcp.json`) — connections to external services
-- **Agents and skills** — prompts injected into Claude context
+- **Shell hooks** (`lint.sh`, `loop.sh`, `prompt.sh`) — execução de comandos local
+- **MCPs configurados** (`.mcp.json`) — conexões com serviços externos
+- **Agents e skills** — prompts injetados no contexto do Claude
 
-### Areas of concern
+### Áreas de atenção
 
-- Command injection in hooks
-- Token/secret exposure in `.mcp.json` or in agents
-- Arbitrary execution via `PreToolUse`/`PostToolUse` hooks
+- Injeção de comandos nos hooks
+- Exposição de tokens/segredos no `.mcp.json` ou nos agents
+- Execução arbitrária via hooks `PreToolUse`/`PostToolUse`
 
-**Remember:** Never commit real tokens (Figma, GitHub) in `.mcp.json`. Use environment variables.
+**Lembre-se:** Nunca faça commit de tokens reais (Figma, GitHub) no `.mcp.json`. Utilize variáveis de ambiente.
