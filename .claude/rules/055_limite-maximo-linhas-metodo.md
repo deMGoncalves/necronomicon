@@ -1,61 +1,61 @@
-# Maximum Lines per Method Limit
+# Limite Máximo de Linhas por Método
 
 **ID**: AP-19-055
-**Severity**: 🟠 High
-**Category**: Structural
+**Severidade**: 🟠 Alta
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Long Method occurs when a method has too many lines of code, typically doing many different things. Long methods are difficult to understand, test, reuse, and maintain. And they often contain multiple hidden abstractions.
+Long Method ocorre quando um método possui muitas linhas de código, tipicamente fazendo várias coisas diferentes. Métodos longos são difíceis de entender, testar, reutilizar e manter. E frequentemente contêm múltiplas abstrações ocultas.
 
-## Why It Matters
+## Por que importa
 
-- Low readability: developers lose logical flow in extensive methods
-- Testing difficulty: testing multiple responsibilities in a single method is complex
-- Low reusability: parts of the method cannot be reused in isolation
-- Code smell: long methods often indicate SRP violation and low cohesion
-- Hidden bugs: it's easy to get lost in complex control flow and introduce bugs
+- Baixa legibilidade: desenvolvedores perdem o fluxo lógico em métodos extensos
+- Dificuldade de teste: testar múltiplas responsabilidades em um único método é complexo
+- Baixa reusabilidade: partes do método não podem ser reutilizadas isoladamente
+- Code smell: métodos longos frequentemente indicam violação de SRP e baixa coesão
+- Bugs ocultos: é fácil se perder no fluxo de controle complexo e introduzir bugs
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Methods with more than 20 lines of code (excluding blank lines and comments)
-- [ ] Methods with more than 3 levels of nested indentation
-- [ ] Methods that do more than 3 different things (e.g., validates + persists + logs)
-- [ ] Methods with multiple responsibilities in sequence without clear dependency
-- [ ] Methods where even the author cannot explain "what it does" in one sentence
+- [ ] Métodos com mais de 20 linhas de código (excluindo linhas em branco e comentários)
+- [ ] Métodos com mais de 3 níveis de indentação aninhada
+- [ ] Métodos que fazem mais de 3 coisas diferentes (ex: valida + persiste + loga)
+- [ ] Métodos com múltiplas responsabilidades em sequência sem dependência clara
+- [ ] Métodos onde até o autor não consegue explicar "o que ele faz" em uma frase
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Constructors of complex objects when there is no more readable alternative
-- Methods implementing mathematical or scientific algorithms where breaking logic would reduce clarity
-- Compatibility with legacy code where refactoring would bring high risk
-- Event handlers or external callbacks with arbitrary third-party code
+- Construtores de objetos complexos quando não há alternativa mais legível
+- Métodos implementando algoritmos matemáticos ou científicos onde quebrar a lógica reduziria clareza
+- Compatibilidade com código legado onde refatoração traria alto risco
+- Event handlers ou callbacks externos com código de terceiros arbitrário
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Read methods: if you need to pause in the middle to continue understanding, it's too long
-- Look for comments explaining "here it does X, now it does Y" — extraction points
-- Identify methods where CTRL+F shows repeated patterns, conditions, or validations
+- Ler métodos: se você precisa pausar no meio para continuar entendendo, está longo demais
+- Buscar comentários explicando "aqui ele faz X, agora faz Y" — pontos de extração
+- Identificar métodos onde CTRL+F mostra padrões repetidos, condições ou validações
 
-### Automatic
+### Automático
 - Linters: eslint (complexity, max-lines-per-function), SonarQube, CodeClimate
-- Cyclomatic complexity metrics > 10 generally indicates long method
-- Static analysis: detect methods with many lines and high complexity
+- Métricas de complexidade ciclomática > 10 geralmente indicam método longo
+- Análise estática: detectar métodos com muitas linhas e alta complexidade
 
-## Related To
+## Relacionada com
 
-- [001 - Single Level of Indentation](001_nivel-unico-indentacao.md): reinforces
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [007 - Maximum Lines per Class](007_limite-maximo-linhas-classe.md): complements
-- [009 - Tell, Don't Ask](009_diga-nao-pergunte.md): complements
-- [037 - Prohibition of Flag Arguments](037_proibicao-argumentos-sinalizadores.md): reinforces
-- [036 - Restriction of Functions with Side Effects](036_restricao-funcoes-efeitos-colaterais.md): complements
-- [059 - Prohibition of Refused Bequest](059_proibicao-heranca-refusao.md): reinforces
+- [001 - Nível Único de Indentação](001_nivel-unico-indentacao.md): reforça
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [007 - Limite Máximo de Linhas por Classe](007_limite-maximo-linhas-classe.md): complementa
+- [009 - Diga, Não Pergunte](009_diga-nao-pergunte.md): complementa
+- [037 - Proibição de Argumentos Sinalizadores](037_proibicao-argumentos-sinalizadores.md): reforça
+- [036 - Restrição de Funções com Efeitos Colaterais](036_restricao-funcoes-efeitos-colaterais.md): complementa
+- [059 - Proibição de Herança Recusada](059_proibicao-heranca-refusao.md): reforça
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

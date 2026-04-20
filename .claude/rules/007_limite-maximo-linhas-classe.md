@@ -1,56 +1,56 @@
-# Maximum Lines per Class File Limit
+# Limite Máximo de Linhas por Arquivo de Classe
 
 **ID**: ESTRUTURAL-007
-**Severity**: 🔴 Critical
-**Category**: Structural
+**Severidade**: 🔴 Crítica
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Imposes a maximum limit on the number of lines of code in a class file (entity, *service*, controller), forcing the extraction of responsibilities to other classes.
+Impõe um limite máximo no número de linhas de código em um arquivo de classe (entidade, *service*, controlador), forçando a extração de responsabilidades para outras classes.
 
-*(Prevents the anti-pattern Large Class: a class with too many attributes and methods, indicating excessive responsibilities.)*
+*(Previne o anti-pattern Large Class: uma classe com muitos atributos e métodos, indicando responsabilidades excessivas.)*
 
-## Why It Matters
+## Por que importa
 
-Violating the line limit is a strong indicator that the class is violating the Single Responsibility Principle (SRP), resulting in classes with low cohesion, high coupling, and extreme difficulty in maintenance and testing.
+A violação do limite de linhas é um forte indicador de que a classe está violando o Princípio da Responsabilidade Única (SRP), resultando em classes com baixa coesão, alto acoplamento e dificuldade extrema na manutenção e testes.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Class files (including declarations, methods, and properties) should have, at most, 50 lines of code (excluding blank lines and comments).
-- [ ] Classes reaching 40 lines should be immediate candidates for refactoring.
-- [ ] Individual methods should have, at most, 15 lines of code.
+- [ ] Arquivos de classe (incluindo declarações, métodos e propriedades) devem ter, no máximo, 50 linhas de código (excluindo linhas em branco e comentários).
+- [ ] Classes que atingem 40 linhas devem ser imediatamente candidatas à refatoração.
+- [ ] Métodos individuais devem ter, no máximo, 15 linhas de código.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Configuration/Initialization Classes**: Classes that only declare constants or mappings (e.g., *Mappers*, *Configuration*).
-- **Test Classes**: Test *suites* where each test method is small, but the file grows due to the number of scenarios.
+- **Classes de Configuração/Inicialização**: Classes que apenas declaram constantes ou mapeamentos (ex: *Mappers*, *Configuration*).
+- **Classes de Teste**: *Suites* de teste onde cada método de teste é pequeno, mas o arquivo cresce devido ao número de cenários.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Visual counting or use of file metrics analysis tools.
+Contagem visual ou uso de ferramentas de análise de métricas de arquivo.
 
-### Automatic
+### Automático
 
-SonarQube/ESLint: `max-lines-per-file: 50` and `max-lines-per-method: 5`.
+SonarQube/ESLint: `max-lines-per-file: 50` e `max-lines-per-method: 5`.
 
-## Related To
+## Relacionada com
 
-- [001 - Single Level of Indentation](001_nivel-unico-indentacao.md): reinforces
-- [004 - First Class Collections](004_colecoes-primeira-classe.md): reinforces
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [021 - Prohibition of Logic Duplication](021_proibicao-duplicacao-logica.md): reinforces
-- [023 - Prohibition of Speculative Functionality](023_proibicao-funcionalidade-especulativa.md): reinforces
-- [025 - Prohibition of The Blob Anti-Pattern](025_proibicao-anti-pattern-the-blob.md): reinforces
-- [016 - Common Closure Principle](016_principio-fechamento-comum.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): complements
-- [055 - Maximum Lines per Method Limit](055_limite-maximo-linhas-metodo.md): complements
-- [054 - Prohibition of Divergent Change](054_proibicao-mudanca-divergente.md): complements
+- [001 - Nível Único de Indentação](001_nivel-unico-indentacao.md): reforça
+- [004 - Coleções de Primeira Classe](004_colecoes-primeira-classe.md): reforça
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [021 - Proibição da Duplicação de Lógica](021_proibicao-duplicacao-logica.md): reforça
+- [023 - Proibição de Funcionalidade Especulativa](023_proibicao-funcionalidade-especulativa.md): reforça
+- [025 - Proibição do Anti-Pattern The Blob](025_proibicao-anti-pattern-the-blob.md): reforça
+- [016 - Princípio do Fechamento Comum](016_principio-fechamento-comum.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): complementa
+- [055 - Limite Máximo de Linhas por Método](055_limite-maximo-linhas-metodo.md): complementa
+- [054 - Proibição de Mudança Divergente](054_proibicao-mudanca-divergente.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criada em**: 2025-10-04
+**Versão**: 1.0

@@ -1,64 +1,64 @@
-# Prohibition of Spaghetti Code
+# Proibição de Código Spaghetti
 
 **ID**: AP-03-060
-**Severity**: 🔴 Critical
-**Category**: Structural
+**Severidade**: 🔴 Crítica
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Spaghetti Code occurs when the code's control flow is complex and intertwined like a plate of spaghetti. Multiple branches, deeply nested loops, `goto`s (or equivalents), and intertwined control logic. It's difficult to follow the execution flow from end to end.
+Spaghetti Code ocorre quando o fluxo de controle do código é complexo e entrelaçado como um prato de espaguete. Múltiplos branches, loops profundamente aninhados, `goto`s (ou equivalentes) e lógica de controle entrelaçada. É difícil seguir o fluxo de execução do início ao fim.
 
-## Why It Matters
+## Por que importa
 
-- Impossible to understand: developers cannot track logical flow
-- Hidden bugs: complex control flow hides edge cases and untested conditions
-- Difficult to test: branch coverage becomes nightmare; there are hundreds of paths
-- Difficult to maintain: changes break non-obvious paths; unknown side effects
-- Difficult to refactor: any change can break intertwined flow
-- Very high onboarding cost: new developers take months to effectively understand the code
+- Impossível entender: desenvolvedores não conseguem rastrear o fluxo lógico
+- Bugs ocultos: fluxo de controle complexo esconde casos extremos e condições não testadas
+- Difícil testar: cobertura de branches se torna pesadelo; existem centenas de caminhos
+- Difícil manter: mudanças quebram caminhos não-óbvios; efeitos colaterais desconhecidos
+- Difícil refatorar: qualquer mudança pode quebrar fluxo entrelaçado
+- Custo de onboarding muito alto: novos desenvolvedores levam meses para entender efetivamente o código
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] More than 3 levels of nested indentation (if inside if inside if)
-- [ ] Branches that jump arbitrarily to different parts of code (goto equivalents)
-- [ ] Functions with unexpected external state mutation (global variables, shared mutable state)
-- [ ] Control flow that depends on variables mutated in multiple distant locations
-- [ ] Multiple entry/exit points in same function (early returns everywhere, loops with mixed break/continue)
-- [ ] Cyclomatic complexity > 15 in same function
+- [ ] Mais de 3 níveis de indentação aninhada (if dentro de if dentro de if)
+- [ ] Branches que saltam arbitrariamente para partes diferentes do código (equivalentes a goto)
+- [ ] Funções com mutação inesperada de estado externo (variáveis globais, estado mutável compartilhado)
+- [ ] Fluxo de controle que depende de variáveis mutadas em múltiplos locais distantes
+- [ ] Múltiplos pontos de entrada/saída na mesma função (returns antecipados em todo lugar, loops com break/continue misturados)
+- [ ] Complexidade ciclomática > 15 na mesma função
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- State machines implemented with well-documented switch/case
-- Event driven code single dispatcher with multiple handlers (cleaner pattern than goto)
-- Protocol parsers or network code necessarily complex by external specification
-- Legacy code where immediate refactoring would bring unacceptable risk
+- Máquinas de estado implementadas com switch/case bem documentado
+- Código orientado a eventos com dispatcher único e múltiplos handlers (padrão mais limpo que goto)
+- Parsers de protocolo ou código de rede necessariamente complexo por especificação externa
+- Código legado onde refatoração imediata traria risco inaceitável
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Read code: if you visualize flow as graph with edges crossing everywhere, it's spaghetti
-- Look for variables mutated in multiple locations without clear locality
-- Identify functions where there are multiple chained `if/else` with nested branches
-- Check for early returns, breaks, continues mixed in loops and modules
+- Ler código: se você visualiza fluxo como grafo com arestas cruzando por todo lado, é spaghetti
+- Buscar variáveis mutadas em múltiplos locais sem localidade clara
+- Identificar funções onde há múltiplos `if/else` encadeados com branches aninhados
+- Verificar por returns antecipados, breaks, continues misturados em loops e módulos
 
-### Automatic
-- Cyclomatic complexity analysis: complexity > 15 indicates risk
-- Code visualization: generate call graphs and detect intertwined control flow
-- Static analysis: detect global variable usage, mutability issues
-- Linters: max-depth, max-params, no-eqeqeq (for comparisons leading to spaghetti)
+### Automático
+- Análise de complexidade ciclomática: complexidade > 15 indica risco
+- Visualização de código: gerar grafos de chamada e detectar fluxo de controle entrelaçado
+- Análise estática: detectar uso de variável global, problemas de mutabilidade
+- Linters: max-depth, max-params, no-eqeqeq (para comparações levando a spaghetti)
 
-## Related To
+## Relacionada com
 
-- [001 - Single Level of Indentation](001_nivel-unico-indentacao.md): reinforces
-- [055 - Maximum Lines per Method](055_limite-maximo-linhas-metodo.md): reinforces
-- [036 - Restriction of Functions with Side Effects](036_restricao-funcoes-efeitos-colaterais.md): reinforces
-- [066 - Prohibition of Pyramid of Doom](066_proibicao-piramide-do-destino.md): complements
-- [037 - Prohibition of Flag Arguments](037_proibicao-argumentos-sinalizadores.md): reinforces
-- [009 - Tell, Don't Ask](009_diga-nao-pergunte.md): complements
+- [001 - Nível Único de Indentação](001_nivel-unico-indentacao.md): reforça
+- [055 - Limite Máximo de Linhas por Método](055_limite-maximo-linhas-metodo.md): reforça
+- [036 - Restrição de Funções com Efeitos Colaterais](036_restricao-funcoes-efeitos-colaterais.md): reforça
+- [066 - Proibição da Pirâmide do Destino](066_proibicao-piramide-do-destino.md): complementa
+- [037 - Proibição de Argumentos Sinalizadores](037_proibicao-argumentos-sinalizadores.md): reforça
+- [009 - Diga, Não Pergunte](009_diga-nao-pergunte.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

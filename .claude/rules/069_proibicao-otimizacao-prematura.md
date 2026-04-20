@@ -1,54 +1,54 @@
-# Prohibition of Premature Optimization
+# Proibição de Otimização Prematura
 
 **ID**: AP-10-069
-**Severity**: 🟡 Medium
-**Category**: Behavioral
+**Severidade**: 🟡 Média
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Premature Optimization occurs when the developer optimizes code based on suspected slowness, without measuring the real problem. Readable and correct code is sacrificed for hypothetical performance gain. Donald Knuth: *"Premature optimization is the root of all evil."*
+Otimização Prematura ocorre quando o desenvolvedor otimiza código baseado em suspeita de lentidão, sem medir o problema real. Código legível e correto é sacrificado por ganho de performance hipotético. Donald Knuth: *"A otimização prematura é a raiz de todo mal."*
 
-## Why It Matters
+## Por que importa
 
-- Accidental complexity: code harder to read without measurable gain
-- Wasted time: optimizations in code that isn't a bottleneck don't deliver value
-- Introduced bugs: optimized code is more fragile and difficult to fix
-- Expensive maintenance: premature optimizations are difficult to undo later
+- Complexidade acidental: código mais difícil de ler sem ganho mensurável
+- Tempo desperdiçado: otimizações em código que não é gargalo não entregam valor
+- Bugs introduzidos: código otimizado é mais frágil e difícil de corrigir
+- Manutenção cara: otimizações prematuras são difíceis de desfazer depois
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Optimization implemented without prior measurement (profiling, benchmark, production metrics)
-- [ ] Complex algorithm where O(n²) would be imperceptible in real data volume
-- [ ] Manual cache in layers that already have native caching (ORM, database, HTTP)
-- [ ] Language micro-optimizations (`for` vs `map`, `++i` vs `i++`) in non-critical code
-- [ ] Comment justifying illegibility with "it's faster" without evidence
+- [ ] Otimização implementada sem medição prévia (profiling, benchmark, métricas de produção)
+- [ ] Algoritmo complexo onde O(n²) seria imperceptível no volume real de dados
+- [ ] Cache manual em camadas que já possuem caching nativo (ORM, banco de dados, HTTP)
+- [ ] Micro-otimizações de linguagem (`for` vs `map`, `++i` vs `i++`) em código não-crítico
+- [ ] Comentário justificando ilegibilidade com "é mais rápido" sem evidência
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Proven Hotspots**: Optimizations in code whose slowness was identified by profiling with real production data.
-- **Canonical Algorithms**: Use of known algorithms (quicksort, binary search) where the choice is industry standard, not speculative.
+- **Hotspots Comprovados**: Otimizações em código cuja lentidão foi identificada por profiling com dados reais de produção.
+- **Algoritmos Canônicos**: Uso de algoritmos conhecidos (quicksort, busca binária) onde a escolha é padrão da indústria, não especulativa.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Ask: "is there a measurement proving this is a bottleneck?" — if the answer is no, it's premature optimization.
+Perguntar: "há uma medição provando que isso é um gargalo?" — se a resposta é não, é otimização prematura.
 
-### Automatic
+### Automático
 
-Code review: identify manual caches, unusual data structures, or micro-optimizations without referenced profiling comment.
+Code review: identificar caches manuais, estruturas de dados incomuns ou micro-otimizações sem comentário de profiling referenciado.
 
-## Related To
+## Relacionada com
 
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [023 - Prohibition of Speculative Functionality](023_proibicao-funcionalidade-especulativa.md): complements
-- [062 - Prohibition of Clever Code](062_proibicao-codigo-inteligente-clever-code.md): reinforces
-- [064 - Prohibition of Overengineering](064_proibicao-overengineering.md): complements
-- [070 - Prohibition of Shared Mutable State](070_proibicao-estado-mutavel-compartilhado.md): complements
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [023 - Proibição de Funcionalidade Especulativa](023_proibicao-funcionalidade-especulativa.md): complementa
+- [062 - Proibição de Código Inteligente](062_proibicao-codigo-inteligente-clever-code.md): reforça
+- [064 - Proibição de Overengineering](064_proibicao-overengineering.md): complementa
+- [070 - Proibição de Estado Mutável Compartilhado](070_proibicao-estado-mutavel-compartilhado.md): complementa
 
 ---
 
-**Created on**: 2026-03-29
-**Version**: 1.0
+**Criada em**: 2026-03-29
+**Versão**: 1.0

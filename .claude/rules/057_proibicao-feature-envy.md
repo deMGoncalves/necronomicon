@@ -1,61 +1,61 @@
-# Prohibition of Feature Envy
+# Proibição de Feature Envy
 
 **ID**: AP-13-057
-**Severity**: 🟡 Medium
-**Category**: Behavioral
+**Severidade**: 🟡 Média
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Feature Envy occurs when a method uses data and behaviors from another class more than from its own. It indicates the method is in the wrong class — it "envies" the other class and should be there. The method seems more interested in another object's data than its own.
+Feature Envy ocorre quando um método usa dados e comportamentos de outra classe mais do que da sua própria. Indica que o método está na classe errada — ele "inveja" a outra classe e deveria estar lá. O método parece mais interessado nos dados de outro objeto do que nos seus próprios.
 
-## Why It Matters
+## Por que importa
 
-- Encapsulation violation: method needs to expose internal data of another class (`getters`)
-- Unnecessary coupling: makes it difficult to change one class without breaking the other
-- Fragmented logic: to understand a complete business rule, you need to read multiple classes
-- Testing difficulty: testing the method requires constructing another class's object with correct state
-- Violation of Tell, Don't Ask: asking for state instead of requesting behavior
+- Violação de encapsulamento: método precisa expor dados internos de outra classe (`getters`)
+- Acoplamento desnecessário: dificulta mudar uma classe sem quebrar a outra
+- Lógica fragmentada: para entender uma regra de negócio completa, precisa ler múltiplas classes
+- Dificuldade de teste: testar o método requer construir objeto de outra classe com estado correto
+- Violação de Tell, Don't Ask: perguntando por estado em vez de solicitar comportamento
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Method calls getters of another object 3 or more times
-- [ ] Method accesses properties of another object more than `this`
-- [ ] Method appears to be working on another object's data instead of its own
-- [ ] To test the method, you need to configure complex state of dependent objects
-- [ ] Method that uses no attribute or method of its own class, only dependencies
+- [ ] Método chama getters de outro objeto 3 ou mais vezes
+- [ ] Método acessa propriedades de outro objeto mais do que `this`
+- [ ] Método parece estar trabalhando nos dados de outro objeto em vez dos seus próprios
+- [ ] Para testar o método, precisa configurar estado complexo de objetos dependentes
+- [ ] Método que não usa nenhum atributo ou método da própria classe, apenas dependências
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Methods in controllers/orchestrators that orchestrate flows between multiple service objects
-- DTOs/Data mappers that extract data from multiple objects to format/serialize
-- Event handlers that aggregate data from different sources for single processing
-- Legacy code where refactoring would bring high risk without clear gain
+- Métodos em controllers/orchestrators que orquestram fluxos entre múltiplos objetos de serviço
+- DTOs/Data mappers que extraem dados de múltiplos objetos para formatar/serializar
+- Event handlers que agregam dados de diferentes fontes para processamento único
+- Código legado onde refatoração traria alto risco sem ganho claro
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Read methods: identify those that repeatedly call `obj.getSomething()`
-- Look for applications where coupling level is high even encapsulated via getters
-- Check methods that don't use `this` internally (or use it minimally)
-- Analyze tests: if testing method requires complex setup of external dependencies, it may be feature envy
+- Ler métodos: identificar aqueles que repetidamente chamam `obj.getSomething()`
+- Buscar aplicações onde nível de acoplamento é alto mesmo encapsulado via getters
+- Verificar métodos que não usam `this` internamente (ou usam minimamente)
+- Analisar testes: se testar método requer setup complexo de dependências externas, pode ser feature envy
 
-### Automatic
-- Coupling analysis: detect methods with high dependency on other classes' data
-- Code complexity tools: detect methods that access many attributes of different objects
-- Linters: detect attempts to access internal properties instead of methods
+### Automático
+- Análise de acoplamento: detectar métodos com alta dependência em dados de outras classes
+- Ferramentas de complexidade de código: detectar métodos que acessam muitos atributos de objetos diferentes
+- Linters: detectar tentativas de acessar propriedades internas em vez de métodos
 
-## Related To
+## Relacionada com
 
-- [009 - Tell, Don't Ask](009_diga-nao-pergunte.md): reinforces
-- [008 - Prohibition of Getters and Setters](008_proibicao-getters-setters.md): reinforces
-- [018 - Acyclic Dependencies Principle](018_principio-dependencias-aciclicas.md): complements
-- [061 - Prohibition of Middle Man](061_proibicao-middle-man.md): complements
-- [003 - Primitive Encapsulation](003_encapsulamento-primitivos.md): reinforces
-- [012 - Liskov Substitution Principle](012_principio-substituicao-liskov.md): complements
+- [009 - Diga, Não Pergunte](009_diga-nao-pergunte.md): reforça
+- [008 - Proibição de Getters e Setters](008_proibicao-getters-setters.md): reforça
+- [018 - Princípio de Dependências Acíclicas](018_principio-dependencias-aciclicas.md): complementa
+- [061 - Proibição de Middle Man](061_proibicao-middle-man.md): complementa
+- [003 - Encapsulamento de Primitivos](003_encapsulamento-primitivos.md): reforça
+- [012 - Princípio de Substituição de Liskov](012_principio-substituicao-liskov.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

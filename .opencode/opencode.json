@@ -1,0 +1,32 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"model": "anthropic/claude-sonnet-4-6",
+	"small_model": "anthropic/claude-haiku-4-5-20251001",
+	"instructions": [
+		".opencode/AGENTS.md",
+		".opencode/rules/**/*.md",
+		".opencode/skills/*/SKILL.md"
+	],
+	"permission": {
+		"bash": {
+			"*": "ask",
+			"bunx biome*": "allow",
+			"bun test*": "allow",
+			"bun run*": "ask",
+			"git status*": "allow",
+			"git diff*": "allow",
+			"git log*": "allow",
+			"git rm*": "allow",
+			"git mv*": "allow",
+			"git add*": "ask",
+			"git commit*": "ask",
+			"git push*": "ask",
+			"npm install": "allow",
+			"npm run build*": "allow",
+			"npx husky init": "allow",
+			"npx biome*": "allow",
+			"python3*": "allow"
+		}
+	},
+	"snapshot": true
+}

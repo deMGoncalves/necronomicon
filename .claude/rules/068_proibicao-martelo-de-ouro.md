@@ -1,57 +1,57 @@
-# Prohibition of Golden Hammer
+# Proibição do Martelo de Ouro
 
 **ID**: AP-06-068
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Golden Hammer occurs when a developer or team applies the same tool, pattern, or technology to all problems, regardless of appropriateness. Like the saying "for a man with a hammer, everything looks like a nail", this defines the bias of using the same universal solution (the golden hammer) in all contexts.
+Golden Hammer ocorre quando um desenvolvedor ou time aplica a mesma ferramenta, padrão ou tecnologia para todos os problemas, independentemente da adequação. Como o ditado "para um homem com um martelo, tudo parece um prego", isso define o viés de usar a mesma solução universal (o martelo de ouro) em todos os contextos.
 
-## Why It Matters
+## Por que importa
 
-- Suboptimal solutions: using wrong tool for specific problem, creating over-engineering or under-engineering
-- Evolution difficulty: when problem changes, still using same "golden hammer" even if inadequate
-- Mental innovation lack: team stops learning new tools; clings to known content
-- Technical debt accumulates: universal solutions are often complex when applied where simple helps
-- Frustrates technical team: experienced developers see wrong tools being used
+- Soluções subótimas: usar ferramenta errada para problema específico, criando over-engineering ou under-engineering
+- Dificuldade de evolução: quando problema muda, ainda usando mesmo "martelo de ouro" mesmo que inadequado
+- Falta de inovação mental: time para de aprender novas ferramentas; se apega ao conteúdo conhecido
+- Débito técnico acumula: soluções universais são frequentemente complexas quando aplicadas onde simples ajudaria
+- Frustra time técnico: desenvolvedores experientes veem ferramentas erradas sendo usadas
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Same tool/pattern applied in 3+ significantly different contexts
-- [ ] Rejection of alternatives with "we always use X" without justification
-- [ ] Use of microservice pattern in systems where single monolith would suffice
-- [ ] Use of NoSQL database in strongly relational systems or vice versa
-- [ ] Framework/library event-bus in systems with simple synchronous operation
+- [ ] Mesma ferramenta/padrão aplicado em 3+ contextos significativamente diferentes
+- [ ] Rejeição de alternativas com "sempre usamos X" sem justificativa
+- [ ] Uso de padrão de microserviço em sistemas onde monolito único seria suficiente
+- [ ] Uso de banco de dados NoSQL em sistemas fortemente relacionais ou vice-versa
+- [ ] Framework/biblioteca event-bus em sistemas com operação síncrona simples
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Standard enforced patterns by compliance/regulation (e.g., security frameworks)
-- Company-wide technology stack where variance would bring greater maintainability cost
-- Known and battle-tested libraries/frameworks where investing in new technology risk is high
+- Padrões padrão impostos por compliance/regulação (ex: frameworks de segurança)
+- Stack tecnológico company-wide onde variância traria maior custo de manutenibilidade
+- Bibliotecas/frameworks conhecidos e battle-tested onde investir em risco de nova tecnologia é alto
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Code review: question "is this the best tool for this problem?" for each technology choice
-- Look for repeated patterns in different domains: same ORM used for KV store, search engine, relational DB
-- Identify architectures where every feature even small uses same complex pattern (event bus for everything, microservice for everything)
+- Code review: questionar "esta é a melhor ferramenta para este problema?" para cada escolha tecnológica
+- Buscar padrões repetidos em domínios diferentes: mesmo ORM usado para KV store, search engine, DB relacional
+- Identificar arquiteturas onde cada feature mesmo pequena usa mesmo padrão complexo (event bus para tudo, microservice para tudo)
 
-### Automatic
-- Architecture analysis: detect patterns applied across multiple domains when domain characteristics differ
-- Code complexity: detect framework overhead where simple solution would exist
+### Automático
+- Análise de arquitetura: detectar padrões aplicados em múltiplos domínios quando características de domínio diferem
+- Complexidade de código: detectar overhead de framework onde solução simples existiria
 
-## Related To
+## Relacionada com
 
-- [014 - Dependency Inversion Principle](014_principio-inversao-dependencia.md): reinforces
-- [064 - Prohibition of Overengineering](064_proibicao-overengineering.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [016 - Common Closure Principle](016_principio-fechamento-comum.md): reinforces
-- [041 - Explicit Dependency Declaration](041_declaracao-explicita-dependencias.md): complements
+- [014 - Princípio de Inversão de Dependência](014_principio-inversao-dependencia.md): reforça
+- [064 - Proibição de Overengineering](064_proibicao-overengineering.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [016 - Princípio do Fechamento Comum](016_principio-fechamento-comum.md): reforça
+- [041 - Declaração Explícita de Dependências](041_declaracao-explicita-dependencias.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

@@ -1,49 +1,49 @@
-# Common Closure Principle (CCP)
+# Princípio do Fechamento Comum (CCP)
 
 **ID**: ESTRUTURAL-016
-**Severity**: 🟠 High
-**Category**: Structural
+**Severidade**: 🟠 Alta
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Classes that change together for the same reason should be packaged together.
+As classes que mudam juntas pela mesma razão devem ser empacotadas juntas.
 
-## Why It Matters
+## Por que importa
 
-CCP reinforces SRP at the package level, ensuring that software modifications are localized. It reduces the need to change many packages in a single requirement change, facilitating deployment and maintenance.
+O CCP reforça o SRP no nível de pacote, garantindo que as modificações de software sejam localizadas. Reduz a necessidade de alterar muitos pacotes em uma única alteração de requisito, facilitando a implantação e manutenção.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package should be reviewed if a requirement change causes modifications in more than **3** unrelated class/module files.
-- [ ] Classes related to a single domain entity (e.g., `Order`, `OrderService`, `OrderFactory`) should be in the same package.
-- [ ] Classes that change together should be located in the same directory to facilitate cohesion.
+- [ ] O pacote deve ser revisado se a alteração de um requisito causar modificações em mais de **3** arquivos de classes/módulos não relacionados.
+- [ ] Classes relacionadas a uma única entidade de domínio (ex: `Pedido`, `PedidoService`, `PedidoFactory`) devem estar no mesmo pacote.
+- [ ] Classes que mudam juntas devem ser localizadas em um mesmo diretório para facilitar a coesão.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Shared Infrastructure Classes**: Classes that are used in many packages and live in a low-level utility package.
+- **Classes de Infraestrutura Compartilhada**: Classes que são utilizadas em muitos pacotes e vivem em um pacote de utilidades de baixo nível.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Analyze commit history: check if a single *feature request* affected classes spread across multiple packages.
+Analisar o histórico de commits: verificar se um único *feature request* afetou classes espalhadas por vários pacotes.
 
-### Automatic
+### Automático
 
-Code metrics analysis: tools that track files changed per functionality.
+Análise de métricas de código: ferramentas que rastreiam arquivos alterados por funcionalidade.
 
-## Related To
+## Relacionada com
 
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [015 - Release Reuse Equivalency Principle](015_principio-equivalencia-lancamento-reuso.md): complements
-- [007 - Maximum Lines per Class Limit](007_limite-maximo-linhas-classe.md): reinforces
-- [017 - Common Reuse Principle](017_principio-reuso-comum.md): complements
-- [058 - Prohibition of Shotgun Surgery](058_proibicao-shotgun-surgery.md): reinforces
-- [018 - Acyclic Dependencies Principle](018_principio-dependencias-aciclicas.md): complements
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [015 - Princípio de Equivalência de Lançamento e Reuso](015_principio-equivalencia-lancamento-reuso.md): complementa
+- [007 - Limite Máximo de Linhas por Classe](007_limite-maximo-linhas-classe.md): reforça
+- [017 - Princípio do Reuso Comum](017_principio-reuso-comum.md): complementa
+- [058 - Proibição de Shotgun Surgery](058_proibicao-shotgun-surgery.md): reforça
+- [018 - Princípio de Dependências Acíclicas](018_principio-dependencias-aciclicas.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criada em**: 2025-10-04
+**Versão**: 1.0

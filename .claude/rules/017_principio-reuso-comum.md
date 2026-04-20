@@ -1,48 +1,48 @@
-# Common Reuse Principle (CRP)
+# Princípio do Reuso Comum (CRP)
 
 **ID**: ESTRUTURAL-017
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Classes in a package should be reused together. If you use one, you should use all.
+As classes em um pacote devem ser reutilizadas em conjunto. Se você usa uma, você deve usar todas.
 
-## Why It Matters
+## Por que importa
 
-CRP helps refine package granularity, ensuring that clients are not forced to depend on classes they don't use, which avoids unnecessary recompilations/redeploys and reduces unwanted coupling.
+O CRP ajuda a refinar a granularidade do pacote, garantindo que os clientes não sejam forçados a depender de classes que não usam, o que evita recompilações/redeploy desnecessários e reduz o acoplamento indesejado.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The package should be split if there are classes that are not used by at least **50%** of clients importing the package.
-- [ ] If a class is used in isolation, it should be moved to a utility package or outside the cohesive package.
-- [ ] There should not be more than **3** public classes within a package that are not externally referenced.
+- [ ] O pacote deve ser dividido se houver classes que não são utilizadas por pelo menos **50%** dos clientes que importam o pacote.
+- [ ] Se uma classe é usada isoladamente, ela deve ser movida para um pacote de utilidade ou para fora do pacote coeso.
+- [ ] Não deve haver mais de **3** classes públicas dentro de um pacote que não são referenciadas externamente.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Private Support Methods**: Internal helper classes that are strictly used to support the public classes of the package.
+- **Métodos Privados de Suporte**: Classes auxiliares internas que são estritamente usadas para suportar as classes públicas do pacote.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check the `imports` directory of a client and see how many classes from the imported package it actively uses.
+Verificar o diretório de `imports` de um cliente e ver quantas classes do pacote importado ele usa ativamente.
 
-### Automatic
+### Automático
 
-Dependency analysis: Tools that map the percentage of classes consumed within a package.
+Análise de dependências: Ferramentas que mapeiam a porcentagem de classes consumidas dentro de um pacote.
 
-## Related To
+## Relacionada com
 
-- [015 - Release Reuse Equivalency Principle](015_principio-equivalencia-lancamento-reuso.md): complements
-- [013 - Interface Segregation Principle](013_principio-segregacao-interfaces.md): reinforces
-- [016 - Common Closure Principle](016_principio-fechamento-comum.md): complements
-- [056 - Prohibition of Zombie Code (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): reinforces
-- [067 - Prohibition of Boat Anchor Dependency](067_proibicao-dependencia-barco-ancora.md): reinforces
+- [015 - Princípio de Equivalência de Lançamento e Reuso](015_principio-equivalencia-lancamento-reuso.md): complementa
+- [013 - Princípio de Segregação de Interface](013_principio-segregacao-interfaces.md): reforça
+- [016 - Princípio do Fechamento Comum](016_principio-fechamento-comum.md): complementa
+- [056 - Proibição de Código Zombie (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): reforça
+- [067 - Proibição de Dependência Barco Âncora](067_proibicao-dependencia-barco-ancora.md): reforça
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criada em**: 2025-10-04
+**Versão**: 1.0

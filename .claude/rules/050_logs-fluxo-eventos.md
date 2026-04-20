@@ -10,51 +10,51 @@ paths:
   - "**/tsconfig.json"
 ---
 
-# Logs as Event Stream
+# Logs como Fluxo de Eventos (Logs)
 
 **ID**: INFRAESTRUTURA-050
-**Severity**: 🔴 Critical
-**Category**: Infrastructure
+**Severidade**: 🔴 Crítica
+**Categoria**: Infraestrutura
 
 ---
 
-## What It Is
+## O que é
 
-The application must treat logs as a **continuous stream of events** ordered by time, written to `stdout`. The application must never concern itself with routing, storage, or log rotation — this is the runtime environment's responsibility.
+A aplicação deve tratar logs como um **fluxo contínuo de eventos** ordenados por tempo, escritos em `stdout`. A aplicação nunca deve se preocupar com roteamento, armazenamento, ou rotação de logs — isso é responsabilidade do ambiente de execução.
 
-## Why It Matters
+## Por que importa
 
-Logs in local files are lost when containers are destroyed, difficult to aggregate in distributed systems, and create filesystem dependency. Stdout allows the runtime environment to capture, aggregate, and route logs to any destination.
+Logs em arquivos locais são perdidos quando containers são destruídos, difíceis de agregar em sistemas distribuídos, e criam dependência de filesystem. Stdout permite que o ambiente de execução capture, agregue, e roteie logs para qualquer destino.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] All logs must be written to **stdout** (or stderr for errors), never to local files.
-- [ ] Using logging libraries that write directly to files or perform log rotation is prohibited.
-- [ ] Logs must be structured (JSON) to facilitate parsing and automated analysis.
+- [ ] Todos os logs devem ser escritos em **stdout** (ou stderr para erros), nunca em arquivos locais.
+- [ ] É proibido o uso de bibliotecas de logging que escrevem diretamente em arquivos ou fazem rotação de logs.
+- [ ] Logs devem ser estruturados (JSON) para facilitar parsing e análise automatizada.
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Local Development Environment**: Colored and readable console formatting in dev, provided stdout is maintained.
-- **Temporary Debug Logs**: `console.log` for local debugging, removed before commit.
+- **Ambiente de Desenvolvimento Local**: Formatação colorida e legível para console em dev, desde que stdout seja mantido.
+- **Logs de Debug Temporários**: `console.log` para debugging local, removidos antes do commit.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check logging library configuration to identify file writes or rotation configuration.
+Verificar configuração de bibliotecas de logging para identificar escritas em arquivo ou configuração de rotação.
 
-### Automatic
+### Automático
 
-Code analysis: Search for `FileAppender`, `RotatingFileHandler` configurations, or file paths in logging.
+Análise de código: Busca por `FileAppender`, `RotatingFileHandler`, ou caminhos de arquivo em logging.
 
-## Related To
+## Relacionada com
 
-- [027 - Error Handling Quality](027_qualidade-tratamento-erros-dominio.md): complements
-- [045 - Stateless Processes](045_processos-stateless.md): reinforces
-- [048 - Process Disposability](048_descartabilidade-processos.md): complements
-- [026 - Comment Quality](026_qualidade-comentarios-porque.md): complements
+- [027 - Qualidade no Tratamento de Erros](027_qualidade-tratamento-erros-dominio.md): complementa
+- [045 - Processos Stateless](045_processos-stateless.md): reforça
+- [048 - Descartabilidade de Processos](048_descartabilidade-processos.md): complementa
+- [026 - Qualidade de Comentários](026_qualidade-comentarios-porque.md): complementa
 
 ---
 
-**Created on**: 2025-01-10
-**Version**: 1.0
+**Criada em**: 2025-01-10
+**Versão**: 1.0

@@ -1,60 +1,60 @@
-# Prohibition of Middle Man
+# Proibição de Middle Man
 
 **ID**: AP-19-061
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Middle Man occurs when a class delegates most of its methods to another class without adding its own value. If 50%+ of a class's methods only pass calls (one-line `return this.obj.method(args)`), it's a useless Middle Man. It's the inverse of Feature Envy: here, the middle man delegates everything; there, the method does another object's work.
+Middle Man ocorre quando uma classe delega a maioria de seus métodos para outra classe sem adicionar seu próprio valor. Se 50%+ dos métodos de uma classe apenas repassam chamadas (linha única `return this.obj.method(args)`), é um Middle Man inútil. É o inverso de Feature Envy: aqui, o middle man delega tudo; lá, o método faz o trabalho de outro objeto.
 
-## Why It Matters
+## Por que importa
 
-- Unnecessary complexity: more files, more imports, more names to learn
-- Duplicated maintenance: each change in the real interface requires change in the Middle Man
-- Slower debugging: stack trace with unnecessary layers and confusion about where real logic is
-- Indirect coupling: if removing real object, middle man loses existence without value
-- Indicates over-engineering or incomplete refactoring: class was useful once but lost purpose
+- Complexidade desnecessária: mais arquivos, mais imports, mais nomes para aprender
+- Manutenção duplicada: cada mudança na interface real requer mudança no Middle Man
+- Debug mais lento: stack trace com camadas desnecessárias e confusão sobre onde está a lógica real
+- Acoplamento indireto: se remover objeto real, middle man perde existência sem valor
+- Indica over-engineering ou refatoração incompleta: classe foi útil uma vez mas perdeu propósito
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] 50%+ of class methods are one-line delegates without adding value
-- [ ] Class exists only to hide another object initially exposed directly
-- [ ] Whenever adding a method to real object, add same wrapper to Middle Man
-- [ ] Stack trace always shows same method names in two consecutive layers
-- [ ] Middle Man isn't used/tested in isolation — always needs real object working
+- [ ] 50%+ dos métodos da classe são delegates de uma linha sem adicionar valor
+- [ ] Classe existe apenas para esconder outro objeto exposto diretamente inicialmente
+- [ ] Sempre que adicionar método ao objeto real, adiciona mesma wrapper ao Middle Man
+- [ ] Stack trace sempre mostra mesmos nomes de método em duas camadas consecutivas
+- [ ] Middle Man não é usado/testado isoladamente — sempre precisa do objeto real funcionando
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Facade patterns that simplify complex interface (adding value via simplification)
-- Proxies with cross-cutting concerns (logging, caching, authentication)
-- Adapters that transform interfaces of different formats
-- DTOs/ViewModels that transform entity objects for presentation layer
+- Padrões de Facade que simplificam interface complexa (adicionando valor via simplificação)
+- Proxies com preocupações transversais (logging, caching, autenticação)
+- Adapters que transformam interfaces de formatos diferentes
+- DTOs/ViewModels que transformam objetos de entidade para camada de apresentação
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Read class: identify methods that only do `return this.obj.method(args)` without modification
-- Look for classes where adding method always requires adding same delegate in another class
-- Check tests: middle man tests only test that it forwards correctly, not own logic
-- Analyze calls: always navigate through middle man to reach real object
+- Ler classe: identificar métodos que apenas fazem `return this.obj.method(args)` sem modificação
+- Buscar classes onde adicionar método sempre requer adicionar mesmo delegate em outra classe
+- Verificar testes: testes do middle man apenas testam que ele repassa corretamente, não lógica própria
+- Analisar chamadas: sempre navega pelo middle man para chegar ao objeto real
 
-### Automatic
-- Static analysis: detect classes with high rate of methods that only delegate (vs implement logic)
-- Code complexity: detect classes where cyclomatic complexity per method ≈ 1 (more delegating code)
-- Coupling analysis: detect classes that only exist to encapsulate others without adding behavior
+### Automático
+- Análise estática: detectar classes com alta taxa de métodos que apenas delegam (vs implementam lógica)
+- Complexidade de código: detectar classes onde complexidade ciclomática por método ≈ 1 (código mais delegando)
+- Análise de acoplamento: detectar classes que apenas existem para encapsular outras sem adicionar comportamento
 
-## Related To
+## Relacionada com
 
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [057 - Prohibition of Feature Envy](057_proibicao-feature-envy.md): complements
-- [008 - Prohibition of Getters and Setters](008_proibicao-getters-setters.md): reinforces
-- [011 - Open/Closed Principle](011_principio-aberto-fechado.md): complements
-- [065 - Prohibition of Poltergeists](065_proibicao-poltergeists.md): complements
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [057 - Proibição de Feature Envy](057_proibicao-feature-envy.md): complementa
+- [008 - Proibição de Getters e Setters](008_proibicao-getters-setters.md): reforça
+- [011 - Princípio Aberto/Fechado](011_principio-aberto-fechado.md): complementa
+- [065 - Proibição de Poltergeists](065_proibicao-poltergeists.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

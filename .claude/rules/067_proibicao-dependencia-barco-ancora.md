@@ -1,57 +1,57 @@
-# Prohibition of Boat Anchor Dependency
+# Proibição de Dependência Barco-Âncora
 
 **ID**: AP-01-067
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Boat Anchor occurs when a dependency, library, or component is imported into the codebase, installed in `package.json` or `requirements.txt`, but is never used or only used superficially. Like a boat anchor that interferes with movement, these unused dependencies add complexity and maintenance cost without bringing value. Variant of Lava Flow for dependencies.
+Boat Anchor ocorre quando uma dependência, biblioteca ou componente é importado para a base de código, instalado no `package.json` ou `requirements.txt`, mas nunca é usado ou usado apenas superficialmente. Como uma âncora de barco que interfere no movimento, essas dependências não usadas adicionam complexidade e custo de manutenção sem trazer valor. Variante de Lava Flow para dependências.
 
-## Why It Matters
+## Por que importa
 
-- Dependency bloat: more files, more downloads, more build/CI/CD time
-- Security vulnerabilities: unused dependencies aren't monitored but may have CVEs
-- Onboarding difficulty: developers wonder "what is X for?" and waste time researching
-- Technology confusion: appears to be used but isn't; false impression of capabilities
-- Complex licenses: unused dependencies can introduce licensing issues without reason
+- Inchaço de dependências: mais arquivos, mais downloads, mais tempo de build/CI/CD
+- Vulnerabilidades de segurança: dependências não usadas não são monitoradas mas podem ter CVEs
+- Dificuldade de onboarding: desenvolvedores se perguntam "para que serve X?" e perdem tempo pesquisando
+- Confusão tecnológica: parece ser usado mas não é; falsa impressão de capacidades
+- Licenças complexas: dependências não usadas podem introduzir problemas de licenciamento sem razão
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Dependency listed in `package.json`, `requirements.txt`, `Pipfile`, `go.mod`, but never imported
-- [ ] Library imported but never called (`import X` without `X.method()` usage)
-- [ ] Dead dependency (unmaintained) kept "just in case" without future usage timeline
-- [ ] Framework/library installed but only 1-2 features used when simple alternative exists
+- [ ] Dependência listada em `package.json`, `requirements.txt`, `Pipfile`, `go.mod`, mas nunca importada
+- [ ] Biblioteca importada mas nunca chamada (`import X` sem uso de `X.method()`)
+- [ ] Dependência morta (não mantida) mantida "just in case" sem timeline de uso futuro
+- [ ] Framework/biblioteca instalado mas apenas 1-2 features usadas quando alternativa simples existe
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- DevDependencies used in build-tooling only (linters, formatters not referenced in prod code)
-- Optional dependencies where usage is runtime unknown until execution (plugins)
-- Future dependency with well-defined roadmap (e.g., feature requiring X in Q3) if documented in comments/tickets
+- DevDependencies usadas apenas em build-tooling (linters, formatters não referenciados em código prod)
+- Dependências opcionais onde uso é desconhecido em runtime até execução (plugins)
+- Dependência futura com roadmap bem definido (ex: feature requerendo X no Q3) se documentado em comments/tickets
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Compare `package.json`/`requirements.txt` with `grep -r "^import\|^from"` or `grep -r "^require\|^use"` — diff is boat anchors
-- Look for libraries where docs/wiki mention "we use X" but grep code base shows zero usage
-- Check tests: if library doesn't appear in tests only in production code not imported, it's boat anchor
+- Comparar `package.json`/`requirements.txt` com `grep -r "^import\|^from"` ou `grep -r "^require\|^use"` — diff são boat anchors
+- Buscar bibliotecas onde docs/wiki mencionam "usamos X" mas grep code base mostra zero uso
+- Verificar testes: se biblioteca não aparece em testes apenas em código de produção não importado, é boat anchor
 
-### Automatic
-- Tools: npm-check, depcheck, pipreqs, go mod tidy
-- CI/CD: scripts that detect unused dependencies and fail build
-- Dependency analysis tools: detect imports vs usage across entire codebase
+### Automático
+- Ferramentas: npm-check, depcheck, pipreqs, go mod tidy
+- CI/CD: scripts que detectam dependências não usadas e falham build
+- Ferramentas de análise de dependências: detectar imports vs uso em toda a base de código
 
-## Related To
+## Relacionada com
 
-- [056 - Prohibition of Zombie Code (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): complements
-- [041 - Explicit Dependency Declaration](041_declaracao-explicita-dependencias.md): reinforces
-- [039 - Boy Scout Rule (Continuous Refactoring)](039_regra-escoteiro-refatoracao-continua.md): reinforces
-- [043 - Environment Configurations](043_configuracoes-via-ambiente.md): complements
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
+- [056 - Proibição de Código Zombie (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): complementa
+- [041 - Declaração Explícita de Dependências](041_declaracao-explicita-dependencias.md): reforça
+- [039 - Regra do Escoteiro (Refatoração Contínua)](039_regra-escoteiro-refatoracao-continua.md): reforça
+- [043 - Configurações de Ambiente](043_servicos-apoio-recursos.md): complementa
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

@@ -1,49 +1,49 @@
 ---
-description: "Prepares changes, creates Conventional Commits commit and pushes to remote. Use after completing Feature, Task or Quick fix."
+description: "Prepara mudanças, cria commit Conventional Commits e envia para remoto. Usar após completar Feature, Task ou Quick fix."
 allowed-tools: Bash(git add *), Bash(git status), Bash(git diff *), Bash(git commit *), Bash(git push *), Bash(git log *)
 ---
 
-## Purpose
+## Propósito
 
-Commits and pushes current changes to remote repository.
+Commita e envia mudanças atuais para repositório remoto.
 
-Current state:
+Estado atual:
 !`git status --short`
 
-Recent commits (style reference):
+Commits recentes (referência de estilo):
 !`git log --oneline -5`
 
-## Instructions
+## Instruções
 
-1. Run `git status` — confirm files to commit
+1. Executar `git status` — confirmar arquivos a commitar
 
-2. Run `git diff --stat` — understand scope of changes
+2. Executar `git diff --stat` — entender escopo das mudanças
 
-3. Elaborate commit message following Conventional Commits:
+3. Elaborar mensagem de commit seguindo Conventional Commits:
 
-   | Prefix | When to use |
+   | Prefixo | Quando usar |
    |---------|-------------|
-   | `feat:` | New functionality |
-   | `fix:` | Bug fix |
-   | `refactor:` | Refactoring without behavior change |
-   | `docs:` | Documentation changes |
-   | `chore:` | Maintenance, configs, scripts |
-   | `test:` | Adding or fixing tests |
+   | `feat:` | Nova funcionalidade |
+   | `fix:` | Correção de bug |
+   | `refactor:` | Refatoração sem mudança de comportamento |
+   | `docs:` | Mudanças de documentação |
+   | `chore:` | Manutenção, configs, scripts |
+   | `test:` | Adicionar ou corrigir testes |
 
-4. Prepare files with specific `git add` (avoid `git add -A` with sensitive files)
+4. Preparar arquivos com `git add` específico (evitar `git add -A` com arquivos sensíveis)
 
-5. Create commit with HEREDOC:
+5. Criar commit com HEREDOC:
    ```bash
    git commit -m "$(cat <<'EOF'
-   type: concise description in imperative
+   tipo: descrição concisa no imperativo
 
    Co-Authored-By: deMGoncalves <noreply@github.com>
    EOF
    )"
    ```
 
-6. Push: `git push`
+6. Enviar: `git push`
 
-7. Confirm: `git status`
+7. Confirmar: `git status`
 
-**Do not commit:** `.env` with real values, secrets, hardcoded credentials.
+**Não commitar:** `.env` com valores reais, secrets, credenciais hardcoded.

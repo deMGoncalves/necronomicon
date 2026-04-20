@@ -1,55 +1,55 @@
-# Application of the "Tell, Don't Ask" Principle (Law of Demeter)
+# Aplicação do Princípio do "Diga, Não Pergunte" (Law of Demeter)
 
 **ID**: COMPORTAMENTAL-009
-**Severity**: 🔴 Critical
-**Category**: Behavioral
+**Severidade**: 🔴 Crítica
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Requires that a method call methods or access properties only of its "immediate neighbors": the object itself, objects passed as arguments, objects it creates, or objects that are direct internal properties.
+Exige que um método chame métodos ou acesse propriedades apenas de seus "vizinhos imediatos": o próprio objeto, objetos passados como argumento, objetos que ele cria ou objetos que são propriedades internas diretas.
 
-*(Prevents the anti-pattern Message Chains / Train Wreck: by telling the object what to do instead of navigating its internal structure via chained getters.)*
+*(Previne o anti-pattern Message Chains / Train Wreck: ao dizer ao objeto o que fazer em vez de navegar sua estrutura interna via getters encadeados.)*
 
-## Why It Matters
+## Por que importa
 
-Violations of the Law of Demeter result in high and transitive coupling (*train wrecks*), making code fragile to internal changes in objects distant in the dependency chain, and obscuring the responsibility of each object.
+Violações do Princípio de Demeter resultam em acoplamento alto e transitivo (*train wrecks*), tornando o código frágil a mudanças internas em objetos distantes na cadeia de dependência, e obscurecendo a responsabilidade de cada objeto.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] A method should avoid calling methods of an object returned by another method (e.g., `a.getB().getC().f()`).
-- [ ] Method calls should be restricted to objects that the method has direct knowledge of.
-- [ ] The client object should *tell* the dependent object what to do, instead of *asking* for internal state to make a decision.
+- [ ] Um método deve evitar chamar métodos de um objeto retornado por outro método (ex: `a.getB().getC().f()`).
+- [ ] A chamada de métodos deve ser restrita aos objetos que o método tem conhecimento direto.
+- [ ] O objeto cliente deve *dizer* ao objeto dependente o que fazer, em vez de *perguntar* pelo estado interno para tomar uma decisão.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Fluent Interface Patterns (Chaining)**: As long as the method returns `this` (or the same interface), as in Builders.
-- **Access to DTOs/Value Objects**: Data access from objects that are purely data containers.
+- **Padrões de Interface Fluida (Chaining)**: Desde que o método retorne `this` (ou a mesma interface), como em Builders.
+- **Acesso a DTOs/Value Objects**: Acesso a dados de objetos que são puramente recipientes de dados.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for call chaining (*dot-chaining*) with three or more consecutive calls, indicating knowledge of nested objects.
+Busca por encadeamento de chamadas (*dot-chaining*) com três ou mais chamadas consecutivas, indicando conhecimento de objetos aninhados.
 
-### Automatic
+### Automático
 
-ESLint: `no-chaining` with high depth and `no-access-target` (with custom plugins).
+ESLint: `no-chaining` com alta profundidade e `no-access-target` (com plugins customizados).
 
-## Related To
+## Relacionada com
 
-- [008 - Prohibition of Getters/Setters](008_proibicao-getters-setters.md): reinforces
-- [005 - Restriction on Method Call Chaining](005_maximo-uma-chamada-por-linha.md): reinforces
-- [012 - Liskov Substitution Principle](012_principio-substituicao-liskov.md): reinforces
-- [003 - Encapsulation of Primitives](003_encapsulamento-primitivos.md): reinforces
-- [004 - First Class Collections](004_colecoes-primeira-classe.md): complements
-- [018 - Acyclic Dependencies Principle](018_principio-dependencias-aciclicas.md): reinforces
-- [036 - Restriction on Functions with Side Effects](036_restricao-funcoes-efeitos-colaterais.md): reinforces
-- [038 - Command-Query Separation Principle](038_conformidade-principio-inversao-consulta.md): reinforces
-- [057 - Prohibition of Feature Envy](057_proibicao-feature-envy.md): complements
+- [008 - Proibição de Getters/Setters](008_proibicao-getters-setters.md): reforça
+- [005 - Restrição de Encadeamento de Chamadas](005_maximo-uma-chamada-por-linha.md): reforça
+- [012 - Princípio de Substituição de Liskov](012_principio-substituicao-liskov.md): reforça
+- [003 - Encapsulamento de Primitivos](003_encapsulamento-primitivos.md): reforça
+- [004 - Coleções de Primeira Classe](004_colecoes-primeira-classe.md): complementa
+- [018 - Princípio de Dependências Acíclicas](018_principio-dependencias-aciclicas.md): reforça
+- [036 - Restrição de Funções com Efeitos Colaterais](036_restricao-funcoes-efeitos-colaterais.md): reforça
+- [038 - Princípio de Separação de Comando-Consulta](038_conformidade-principio-inversao-consulta.md): reforça
+- [057 - Proibição de Feature Envy](057_proibicao-feature-envy.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Version**: 1.0
+**Criada em**: 2025-10-04
+**Versão**: 1.0

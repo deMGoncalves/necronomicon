@@ -1,48 +1,48 @@
-# Prohibition of Flag Arguments
+# Proibição de Argumentos Sinalizadores (Flag Arguments)
 
 **ID**: COMPORTAMENTAL-037
-**Severity**: 🟠 High
-**Category**: Behavioral
+**Severidade**: 🟠 Alta
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Prohibits using boolean parameters (*boolean flags*) in function or method signatures, as they are a strong indicator that the function has more than one responsibility.
+Proíbe o uso de parâmetros booleanos (*boolean flags*) em assinaturas de funções ou métodos, pois eles são um forte indicador de que a função possui mais de uma responsabilidade.
 
-## Why It Matters
+## Por que importa
 
-Flag arguments (e.g., `process(data, shouldLog: boolean)`) violate the Single Responsibility Principle (SRP) and the Open/Closed Principle (OCP), as the function branches internally, making it difficult to test and maintain.
+Argumentos sinalizadores (ex: `process(data, shouldLog: boolean)`) violam o Princípio da Responsabilidade Única (SRP) e o Princípio Aberto/Fechado (OCP), pois a função se ramifica internamente, tornando-a difícil de testar e manter.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Functions must not have boolean arguments that alter the main execution path (e.g., `if (flag) { ... } else { ... }`).
-- [ ] Functions with *boolean flags* must be split into separate methods with names expressing each branch's intent (e.g., `processAndLog(data)` and `process(data)`).
-- [ ] Limit of **zero** *boolean flags* in public methods of domain classes (`Services`, `Entities`).
+- [ ] Funções não devem ter argumentos booleanos que alteram o caminho de execução principal (ex: `if (flag) { ... } else { ... }`).
+- [ ] Funções com *boolean flags* devem ser divididas em métodos separados, com nomes que expressem a intenção de cada ramificação (ex: `processAndLog(data)` e `process(data)`).
+- [ ] Limite de **zero** *boolean flags* nos métodos públicos de classes de domínio (`Services`, `Entities`).
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **System Control Modules**: Low-level functions that control *debugging* or *mode* (e.g., `isVerbose`).
-- **Frameworks/Libraries**: Functions that implement a signature required by a third-party framework.
+- **Módulos de Controle de Sistema**: Funções de baixo nível que controlam *debugging* ou *mode* (ex: `isVerbose`).
+- **Frameworks/Libraries**: Funções que implementam uma assinatura exigida por um framework de terceiros.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for function parameters typed as `boolean` or with names like `isX`, `shouldY`, `withZ`.
+Busca por parâmetros de função tipados como `boolean` ou com nomes como `isX`, `shouldY`, `withZ`.
 
-### Automatic
+### Automático
 
-ESLint: `no-flag-args` (custom rule) or `max-params`.
+ESLint: `no-flag-args` (regra customizada) ou `max-params`.
 
-## Related To
+## Relacionada com
 
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [011 - Open/Closed Principle](011_principio-aberto-fechado.md): reinforces
-- [033 - Parameter Limit per Function](033_limite-parametros-funcao.md): reinforces
-- [013 - Interface Segregation Principle](013_principio-segregacao-interfaces.md): reinforces
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [011 - Princípio Aberto/Fechado](011_principio-aberto-fechado.md): reforça
+- [033 - Limite de Parâmetros por Função](033_limite-parametros-funcao.md): reforça
+- [013 - Princípio de Segregação de Interface](013_principio-segregacao-interfaces.md): reforça
 
 ---
 
-**Created on**: 2025-10-08
-**Version**: 1.0
+**Criada em**: 2025-10-08
+**Versão**: 1.0

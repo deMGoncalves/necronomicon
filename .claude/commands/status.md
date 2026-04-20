@@ -1,66 +1,65 @@
 ---
-description: "Workflow progress dashboard: lists features in changes/, completed tasks, current phase and attempt counters per agent."
+description: "Dashboard de progresso do fluxo: lista features em changes/, tarefas completas, fase atual e contadores de tentativas por agente."
 allowed-tools: Read, Glob, Grep, Bash(ls *)
 ---
 
-## Purpose
+## Propósito
 
-Displays current state of all features in progress, reading `tasks.md` in `changes/`.
+Exibe estado atual de todos os features em andamento, lendo `tasks.md` em `changes/`.
 
-Detected features:
-!`ls changes/ 2>/dev/null | sort || echo "(no features in progress)"`
+Features detectados:
+!`ls changes/ 2>/dev/null | sort || echo "(nenhum feature em andamento)"`
 
-Last added rule:
-!`ls .claude/rules/ 2>/dev/null | sort | tail -1 || echo "(rules not found)"`
+Última regra adicionada:
+!`ls .claude/rules/ 2>/dev/null | sort | tail -1 || echo "(regras não encontradas)"`
 
-## Instructions
+## Instruções
 
-1. **List directories** in `changes/` — if empty, show guidance to use `/start`
+1. **Listar diretórios** em `changes/` — se vazio, mostrar orientação para usar `/start`
 
-2. **For each feature**, read `changes/XXX/tasks.md` and extract:
-   - Feature name (from directory)
-   - Current phase (`**Current Phase**` in header)
-   - Progress: count of `- [x]` (completed) vs `- [ ]` (pending)
-   - `<!-- attempts-developer: N -->`
+2. **Para cada feature**, ler `changes/XXX/tasks.md` e extrair:
+   - Nome do feature (do diretório)
+   - Fase atual (`**Fase Atual**` no cabeçalho)
+   - Progresso: contagem de `- [x]` (completo) vs `- [ ]` (pendente)
+   - `<!-- attempts-coder: N -->`
    - `<!-- attempts-tester: N -->`
-   - `<!-- attempts-reviewer: N -->`
    - `<!-- mode: Quick|Task|Feature -->`
 
-3. **Display dashboard** in format:
+3. **Exibir dashboard** no formato:
 
 ```
 ══════════════════════════════════════════════
-  oh my claude — Workflow Status
-  Next available rule ID: [N+1 based on .claude/rules/]
+  oh my claude — Status do Fluxo
+  Próximo ID de regra disponível: [N+1 baseado em .claude/rules/]
 ══════════════════════════════════════════════
 
-📋 FEATURES IN PROGRESS
+📋 FEATURES EM ANDAMENTO
 ──────────────────────────────────────────────
 
-[001] feature-name  [Feature]
-  Phase:      🔬 Phase 1 — Research
-  Progress: ██░░░░░░░░  2/6 tasks (33%)
-  Agent:    @architect
-  Attention:   —
+[001] nome-feature  [Feature]
+  Fase:      🔬 Fase 1 — Pesquisa
+  Progresso: ██░░░░░░░░  2/6 tarefas (33%)
+  Agente:    @architect
+  Atenção:   —
 
-[002] other-task  [Task]
-  Phase:      ⚙️  Phase 3 — Code
-  Progress: ████░░░░░░  3/6 tasks (50%)
-  Attempts: dev=2  tester=1  reviewer=0
-  Attention:   ⚠️  2 @developer attempts
+[002] outra-task  [Task]
+  Fase:      ⚙️  Fase 3 — Code
+  Progresso: ████░░░░░░  3/6 tarefas (50%)
+  Tentativas: coder=2  tester=1
+  Atenção:   ⚠️  2 tentativas @coder
 
 ──────────────────────────────────────────────
-📊 SUMMARY
-  Active features:   N
-  Completed tasks:  X / Y
-  Total progress:   Z%
+📊 RESUMO
+  Features ativos:   N
+  Tarefas completas: X / Y
+  Progresso total:   Z%
 ──────────────────────────────────────────────
 ```
 
-4. **Attention indicators**:
-   - `attempts-developer >= 3` → `⚠️ Re-spec recommended`
-   - All `[x]` → `✅ Complete — use /ship to commit`
-   - No features → guide to `/start feature-name`
+4. **Indicadores de atenção**:
+   - `attempts-coder >= 3` → `⚠️ Re-spec recomendado`
+   - Todos `[x]` → `✅ Completo — use /ship para commit`
+   - Sem features → orientar para `/start nome-feature`
 
-5. **At end**, display next available rule ID:
-   - List `.claude/rules/` and identify highest existing number + 1
+5. **Ao final**, exibir próximo ID de regra disponível:
+   - Listar `.claude/rules/` e identificar número mais alto existente + 1

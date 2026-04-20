@@ -1,54 +1,54 @@
-# Prioritization of Simplicity and Clarity (KISS Principle)
+# Priorização da Simplicidade e Clareza (Princípio KISS)
 
 **ID**: ESTRUTURAL-022
-**Severity**: 🟠 High
-**Category**: Structural
+**Severidade**: 🟠 Alta
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Requires that design and code be kept as simple and direct as possible, avoiding excessively clever or complex solutions when a clear alternative exists.
+Impõe que o design e o código devem ser mantidos o mais simples e direto possível, evitando soluções excessivamente inteligentes ou complexas quando uma alternativa clara existe.
 
-## Why It Matters
+## Por que importa
 
-Unnecessary complexity is a debt that affects readability and maintainability. Simple solutions are easier to understand, test, debug, and scale, reducing the tendency for errors and cognitive cost.
+A complexidade desnecessária é um débito que afeta a legibilidade e a manutenibilidade. Soluções simples são mais fáceis de entender, testar, depurar e escalar, reduzindo a tendência a erros e o custo cognitivo.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] The **Cyclomatic Complexity Index (CC)** of any method should not exceed **5**.
-- [ ] Functions and methods should perform only a single task.
-- [ ] The use of metaprogramming or advanced language features is prohibited if the same result can be achieved with direct code.
+- [ ] O **Índice de Complexidade Ciclomática (CC)** de qualquer método não deve exceder **5**.
+- [ ] Funções e métodos devem realizar apenas uma única tarefa.
+- [ ] É proibido o uso de metaprogramação ou recursos avançados da linguagem se o mesmo resultado puder ser alcançado com código direto.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Infrastructure Libraries**: Low-level components (e.g., *parser*, *serializer*) where complexity is inherent to the task, but isolated.
+- **Bibliotecas de Infraestrutura**: Componentes de baixo nível (ex: *parser*, *serializer*) onde a complexidade é inerente à tarefa, mas isolada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Check if the code requires more than 5 seconds of analysis to understand its purpose and control flow.
+Verificar se o código exige mais de 5 segundos de análise para entender seu propósito e fluxo de controle.
 
-### Automatic
+### Automático
 
 SonarQube/ESLint: `complexity.max-cycles: 5`.
 
-## Related To
+## Relacionada com
 
-- [001 - Single Level of Indentation](001_nivel-unico-indentacao.md): reinforces
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [005 - Restriction on Method Call Chaining](005_maximo-uma-chamada-por-linha.md): complements
-- [006 - Prohibition of Abbreviated Names](006_proibicao-nomes-abreviados.md): complements
-- [007 - Maximum Lines per Class Limit](007_limite-maximo-linhas-classe.md): complements
-- [021 - Prohibition of Logic Duplication](021_proibicao-duplicacao-logica.md): complements
-- [026 - Comment Quality](026_qualidade-comentarios-porque.md): complements
-- [062 - Prohibition of Clever Code](062_proibicao-codigo-inteligente-clever-code.md): reinforces
-- [064 - Prohibition of Overengineering](064_proibicao-overengineering.md): reinforces
-- [068 - Prohibition of Golden Hammer](068_proibicao-martelo-de-ouro.md): reinforces
-- [069 - Prohibition of Premature Optimization](069_proibicao-otimizacao-prematura.md): reinforces
+- [001 - Nível Único de Indentação](001_nivel-unico-indentacao.md): reforça
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [005 - Restrição de Encadeamento de Chamadas](005_maximo-uma-chamada-por-linha.md): complementa
+- [006 - Proibição de Nomes Abreviados](006_proibicao-nomes-abreviados.md): complementa
+- [007 - Limite Máximo de Linhas por Classe](007_limite-maximo-linhas-classe.md): complementa
+- [021 - Proibição da Duplicação de Lógica](021_proibicao-duplicacao-logica.md): complementa
+- [026 - Qualidade de Comentários](026_qualidade-comentarios-porque.md): complementa
+- [062 - Proibição de Código Inteligente](062_proibicao-codigo-inteligente-clever-code.md): reforça
+- [064 - Proibição de Overengineering](064_proibicao-overengineering.md): reforça
+- [068 - Proibição do Martelo de Ouro](068_proibicao-martelo-de-ouro.md): reforça
+- [069 - Proibição de Otimização Prematura](069_proibicao-otimizacao-prematura.md): reforça
 
 ---
 
-**Created on**: 2025-10-08
-**Version**: 1.0
+**Criada em**: 2025-10-08
+**Versão**: 1.0

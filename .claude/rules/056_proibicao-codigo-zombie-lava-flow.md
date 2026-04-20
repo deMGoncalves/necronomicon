@@ -1,62 +1,62 @@
-# Prohibition of Zombie Code (Lava Flow)
+# Proibição de Código Zombie (Lava Flow)
 
 **ID**: AP-02-056
-**Severity**: 🟠 High
-**Category**: Structural
+**Severidade**: 🟠 Alta
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Lava Flow (Dead Code / Zombie Code) occurs when code is no longer used but remains in the system because no one is sure if it can be safely removed. Like lava that solidifies and hardens, this code becomes a permanent obstacle to maintenance. Abandoned, commented, or never-called code.
+Lava Flow (Dead Code / Zombie Code) ocorre quando código não é mais utilizado mas permanece no sistema porque ninguém tem certeza se pode ser removido com segurança. Como lava que solidifica e endurece, este código se torna um obstáculo permanente à manutenção. Código abandonado, comentado ou nunca chamado.
 
-## Why It Matters
+## Por que importa
 
-- Extra cognitive load: developers need to understand useless code to find useful code
-- Perpetuated confusion: new developers don't know what's active or obsolete
-- Growing technical debt: the system becomes larger and slower to navigate
-- Preserved bugs: dead code can be accidentally reactivated and introduce old bugs
-- False complexity: system appears to do more than it actually does
+- Carga cognitiva extra: desenvolvedores precisam entender código inútil para encontrar código útil
+- Confusão perpetuada: novos desenvolvedores não sabem o que está ativo ou obsoleto
+- Débito técnico crescente: o sistema se torna maior e mais lento para navegar
+- Bugs preservados: código morto pode ser reativado acidentalmente e introduzir bugs antigos
+- Complexidade falsa: sistema parece fazer mais do que realmente faz
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Functions, classes, or modules never called/executed
-- [ ] Commented code with markers like `// old version`, `// deprecated`, `// TODO remove`
-- [ ] Imports of modules/packages that are never referenced
-- [ ] `if` or `switch` branches that are never executed (test coverage = 0%)
-- [ ] Variables declared and never read
-- [ ] Entire files that no one knows what they're for
+- [ ] Funções, classes ou módulos nunca chamados/executados
+- [ ] Código comentado com marcadores como `// versão antiga`, `// deprecated`, `// TODO remover`
+- [ ] Imports de módulos/pacotes que nunca são referenciados
+- [ ] Branches de `if` ou `switch` que nunca são executados (cobertura de teste = 0%)
+- [ ] Variáveis declaradas e nunca lidas
+- [ ] Arquivos inteiros que ninguém sabe para que servem
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Temporarily disabled/commented code with well-documented @TODO and deadline
-- Feature flags or A/B tests with known usage
-- Code maintained for immediate rollback (< 1 day) when there's critical functionality
-- Historical documentation maintained in comments when it has educational value
+- Código temporariamente desabilitado/comentado com @TODO bem documentado e prazo
+- Feature flags ou testes A/B com uso conhecido
+- Código mantido para rollback imediato (< 1 dia) quando há funcionalidade crítica
+- Documentação histórica mantida em comentários quando possui valor educacional
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Search for comments with `//`, `#` prefixes and TODO, FIXME, DEPRECATED
-- Look for files with "If __name__ == '__main__'" but no real usage
-- Identify functions/classes without unit tests, without imports, without references
-- Check imported but never used modules
+- Procurar comentários com prefixos `//`, `#` e TODO, FIXME, DEPRECATED
+- Buscar arquivos com "If __name__ == '__main__'" mas sem uso real
+- Identificar funções/classes sem testes unitários, sem imports, sem referências
+- Verificar módulos importados mas nunca usados
 
-### Automatic
-- Static analysis: dead code detection (pyflakes, eslint no-unused-vars, unused-import)
-- Code coverage: branches/lines with 0% coverage are suspect
-- Tree shaking tools to detect unreferenced code in frontend
-- IDE tools: "Find Unused Code" in VS Code, PyCharm
+### Automático
+- Análise estática: detecção de código morto (pyflakes, eslint no-unused-vars, unused-import)
+- Cobertura de código: branches/linhas com 0% de cobertura são suspeitas
+- Ferramentas de tree shaking para detectar código não referenciado em frontend
+- Ferramentas de IDE: "Find Unused Code" no VS Code, PyCharm
 
-## Related To
+## Relacionada com
 
-- [039 - Boy Scout Rule (Continuous Refactoring)](039_regra-escoteiro-refatoracao-continua.md): reinforces
-- [021 - Prohibition of Logic Duplication](021_proibicao-duplicacao-logica.md): complements
-- [025 - Prohibition of The Blob Anti-Pattern](025_proibicao-anti-pattern-the-blob.md): reinforces
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): reinforces
-- [032 - Minimum Test Coverage and Quality](032_cobertura-teste-minima-qualidade.md): complements
+- [039 - Regra do Escoteiro (Refatoração Contínua)](039_regra-escoteiro-refatoracao-continua.md): reforça
+- [021 - Proibição da Duplicação de Lógica](021_proibicao-duplicacao-logica.md): complementa
+- [025 - Proibição do Anti-Pattern The Blob](025_proibicao-anti-pattern-the-blob.md): reforça
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): reforça
+- [032 - Cobertura Mínima de Teste e Qualidade](032_cobertura-teste-minima-qualidade.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

@@ -1,182 +1,182 @@
 ---
-description: "Initializes new Feature or Task creating changes/00X_name/ with PRD, design, specs and tasks templates. Usage: /start feature-name"
-argument-hint: "[feature-name]"
+description: "Inicializa novo Feature ou Task criando changes/00X_name/ com templates de PRD, design, specs e tasks. Uso: /start nome-feature"
+argument-hint: "[nome-feature]"
 allowed-tools: Read, Write, Glob, Bash(ls *)
 ---
 
-## Purpose
+## Propósito
 
-Creates directory structure for new Feature or Task in oh my claude workflow.
-Argument defines feature name: `/start user-authentication`
+Cria estrutura de diretórios para novo Feature ou Task no fluxo do oh my claude.
+Argumento define nome da feature: `/start autenticacao-usuario`
 
-Features in progress:
-!`ls changes/ 2>/dev/null | sort || echo "(none yet)"`
+Features em andamento:
+!`ls changes/ 2>/dev/null | sort || echo "(nenhuma ainda)"`
 
-## Instructions
+## Instruções
 
-1. **Read argument** `$ARGUMENTS` as feature name. If empty, ask user.
+1. **Ler argumento** `$ARGUMENTS` como nome da feature. Se vazio, perguntar ao usuário.
 
-2. **Determine next available number** in `changes/`:
-   - List existing directories and identify highest number
-   - If none exist, start at `001`
-   - Increment (zero-padded to 3 digits): `001`, `002`, `003`…
+2. **Determinar próximo número disponível** em `changes/`:
+   - Listar diretórios existentes e identificar número mais alto
+   - Se não existir nenhum, iniciar em `001`
+   - Incrementar (zero-padded para 3 dígitos): `001`, `002`, `003`…
 
-3. **Normalize name**: lowercase, spaces → hyphens, no special chars
+3. **Normalizar nome**: minúsculas, espaços → hífens, sem caracteres especiais
 
-4. **Create** `changes/00X_normalized-name/` (and `changes/` if doesn't exist)
+4. **Criar** `changes/00X_nome-normalizado/` (e `changes/` se não existir)
 
-5. **Create files** per mode:
+5. **Criar arquivos** conforme modo:
    - **Feature** → PRD.md + design.md + specs.md + tasks.md
-   - **Task** → specs.md + tasks.md only
+   - **Task** → specs.md + tasks.md apenas
 
-6. **File contents:**
+6. **Conteúdo dos arquivos:**
 
-### PRD.md (Feature only)
+### PRD.md (Feature apenas)
 ```markdown
-# PRD — [Feature Name]
+# PRD — [Nome do Feature]
 
-**Feature**: [name]
+**Feature**: [nome]
 **ID**: [00X]
-**Date**: [YYYY-MM-DD]
-**Status**: 🟡 In Research
+**Data**: [AAAA-MM-DD]
+**Status**: 🟡 Em Pesquisa
 
 ---
 
-## Objective
+## Objetivo
 
-> Describe the problem this feature solves and value it delivers.
+> Descrever o problema que este feature resolve e o valor que entrega.
 
-## Functional Requirements
+## Requisitos Funcionais
 
-- [ ] FR-01:
+- [ ] RF-01:
 
-## Non-Functional Requirements
+## Requisitos Não-Funcionais
 
-- [ ] NFR-01:
+- [ ] RNF-01:
 
-## Business Rules
+## Regras de Negócio
 
-- BR-01:
+- RN-01:
 
-## Acceptance Criteria
+## Critérios de Aceitação
 
-- [ ] AC-01:
+- [ ] CA-01:
 
-## Out of Scope
+## Fora de Escopo
 
 -
 ```
 
-### design.md (Feature only)
+### design.md (Feature apenas)
 ```markdown
-# Technical Design — [Feature Name]
+# Design Técnico — [Nome do Feature]
 
-**Feature**: [name]
+**Feature**: [nome]
 **ID**: [00X]
 
 ---
 
-## Architectural Decisions
+## Decisões Arquiteturais
 
-| Pattern | Justification |
-|---------|---------------|
-|         |               |
+| Padrão | Justificativa |
+|--------|---------------|
+|        |               |
 
-## Data Flow
+## Fluxo de Dados
 
-[Input] → [Processing] → [Output]
+[Entrada] → [Processamento] → [Saída]
 
-## Main Interfaces
+## Interfaces Principais
 
 ```typescript
-// main interfaces
+// interfaces principais
 ```
 
-## Dependencies
+## Dependências
 
-| Module | Reason |
+| Módulo | Razão |
 |--------|-------|
 |        |       |
 ```
 
 ### specs.md (Feature + Task)
 ```markdown
-# Specs — [Feature/Task Name]
+# Specs — [Nome do Feature/Task]
 
-**Feature**: [name]
+**Feature**: [nome]
 **ID**: [00X]
 
 ---
 
-## Context
+## Contexto
 
-[1-2 lines]
+[1-2 linhas]
 
-## Interfaces and Types
+## Interfaces e Tipos
 
 ```typescript
 // interfaces, types, schemas
 ```
 
-## API Contracts
+## Contratos de API
 
-| Method | Route | Input | Output |
+| Método | Rota | Entrada | Saída |
 |--------|------|---------|-------|
 |        |      |         |       |
 
-## Acceptance Criteria
+## Critérios de Aceitação
 
-- [ ] AC-01: happy path
-- [ ] AC-02: validation error
-- [ ] AC-03: edge cases
+- [ ] CA-01: caminho feliz
+- [ ] CA-02: erro de validação
+- [ ] CA-03: casos extremos
 ```
 
 ### tasks.md (Feature + Task)
 ```markdown
-# Tasks — [Feature/Task Name]
+# Tasks — [Nome do Feature/Task]
 
-**Feature**: [name]
+**Feature**: [nome]
 **ID**: [00X]
-**Current Phase**: 🔬 Phase 1 — Research
+**Fase Atual**: 🔬 Fase 1 — Pesquisa
 
 ---
 
-## Progress
+## Progresso
 
-| Phase | Status | Agent |
+| Fase | Status | Agente |
 |------|--------|--------|
-| 1. Research | 🟡 Pending | @architect |
-| 2. Spec | ⬜ Waiting | @leader |
-| 3. Code | ⬜ Waiting | @developer → @tester → @reviewer |
-| 4. Docs | ⬜ Waiting | @architect |
+| 1. Plan | 🟡 Pendente | @planner → @architect |
+| 2. Spec | ⬜ Aguardando | @architect |
+| 3. Code | ⬜ Aguardando | @coder → @tester → @architect review |
+| 4. Docs | ⬜ Aguardando | @architect |
 
 ---
 
-## Tasks
+## Tarefas
 
-- [ ] T-001: Create PRD + design + specs (@architect)
-- [ ] T-002: Detail implementation tasks (@leader)
-- [ ] T-003: Implement code following specs.md (@developer)
-- [ ] T-004: Write and run tests — ≥85% coverage (@tester)
-- [ ] T-005: Code review CDD + 70 rules (@reviewer)
-- [ ] T-006: Sync docs/ — arc42, c4, adr, bdd (@architect)
+- [ ] T-000: Planejar + criar estrutura de tasks (@planner)
+- [ ] T-001: Criar PRD + design + specs (@architect)
+- [ ] T-002: Detalhar tarefas de implementação (Tech Lead)
+- [ ] T-003: Implementar código seguindo specs.md (@coder)
+- [ ] T-004: Escrever e rodar testes — cobertura ≥85% (@tester)
+- [ ] T-005: Revisão arquitetural CDD/ICP + 70 regras (@architect review)
+- [ ] T-006: Sincronizar docs/ — arc42, c4, adr, bdd (@architect)
 
 ---
 
-## Iteration Log
+## Log de Iterações
 
-| Iteration | Phase | Agent | Result |
+| Iteração | Fase | Agente | Resultado |
 |----------|------|--------|-----------|
 | #1       |      |        |           |
 
 <!-- mode: Feature -->
-<!-- attempts-developer: 0 -->
+<!-- attempts-coder: 0 -->
 <!-- attempts-tester: 0 -->
-<!-- attempts-reviewer: 0 -->
 ```
 
-7. **Display result**:
+7. **Exibir resultado**:
    ```
-   ✅ Feature initialized: changes/00X_name/
-   Next step: @leader, start workflow for changes/00X_name/
+   ✅ Feature inicializado: changes/00X_nome/
+   Próximo passo: iniciar fluxo para changes/00X_nome/
    ```

@@ -1,50 +1,50 @@
-# Prohibition of The Blob Anti-Pattern (God Object)
+# Proibição do Anti-Pattern The Blob (God Object)
 
 **ID**: ESTRUTURAL-025
-**Severity**: 🔴 Critical
-**Category**: Structural
+**Severidade**: 🔴 Crítica
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Prohibits the creation of classes that concentrate most of the system's logic and data, resulting in a **God Object** (The Blob) that other small classes merely orbit and access.
+Proíbe a criação de classes que concentram a maior parte da lógica e dados do sistema, resultando em um **Objeto Deus** (The Blob) que outras classes pequenas apenas orbitam e acessam.
 
-*(The anti-pattern Large Class is the initial stage of a Blob: Large Class violates SRP due to too many responsibilities; The Blob adds the domain of centralized data that other classes merely orbit.)*
+*(O anti-pattern Large Class é o estágio inicial de um Blob: Large Class viola SRP por ter responsabilidades demais; The Blob adiciona o domínio de dados centralizados que outras classes apenas orbitam.)*
 
-## Why It Matters
+## Por que importa
 
-Severely violates the Single Responsibility Principle (SRP), resulting in the **worst form of coupling and low cohesion**. Makes the class impossible to test and the system extremely fragile to changes.
+Viola o Princípio da Responsabilidade Única (SRP) de forma severa, resultando na **pior forma de acoplamento e baixa coesão**. Torna a classe impossível de testar e o sistema extremamente frágil a mudanças.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] A class should not contain more than **10** public methods (excluding permitted *getters* and *setters*).
-- [ ] The number of dependencies (imports) of concrete classes in a single class should not exceed **5**.
-- [ ] If the class violates the limits of `ESTRUTURAL-007` (50 lines) and `COMPORTAMENTAL-010` (7 methods), it should be classified as a *Blob* and refactored.
+- [ ] Uma classe não deve conter mais de **10** métodos públicos (excluindo *getters* e *setters* permitidos).
+- [ ] O número de dependências (imports) de classes concretas em uma única classe não deve exceder **5**.
+- [ ] Se a classe violar os limites de `ESTRUTURAL-007` (50 linhas) e `COMPORTAMENTAL-010` (7 métodos) deve ser classificada como um *Blob* e refatorada.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Legacy Encapsulation**: Large classes may be accepted when encapsulating a non-OO legacy system to access it from the OO system.
+- **Encapsulamento de Legado**: Grandes classes podem ser aceitas ao encapsular um sistema legado não-OO para acessá-lo a partir do sistema OO.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Identify classes that are constantly being modified by several different *feature requests*.
+Identificar classes que estão em constante modificação por vários *feature requests* diferentes.
 
-### Automatic
+### Automático
 
-SonarQube: Very high LCOM (Lack of Cohesion in Methods) and WMC (Weighted Methods Per Class).
+SonarQube: LCOM (Lack of Cohesion in Methods) e WMC (Weighted Methods Per Class) muito altos.
 
-## Related To
+## Relacionada com
 
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): replaces
-- [007 - Maximum Lines per Class Limit](007_limite-maximo-linhas-classe.md): reinforces
-- [039 - Boy Scout Rule](039_regra-escoteiro-refatoracao-continua.md): complements
-- [056 - Prohibition of Zombie Code (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): reinforces
-- [054 - Prohibition of Divergent Change](054_proibicao-mudanca-divergente.md): reinforces
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): substitui
+- [007 - Limite Máximo de Linhas por Classe](007_limite-maximo-linhas-classe.md): reforça
+- [039 - Regra do Escoteiro](039_regra-escoteiro-refatoracao-continua.md): complementa
+- [056 - Proibição de Código Zombie (Lava Flow)](056_proibicao-codigo-zombie-lava-flow.md): reforça
+- [054 - Proibição de Mudança Divergente](054_proibicao-mudanca-divergente.md): reforça
 
 ---
 
-**Created on**: 2025-10-08
-**Version**: 1.0
+**Criada em**: 2025-10-08
+**Versão**: 1.0

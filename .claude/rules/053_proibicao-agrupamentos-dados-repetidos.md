@@ -1,57 +1,57 @@
-# Prohibition of Repeated Data Groupings (Data Clumps)
+# Proibição de Agrupamentos de Dados Repetidos (Data Clumps)
 
 **ID**: AP-20-053
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Data Clumps occur when groups of data always appear together as function parameters, class attributes, or local variables, but do not have their own object or structure representing that cohesive concept. They are primitives that always travel together but have never been married.
+Data Clumps ocorrem quando grupos de dados sempre aparecem juntos como parâmetros de função, atributos de classe ou variáveis locais, mas não possuem seu próprio objeto ou estrutura representando aquele conceito coeso. São primitivos que sempre viajam juntos mas nunca se casaram.
 
-## Why It Matters
+## Por que importa
 
-- Parameter inflation: functions receive many individual values instead of an object
-- Duplicated validation: same validation logic repeated in multiple locations
-- Costly change: altering the concept requires modifying N function signatures
-- Low conceptual cohesion: the domain is modeled as scattered primitives
-- Difficulty extending: adding a new field requires changing all functions that use the group
+- Inflação de parâmetros: funções recebem muitos valores individuais em vez de um objeto
+- Validação duplicada: mesma lógica de validação repetida em múltiplos locais
+- Mudança custosa: alterar o conceito requer modificar N assinaturas de função
+- Baixa coesão conceitual: o domínio é modelado como primitivos espalhados
+- Dificuldade de extensão: adicionar novo campo requer alterar todas as funções que usam o grupo
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] 3 or more parameters appearing together in more than 2 different functions
-- [ ] Group of attributes that are always read/written together in a class
-- [ ] Removing one data element from the group renders the others meaningless or incomplete
-- [ ] Same set of types/format appears repeatedly in method signatures
-- [ ] Field validation is identical in different code locations
+- [ ] 3 ou mais parâmetros aparecendo juntos em mais de 2 funções diferentes
+- [ ] Grupo de atributos que são sempre lidos/escritos juntos em uma classe
+- [ ] Remover um elemento de dados do grupo torna os outros sem significado ou incompletos
+- [ ] Mesmo conjunto de tipos/formato aparece repetidamente em assinaturas de métodos
+- [ ] Validação de campos é idêntica em diferentes locais do código
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Temporary groups in one-off events or migration scripts
-- Integrations with external APIs that do not allow custom objects
-- Legacy code where refactoring would bring high risk without clear gain
+- Grupos temporários em eventos únicos ou scripts de migração
+- Integrações com APIs externas que não permitem objetos customizados
+- Código legado onde refatoração traria alto risco sem ganho claro
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Search for function signatures with repeated parameters with exactly the same name/type
-- Identify functions that always receive `(street, city, zipCode, country)`, `(startX, startY, endX, endY)`, `(day, month, year)`
-- Look for coherence patterns: if one field changes, the others always change together
+- Procurar assinaturas de função com parâmetros repetidos com exatamente o mesmo nome/tipo
+- Identificar funções que sempre recebem `(rua, cidade, cep, pais)`, `(startX, startY, endX, endY)`, `(dia, mes, ano)`
+- Buscar padrões de coerência: se um campo muda, os outros sempre mudam juntos
 
-### Automatic
-- Static analysis: detect signatures with identical parameter groups
-- Code analysis: identify co-occurring parameters in functions
-- Refactoring tools: suggestions for "Introduce Parameter Object"
+### Automático
+- Análise estática: detectar assinaturas com grupos de parâmetros idênticos
+- Análise de código: identificar parâmetros co-ocorrentes em funções
+- Ferramentas de refatoração: sugestões de "Introduce Parameter Object"
 
-## Related To
+## Relacionada com
 
-- [003 - Primitive Encapsulation](003_encapsulamento-primitivos.md): reinforces
-- [033 - Maximum Parameters per Function](033_limite-parametros-funcao.md): complements
-- [034 - Consistent Class and Method Names](034_nomes-classes-metodos-consistentes.md): complements
-- [037 - Prohibition of Flag Arguments](037_proibicao-argumentos-sinalizadores.md): reinforces
+- [003 - Encapsulamento de Primitivos](003_encapsulamento-primitivos.md): reforça
+- [033 - Limite Máximo de Parâmetros por Função](033_limite-parametros-funcao.md): complementa
+- [034 - Nomes de Classes e Métodos Consistentes](034_nomes-classes-metodos-consistentes.md): complementa
+- [037 - Proibição de Argumentos Sinalizadores](037_proibicao-argumentos-sinalizadores.md): reforça
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

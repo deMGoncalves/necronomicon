@@ -1,59 +1,59 @@
-# Prohibition of Poltergeists
+# Proibição de Poltergeists
 
 **ID**: AP-12-065
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Poltergeists (or Short-Lived Entities) occur when classes or objects are created only to call another method or object and then are immediately discarded. Like poltergeists (transient spirits) that appear briefly and disappear, these objects don't add value, they only add transient complexity. Short-lived middle men.
+Poltergeists (ou Entidades de Vida Curta) ocorrem quando classes ou objetos são criados apenas para chamar outro método ou objeto e então são imediatamente descartados. Como poltergeists (espíritos transitórios) que aparecem brevemente e desaparecem, estes objetos não adicionam valor, apenas adicionam complexidade transitória. Middle men de vida curta.
 
-## Why It Matters
+## Por que importa
 
-- Unnecessary complexity: each poltergeist adds +1 class/set name to learn and maintain
-- Reading confusion: developers wonder "why does this exist?" only to discover it has no reason
-- Debugging difficulty: object creation/disposal add noise to stack trace and analysis
-- Indicates incomplete refactoring or mechanical pattern application without thinking
-- Spreads boilerplate code: when poltergeists are common, many files exist without purpose
+- Complexidade desnecessária: cada poltergeist adiciona +1 nome de classe/set para aprender e manter
+- Confusão de leitura: desenvolvedores se perguntam "por que isso existe?" apenas para descobrir que não há razão
+- Dificuldade de debugging: criação/descarte de objetos adicionam ruído ao stack trace e análise
+- Indica refatoração incompleta ou aplicação mecânica de padrão sem pensar
+- Espalha código boilerplate: quando poltergeists são comuns, muitos arquivos existem sem propósito
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Classes/services created only to adapt parameters or format calls and discarded
-- [ ] Objects created and discarded within same scope (single line or few lines)
-- [ ] Classes that exist only to pass data between layers without validation, transformation or behavior
-- [ ] Frequent pattern of `new SomeAdapter(object).execute()` instead of using object directly
-- [ ] Constructed objects never stored, never tested, never referenced beyond immediate call
+- [ ] Classes/services criados apenas para adaptar parâmetros ou formatar chamadas e descartados
+- [ ] Objetos criados e descartados dentro do mesmo escopo (linha única ou poucas linhas)
+- [ ] Classes que existem apenas para passar dados entre camadas sem validação, transformação ou comportamento
+- [ ] Padrão frequente de `new SomeAdapter(object).execute()` em vez de usar objeto diretamente
+- [ ] Objetos construídos nunca armazenados, nunca testados, nunca referenciados além da chamada imediata
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Builder patterns where builder adds readability via fluent API even if discarded
-- Adapters/wrappers that transform formats between boundaries (API → internal domain)
-- Commands/Queries encapsulated in CQRS patterns that exist by design
-- DTOs that are created, populated, passed to boundary then discarded (standard pattern in boundary layers)
+- Padrões de Builder onde builder adiciona legibilidade via API fluente mesmo se descartado
+- Adapters/wrappers que transformam formatos entre fronteiras (API → domínio interno)
+- Commands/Queries encapsulados em padrões CQRS que existem por design
+- DTOs que são criados, populados, passados para fronteira e então descartados (padrão padrão em camadas de fronteira)
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Look for instantiations where object is created, used, discarded immediately (all in same scope)
-- Identify classes never used as fields, never referenced in tests, never part of module exports; only used locally in functions
-- Code review: question "what value does this object add?" for each transient class
-- Visualize call graphs: detect leaf nodes called only once
+- Procurar instanciações onde objeto é criado, usado, descartado imediatamente (tudo no mesmo escopo)
+- Identificar classes nunca usadas como campos, nunca referenciadas em testes, nunca parte de exports de módulo; apenas usadas localmente em funções
+- Code review: questionar "que valor esse objeto adiciona?" para cada classe transitória
+- Visualizar grafos de chamada: detectar nós folha chamados apenas uma vez
 
-### Automatic
-- Linters: detect objects created + called + discarded within same scope
-- Static analysis: detect classes only referenced via instantiation and unpredictable usage
-- Coverage: detect classes with 0% or < 5% usage coverage
+### Automático
+- Linters: detectar objetos criados + chamados + descartados dentro do mesmo escopo
+- Análise estática: detectar classes apenas referenciadas via instanciação e uso imprevisível
+- Cobertura: detectar classes com 0% ou < 5% de cobertura de uso
 
-## Related To
+## Relacionada com
 
-- [061 - Prohibition of Middle Man](061_proibicao-middle-man.md): complements
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [057 - Prohibition of Feature Envy](057_proibicao-feature-envy.md): complements
-- [009 - Tell, Don't Ask](009_diga-nao-pergunte.md): reinforces
+- [061 - Proibição de Middle Man](061_proibicao-middle-man.md): complementa
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [057 - Proibição de Feature Envy](057_proibicao-feature-envy.md): complementa
+- [009 - Diga, Não Pergunte](009_diga-nao-pergunte.md): reforça
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

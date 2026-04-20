@@ -1,47 +1,47 @@
 ---
-description: "Syncs docs/ (arc42, c4, adr, bdd) with implemented code. Works without Spec Flow — useful for legacy code and accumulated Quick fixes."
-argument-hint: "[src/path (optional)]"
+description: "Sincroniza docs/ (arc42, c4, adr, bdd) com código implementado. Funciona sem Spec Flow — útil para código legado e Quick fixes acumulados."
+argument-hint: "[src/caminho (opcional)]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git diff *), Bash(git log *)
 ---
 
-## Purpose
+## Propósito
 
-Runs Phase 4 (Docs Sync) independently, without needing complete workflow.
-Useful for legacy code, accumulated Quick fixes or after completed Task.
+Executa Fase 4 (Sync de Docs) independentemente, sem necessidade de fluxo completo.
+Útil para código legado, Quick fixes acumulados ou após Task completo.
 
-Recently changed files:
-!`git diff --name-only HEAD~1 2>/dev/null | head -20 || echo "(no recent commits)"`
+Arquivos alterados recentemente:
+!`git diff --name-only HEAD~1 2>/dev/null | head -20 || echo "(sem commits recentes)"`
 
-## Instructions
+## Instruções
 
-1. **Determine scope**:
-   - If `$ARGUMENTS` provided → use that path (ex: `src/user_auth/`)
-   - If not → use list above as guide for changed files
+1. **Determinar escopo**:
+   - Se `$ARGUMENTS` fornecido → usar aquele caminho (ex: `src/user_auth/`)
+   - Se não → usar lista acima como guia para arquivos alterados
 
-2. **Read target code** in `src/` to understand current implementation
+2. **Ler código alvo** em `src/` para entender implementação atual
 
-3. **Read existing documentation** in `docs/`:
-   - `docs/arc42/` — currently documented architecture
-   - `docs/c4/` — context, container, component diagrams
-   - `docs/adr/` — previous architectural decisions
-   - `docs/bdd/` — existing Gherkin features
+3. **Ler documentação existente** em `docs/`:
+   - `docs/arc42/` — arquitetura atualmente documentada
+   - `docs/c4/` — diagramas de contexto, container, componente
+   - `docs/adr/` — decisões arquiteturais anteriores
+   - `docs/bdd/` — features Gherkin existentes
 
-4. **Compare code vs docs** and identify gaps:
-   - New undocumented contexts or containers
-   - Behaviors without Gherkin feature
-   - Technical decisions without registered ADR
+4. **Comparar código vs docs** e identificar lacunas:
+   - Novos contextos ou containers não documentados
+   - Comportamentos sem feature Gherkin
+   - Decisões técnicas sem ADR registrado
 
-5. **Update** what's needed:
-   - `docs/arc42/` — building blocks, runtime views, concepts
-   - `docs/c4/` — affected diagrams
-   - `docs/bdd/` — Gherkin features if behavior changed
-   - `docs/adr/ADR-NNN.md` — create if relevant architectural decision
+5. **Atualizar** o que for necessário:
+   - `docs/arc42/` — blocos de construção, visões de runtime, conceitos
+   - `docs/c4/` — diagramas afetados
+   - `docs/bdd/` — features Gherkin se comportamento mudou
+   - `docs/adr/ADR-NNN.md` — criar se houver decisão arquitetural relevante
 
-6. **Display summary**:
+6. **Exibir resumo**:
    ```
-   ✅ Docs synced:
-   - arc42/05_building_block_view.md — description
-   - adr/ADR-019.md — documented decision
+   ✅ Docs sincronizados:
+   - arc42/05_building_block_view.md — descrição
+   - adr/ADR-019.md — decisão documentada
    ```
 
-**Important:** If `docs/` doesn't exist, create directories before syncing.
+**Importante:** Se `docs/` não existir, criar diretórios antes de sincronizar.

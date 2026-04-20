@@ -1,60 +1,60 @@
-# Prohibition of Clever Code
+# Proibição de Código Inteligente (Clever Code)
 
 **ID**: AP-04-062
-**Severity**: 🟡 Medium
-**Category**: Behavioral
+**Severidade**: 🟡 Média
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Clever Code occurs when a developer writes excessively concise code, using non-obvious tricks, complex operators, or unconventional code patterns to show "skill" instead of prioritizing clarity. Code that makes the developer feel smart when writing (and others feel confused when reading).
+Clever Code ocorre quando um desenvolvedor escreve código excessivamente conciso, usando truques não-óbvios, operadores complexos ou padrões de código não convencionais para mostrar "habilidade" em vez de priorizar clareza. Código que faz o desenvolvedor se sentir inteligente ao escrever (e outros se sentirem confusos ao ler).
 
-## Why It Matters
+## Por que importa
 
-- Maintenance difficulty: other developers don't understand code without spending much time
-- Hides bugs: complex code has more edge cases and is harder to reason about
-- Frustrates team: creates culture of "code cleverness" over code clarity
-- Onboarding difficulty: new developers take much longer to be productive
-- Common in code reviews: "this works but I can't understand it"
+- Dificuldade de manutenção: outros desenvolvedores não entendem o código sem gastar muito tempo
+- Esconde bugs: código complexo tem mais casos extremos e é mais difícil raciocinar sobre
+- Frustra time: cria cultura de "esperteza de código" sobre clareza de código
+- Dificuldade de onboarding: novos desenvolvedores levam muito mais tempo para serem produtivos
+- Comum em code reviews: "isso funciona mas não consigo entender"
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Code review comments asking "what does this do?" or "can it be clearer?"
-- [ ] Use of complex one-liners: ternary chaining, arrow functions with multiple operations
-- [ ] Bit-shifting operators, bitwise manipulations, or other advanced language features without clarifying comments
-- [ ] Complex regex or string parsing embedded in main code
-- [ ] Functions with short non-explanatory names (`fn()`, `go()`, `proc()`) doing complex logic
+- [ ] Comentários de code review perguntando "o que isso faz?" ou "pode ser mais claro?"
+- [ ] Uso de one-liners complexos: encadeamento de ternários, arrow functions com múltiplas operações
+- [ ] Operadores de bit-shifting, manipulações bitwise ou outros recursos avançados da linguagem sem comentários explicativos
+- [ ] Regex complexo ou parsing de string embutido no código principal
+- [ ] Funções com nomes curtos não-explicativos (`fn()`, `go()`, `proc()`) fazendo lógica complexa
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Optimized copy of known algorithms (CRC32, MD5) where purpose is clear via function name
-- Code golfing in intentionally tiny functions where context makes meaning obvious
-- Performance-critical paths that were profiled as hotspots where comments justify optimization
-- Specific domain (crypto, graphics, systems programming) where standard operations are known
+- Cópia otimizada de algoritmos conhecidos (CRC32, MD5) onde propósito é claro via nome da função
+- Code golfing em funções intencionalmente minúsculas onde contexto torna significado óbvio
+- Caminhos críticos de performance que foram perfilados como hotspots onde comentários justificam otimização
+- Domínio específico (cripto, gráficos, programação de sistemas) onde operações padrão são conhecidas
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Code review: explicit rules to reject code "clever" over code "clear"
-- Look for one-liners with > 3 operations on same lines
-- Identify code that developer spends 5 minutes reading without being author
-- Check comments pointing "this is an optimization" without profiling measurements
+- Code review: regras explícitas para rejeitar código "esperto" sobre código "claro"
+- Buscar one-liners com > 3 operações nas mesmas linhas
+- Identificar código que desenvolvedor gasta 5 minutos lendo sem ser o autor
+- Verificar comentários apontando "isso é uma otimização" sem medições de profiling
 
-### Automatic
-- Linters: ESLint (no-nested-ternary, max-depth, complexity), SonarQube simplicity rules
-- Auto-formatters: prettier, black force more readable style
-- Cyclomatic complexity: detect functions with high complexity that can be written more simply
+### Automático
+- Linters: ESLint (no-nested-ternary, max-depth, complexity), regras de simplicidade do SonarQube
+- Auto-formatters: prettier, black forçam estilo mais legível
+- Complexidade ciclomática: detectar funções com alta complexidade que podem ser escritas mais simplesmente
 
-## Related To
+## Relacionada com
 
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [034 - Consistent Class and Method Names](034_nomes-classes-metodos-consistentes.md): reinforces
-- [033 - Maximum Parameters per Function](033_limite-parametros-funcao.md): reinforces
-- [001 - Single Level of Indentation](001_nivel-unico-indentacao.md): reinforces
-- [069 - Prohibition of Premature Optimization](069_proibicao-otimizacao-prematura.md): reinforces
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [034 - Nomes de Classes e Métodos Consistentes](034_nomes-classes-metodos-consistentes.md): reforça
+- [033 - Limite Máximo de Parâmetros por Função](033_limite-parametros-funcao.md): reforça
+- [001 - Nível Único de Indentação](001_nivel-unico-indentacao.md): reforça
+- [069 - Proibição de Otimização Prematura](069_proibicao-otimizacao-prematura.md): reforça
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

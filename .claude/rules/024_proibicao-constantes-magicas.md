@@ -1,48 +1,48 @@
-# Prohibition of Magic Constants (Magic Strings and Numbers)
+# Proibição de Constantes Mágicas (Magic Strings e Numbers)
 
 **ID**: CRIACIONAL-024
-**Severity**: 🔴 Critical
-**Category**: Creational
+**Severidade**: 🔴 Crítica
+**Categoria**: Criacional
 
 ---
 
-## What It Is
+## O que é
 
-Prohibits direct use of literal values (numbers or strings) that have contextual or business meaning (e.g., status codes, time limits) instead of named constants or *Value Objects*.
+Proíbe o uso direto de valores literais (números ou strings) que possuam um significado contextual ou de negócio (ex: códigos de status, limites de tempo) em vez de constantes nomeadas ou *Value Objects*.
 
-## Why It Matters
+## Por que importa
 
-Magic constants degrade readability. A value change in multiple locations introduces serious errors and makes maintenance difficult, as the context of the value is lost.
+Constantes mágicas degradam a legibilidade. Uma alteração de valor em vários locais introduz erros graves e dificulta a manutenção, pois o contexto do valor é perdido.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Numeric values (except 0 and 1) used in business logic or conditions should be replaced by `UPPER_SNAKE_CASE` constants.
-- [ ] Strings used to represent states, types, base URLs, or *tokens* should be replaced by `Enums` or constants.
-- [ ] Constants should be defined in a centralized module and imported, not duplicated.
+- [ ] Valores numéricos (exceto 0 e 1) usados em lógica de negócio ou condições devem ser substituídos por constantes `UPPER_SNAKE_CASE`.
+- [ ] Strings usadas para representar estados, tipos, URLs base ou *tokens* devem ser substituídas por `Enums` ou constantes.
+- [ ] Constantes devem ser definidas em um módulo centralizado e importadas, não duplicadas.
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Pure Mathematics**: Numeric values used in basic mathematical operations (e.g., `total / 2`).
-- **Frameworks/Infrastructure**: Strings required by low-level APIs.
+- **Matemática Pura**: Valores numéricos usados em operações matemáticas básicas (ex: `total / 2`).
+- **Frameworks/Infraestrutura**: Strings exigidas por APIs de baixo nível.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for `string` or `number` literals inside `if`, `switch`, or business calculations.
+Busca por `string` ou `number` literal dentro de `if`, `switch` ou cálculos de negócio.
 
-### Automatic
+### Automático
 
 SonarQube/ESLint: `no-magic-numbers`, `no-magic-strings`.
 
-## Related To
+## Relacionada com
 
-- [003 - Encapsulation of Primitives](003_encapsulamento-primitivos.md): reinforces
-- [006 - Prohibition of Abbreviated Names](006_proibicao-nomes-abreviados.md): complements
-- [030 - Prohibition of Unsafe Functions](030_proibicao-funcoes-inseguras.md): complements
-- [042 - Environment-based Configuration](042_configuracoes-via-ambiente.md): complements
+- [003 - Encapsulamento de Primitivos](003_encapsulamento-primitivos.md): reforça
+- [006 - Proibição de Nomes Abreviados](006_proibicao-nomes-abreviados.md): complementa
+- [030 - Proibição de Funções Inseguras](030_proibicao-funcoes-inseguras.md): complementa
+- [042 - Configurações via Ambiente](042_configuracoes-via-ambiente.md): complementa
 
 ---
 
-**Created on**: 2025-10-08
-**Version**: 1.0
+**Criada em**: 2025-10-08
+**Versão**: 1.0

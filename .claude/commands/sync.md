@@ -1,32 +1,32 @@
 ---
-description: "Updates current branch with latest changes from remote repository. Works on any branch — main or feature."
+description: "Atualiza branch atual com últimas mudanças do repositório remoto. Funciona em qualquer branch — main ou feature."
 allowed-tools: Bash(git branch *), Bash(git fetch *), Bash(git pull *), Bash(git checkout *), Bash(git merge *), Bash(git status)
 ---
 
-## Purpose
+## Propósito
 
-Syncs local branch with remote, properly managing feature branches and main.
+Sincroniza branch local com remoto, gerenciando branches de feature e main adequadamente.
 
-Current branch:
+Branch atual:
 !`git branch --show-current`
 
-Current status:
+Status atual:
 !`git status --short`
 
-## Instructions
+## Instruções
 
-1. Save current branch name
+1. Salvar nome da branch atual
 
-2. `git fetch origin` — fetch changes without applying
+2. `git fetch origin` — buscar mudanças sem aplicar
 
-3. **If on main/master:** `git pull origin main`
+3. **Se em main/master:** `git pull origin main`
 
-4. **If on feature branch:**
+4. **Se em branch de feature:**
    - `git checkout main`
    - `git pull origin main`
-   - `git checkout [original-branch]`
+   - `git checkout [branch-original]`
    - `git merge main`
 
-5. Confirm with `git status`
+5. Confirmar com `git status`
 
-**Important:** Adapt `main` or `master` per repository convention.
+**Importante:** Adaptar `main` ou `master` conforme convenção do repositório.

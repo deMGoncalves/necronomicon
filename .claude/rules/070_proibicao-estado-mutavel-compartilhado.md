@@ -1,54 +1,54 @@
-# Prohibition of Shared Mutable State
+# Proibição de Estado Mutável Compartilhado
 
 **ID**: AP-08-070
-**Severity**: 🟠 High
-**Category**: Behavioral
+**Severidade**: 🟠 Alta
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Shared Mutable State occurs when multiple modules, functions, or execution contexts read and modify the same object without coordination. Any part of the system can change state at any time, making behavior unpredictable. Distinct from Accidental Mutation (052): here the sharing is structural, not accidental.
+Estado Mutável Compartilhado (Shared Mutable State) ocorre quando múltiplos módulos, funções ou contextos de execução leem e modificam o mesmo objeto sem coordenação. Qualquer parte do sistema pode alterar estado a qualquer momento, tornando o comportamento imprevisível. Distinto de Mutação Acidental (052): aqui o compartilhamento é estrutural, não acidental.
 
-## Why It Matters
+## Por que importa
 
-- Phantom bugs: the mutation origin is in a different module from the failure point
-- Fragile tests: result depends on global state left by previous tests
-- Zero traceability: impossible to know who changed state without breakpoints
-- Impossible concurrency: any parallelism introduces race conditions
+- Bugs fantasma: a origem da mutação está em módulo diferente do ponto de falha
+- Testes frágeis: resultado depende de estado global deixado por testes anteriores
+- Rastreabilidade zero: impossível saber quem mudou estado sem breakpoints
+- Concorrência impossível: qualquer paralelismo introduz race conditions
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Domain object passed by reference and modified in two or more distinct modules
-- [ ] Module or global variable changed by multiple functions without explicit coordination
-- [ ] Tests that fail depending on execution order (signal of shared state)
-- [ ] Array or object used as "communication buffer" between system parts without copy
-- [ ] Absence of `Object.freeze()` in objects passed to multiple consumers
+- [ ] Objeto de domínio passado por referência e modificado em dois ou mais módulos distintos
+- [ ] Variável de módulo ou global alterada por múltiplas funções sem coordenação explícita
+- [ ] Testes que falham dependendo da ordem de execução (sinal de estado compartilhado)
+- [ ] Array ou objeto usado como "buffer de comunicação" entre partes do sistema sem cópia
+- [ ] Ausência de `Object.freeze()` em objetos passados para múltiplos consumidores
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- **Explicit Stores**: State managers (Redux, Zustand, MobX) where mutation pattern is centralized, tracked, and intentional.
-- **Read-Only Configuration Objects**: Frozen configurations with `Object.freeze()` passed as read constants.
+- **Stores Explícitos**: Gerenciadores de estado (Redux, Zustand, MobX) onde padrão de mutação é centralizado, rastreado e intencional.
+- **Objetos de Configuração Somente Leitura**: Configurações congeladas com `Object.freeze()` passadas como constantes de leitura.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Track an object's lifecycle: if it's passed to multiple functions and each can modify it, it's Shared Mutable State.
+Rastrear ciclo de vida de um objeto: se ele é passado para múltiplas funções e cada uma pode modificá-lo, é Estado Mutável Compartilhado.
 
-### Automatic
+### Automático
 
-ESLint: `no-param-reassign`, TypeScript: `Readonly<T>`, `as const`. Tests: running in random order detects global state dependency.
+ESLint: `no-param-reassign`, TypeScript: `Readonly<T>`, `as const`. Testes: executar em ordem aleatória detecta dependência de estado global.
 
-## Related To
+## Relacionada com
 
-- [029 - Object Immutability](029_imutabilidade-objetos-freeze.md): reinforces
-- [036 - Restriction of Functions with Side Effects](036_restricao-funcoes-efeitos-colaterais.md): reinforces
-- [045 - Stateless Processes](045_processos-stateless.md): complements
-- [052 - Prohibition of Accidental Mutation](052_proibicao-mutacao-acidental.md): complements
-- [069 - Prohibition of Premature Optimization](069_proibicao-otimizacao-prematura.md): complements
+- [029 - Imutabilidade de Objetos](029_imutabilidade-objetos-freeze.md): reforça
+- [036 - Restrição de Funções com Efeitos Colaterais](036_restricao-funcoes-efeitos-colaterais.md): reforça
+- [045 - Processos Stateless](045_processos-stateless.md): complementa
+- [052 - Proibição de Mutação Acidental](052_proibicao-mutacao-acidental.md): complementa
+- [069 - Proibição de Otimização Prematura](069_proibicao-otimizacao-prematura.md): complementa
 
 ---
 
-**Created on**: 2026-03-29
-**Version**: 1.0
+**Criada em**: 2026-03-29
+**Versão**: 1.0

@@ -1,63 +1,63 @@
-# Prohibition of Overengineering
+# Proibição de Overengineering
 
 **ID**: AP-09-064
-**Severity**: 🟡 Medium
-**Category**: Structural
+**Severidade**: 🟡 Média
+**Categoria**: Estrutural
 
 ---
 
-## What It Is
+## O que é
 
-Overengineering occurs when a developer creates excessively complex architecture or code for simple requirements. Patterns, abstractions, layers, and frameworks introduced "for the future" that complicate code without bringing real value. Premature abstraction in the name of "scalability" or "flexibility".
+Overengineering ocorre quando um desenvolvedor cria arquitetura ou código excessivamente complexos para requisitos simples. Padrões, abstrações, camadas e frameworks introduzidos "para o futuro" que complicam código sem trazer valor real. Abstração prematura em nome de "escalabilidade" ou "flexibilidade".
 
-*(Encompasses the Speculative Generality anti-pattern when speculative complexity is introduced at the architecture level.)*
+*(Engloba o anti-pattern Speculative Generality quando complexidade especulativa é introduzida em nível de arquitetura.)*
 
-## Why It Matters
+## Por que importa
 
-- Cognitive overload: developers spend time understanding architecture instead of domain
-- Development time: building complex features takes longer than simple solutions
-- Maintenance difficulty: changes in architecture break many parts of code in cascade
-- Concrete vs Abstraction imbalance: without real problems to abstract, abstractions become invented
-- Honestly, simple functional requirements (REST API, CRUD) rarely justify microservices, event-driven architecture, complex DI containers
+- Sobrecarga cognitiva: desenvolvedores gastam tempo entendendo arquitetura em vez de domínio
+- Tempo de desenvolvimento: construir features complexas leva mais tempo que soluções simples
+- Dificuldade de manutenção: mudanças na arquitetura quebram muitas partes do código em cascata
+- Desbalanceamento Concreto vs Abstração: sem problemas reais para abstrair, abstrações se tornam inventadas
+- Honestamente, requisitos funcionais simples (API REST, CRUD) raramente justificam microserviços, arquitetura orientada a eventos, containers DI complexos
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Introduce a pattern without clear problem being solved (e.g., Strategy pattern without variation of algorithms)
-- [ ] Create interfaces/classes for "future scalability" without documented business requirements
-- [ ] Multiple layers of abstraction when single layer would suffice (e.g., service calling service calling service)
-- [ ] Framework usage (DI, ORM, event bus) for trivial CRUD operations
-- [ ] Excess generality: generic parameterized code instead of domain-specific code
+- [ ] Introduzir padrão sem problema claro sendo resolvido (ex: padrão Strategy sem variação de algoritmos)
+- [ ] Criar interfaces/classes para "escalabilidade futura" sem requisitos de negócio documentados
+- [ ] Múltiplas camadas de abstração quando camada única seria suficiente (ex: service chamando service chamando service)
+- [ ] Uso de framework (DI, ORM, event bus) para operações CRUD triviais
+- [ ] Excesso de generalidade: código genérico parametrizado em vez de código específico de domínio
 
-## Allowed Exceptions
+## Exceções Permitidas
 
-- Framework code by nature general that needs to support multiple use cases
-- Libraries where flexibility is primary concern (UI frameworks, ORMs)
-- Explicit architectural decisions documenting why complexity is justified
-- Code in extreme growth (startups with rapidly scaled MVP) where investment in architecture pays back
+- Código de framework por natureza geral que precisa suportar múltiplos casos de uso
+- Bibliotecas onde flexibilidade é preocupação primária (frameworks UI, ORMs)
+- Decisões arquiteturais explícitas documentando por que complexidade é justificada
+- Código em crescimento extremo (startups com MVP rapidamente escalado) onde investimento em arquitetura se paga
 
-## How to Detect
+## Como Detectar
 
 ### Manual
-- Code review: ask "what concrete problem does this solve?" for each abstraction/framework introduced
-- Look for "for the future" functionalities without defined timeline or requirements
-- Identify code where adding simple field requires mapping config, interfaces, DTOs, services, repositories
-- Check architecture: multiple layers where a single isolated layer would suffice
+- Code review: perguntar "que problema concreto isso resolve?" para cada abstração/framework introduzido
+- Buscar funcionalidades "para o futuro" sem timeline ou requisitos definidos
+- Identificar código onde adicionar campo simples requer mapear config, interfaces, DTOs, services, repositories
+- Verificar arquitetura: múltiplas camadas onde uma única camada isolada seria suficiente
 
-### Automatic
-- Complexity analysis: detect abstractions with low usage frequency
-- Code metrics: detect functions/classes high complexity but only 1-2 uses
-- Architecture analysis: detect microservice-oriented systems where communication patterns are simple
+### Automático
+- Análise de complexidade: detectar abstrações com baixa frequência de uso
+- Métricas de código: detectar funções/classes alta complexidade mas apenas 1-2 usos
+- Análise de arquitetura: detectar sistemas orientados a microserviço onde padrões de comunicação são simples
 
-## Related To
+## Relacionada com
 
-- [023 - Prohibition of Speculative Functionality](023_proibicao-funcionalidade-especulativa.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): reinforces
-- [010 - Single Responsibility Principle](010_principio-responsabilidade-unica.md): complements
-- [016 - Common Closure Principle](016_principio-fechamento-comum.md): reinforces
-- [041 - Explicit Dependency Declaration](041_declaracao-explicita-dependencias.md): reinforces
-- [069 - Prohibition of Premature Optimization](069_proibicao-otimizacao-prematura.md): complements
+- [023 - Proibição de Funcionalidade Especulativa](023_proibicao-funcionalidade-especulativa.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): reforça
+- [010 - Princípio da Responsabilidade Única](010_principio-responsabilidade-unica.md): complementa
+- [016 - Princípio do Fechamento Comum](016_principio-fechamento-comum.md): reforça
+- [041 - Declaração Explícita de Dependências](041_declaracao-explicita-dependencias.md): reforça
+- [069 - Proibição de Otimização Prematura](069_proibicao-otimizacao-prematura.md): complementa
 
 ---
 
-**Created on**: 2026-03-28
-**Version**: 1.0
+**Criada em**: 2026-03-28
+**Versão**: 1.0

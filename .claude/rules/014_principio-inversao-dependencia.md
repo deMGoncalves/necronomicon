@@ -1,54 +1,54 @@
-# Application of the Dependency Inversion Principle (DIP)
+# Aplicação do Princípio de Inversão de Dependência (DIP)
 
 **ID**: COMPORTAMENTAL-014
-**Severity**: 🔴 Critical
-**Category**: Behavioral
+**Severidade**: 🔴 Crítica
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-High-level modules should not depend on low-level modules. Both should depend on abstractions (interfaces).
+Módulos de alto nível não devem depender de módulos de baixo nível. Ambos devem depender de abstrações (interfaces).
 
-## Why It Matters
+## Por que importa
 
-DIP is crucial for decoupling business policy from implementation. Violation creates tight coupling, making tests (unit and integration) difficult and preventing the high-level module from being reused in a new context.
+O DIP é crucial para desacoplar a política de negócio da implementação. A violação cria acoplamento rígido, dificultando testes (unidade e integração) e impedindo que o módulo de alto nível seja reutilizado em um novo contexto.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] Creating new instances of concrete classes (*new Class()*) is prohibited inside high-level classes (e.g., *Services* and *Controllers*).
-- [ ] High-level modules should reference only interfaces or abstract classes (what will be injected).
-- [ ] The number of *imports* for concrete classes in constructors should be zero (only injection of abstractions).
+- [ ] A criação de novas instâncias de classes concretas (*new Class()*) é proibida dentro de classes de alto nível (ex: *Services* e *Controllers*).
+- [ ] Módulos de alto nível devem referenciar apenas interfaces ou classes abstratas (o que será injetado).
+- [ ] O número de *imports* para classes concretas em construtores deve ser zero (apenas injeção de abstrações).
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Entities and Value Objects**: Pure data classes that can be instantiated freely.
-- **Root Composer**: The system initialization module where dependency injection is configured.
+- **Entidades e Value Objects**: Classes de dados puras que podem ser instanciadas livremente.
+- **Root Composer**: O módulo de inicialização do sistema onde a injeção de dependência é configurada.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for `new ConcreteName()` inside *Services* or *Business Logic* code.
+Busca por `new NomeConcreto()` dentro do código de *Services* ou *Business Logic*.
 
-### Automatic
+### Automático
 
-ESLint: `no-new-without-abstraction` (with custom rules).
+ESLint: `no-new-without-abstraction` (com regras customizadas).
 
-## Related To
+## Relacionada com
 
-- [011 - Open/Closed Principle](011_principio-aberto-fechado.md): reinforces
-- [015 - Release Reuse Equivalency Principle](015_principio-equivalencia-lancamento-reuso.md): reinforces
-- [003 - Encapsulation of Primitives](003_encapsulamento-primitivos.md): complements
-- [018 - Acyclic Dependencies Principle](018_principio-dependencias-aciclicas.md): reinforces
-- [019 - Stable Dependencies Principle](019_principio-dependencias-estaveis.md): reinforces
-- [020 - Stable Abstractions Principle](020_principio-abstracoes-estaveis.md): reinforces
-- [032 - Minimum Test Coverage](032_cobertura-teste-minima-qualidade.md): complements
-- [041 - Explicit Dependency Declaration](041_declaracao-explicita-dependencias.md): complements
-- [043 - Backing Services as Resources](043_servicos-apoio-recursos.md): complements
+- [011 - Princípio Aberto/Fechado](011_principio-aberto-fechado.md): reforça
+- [015 - Princípio de Equivalência de Lançamento e Reuso](015_principio-equivalencia-lancamento-reuso.md): reforça
+- [003 - Encapsulamento de Primitivos](003_encapsulamento-primitivos.md): complementa
+- [018 - Princípio de Dependências Acíclicas](018_principio-dependencias-aciclicas.md): reforça
+- [019 - Princípio de Dependências Estáveis](019_principio-dependencias-estaveis.md): reforça
+- [020 - Princípio de Abstrações Estáveis](020_principio-abstracoes-estaveis.md): reforça
+- [032 - Cobertura Mínima de Teste](032_cobertura-teste-minima-qualidade.md): complementa
+- [041 - Declaração Explícita de Dependências](041_declaracao-explicita-dependencias.md): complementa
+- [043 - Serviços de Apoio como Recursos](043_servicos-apoio-recursos.md): complementa
 
 ---
 
-**Created on**: 2025-10-04
-**Updated on**: 2025-10-04
-**Version**: 1.1
+**Criada em**: 2025-10-04
+**Atualizada em**: 2025-10-04
+**Versão**: 1.1

@@ -1,48 +1,48 @@
-# Prohibition of Speculative Functionality (YAGNI Principle)
+# Proibição de Funcionalidade Especulativa (Princípio YAGNI)
 
 **ID**: COMPORTAMENTAL-023
-**Severity**: 🟡 Medium
-**Category**: Behavioral
+**Severidade**: 🟡 Média
+**Categoria**: Comportamental
 
 ---
 
-## What It Is
+## O que é
 
-Requires that code be implemented only when a functionality is **needed** (and not *maybe needed* in the future), avoiding the inclusion of unnecessary code or abstractions.
+Exige que o código seja implementado apenas quando uma funcionalidade é **necessária** (e não *talvez necessária* no futuro), evitando a inclusão de código ou abstrações desnecessárias.
 
-*(Prevents the anti-pattern Speculative Generality: hooks, parameters, abstract classes and configurations created for hypothetical use cases without current use.)*
+*(Previne o anti-pattern Speculative Generality: hooks, parâmetros, classes abstratas e configurações criadas para casos de uso hipotéticos sem uso atual.)*
 
-## Why It Matters
+## Por que importa
 
-Speculative functionality increases complexity and dead code, wasting development time. It increases the attack surface and reduces agility in responding to real changes.
+A funcionalidade especulativa aumenta a complexidade e o código morto, desperdiçando tempo de desenvolvimento. Aumenta a superfície de ataque e reduz a agilidade na resposta a mudanças reais.
 
-## Objective Criteria
+## Critérios Objetivos
 
-- [ ] *Empty* classes or methods intended to be *placeholders* for future functionalities are prohibited.
-- [ ] Adding parameters or configuration options that are not immediately used by at least **one** client is prohibited.
-- [ ] Code should not contain more than **5%** of lines marked as disabled or with comments indicating "TODO: future implementation".
+- [ ] Classes ou métodos *vazios* que visam ser *placeholders* para funcionalidades futuras são proibidos.
+- [ ] É proibida a adição de parâmetros ou opções de configuração que não são usados imediatamente pelo menos por **um** cliente.
+- [ ] O código não deve conter mais de **5%** de linhas marcadas como desabilitadas ou com comentários indicando "TODO: futura implementação".
 
-## Permitted Exceptions
+## Exceções Permitidas
 
-- **Interface Requirements**: Interface methods required by an external contract (e.g., `Disposable` or `Closable`) that are trivially implemented.
+- **Requisitos de Interface**: Métodos de interface exigidos por um contrato externo (ex: `Disposable` ou `Closable`) que são trivialmente implementados.
 
-## How to Detect
+## Como Detectar
 
 ### Manual
 
-Search for empty methods, unused parameters, or code that is never called (dead code).
+Busca por métodos vazios, parâmetros não utilizados, ou código que nunca é chamado (código morto).
 
-### Automatic
+### Automático
 
 SonarQube/ESLint: `no-unused-vars`, `no-empty-function`.
 
-## Related To
+## Relacionada com
 
-- [007 - Maximum Lines per Class Limit](007_limite-maximo-linhas-classe.md): reinforces
-- [022 - Prioritization of Simplicity and Clarity](022_priorizacao-simplicidade-clareza.md): complements
-- [069 - Prohibition of Premature Optimization](069_proibicao-otimizacao-prematura.md): complements
+- [007 - Limite Máximo de Linhas por Classe](007_limite-maximo-linhas-classe.md): reforça
+- [022 - Priorização da Simplicidade e Clareza](022_priorizacao-simplicidade-clareza.md): complementa
+- [069 - Proibição de Otimização Prematura](069_proibicao-otimizacao-prematura.md): complementa
 
 ---
 
-**Created on**: 2025-10-08
-**Version**: 1.0
+**Criada em**: 2025-10-08
+**Versão**: 1.0
